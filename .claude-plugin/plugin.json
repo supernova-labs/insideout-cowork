@@ -1,0 +1,9 @@
+{
+  "name": "insideout-cowork",
+  "version": "0.1.0",
+  "description": "Plugin da InsideOut PR para análise de briefings e gestão de social media",
+  "author": "InsideOut PR",
+  "keywords": ["briefing", "social-media", "pr", "marketing"],
+  "agents": ["./agents"],
+  "skills": ["./skills"]
+}
