@@ -1,5 +1,5 @@
 ---
-name: insideout-pr
+name: about-insideout
 description: Base de conhecimento da InsideOut PR — empresa, serviços, clientes e modelo de operação
 ---
 
