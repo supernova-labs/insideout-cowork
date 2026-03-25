@@ -1,45 +1,49 @@
 ---
 name: about-insideout
-description: Base de conhecimento da InsideOut PR — empresa, serviços, clientes e modelo de operação
+description: Base de conhecimento da InsideOut PR — empresa, serviços, clientes, diferenciais e tendências de mercado
 ---
 
 # InsideOut PR
 
-## Sobre a Empresa
+Agência de Comunicação e Relações Públicas premium, fundada em 2017 em São Paulo. Contadoras de histórias e construtoras de experiências.
 
-<!-- TODO: Preencher com informações reais -->
+> "Acreditamos que a magia da comunicação acontece quando a conexão é natural, sem mistérios e sem regras."
 
-**Nome:** InsideOut PR
-**Fundadoras:** [A preencher]
-**Ano de fundação:** [A preencher]
-**Posicionamento:** [A preencher]
-**Filosofia:** A abordagem "Inside Out" parte da essência da marca para criar experiências autênticas.
+## Essência: Inside Out
+
+Trabalhamos **de dentro para fora** — mergulhamos na essência da marca para criar narrativas que ressoam genuinamente com as pessoas certas, nos momentos certos.
+
+- **Inside (Dentro):** Entendemos a alma do negócio — valores, propósito e objetivos
+- **Out (Fora):** Transformamos essa essência em histórias tangíveis e experiências memoráveis
 
 ## Serviços
 
-- **Eventos** — Planejamento e execução de eventos de marca
-- **Social Media** — Gestão estratégica de redes sociais
-- **Atendimento de Imprensa** — Assessoria de imprensa e media relations
-- **Marketing de Influenciadores** — Estratégia e gestão de campanhas com influenciadores
-- **Seeding (Presentes)** — Envio estratégico de produtos para influenciadores e imprensa
+6 braços de PR que funcionam integrados ou separadamente. Detalhes em [about.md](./about.md).
+
+1. **Ativações & Eventos** — Experiências de marca tangíveis e memoráveis
+2. **Conexão & Pessoas** — Relacionamentos estratégicos com influenciadores e KOLs
+3. **Assessoria de Imprensa** — Mensagens que reverberam nos veículos certos
+4. **Produção de Materiais** — Assets que contam histórias (press kits, design, produção)
+5. **Produção de Conteúdo** — Storytelling em múltiplos formatos (shootings, redes sociais, redação)
+6. **Projetos Especiais** — Branded content, eventos parceiros, colaborações
 
 ## O que NÃO fazemos
 
 - Ad-buy ou impulsionamento de mídia (feito por agências parceiras)
-- Alinhamento técnico de produção de conteúdo (equipamentos, complexidade, dimensão de equipe) — isso é alinhado diretamente com a produtora
+- Alinhamento técnico de produção de conteúdo (equipamentos, dimensão de equipe) — alinhado com a produtora
 
 ## Modelo de Operação
 
-<!-- TODO: Preencher com detalhes -->
-
 - Cada cliente pode contratar um ou mais serviços
 - Nem todos os serviços estão presentes em todos os briefings
-- O trabalho é organizado em ciclos mensais com briefings estratégicos
+- Trabalho organizado em ciclos mensais com briefings estratégicos
 
-## Clientes
+## Contatos
 
-<!-- TODO: Preencher com lista de clientes e seus serviços contratados -->
+- **Lyvia Byd** — lyvia.byd@insideoutpr.com.br
+- **Kassia Caricol** — kassia.caricol@insideoutpr.com.br
 
-## Tom de Voz e Posicionamento
+## Referências Detalhadas
 
-<!-- TODO: Preencher com guidelines de comunicação -->
+- [Sobre a empresa, serviços e clientes](./about.md)
+- [Tendências de mercado PR 2025-2027](./trends.md)
