@@ -1,0 +1,62 @@
+{
+  "version": "1.0",
+  "mode": "marketplace",
+  "lastUpdated": "2026-05-17T00:00:00Z",
+
+  "components": {
+    "skills": [
+      {
+        "name": "about-insideout",
+        "path": "plugins/io-social-media/skills/about-insideout/SKILL.md",
+        "description": "Base de conhecimento da InsideOut PR — empresa, serviços, clientes, diferenciais e tendências de mercado",
+        "supportingFiles": [
+          "plugins/io-social-media/skills/about-insideout/about.md",
+          "plugins/io-social-media/skills/about-insideout/trends.md"
+        ],
+        "tags": ["knowledge-base", "insideout"]
+      },
+      {
+        "name": "analyze-briefing",
+        "path": "plugins/io-social-media/skills/analyze-briefing/SKILL.md",
+        "description": "Analisa um briefing de cliente seguindo o framework InsideOut PR",
+        "tags": ["briefing", "analysis"]
+      }
+    ],
+
+    "agents": [],
+    "hooks": [],
+    "scripts": []
+  },
+
+  "relationships": [
+    {
+      "from": "skills/analyze-briefing",
+      "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
+      "from": "skills/about-insideout",
+      "to": "plugins/io-social-media/skills/about-insideout/about.md",
+      "type": "references"
+    },
+    {
+      "from": "skills/about-insideout",
+      "to": "plugins/io-social-media/skills/about-insideout/trends.md",
+      "type": "references"
+    }
+  ],
+
+  "plugins": [
+    {
+      "name": "io-social-media",
+      "path": "plugins/io-social-media",
+      "version": "0.1.0",
+      "componentCounts": {
+        "skills": 2,
+        "agents": 0,
+        "hooks": 0,
+        "scripts": 0
+      }
+    }
+  ]
+}
