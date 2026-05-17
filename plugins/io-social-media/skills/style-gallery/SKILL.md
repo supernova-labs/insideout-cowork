@@ -1,0 +1,127 @@
+---
+name: style-gallery
+description: 'Biblioteca de estilos visuais reutilizáveis da InsideOut — criar, listar, editar, remover estilos e abrir a galeria HTML. Use para "salvar este visual como estilo", "mostra a galeria de estilos", "renomeia/edita/apaga o estilo X", "que estilos eu tenho".'
+allowed-tools: Bash, Read, Write
+argument-hint: '[listar | abrir galeria | salvar estilo | editar | remover]'
+disable-model-invocation: false
+---
+
+# Style Gallery — biblioteca de estilos InsideOut
+
+Cria e mantém a biblioteca de estilos visuais reutilizáveis do cliente. Cada estilo é um prompt de imagem nomeado, com categoria, tags e thumbnail. A skill `image-generation` consome esta biblioteca ("gere usando o estilo #N").
+
+## Onde rodar (crítico)
+
+O diretório do plugin (`${CLAUDE_PLUGIN_ROOT}`) é **read-only e efêmero por sessão** no Cowork. A biblioteca **viva** do cliente vive na **pasta de trabalho**, não no plugin. Nunca faça `cd` para o `core/`; importe via `sys.path` com cwd = pasta de trabalho.
+
+Padrão de invocação (use em tudo abaixo):
+```bash
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+python -c "
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
+import style_library as sl
+# ... chamada ...
+"
+```
+Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
+
+## Onde fica a biblioteca
+
+`sl.find_library_dir()` resolve nesta ordem:
+1. variável de ambiente `STYLE_GALLERY_DIR`, se setada;
+2. busca **pra cima** a partir do cwd por uma pasta `style-gallery/` existente (para na raiz do git/filesystem) — assim rodar de uma subpasta não cria biblioteca duplicada;
+3. se nada: cria `<pasta de trabalho>/style-gallery/`.
+
+Estrutura: `style-gallery/styles/<slug>.json` (1 arquivo por estilo — fonte da verdade), `thumbnails/`, `style-gallery.html` (gerado), `.trash/`. Sem biblioteca no workspace, leitura cai no **seed embarcado** (5 exemplos) — funciona com zero config.
+
+Se for um repositório git, garanta no `.gitignore` da pasta de trabalho: ignorar `style-gallery/style-gallery.html` e `style-gallery/.trash/`; **versionar** `style-gallery/styles/` e `style-gallery/thumbnails/` (é o ativo de marca do cliente).
+
+## Operações
+
+**Primeiro uso / semear exemplos** — só quando o usuário quiser partir dos exemplos:
+```python
+lib = sl.find_library_dir(); sl.bootstrap(lib); print(sl.render_gallery(lib))
+```
+`bootstrap` é idempotente e nunca sobrescreve estilo existente. Se o cliente quer começar **do zero**, não chame bootstrap — só comece a adicionar.
+
+**Listar / ver:**
+```python
+for s in sl.list_styles(): print(s['id'], s['slug'], '-', s['name'], s['category'], s['tags'])
+print(sl.get_style(3))            # por id
+print(sl.get_style('product-launch-gradient'))  # por slug
+```
+
+**Criar** (valida categoria/tags; slug único; id monotônico; escrita atômica):
+```python
+sl.add_style("Tom Institucional Azul", "<prompt completo>",
+             category="Marketing", tags=["social","banner"],
+             example_use="posts institucionais",
+             thumbnail="caminho/opcional/para/imagem.png")
+```
+
+**Editar** (slug e id são estáveis; revalida categoria/tags):
+```python
+sl.update_style(6, exampleUse="...", category="Artistic", tags=["photography"])
+```
+
+**Remover** (soft-delete reversível — move pra `.trash/`, **não** apaga a imagem; **não existe** "apagar tudo"):
+```python
+sl.delete_style(6)
+```
+
+A galeria HTML é regenerada automaticamente após todo `add/update/delete`.
+
+## Adicionar a partir de uma imagem de referência
+
+Quando o usuário disser "gostei desse visual, salva como estilo" e fornecer uma imagem:
+```python
+import style_library as sl
+from style_extract import extract_style
+prompt = extract_style("caminho/da/referencia.jpg")     # análise de visão do Gemini
+sl.add_style("<nome do estilo>", prompt, category="<categoria>",
+             tags=[...], thumbnail="caminho/da/referencia.jpg")
+```
+A própria imagem de referência vira o thumbnail (sem custo de geração extra). Requer `GEMINI_API_KEY` (ver skill `image-generation` para o fluxo de chave via `.env` na pasta de trabalho).
+
+## Abrir a galeria
+
+```python
+print(sl.open_gallery())   # regenera e devolve o caminho do style-gallery.html
+```
+Informe ao usuário o caminho e diga para abrir esse arquivo no navegador. Ele vive ao lado de `thumbnails/`, então os previews carregam; estilo sem thumbnail mostra placeholder limpo ("sem preview") automaticamente.
+
+## Categorias e tags canônicas
+
+Use **somente** estas (espelham a galeria; `add/update` rejeitam fora disso):
+
+- **Categorias**: Framework, Flow, Architecture, Mockup, Persona, Marketing, Artistic
+- **Tags por categoria** (ex.): Marketing → `ad, social, announcement, banner, hero`; Artistic → `flat-illustration, hand-drawn, watercolor, photography, retro, minimalist, bold-graphic, 3d-render`; Persona → `portrait, lifestyle, headshot, context, illustrated, scene`. Lista completa: `python -c "import sys;sys.path.insert(0,r'$CORE');import style_library as sl;print(sl.CANONICAL_TAGS)"`.
+
+Para peça da InsideOut, alinhe à marca via skill `about-insideout` antes de definir nome/categoria.
+
+## Lógica de decisão
+
+- "salva este visual como estilo" / "guarda esse" → `add_style` (confirme nome e categoria com o usuário antes; se veio de imagem de referência, extraia o prompt com `extract_style` e use a imagem como thumbnail).
+- "mostra/abre a galeria", "que estilos eu tenho" → `list_styles` / `open_gallery`.
+- "renomeia/edita/muda o estilo X" → `update_style` (nome/exampleUse/prompt/category/tags; slug e id não mudam).
+- "apaga/remove o estilo X" → **confirme explicitamente** antes; `delete_style` (é reversível via `.trash/`).
+- "gera uma imagem com o estilo X" → **não é aqui**: encaminhe para a skill `image-generation`.
+
+## Regras importantes
+
+- Confirme antes de deletar; nunca delete em lote nem ofereça "limpar tudo".
+- Após criar, resuma ao usuário: nome, categoria, tags, id (referência "estilo #id").
+- Não exponha `slug`/caminhos de arquivo a menos que o usuário peça — fale em nome e "#id".
+- Sempre reporte o caminho do `style-gallery.html` ao abrir/atualizar a galeria.
+- `core/` é read-only: nunca tente gravar lá; toda escrita vai para a pasta de trabalho via o módulo.
+- Não edite `styles/*.json` na mão — use as funções (escrita atômica + regen da galeria).
+
+## Tratamento de erros
+
+- **`InvalidCategory` / `InvalidTag`**: a mensagem traz as opções válidas — escolha uma delas e repita.
+- **`StyleNotFound`**: confira com `list_styles()`; estilos do seed embarcado são read-only (para editar, crie o seu com `add_style`).
+- **Biblioteca não encontrada para editar/remover**: não há `style-gallery/` no workspace ainda — `add_style`/`bootstrap` criam.
+- **Import falha**: `pip install -r "$CORE/requirements.txt"`.
+- **`extract_style` falha**: confirme `GEMINI_API_KEY` (fluxo `.env` na pasta de trabalho — ver `image-generation`) e que o caminho da imagem existe.

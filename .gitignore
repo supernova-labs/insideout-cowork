@@ -4,10 +4,16 @@ Thumbs.db
 # Estado local do Claude Code CLI (não versionar)
 .claude/
 
-# image-generation toolkit — segredos e artefatos de runtime (NUNCA commitar)
-**/toolkit/.env
-**/toolkit/outputs/
-**/toolkit/.image_session.json
+# core/ — segredos e artefatos de runtime (NUNCA commitar)
+**/core/.env
+**/core/outputs/
+**/core/.image_session.json
+
+# galeria de estilos gerada na pasta de trabalho:
+#   versionar styles/ e thumbnails/ (ativo de marca); ignorar o derivado e a lixeira
+**/style-gallery/style-gallery.html
+**/style-gallery/.trash/
+
 **/__pycache__/
 *.pyc
 *.pyo

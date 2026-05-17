@@ -45,28 +45,30 @@ Resolução: `1K` (~US$0,10), `2K` (~US$0,20), `4K` (~US$0,40). Default `1K`; su
 
 O diretório do plugin (`${CLAUDE_PLUGIN_ROOT}`) é **read-only e efêmero por sessão** no Cowork — não dá pra editar nem persistir nada lá. Portanto:
 
-- **Nunca** faça `cd` para o toolkit nem grave nada dentro dele.
-- Rode tudo a partir da **pasta de trabalho da sessão** (o diretório que o usuário tem aberto no Cowork). É lá que ficam — e devem ficar — a chave (`.env`), as imagens (`outputs/`) e a sessão (`.image_session.json`): visíveis e persistentes pro usuário.
-- Aponte o Python para o toolkit via `sys.path`, sem mudar o cwd. Caminho (só leitura): `${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit`
+- **Nunca** faça `cd` para o `core/` nem grave nada dentro dele.
+- Rode tudo a partir da **pasta de trabalho da sessão** (o diretório que o usuário tem aberto no Cowork). É lá que ficam — e devem ficar — a chave (`.env`), as imagens (`outputs/`), a sessão (`.image_session.json`) e a biblioteca de estilos (`style-gallery/`): visíveis e persistentes pro usuário.
+- Aponte o Python para o motor via `sys.path`, sem mudar o cwd. Caminho (só leitura): `${CLAUDE_PLUGIN_ROOT}/core`
 
 Padrão de invocação (use em todos os comandos abaixo):
 ```bash
-TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
 python -c "
-import sys; sys.path.insert(0, r'$TOOLKIT')
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
 from dotenv import load_dotenv; load_dotenv()   # carrega .env do cwd = pasta de trabalho
 from image_gen import generate
 print(generate('...'))
 "
 ```
-Dependências (se faltar import): `pip install -r "$TOOLKIT/requirements.txt"`.
+Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
 
 ### Chave de API — fluxo gerenciado por você (agente)
 
 O usuário **não** deve navegar até o diretório do plugin. Você cuida disso antes da primeira geração:
 
 1. Se `GEMINI_API_KEY` não estiver no ambiente **e** não houver `.env` com a chave preenchida na pasta de trabalho:
-   - Crie `.env` **na pasta de trabalho** (cwd) com o conteúdo `GEMINI_API_KEY=` (use o `.env.example` do toolkit como modelo de texto).
+   - Crie `.env` **na pasta de trabalho** (cwd) com o conteúdo `GEMINI_API_KEY=` (use o `${CLAUDE_PLUGIN_ROOT}/core/.env.example` como modelo de texto).
    - Garanta que `.env`, `outputs/` e `.image_session.json` estejam no `.gitignore` da pasta de trabalho **se for um repositório git** — a chave não pode vazar.
    - Peça ao usuário para abrir esse `.env` (que está na pasta dele, não no AppData), colar a chave do Gemini depois do `=`, salvar e mandar continuar. Chave em https://aistudio.google.com/apikey
 2. Com a chave no `.env` da pasta de trabalho, `load_dotenv()` a carrega automaticamente (cwd = pasta de trabalho).
@@ -83,9 +85,11 @@ O usuário **não** deve navegar até o diretório do plugin. Você cuida disso 
 Cada `generate()` continua a conversa anterior automaticamente (sessão em `.image_session.json`). Só chame `new_session()` ao começar uma peça nova e não relacionada.
 
 ```bash
-TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
 python -c "
-import sys; sys.path.insert(0, r'$TOOLKIT')
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
 from dotenv import load_dotenv; load_dotenv()
 from image_gen import generate
 result = generate('prompt enriquecido aqui...', aspect_ratio='9:16', resolution='1K')
@@ -99,9 +103,11 @@ print(f'Gerada: {result}')
 Use quando o usuário fornecer uma **imagem custom** de referência ("use esta imagem", "aplique o visual desta foto"). **Obrigatório extrair antes de gerar** — a análise de visão do Gemini é muito superior a descrição manual.
 
 ```bash
-TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
 python -c "
-import sys; sys.path.insert(0, r'$TOOLKIT')
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
 from dotenv import load_dotenv; load_dotenv()
 from style_extract import extract_style
 print(extract_style('caminho/para/referencia.jpg'))
@@ -109,37 +115,56 @@ print(extract_style('caminho/para/referencia.jpg'))
 ```
 Para um elemento específico (ex.: só a paleta, só a tipografia da peça de referência), passe `custom_prompt='...'` focado nesse elemento.
 
-### 3. get_style.py — biblioteca de estilos numerados
+### 3. get_style.py — consumir um estilo da biblioteca
 
-Use quando o usuário citar "estilo #125" / "usa o estilo 42". **Não** extraia — esses estilos já estão prontos.
+Use quando o usuário citar "estilo #3" / "usa o estilo product-launch-gradient". **Não** extraia — já está pronto.
 ```bash
-TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
-python "$TOOLKIT/get_style.py" 125
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+python "$CORE/get_style.py" 3        # por id; aceita também o slug
+python "$CORE/get_style.py" --list  # ver os disponíveis
 ```
 Retorna `id`, `name`, `prompt` (substitua `[subject]` pelo assunto), `category`, `exampleUse`.
 
-O catálogo nasce com **5 estilos de exemplo** (social/PR) embarcados no toolkit. **Limitação conhecida**: como o diretório do plugin é read-only/efêmero, a Inside.out **não consegue** customizar o `style-library.html` embarcado nem versionar thumbnails próprios por enquanto — isso depende de um mecanismo de "biblioteca de estilos do usuário" na pasta de trabalho (problema em aberto, fora do escopo desta versão). Os 5 exemplos funcionam 100% via `get_style.py` / "estilo #N"; referências custom hoje vão pelo `style_extract.py` (imagem de referência), que não depende do catálogo.
+Os estilos vêm da **biblioteca do cliente** em `<pasta de trabalho>/style-gallery/styles/*.json`; sem biblioteca no workspace, cai automaticamente no **seed embarcado** (5 exemplos social/PR) — "estilo #N" funciona com zero config. Criar, editar, remover estilos e abrir a galeria visual é trabalho da skill **`style-gallery`** — encaminhe para lá quando o usuário quiser gerenciar.
+
+### Salvar como estilo (só sob pedido)
+
+**Apenas quando o usuário pedir explicitamente** ("salva esse visual como estilo", "guarda isso na galeria") — nunca ofereça proativamente. Confirme nome e categoria, então grave via o módulo compartilhado:
+```bash
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+python -c "
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
+import style_library as sl
+sl.add_style('<nome>', '<prompt enriquecido que você acabou de usar>',
+             category='<categoria canônica>', tags=[...],
+             example_use='<quando usar>', thumbnail='<caminho do output gerado>')
+"
+```
+A imagem recém-gerada vira o thumbnail. Categorias/tags canônicas e demais operações: ver skill `style-gallery`.
 
 ## Lógica de decisão
 
 - **"Gere [algo] para [formato]"** → escolha o preset de aspect_ratio, alinhe à marca (about-insideout), enriqueça, mostre o prompt, gere com `image_gen.py` (continua a sessão).
-- **"Use o estilo #42"** → `get_style.py 42`, troque `[subject]`, enriqueça, mostre, gere.
+- **"Use o estilo #42"** (id ou slug) → `get_style.py 42`, troque `[subject]`, enriqueça, mostre, gere.
+- **"Salva esse visual como estilo"** (só se pedido explícito) → ver seção "Salvar como estilo (só sob pedido)". Gerenciar a galeria (listar/editar/remover/abrir) → skill `style-gallery`.
 - **"Use esta_imagem.jpg de referência"** → **extraia primeiro** com `style_extract.py`, incorpore a descrição ao prompt, gere com `reference_images=['esta_imagem.jpg']`.
 - **"Deixe mais escuro / mais quente / adicione X"** → **não** chame `new_session()`; enriqueça o ajuste e gere (a sessão continua a partir da última imagem).
 - **"Recomeçar / nova peça"** → `new_session()` e siga.
 
 ## Regras importantes
 
-- **O toolkit é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`, `style-library.html`): não tente editar nem gravar nada lá. Lógica custom roda na pasta de trabalho importando o toolkit via `sys.path`.
-- **`.env`, `outputs/` e `.image_session.json` vivem na pasta de trabalho.** Se ela for um repositório git, garanta que os três estejam no `.gitignore` antes de criar o `.env` — a chave não pode vazar.
+- **O `core/` é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`, `style_library.py`, `gallery-template.html`): não tente editar nem gravar nada lá. Lógica custom e dados rodam/vivem na pasta de trabalho importando o motor via `sys.path`.
+- **`.env`, `outputs/`, `.image_session.json` e `style-gallery/` vivem na pasta de trabalho.** Se ela for um repositório git, garanta no `.gitignore`: ignorar `.env`, `outputs/`, `.image_session.json`, `style-gallery/style-gallery.html`, `style-gallery/.trash/`; versionar `style-gallery/styles/` e `style-gallery/thumbnails/`.
 - Sempre retorne ao usuário o caminho da imagem gerada.
-- Dependências: `pip install -r requirements.txt` (google-genai, python-dotenv, pillow) caso a geração falhe por import.
+- Dependências: `pip install -r "$CORE/requirements.txt"` (google-genai, python-dotenv, pillow) caso a geração falhe por import.
 
 ## Tratamento de erros
 
-**Geração falha**: verifique `GEMINI_API_KEY` (env ou `.env` na pasta de trabalho); confirme que está rodando da pasta de trabalho com o toolkit no `sys.path` (não fez `cd` pro plugin); tente `new_session()` (sessão corrompida); cheque os paths das imagens de referência; instale deps via `pip install -r "$TOOLKIT/requirements.txt"`.
+**Geração falha**: verifique `GEMINI_API_KEY` (env ou `.env` na pasta de trabalho); confirme que está rodando da pasta de trabalho com o `core/` no `sys.path` (não fez `cd` pro plugin); tente `new_session()` (sessão corrompida); cheque os paths das imagens de referência; instale deps via `pip install -r "$CORE/requirements.txt"`.
 **Extração falha**: confirme que o caminho da imagem existe e é legível; valide a chave.
-**get_style falha**: confirme que o número existe no catálogo e que `style-library.html` está presente.
+**get_style falha**: confirme número/slug com `python "$CORE/get_style.py" --list`; a biblioteca resolve da pasta de trabalho (`style-gallery/`) ou cai no seed embarcado.
 
 ## Checklist por geração
 
