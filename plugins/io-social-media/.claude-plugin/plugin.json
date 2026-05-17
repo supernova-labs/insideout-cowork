@@ -8,6 +8,8 @@
   "skills": ["./skills"],
   "userConfig": {
     "GEMINI_API_KEY": {
+      "type": "string",
+      "title": "Gemini API Key",
       "description": "Chave de API do Google Gemini, usada pela skill image-generation para gerar/analisar imagens",
       "sensitive": true
     }
