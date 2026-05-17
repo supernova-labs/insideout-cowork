@@ -20,6 +20,20 @@
         "path": "plugins/io-social-media/skills/analyze-briefing/SKILL.md",
         "description": "Analisa um briefing de cliente seguindo o framework InsideOut PR",
         "tags": ["briefing", "analysis"]
+      },
+      {
+        "name": "image-generation",
+        "path": "plugins/io-social-media/skills/image-generation/SKILL.md",
+        "description": "Geração de imagens com IA (Gemini 3 Pro) para social media e PR da InsideOut, com enriquecimento de prompt, estilos numerados e extração de referência",
+        "supportingFiles": [
+          "plugins/io-social-media/skills/image-generation/toolkit/image_gen.py",
+          "plugins/io-social-media/skills/image-generation/toolkit/style_extract.py",
+          "plugins/io-social-media/skills/image-generation/toolkit/get_style.py",
+          "plugins/io-social-media/skills/image-generation/toolkit/style-library.html",
+          "plugins/io-social-media/skills/image-generation/toolkit/requirements.txt"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["image-generation", "social-media", "gemini"]
       }
     ],
 
@@ -31,6 +45,11 @@
   "relationships": [
     {
       "from": "skills/analyze-briefing",
+      "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
+      "from": "skills/image-generation",
       "to": "skills/about-insideout",
       "type": "references"
     },
@@ -50,9 +69,9 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "componentCounts": {
-        "skills": 2,
+        "skills": 3,
         "agents": 0,
         "hooks": 0,
         "scripts": 0

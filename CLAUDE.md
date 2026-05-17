@@ -10,6 +10,7 @@ Marketplace de plugins do Claude Cowork da InsideOut PR.
   - `.claude-plugin/plugin.json` — Manifesto do plugin
   - `skills/about-insideout/` — Conhecimento sobre a empresa, serviços e modelo de operação
   - `skills/analyze-briefing/SKILL.md` — Skill de análise de briefings (framework + fluxo em 3 passos)
+  - `skills/image-generation/` — Geração de imagens com IA (Gemini 3 Pro) para social media; toolkit Python embarcado. Requer `GEMINI_API_KEY` via userConfig do plugin
 
 ## Uso
 
