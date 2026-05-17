@@ -56,7 +56,9 @@ python -c "
 import sys; sys.path.insert(0, r'$CORE')
 try: sys.stdout.reconfigure(encoding='utf-8')
 except Exception: pass
-from dotenv import load_dotenv; load_dotenv()   # carrega .env do cwd = pasta de trabalho
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(usecwd=True), override=True)   # .env da pasta de trabalho VENCE env contaminado
+import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
 from image_gen import generate
 print(generate('...'))
 "
@@ -67,13 +69,17 @@ Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
 
 O usuário **não** deve navegar até o diretório do plugin. Você cuida disso antes da primeira geração:
 
-1. Se `GEMINI_API_KEY` não estiver no ambiente **e** não houver `.env` com a chave preenchida na pasta de trabalho:
+1. Se não houver `.env` com a chave preenchida na pasta de trabalho:
    - Crie `.env` **na pasta de trabalho** (cwd) com o conteúdo `GEMINI_API_KEY=` (use o `${CLAUDE_PLUGIN_ROOT}/core/.env.example` como modelo de texto).
    - Garanta que `.env`, `outputs/` e `.image_session.json` estejam no `.gitignore` da pasta de trabalho **se for um repositório git** — a chave não pode vazar.
    - Peça ao usuário para abrir esse `.env` (que está na pasta dele, não no AppData), colar a chave do Gemini depois do `=`, salvar e mandar continuar. Chave em https://aistudio.google.com/apikey
-2. Com a chave no `.env` da pasta de trabalho, `load_dotenv()` a carrega automaticamente (cwd = pasta de trabalho).
+2. O padrão de invocação usa **`load_dotenv(find_dotenv(usecwd=True), override=True)`** + `.strip()` — não use `load_dotenv()` pelado.
 
-`userConfig` do plugin (Cowork pede a chave na instalação) seria o ideal, mas há um bug conhecido na UI do Cowork (issues **#39455** e **#39827**) que impede a injeção — por isso o fluxo via `.env` na pasta de trabalho é o caminho atual. O script tenta `os.environ` primeiro, então quando o bug for corrigido o userConfig também funciona sem `.env`.
+**Por que esse padrão exato é obrigatório** (0.3.1 — duas falhas que se somavam):
+- **`find_dotenv(usecwd=True)`**: `load_dotenv()` pelado resolve o `.env` a partir do diretório do *script* (`core/`), **não** do cwd — então o `.env` da pasta de trabalho nunca era encontrado sob `python -c`. `usecwd=True` ancora a busca no cwd (pasta de trabalho).
+- **`override=True`** + `userConfig` **removido** do `plugin.json`: o bug do Cowork (issues **#39455** / **#39827**) injeta a `GEMINI_API_KEY` **truncada** no ambiente; sem `override` essa variável contaminada vence o `.env` correto → API recusa como "inválida". `.strip()` remove `\r`/espaço (Windows/Notepad salvam CRLF).
+
+Não reintroduza `userConfig`, não troque por `load_dotenv()` pelado, não remova `override` nem `usecwd=True` enquanto o bug do Cowork existir.
 
 ## Scripts disponíveis
 
@@ -90,7 +96,9 @@ python -c "
 import sys; sys.path.insert(0, r'$CORE')
 try: sys.stdout.reconfigure(encoding='utf-8')
 except Exception: pass
-from dotenv import load_dotenv; load_dotenv()
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(usecwd=True), override=True)
+import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
 from image_gen import generate
 result = generate('prompt enriquecido aqui...', aspect_ratio='9:16', resolution='1K')
 print(f'Gerada: {result}')
@@ -108,7 +116,9 @@ python -c "
 import sys; sys.path.insert(0, r'$CORE')
 try: sys.stdout.reconfigure(encoding='utf-8')
 except Exception: pass
-from dotenv import load_dotenv; load_dotenv()
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(usecwd=True), override=True)
+import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
 from style_extract import extract_style
 print(extract_style('caminho/para/referencia.jpg'))
 "

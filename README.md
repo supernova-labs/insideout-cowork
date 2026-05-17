@@ -32,7 +32,7 @@ Atualizar para uma versão nova: atualizar o **marketplace** primeiro, depois o 
 
 ### Chave de API (skill image-generation)
 
-Precisa de `GEMINI_API_KEY`. O fluxo confiável é via `.env` na **pasta de trabalho** da sessão — o agente cria e gerencia (o usuário nunca toca no diretório do plugin, que é read-only/efêmero no Cowork). `userConfig` do plugin é a alternativa quando o bug do Cowork #39455/#39827 for resolvido. Detalhes no `SKILL.md` da `image-generation`.
+Precisa de `GEMINI_API_KEY`. Fluxo: `.env` na **pasta de trabalho** da sessão, carregado com `load_dotenv(override=True)` — o agente cria e gerencia (o usuário nunca toca no diretório do plugin, read-only/efêmero no Cowork). O `userConfig` foi **removido na 0.3.1**: o bug do Cowork #39455/#39827 injeta a `GEMINI_API_KEY` **truncada** no ambiente, e sem `override` o `.env` correto era ignorado (chave recusada como "inválida"). Não reintroduzir userConfig nem `load_dotenv()` sem override enquanto o bug existir. Detalhes no `SKILL.md` da `image-generation`.
 
 ## Processo de release
 

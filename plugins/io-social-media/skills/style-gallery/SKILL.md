@@ -77,12 +77,16 @@ A galeria HTML é regenerada automaticamente após todo `add/update/delete`.
 
 Quando o usuário disser "gostei desse visual, salva como estilo" e fornecer uma imagem:
 ```python
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(usecwd=True), override=True)   # .env da pasta de trabalho VENCE env contaminado
+import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
 import style_library as sl
 from style_extract import extract_style
 prompt = extract_style("caminho/da/referencia.jpg")     # análise de visão do Gemini
 sl.add_style("<nome do estilo>", prompt, category="<categoria>",
              tags=[...], thumbnail="caminho/da/referencia.jpg")
 ```
+(O padrão `load_dotenv(find_dotenv(usecwd=True), override=True)` é obrigatório — sem ele o `.env` da pasta de trabalho não é encontrado e/ou a `GEMINI_API_KEY` truncada do Cowork vence; ver "Chave de API" na skill `image-generation`.)
 A própria imagem de referência vira o thumbnail (sem custo de geração extra). Requer `GEMINI_API_KEY` (ver skill `image-generation` para o fluxo de chave via `.env` na pasta de trabalho).
 
 ## Abrir a galeria
