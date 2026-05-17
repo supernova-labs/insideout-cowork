@@ -24,17 +24,31 @@
       {
         "name": "image-generation",
         "path": "plugins/io-social-media/skills/image-generation/SKILL.md",
-        "description": "Geração de imagens com IA (Gemini 3 Pro) para social media e PR da InsideOut, com enriquecimento de prompt, estilos numerados e extração de referência",
+        "description": "Geração de imagens com IA (Gemini 3 Pro) para social media e PR da InsideOut, com enriquecimento de prompt, estilos da galeria e extração de referência",
         "supportingFiles": [
-          "plugins/io-social-media/skills/image-generation/toolkit/image_gen.py",
-          "plugins/io-social-media/skills/image-generation/toolkit/style_extract.py",
-          "plugins/io-social-media/skills/image-generation/toolkit/get_style.py",
-          "plugins/io-social-media/skills/image-generation/toolkit/style-library.html",
-          "plugins/io-social-media/skills/image-generation/toolkit/requirements.txt",
-          "plugins/io-social-media/skills/image-generation/toolkit/.env.example"
+          "plugins/io-social-media/core/image_gen.py",
+          "plugins/io-social-media/core/style_extract.py",
+          "plugins/io-social-media/core/get_style.py",
+          "plugins/io-social-media/core/style_library.py",
+          "plugins/io-social-media/core/requirements.txt",
+          "plugins/io-social-media/core/.env.example"
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["image-generation", "social-media", "gemini"]
+      },
+      {
+        "name": "style-gallery",
+        "path": "plugins/io-social-media/skills/style-gallery/SKILL.md",
+        "description": "Biblioteca de estilos visuais reutilizáveis — criar, listar, editar, remover estilos e gerar/abrir a galeria HTML; dados por arquivo na pasta de trabalho",
+        "supportingFiles": [
+          "plugins/io-social-media/core/style_library.py",
+          "plugins/io-social-media/core/gallery-template.html",
+          "plugins/io-social-media/core/styles.seed.json",
+          "plugins/io-social-media/core/get_style.py",
+          "plugins/io-social-media/core/style_extract.py"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["style-library", "social-media", "gallery"]
       }
     ],
 
@@ -55,6 +69,26 @@
       "type": "references"
     },
     {
+      "from": "skills/image-generation",
+      "to": "skills/style-gallery",
+      "type": "references"
+    },
+    {
+      "from": "skills/image-generation",
+      "to": "plugins/io-social-media/core/style_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/style-gallery",
+      "to": "plugins/io-social-media/core/style_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/style-gallery",
+      "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
       "from": "skills/about-insideout",
       "to": "plugins/io-social-media/skills/about-insideout/about.md",
       "type": "references"
@@ -70,9 +104,9 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.2.2",
+      "version": "0.3.0",
       "componentCounts": {
-        "skills": 3,
+        "skills": 4,
         "agents": 0,
         "hooks": 0,
         "scripts": 0

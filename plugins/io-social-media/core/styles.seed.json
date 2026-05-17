@@ -1,0 +1,78 @@
+[
+  {
+    "schemaVersion": 1,
+    "id": 1,
+    "slug": "instagram-product-post",
+    "name": "Instagram Product Post",
+    "category": "Marketing",
+    "tags": [
+      "social"
+    ],
+    "thumbnail": "thumbnails/social-instagram-product.png",
+    "prompt": "**Task:** Create an Instagram-native product showcase post\n\n**Style:**\n- Vibrant, thumb-stopping design\n- Gradient background (purple to blue)\n- Modern rounded typography\n- 3D-style floating UI mockups\n\n**Output:**\n- Square format (1080x1080px)\n- Rich gradient with subtle texture\n\n**Content:**\n- Headline: \"Ship Faster With Smart Roadmaps\"\n- Visual: 3D perspective mockups of roadmap interface\n- Branding: Small logo bottom corner\n- Emoji: Rocket ship 🚀\n\n**Layout:**\n- Centered composition\n- Headline at top with padding\n- Mockups arranged in perspective stack\n- Balanced negative space\n\n**Constraints:**\n- English text only\n- High contrast for mobile viewing\n- Instagram-optimized colors",
+    "exampleUse": "Instagram posts, product showcases, feature highlights on social media",
+    "createdAt": "2026-05-17T00:00:00Z",
+    "updatedAt": "2026-05-17T00:00:00Z"
+  },
+  {
+    "schemaVersion": 1,
+    "id": 2,
+    "slug": "linkedin-professional-graphic",
+    "name": "LinkedIn Professional Graphic",
+    "category": "Marketing",
+    "tags": [
+      "social"
+    ],
+    "thumbnail": "thumbnails/social-linkedin-professional.png",
+    "prompt": "**Task:** Create a professional LinkedIn insight post\n\n**Style:**\n- Clean, corporate aesthetic\n- Professional color scheme (navy, white, gold accent)\n- Serif and sans-serif combination\n- Data visualization elements\n\n**Output:**\n- Landscape format (1200x627px, LinkedIn native)\n- Solid or subtle gradient background\n\n**Content:**\n- Headline: \"The State of Product Management 2025\"\n- Supporting stat: \"73% of PMs say AI changed their workflow\"\n- Visual: Simple bar chart or infographic element\n- Branding: Company name \"ProductFlow Insights\"\n\n**Layout:**\n- Text-heavy design, left-aligned\n- Chart/visual element right side\n- Professional spacing and hierarchy\n- Subtle brand accent at bottom\n\n**Constraints:**\n- English text only\n- Corporate professional tone\n- Optimized for LinkedIn feed",
+    "exampleUse": "LinkedIn posts, industry insights, thought leadership content, B2B marketing",
+    "createdAt": "2026-05-17T00:00:00Z",
+    "updatedAt": "2026-05-17T00:00:00Z"
+  },
+  {
+    "schemaVersion": 1,
+    "id": 3,
+    "slug": "twitter-x-announcement-card",
+    "name": "Twitter/X Announcement Card",
+    "category": "Marketing",
+    "tags": [
+      "social",
+      "announcement"
+    ],
+    "thumbnail": "thumbnails/social-twitter-announcement.png",
+    "prompt": "**Task:** Create a Twitter/X card for feature announcement\n\n**Style:**\n- Bold, punchy design\n- High-contrast colors (black background, electric blue accents)\n- Condensed bold typography\n- Minimal graphic elements\n\n**Output:**\n- Twitter card format (1200x675px)\n- Dark background with neon accents\n\n**Content:**\n- Headline: \"NEW: Real-Time Sync\"\n- Subtext: \"Your team, always in sync. Zero lag.\"\n- Icon: Sync symbol with glow effect\n- Branding: \"TaskFlow\" wordmark\n\n**Layout:**\n- Centered text\n- Large icon top center\n- Headline middle\n- Brand bottom\n- Plenty of breathing room\n\n**Constraints:**\n- English text only\n- High contrast for timeline scanning\n- Eye-catching but not cluttered",
+    "exampleUse": "Twitter/X announcements, quick feature drops, social media launch teasers",
+    "createdAt": "2026-05-17T00:00:00Z",
+    "updatedAt": "2026-05-17T00:00:00Z"
+  },
+  {
+    "schemaVersion": 1,
+    "id": 4,
+    "slug": "product-launch-gradient",
+    "name": "Product Launch Gradient",
+    "category": "Marketing",
+    "tags": [
+      "announcement"
+    ],
+    "thumbnail": "thumbnails/announcement-launch-gradient.png",
+    "prompt": "**Task:** Create an exciting product launch announcement\n\n**Style:**\n- Futuristic gradient design\n- Multi-color gradient (cyan to purple to pink)\n- Bold geometric typography\n- Light rays and glow effects\n\n**Output:**\n- Landscape format (1920x1080px)\n- Dynamic flowing gradient background\n\n**Content:**\n- Headline: \"Introducing PulseFlow 2.0\"\n- Subheadline: \"The future of agile project management\"\n- Launch date: \"Available January 15, 2025\"\n- Visual: Abstract geometric shapes suggesting movement\n\n**Layout:**\n- Text centered with dramatic spacing\n- Geometric elements framing the text\n- Symmetrical composition\n- Glowing accents\n\n**Constraints:**\n- English text only\n- All text prominently displayed\n- Exciting, launch-worthy energy",
+    "exampleUse": "Major product launches, version releases, big announcements, event promotion",
+    "createdAt": "2026-05-17T00:00:00Z",
+    "updatedAt": "2026-05-17T00:00:00Z"
+  },
+  {
+    "schemaVersion": 1,
+    "id": 5,
+    "slug": "product-flat-lay-photography",
+    "name": "Product Flat Lay Photography",
+    "category": "Artistic",
+    "tags": [
+      "photography"
+    ],
+    "thumbnail": "thumbnails/photography-flatlay.png",
+    "prompt": "**Task:** Create an artistic flat lay photograph of productivity tools and stationery.\n\n**Style:**\n- Overhead photography with clean, organized arrangement\n- Natural light from above creating soft shadows\n- Minimalist aesthetic with plenty of negative space\n- Professional product photography quality\n- Soft focus on edges, crisp center\n\n**Output:**\n- Square aspect ratio (1:1)\n- Clean white or neutral background\n\n**Content:**\n- Tech gadgets (laptop, phone, headphones)\n- Notebooks, pens, coffee cup\n- Geometric arrangement with intentional spacing\n- Conveys productivity and organization\n\n**Layout:**\n- Perfectly overhead view (bird's eye)\n- Objects arranged in pleasing grid or diagonal\n- Balanced composition with breathing room\n\n**Constraints:**\n- No text or logos\n- Clean, professional aesthetic\n- Realistic photography\n- Subtle shadows only",
+    "exampleUse": "Product showcases, tool collections, organizational systems, professional aesthetics",
+    "createdAt": "2026-05-17T00:00:00Z",
+    "updatedAt": "2026-05-17T00:00:00Z"
+  }
+]
