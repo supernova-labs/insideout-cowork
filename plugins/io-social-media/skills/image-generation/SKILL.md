@@ -41,29 +41,37 @@ Mapeie o destino da peça para o `aspect_ratio` suportado pelo motor (`1:1`, `3:
 
 Resolução: `1K` (~US$0,10), `2K` (~US$0,20), `4K` (~US$0,40). Default `1K`; suba para `2K` em peça final/hero.
 
-## Localização do toolkit
+## Onde rodar (crítico)
 
-Scripts em: `${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit/`
+O diretório do plugin (`${CLAUDE_PLUGIN_ROOT}`) é **read-only e efêmero por sessão** no Cowork — não dá pra editar nem persistir nada lá. Portanto:
 
-Antes de qualquer comando Python, entre no diretório do toolkit:
+- **Nunca** faça `cd` para o toolkit nem grave nada dentro dele.
+- Rode tudo a partir da **pasta de trabalho da sessão** (o diretório que o usuário tem aberto no Cowork). É lá que ficam — e devem ficar — a chave (`.env`), as imagens (`outputs/`) e a sessão (`.image_session.json`): visíveis e persistentes pro usuário.
+- Aponte o Python para o toolkit via `sys.path`, sem mudar o cwd. Caminho (só leitura): `${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit`
+
+Padrão de invocação (use em todos os comandos abaixo):
 ```bash
-cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+python -c "
+import sys; sys.path.insert(0, r'$TOOLKIT')
+from dotenv import load_dotenv; load_dotenv()   # carrega .env do cwd = pasta de trabalho
+from image_gen import generate
+print(generate('...'))
+"
 ```
-(Em desenvolvimento local, se `${CLAUDE_PLUGIN_ROOT}` não estiver setado, use o caminho do plugin no repo: `.../insideout-cowork/plugins/io-social-media/skills/image-generation/toolkit`.)
+Dependências (se faltar import): `pip install -r "$TOOLKIT/requirements.txt"`.
 
-### Chave de API
+### Chave de API — fluxo gerenciado por você (agente)
 
-O motor lê `GEMINI_API_KEY` do ambiente. Configure por uma destas formas (nunca commite a chave):
+O usuário **não** deve navegar até o diretório do plugin. Você cuida disso antes da primeira geração:
 
-1. **Arquivo `.env` (método confiável hoje)**: no diretório do toolkit existe um `.env.example`. Copie-o para `.env` na mesma pasta e preencha a chave:
-   ```bash
-   cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
-   cp .env.example .env   # depois edite .env e cole a chave em GEMINI_API_KEY=
-   ```
-   O `.env` é gitignored — a chave nunca vai para o repositório. Chave em https://aistudio.google.com/apikey
-2. **userConfig do plugin**: ao instalar, o Cowork pede `GEMINI_API_KEY` e injeta como variável de ambiente. ⚠️ Há um bug conhecido na UI do Cowork (issues #39455 e #39827) que pode impedir a injeção — por isso o método 1 (`.env`) é o recomendado até o bug ser resolvido. Quando funcionar, o userConfig dispensa o `.env`.
+1. Se `GEMINI_API_KEY` não estiver no ambiente **e** não houver `.env` com a chave preenchida na pasta de trabalho:
+   - Crie `.env` **na pasta de trabalho** (cwd) com o conteúdo `GEMINI_API_KEY=` (use o `.env.example` do toolkit como modelo de texto).
+   - Garanta que `.env`, `outputs/` e `.image_session.json` estejam no `.gitignore` da pasta de trabalho **se for um repositório git** — a chave não pode vazar.
+   - Peça ao usuário para abrir esse `.env` (que está na pasta dele, não no AppData), colar a chave do Gemini depois do `=`, salvar e mandar continuar. Chave em https://aistudio.google.com/apikey
+2. Com a chave no `.env` da pasta de trabalho, `load_dotenv()` a carrega automaticamente (cwd = pasta de trabalho).
 
-O script tenta `os.environ` e depois `load_dotenv()`, então qualquer um dos dois caminhos funciona (e o `.env` tem precedência prática quando o userConfig falha).
+`userConfig` do plugin (Cowork pede a chave na instalação) seria o ideal, mas há um bug conhecido na UI do Cowork (issues **#39455** e **#39827**) que impede a injeção — por isso o fluxo via `.env` na pasta de trabalho é o caminho atual. O script tenta `os.environ` primeiro, então quando o bug for corrigido o userConfig também funciona sem `.env`.
 
 ## Scripts disponíveis
 
@@ -75,22 +83,25 @@ O script tenta `os.environ` e depois `load_dotenv()`, então qualquer um dos doi
 Cada `generate()` continua a conversa anterior automaticamente (sessão em `.image_session.json`). Só chame `new_session()` ao começar uma peça nova e não relacionada.
 
 ```bash
-cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
 python -c "
+import sys; sys.path.insert(0, r'$TOOLKIT')
 from dotenv import load_dotenv; load_dotenv()
 from image_gen import generate
 result = generate('prompt enriquecido aqui...', aspect_ratio='9:16', resolution='1K')
 print(f'Gerada: {result}')
 "
 ```
+(Rodado da pasta de trabalho — `outputs/` e `.image_session.json` caem lá.)
 
 ### 2. style_extract.py — análise de estilo
 
 Use quando o usuário fornecer uma **imagem custom** de referência ("use esta imagem", "aplique o visual desta foto"). **Obrigatório extrair antes de gerar** — a análise de visão do Gemini é muito superior a descrição manual.
 
 ```bash
-cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
 python -c "
+import sys; sys.path.insert(0, r'$TOOLKIT')
 from dotenv import load_dotenv; load_dotenv()
 from style_extract import extract_style
 print(extract_style('caminho/para/referencia.jpg'))
@@ -102,12 +113,12 @@ Para um elemento específico (ex.: só a paleta, só a tipografia da peça de re
 
 Use quando o usuário citar "estilo #125" / "usa o estilo 42". **Não** extraia — esses estilos já estão prontos.
 ```bash
-cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
-python get_style.py 125
+TOOLKIT="${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+python "$TOOLKIT/get_style.py" 125
 ```
 Retorna `id`, `name`, `prompt` (substitua `[subject]` pelo assunto), `category`, `exampleUse`.
 
-Catálogo navegável: abra `toolkit/style-library.html` no navegador. **Nota**: o catálogo nasce com **5 estilos de exemplo** (social/PR) — a Inside.out monta as próprias referências de marca adicionando objetos ao array `const styles` no `style-library.html` (campos: `id`, `name`, `category`, `tags`, `prompt`, `exampleUse`, `thumbnail`). Estilo sem thumbnail gerado ainda exibe um placeholder limpo ("sem preview") automaticamente — segue 100% utilizável via `get_style.py` / "estilo #N".
+O catálogo nasce com **5 estilos de exemplo** (social/PR) embarcados no toolkit. **Limitação conhecida**: como o diretório do plugin é read-only/efêmero, a Inside.out **não consegue** customizar o `style-library.html` embarcado nem versionar thumbnails próprios por enquanto — isso depende de um mecanismo de "biblioteca de estilos do usuário" na pasta de trabalho (problema em aberto, fora do escopo desta versão). Os 5 exemplos funcionam 100% via `get_style.py` / "estilo #N"; referências custom hoje vão pelo `style_extract.py` (imagem de referência), que não depende do catálogo.
 
 ## Lógica de decisão
 
@@ -119,14 +130,14 @@ Catálogo navegável: abra `toolkit/style-library.html` no navegador. **Nota**: 
 
 ## Regras importantes
 
-- **Nunca modifique os scripts do toolkit** (`image_gen.py`, `style_extract.py`, `get_style.py`, `style-library.html`, `.env`). Se precisar de lógica custom, crie um arquivo temporário que importe do toolkit.
-- **Nunca commite `.env`, `outputs/` nem `.image_session.json`** (já cobertos pelo `.gitignore`).
+- **O toolkit é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`, `style-library.html`): não tente editar nem gravar nada lá. Lógica custom roda na pasta de trabalho importando o toolkit via `sys.path`.
+- **`.env`, `outputs/` e `.image_session.json` vivem na pasta de trabalho.** Se ela for um repositório git, garanta que os três estejam no `.gitignore` antes de criar o `.env` — a chave não pode vazar.
 - Sempre retorne ao usuário o caminho da imagem gerada.
 - Dependências: `pip install -r requirements.txt` (google-genai, python-dotenv, pillow) caso a geração falhe por import.
 
 ## Tratamento de erros
 
-**Geração falha**: verifique `GEMINI_API_KEY` no ambiente/`.env`; confirme o diretório do toolkit; tente `new_session()` (sessão corrompida); cheque os paths das imagens de referência; instale deps via `requirements.txt`.
+**Geração falha**: verifique `GEMINI_API_KEY` (env ou `.env` na pasta de trabalho); confirme que está rodando da pasta de trabalho com o toolkit no `sys.path` (não fez `cd` pro plugin); tente `new_session()` (sessão corrompida); cheque os paths das imagens de referência; instale deps via `pip install -r "$TOOLKIT/requirements.txt"`.
 **Extração falha**: confirme que o caminho da imagem existe e é legível; valide a chave.
 **get_style falha**: confirme que o número existe no catálogo e que `style-library.html` está presente.
 
