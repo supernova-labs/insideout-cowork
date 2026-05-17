@@ -10,7 +10,7 @@ Marketplace de plugins do Claude Cowork da InsideOut PR.
   - `.claude-plugin/plugin.json` — Manifesto do plugin
   - `skills/about-insideout/` — Conhecimento sobre a empresa, serviços e modelo de operação
   - `skills/analyze-briefing/SKILL.md` — Skill de análise de briefings (framework + fluxo em 3 passos)
-  - `skills/image-generation/` — Geração de imagens com IA (Gemini 3 Pro) para social media; toolkit Python embarcado. Requer `GEMINI_API_KEY` via `.env` no toolkit (copiar de `.env.example`); userConfig do plugin é alternativa quando o bug do Cowork #39455/#39827 for resolvido
+  - `skills/image-generation/` — Geração de imagens com IA (Gemini 3 Pro) para social media; toolkit Python embarcado (read-only). Roda da pasta de trabalho da sessão; `GEMINI_API_KEY` via `.env` na pasta de trabalho (o agente cria e gerencia). userConfig do plugin é alternativa quando o bug do Cowork #39455/#39827 for resolvido
 
 ## Uso
 
