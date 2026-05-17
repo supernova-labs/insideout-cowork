@@ -30,7 +30,8 @@
           "plugins/io-social-media/skills/image-generation/toolkit/style_extract.py",
           "plugins/io-social-media/skills/image-generation/toolkit/get_style.py",
           "plugins/io-social-media/skills/image-generation/toolkit/style-library.html",
-          "plugins/io-social-media/skills/image-generation/toolkit/requirements.txt"
+          "plugins/io-social-media/skills/image-generation/toolkit/requirements.txt",
+          "plugins/io-social-media/skills/image-generation/toolkit/.env.example"
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["image-generation", "social-media", "gemini"]
@@ -69,7 +70,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "componentCounts": {
         "skills": 3,
         "agents": 0,
