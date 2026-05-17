@@ -1,6 +1,9 @@
 .DS_Store
 Thumbs.db
 
+# Estado local do Claude Code CLI (não versionar)
+.claude/
+
 # image-generation toolkit — segredos e artefatos de runtime (NUNCA commitar)
 **/toolkit/.env
 **/toolkit/outputs/

@@ -1,8 +1,8 @@
 ---
 name: image-generation
-description: Geração de imagens com IA (Gemini 3 Pro) para social media e PR da InsideOut. Use para gerar, criar ou modificar imagens de posts, stories, reels e capas; extrair estilo de imagem de referência; ou usar estilos numerados (ex.: "estilo #42").
+description: 'Geração de imagens com IA (Gemini 3 Pro) para social media e PR da InsideOut. Use para gerar, criar ou modificar imagens de posts, stories, reels e capas; extrair estilo de imagem de referência; ou usar estilos numerados (ex.: "estilo #42").'
 allowed-tools: Bash, Read, Write
-argument-hint: [descrição da imagem, formato social ou "estilo #N"]
+argument-hint: '[descrição da imagem, formato social ou "estilo #N"]'
 disable-model-invocation: false
 ---
 
