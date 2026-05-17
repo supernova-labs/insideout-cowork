@@ -1,17 +1,9 @@
 {
   "name": "io-social-media",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Plugin da InsideOut PR para análise de briefings e gestão de social media",
   "author": { "name": "InsideOut PR" },
   "homepage": "https://insideoutpr.com.br",
   "keywords": ["briefing", "social-media", "pr", "marketing", "image-generation"],
-  "skills": ["./skills"],
-  "userConfig": {
-    "GEMINI_API_KEY": {
-      "type": "string",
-      "title": "Gemini API Key",
-      "description": "Chave de API do Google Gemini, usada pela skill image-generation para gerar/analisar imagens",
-      "sensitive": true
-    }
-  }
+  "skills": ["./skills"]
 }
