@@ -2,6 +2,8 @@
 
 Marketplace de plugins do Claude Cowork da InsideOut PR.
 
+Doc humana/mantenedor (skills, install, release): ver [`README.md`](README.md). Este arquivo é a referência do agente trabalhando no repo.
+
 ## Estrutura
 
 - `.claude-plugin/marketplace.json` — Manifesto do marketplace (`insideout-marketplace`)
@@ -30,3 +32,7 @@ Para analisar um briefing, use `/io-social-media:analyze-briefing` e forneça o 
 1. Criar `plugins/<novo-plugin>/.claude-plugin/plugin.json`
 2. Adicionar a entrada em `.claude-plugin/marketplace.json` (`plugins[]`)
 3. Atualizar `agent-smith-index.json`
+
+## Release (repo co-acessado com cliente)
+
+Nunca push direto na `main` — branch + PR, e quem trabalha aqui mergeia o próprio PR. Bump de versão **sincronizado** em `plugin.json` + `marketplace.json` (+ `agent-smith-index.json`); depois `claude plugin tag --push` do diretório do plugin → tag `io-social-media--v{versão}` (a resolução de versão do Cowork ancora nela). Docs-only não precisa de bump/tag. Detalhe completo no [`README.md`](README.md).
