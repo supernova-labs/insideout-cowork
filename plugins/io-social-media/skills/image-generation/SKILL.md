@@ -53,9 +53,17 @@ cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
 
 ### Chave de API
 
-O motor lê `GEMINI_API_KEY` do ambiente. Configure de uma destas formas (nunca commite a chave):
-1. **userConfig do plugin** (recomendado): ao instalar o plugin, informe `GEMINI_API_KEY` — fica no keychain do sistema e é injetada como variável de ambiente.
-2. **`.env` local** no diretório do toolkit (gitignored): `GEMINI_API_KEY=...`
+O motor lê `GEMINI_API_KEY` do ambiente. Configure por uma destas formas (nunca commite a chave):
+
+1. **Arquivo `.env` (método confiável hoje)**: no diretório do toolkit existe um `.env.example`. Copie-o para `.env` na mesma pasta e preencha a chave:
+   ```bash
+   cd "${CLAUDE_PLUGIN_ROOT}/skills/image-generation/toolkit"
+   cp .env.example .env   # depois edite .env e cole a chave em GEMINI_API_KEY=
+   ```
+   O `.env` é gitignored — a chave nunca vai para o repositório. Chave em https://aistudio.google.com/apikey
+2. **userConfig do plugin**: ao instalar, o Cowork pede `GEMINI_API_KEY` e injeta como variável de ambiente. ⚠️ Há um bug conhecido na UI do Cowork (issues #39455 e #39827) que pode impedir a injeção — por isso o método 1 (`.env`) é o recomendado até o bug ser resolvido. Quando funcionar, o userConfig dispensa o `.env`.
+
+O script tenta `os.environ` e depois `load_dotenv()`, então qualquer um dos dois caminhos funciona (e o `.env` tem precedência prática quando o userConfig falha).
 
 ## Scripts disponíveis
 
