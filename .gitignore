@@ -1,1 +1,10 @@
 .DS_Store
+Thumbs.db
+
+# image-generation toolkit — segredos e artefatos de runtime (NUNCA commitar)
+**/toolkit/.env
+**/toolkit/outputs/
+**/toolkit/.image_session.json
+**/__pycache__/
+*.pyc
+*.pyo

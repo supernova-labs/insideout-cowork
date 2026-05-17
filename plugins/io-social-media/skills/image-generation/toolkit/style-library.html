@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Instrument+Serif&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0b;
+      --bg-secondary: #141416;
+      --bg-tertiary: #1c1c1f;
+      --border: #2a2a2e;
+      --text-primary: #fafafa;
+      --text-secondary: #888;
+      --text-muted: #555;
+      --accent: #e8ff47;
+      --accent-dim: #a3b832;
+      --success: #47ffb4;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 0% 0%, rgba(232, 255, 71, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(71, 255, 180, 0.02) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    header {
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .tag-filters {
+      display: none;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      width: 100%;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+    }
+
+    .tag-filters.active {
+      display: flex;
+    }
+
+    .tag-filter-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      padding: 0.35rem 0.7rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tag-filter-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+
+    .tag-filter-btn.active {
+      background: var(--success);
+      border-color: var(--success);
+      color: var(--bg-primary);
+    }
+
+    .style-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .style-table th {
+      text-align: left;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .style-table th:first-child {
+      width: 60px;
+    }
+
+    .style-table th:nth-child(2) {
+      width: 100px;
+    }
+
+    .style-table tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+
+    .style-table tbody tr:hover {
+      background: var(--bg-secondary);
+    }
+
+    .style-table td {
+      padding: 1.25rem 1rem;
+      vertical-align: top;
+    }
+
+    .index {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .thumbnail:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Placeholder intencional para estilos sem thumbnail versionado.
+       O estilo segue 100% utilizável via get_style.py / "estilo #N". */
+    .thumbnail--none {
+      width: 80px;
+      height: 80px;
+      border-radius: 6px;
+      border: 1px dashed var(--border);
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 8px;
+      line-height: 1.2;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 4px;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    /* Hover preview styles */
+    .hover-preview {
+      display: none;
+      position: fixed;
+      z-index: 500;
+      pointer-events: none;
+      max-width: 400px;
+      max-height: 400px;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      padding: 4px;
+    }
+
+    .hover-preview.active {
+      display: block;
+      animation: previewFadeIn 0.15s ease;
+    }
+
+    .hover-preview img {
+      max-width: 100%;
+      max-height: 392px;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+    }
+
+    @keyframes previewFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+      animation: lightboxFadeIn 0.2s ease;
+    }
+
+    @keyframes lightboxFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 2rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .lightbox-close:hover {
+      color: var(--text-primary);
+    }
+
+    .style-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.35rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .style-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.25rem 0.5rem;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      color: var(--text-secondary);
+    }
+
+    .category-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.35rem 0.65rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .prompt-cell {
+      position: relative;
+      max-width: 400px;
+    }
+
+    .prompt-text {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.75rem;
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      max-height: 5.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .prompt-text:hover {
+      border-color: var(--accent-dim);
+      color: var(--text-primary);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 50;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    .prompt-text::after {
+      content: 'Click to copy';
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .prompt-text:hover::after {
+      opacity: 1;
+    }
+
+    .prompt-text.copied {
+      border-color: var(--success);
+    }
+
+    .prompt-text.copied::after {
+      content: 'Copied!';
+      color: var(--success);
+      opacity: 1;
+    }
+
+    /* Markdown formatting inside prompt */
+    .prompt-text strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .prompt-text ul, .prompt-text ol {
+      margin: 0.3rem 0;
+      padding-left: 1.2rem;
+    }
+
+    .prompt-text li {
+      margin: 0.15rem 0;
+    }
+
+    .prompt-text p {
+      margin: 0.4rem 0;
+    }
+
+    .prompt-text p:first-child {
+      margin-top: 0;
+    }
+
+    .example-use {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--success);
+      color: var(--bg-primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 900px) {
+      h1 { font-size: 2.5rem; }
+      .style-table th:nth-child(5),
+      .style-table td:nth-child(5) { display: none; }
+      .prompt-cell { max-width: 250px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Style <span>Library</span></h1>
+      <p class="subtitle">Your personal collection of reusable visual styles. Tell Claude the index # to use any style.</p>
+    </header>
+
+    <div class="filters">
+      <div class="category-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Framework">Framework</button>
+        <button class="filter-btn" data-filter="Flow">Flow</button>
+        <button class="filter-btn" data-filter="Architecture">Architecture</button>
+        <button class="filter-btn" data-filter="Mockup">Mockup</button>
+        <button class="filter-btn" data-filter="Persona">Persona</button>
+        <button class="filter-btn" data-filter="Marketing">Marketing</button>
+        <button class="filter-btn" data-filter="Artistic">Artistic</button>
+      </div>
+      <div class="tag-filters" id="tag-filters">
+        <!-- Populated by JS when category is selected -->
+      </div>
+    </div>
+
+    <table class="style-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Preview</th>
+          <th>Style</th>
+          <th>Category</th>
+          <th>Prompt (click to copy)</th>
+          <th>Good For</th>
+        </tr>
+      </thead>
+      <tbody id="styles-body">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+
+    <div class="empty-state" id="empty-state" style="display: none;">
+      <h2>No styles match this filter</h2>
+      <p>Try a different category or add more styles to your library.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img src="" alt="Expanded view" id="lightbox-img">
+  </div>
+
+  <!-- Hover Preview -->
+  <div class="hover-preview" id="hover-preview">
+    <img src="" alt="Preview" id="hover-preview-img">
+  </div>
+
+  <script>
+    // ===========================================
+    // CANONICAL CATEGORIES AND TAGS
+    // When adding new styles, Claude MUST use these categories and tags only.
+    // ===========================================
+    const CATEGORIES = ["Framework", "Flow", "Architecture", "Mockup", "Persona", "Marketing", "Artistic"];
+
+    const CANONICAL_TAGS = {
+      "Framework": ["2x2-matrix", "pyramid", "venn", "canvas", "concentric", "triangle"],
+      "Flow": ["process", "journey-map", "flowchart", "steps", "sequence"],
+      "Architecture": ["hierarchy", "hub-spoke", "system-diagram", "org-chart", "tree"],
+      "Mockup": ["wireframe", "device-frame", "ui-concept", "landing-page", "mobile", "desktop"],
+      "Persona": ["portrait", "lifestyle", "headshot", "context", "illustrated", "scene"],
+      "Marketing": ["ad", "social", "announcement", "banner", "hero"],
+      "Artistic": ["flat-illustration", "hand-drawn", "watercolor", "photography", "retro", "minimalist", "bold-graphic", "3d-render"]
+    };
+
+    // Style library data - Claude can add entries here
+    const styles = [
+      {
+        id: 1,
+        name: "Instagram Product Post",
+        category: "Marketing",
+        tags: ["social"],
+        thumbnail: "thumbnails/social-instagram-product.png",
+        prompt: "**Task:** Create an Instagram-native product showcase post\n\n**Style:**\n- Vibrant, thumb-stopping design\n- Gradient background (purple to blue)\n- Modern rounded typography\n- 3D-style floating UI mockups\n\n**Output:**\n- Square format (1080x1080px)\n- Rich gradient with subtle texture\n\n**Content:**\n- Headline: \"Ship Faster With Smart Roadmaps\"\n- Visual: 3D perspective mockups of roadmap interface\n- Branding: Small logo bottom corner\n- Emoji: Rocket ship 🚀\n\n**Layout:**\n- Centered composition\n- Headline at top with padding\n- Mockups arranged in perspective stack\n- Balanced negative space\n\n**Constraints:**\n- English text only\n- High contrast for mobile viewing\n- Instagram-optimized colors",
+        exampleUse: "Instagram posts, product showcases, feature highlights on social media"
+      },
+      {
+        id: 2,
+        name: "LinkedIn Professional Graphic",
+        category: "Marketing",
+        tags: ["social"],
+        thumbnail: "thumbnails/social-linkedin-professional.png",
+        prompt: "**Task:** Create a professional LinkedIn insight post\n\n**Style:**\n- Clean, corporate aesthetic\n- Professional color scheme (navy, white, gold accent)\n- Serif and sans-serif combination\n- Data visualization elements\n\n**Output:**\n- Landscape format (1200x627px, LinkedIn native)\n- Solid or subtle gradient background\n\n**Content:**\n- Headline: \"The State of Product Management 2025\"\n- Supporting stat: \"73% of PMs say AI changed their workflow\"\n- Visual: Simple bar chart or infographic element\n- Branding: Company name \"ProductFlow Insights\"\n\n**Layout:**\n- Text-heavy design, left-aligned\n- Chart/visual element right side\n- Professional spacing and hierarchy\n- Subtle brand accent at bottom\n\n**Constraints:**\n- English text only\n- Corporate professional tone\n- Optimized for LinkedIn feed",
+        exampleUse: "LinkedIn posts, industry insights, thought leadership content, B2B marketing"
+      },
+      {
+        id: 3,
+        name: "Twitter/X Announcement Card",
+        category: "Marketing",
+        tags: ["social", "announcement"],
+        thumbnail: "thumbnails/social-twitter-announcement.png",
+        prompt: "**Task:** Create a Twitter/X card for feature announcement\n\n**Style:**\n- Bold, punchy design\n- High-contrast colors (black background, electric blue accents)\n- Condensed bold typography\n- Minimal graphic elements\n\n**Output:**\n- Twitter card format (1200x675px)\n- Dark background with neon accents\n\n**Content:**\n- Headline: \"NEW: Real-Time Sync\"\n- Subtext: \"Your team, always in sync. Zero lag.\"\n- Icon: Sync symbol with glow effect\n- Branding: \"TaskFlow\" wordmark\n\n**Layout:**\n- Centered text\n- Large icon top center\n- Headline middle\n- Brand bottom\n- Plenty of breathing room\n\n**Constraints:**\n- English text only\n- High contrast for timeline scanning\n- Eye-catching but not cluttered",
+        exampleUse: "Twitter/X announcements, quick feature drops, social media launch teasers"
+      },
+      {
+        id: 4,
+        name: "Product Launch Gradient",
+        category: "Marketing",
+        tags: ["announcement"],
+        thumbnail: "thumbnails/announcement-launch-gradient.png",
+        prompt: "**Task:** Create an exciting product launch announcement\n\n**Style:**\n- Futuristic gradient design\n- Multi-color gradient (cyan to purple to pink)\n- Bold geometric typography\n- Light rays and glow effects\n\n**Output:**\n- Landscape format (1920x1080px)\n- Dynamic flowing gradient background\n\n**Content:**\n- Headline: \"Introducing PulseFlow 2.0\"\n- Subheadline: \"The future of agile project management\"\n- Launch date: \"Available January 15, 2025\"\n- Visual: Abstract geometric shapes suggesting movement\n\n**Layout:**\n- Text centered with dramatic spacing\n- Geometric elements framing the text\n- Symmetrical composition\n- Glowing accents\n\n**Constraints:**\n- English text only\n- All text prominently displayed\n- Exciting, launch-worthy energy",
+        exampleUse: "Major product launches, version releases, big announcements, event promotion"
+      },
+      {
+        id: 5,
+        name: "Product Flat Lay Photography",
+        category: "Artistic",
+        tags: ["photography"],
+        thumbnail: "thumbnails/photography-flatlay.png",
+        prompt: "**Task:** Create an artistic flat lay photograph of productivity tools and stationery.\n\n**Style:**\n- Overhead photography with clean, organized arrangement\n- Natural light from above creating soft shadows\n- Minimalist aesthetic with plenty of negative space\n- Professional product photography quality\n- Soft focus on edges, crisp center\n\n**Output:**\n- Square aspect ratio (1:1)\n- Clean white or neutral background\n\n**Content:**\n- Tech gadgets (laptop, phone, headphones)\n- Notebooks, pens, coffee cup\n- Geometric arrangement with intentional spacing\n- Conveys productivity and organization\n\n**Layout:**\n- Perfectly overhead view (bird's eye)\n- Objects arranged in pleasing grid or diagonal\n- Balanced composition with breathing room\n\n**Constraints:**\n- No text or logos\n- Clean, professional aesthetic\n- Realistic photography\n- Subtle shadows only",
+        exampleUse: "Product showcases, tool collections, organizational systems, professional aesthetics"
+      }
+    ];
+
+    const tbody = document.getElementById('styles-body');
+    const emptyState = document.getElementById('empty-state');
+    const toast = document.getElementById('toast');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const tagFiltersContainer = document.getElementById('tag-filters');
+    let currentFilter = 'all';
+    let currentTag = null;
+
+    function renderTagFilters() {
+      if (currentFilter === 'all') {
+        tagFiltersContainer.classList.remove('active');
+        tagFiltersContainer.innerHTML = '';
+        return;
+      }
+
+      const tags = CANONICAL_TAGS[currentFilter] || [];
+      if (tags.length === 0) {
+        tagFiltersContainer.classList.remove('active');
+        tagFiltersContainer.innerHTML = '';
+        return;
+      }
+
+      tagFiltersContainer.innerHTML = tags.map(tag =>
+        `<button class="tag-filter-btn${currentTag === tag ? ' active' : ''}" data-tag="${tag}">${tag}</button>`
+      ).join('');
+      tagFiltersContainer.classList.add('active');
+
+      // Add click handlers for tag buttons
+      document.querySelectorAll('.tag-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const clickedTag = btn.dataset.tag;
+          if (currentTag === clickedTag) {
+            // Deselect if clicking same tag
+            currentTag = null;
+          } else {
+            currentTag = clickedTag;
+          }
+          renderTagFilters();
+          renderStyles();
+        });
+      });
+    }
+
+    // Simple markdown to HTML converter
+    function renderMarkdown(text) {
+      return text
+        // Bold: **text** or __text__
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/__(.+?)__/g, '<strong>$1</strong>')
+        // Italic: *text* or _text_
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/_([^_]+)_/g, '<em>$1</em>')
+        // Line breaks to paragraphs (double newline)
+        .split(/\n\n+/)
+        .map(para => {
+          // Check if paragraph is a list
+          const lines = para.split('\n');
+          if (lines[0].match(/^[-•]\s/)) {
+            // Unordered list
+            const items = lines.map(line => `<li>${line.replace(/^[-•]\s+/, '')}</li>`).join('');
+            return `<ul>${items}</ul>`;
+          }
+          // Regular paragraph - convert single newlines to <br>
+          return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+        })
+        .join('');
+    }
+
+    // Fallback automático: se um estilo não tiver thumbnail (ex.: referência
+    // nova que a Inside.out adicionou e ainda não gerou preview), troca a
+    // imagem por um placeholder limpo. Zero manutenção de lista.
+    function thumbFallback(img) {
+      const d = document.createElement('div');
+      d.className = 'thumbnail--none';
+      d.appendChild(document.createTextNode('sem'));
+      d.appendChild(document.createElement('br'));
+      d.appendChild(document.createTextNode('preview'));
+      img.replaceWith(d);
+    }
+
+    function renderStyles() {
+      let filtered = currentFilter === 'all'
+        ? styles
+        : styles.filter(s => s.category === currentFilter);
+
+      // Apply tag filter if set
+      if (currentTag) {
+        filtered = filtered.filter(s => s.tags.includes(currentTag));
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      tbody.innerHTML = filtered.map(style => `
+        <tr data-category="${style.category}">
+          <td><span class="index">${String(style.id).padStart(2, '0')}</span></td>
+          <td><img class="thumbnail" src="${style.thumbnail}" alt="${style.name}" onerror="thumbFallback(this)"></td>
+          <td>
+            <div class="style-name">${style.name}</div>
+            <div class="style-tags">
+              ${style.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+          </td>
+          <td><span class="category-badge">${style.category}</span></td>
+          <td class="prompt-cell">
+            <div class="prompt-text" data-prompt="${encodeURIComponent(style.prompt)}">${renderMarkdown(style.prompt)}</div>
+          </td>
+          <td><span class="example-use">${style.exampleUse}</span></td>
+        </tr>
+      `).join('');
+
+      // Add click handlers for copy
+      document.querySelectorAll('.prompt-text').forEach(el => {
+        el.addEventListener('click', () => copyPrompt(el));
+      });
+
+      // Add click handlers for lightbox
+      document.querySelectorAll('img.thumbnail').forEach(el => {
+        el.addEventListener('click', () => openLightbox(el.src));
+        el.addEventListener('mouseenter', (e) => showHoverPreview(el.src, e));
+        el.addEventListener('mousemove', (e) => moveHoverPreview(e));
+        el.addEventListener('mouseleave', hideHoverPreview);
+      });
+    }
+
+    function copyPrompt(el) {
+      const prompt = decodeURIComponent(el.dataset.prompt);
+      navigator.clipboard.writeText(prompt).then(() => {
+        el.classList.add('copied');
+        toast.classList.add('show');
+        setTimeout(() => {
+          el.classList.remove('copied');
+          toast.classList.remove('show');
+        }, 2000);
+      });
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        currentTag = null; // Reset tag when category changes
+        renderTagFilters();
+        renderStyles();
+      });
+    });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.querySelector('.lightbox-close');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', closeLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Hover preview functionality
+    const hoverPreview = document.getElementById('hover-preview');
+    const hoverPreviewImg = document.getElementById('hover-preview-img');
+
+    function showHoverPreview(src, e) {
+      hoverPreviewImg.src = src;
+      hoverPreview.classList.add('active');
+      moveHoverPreview(e);
+    }
+
+    function moveHoverPreview(e) {
+      const preview = hoverPreview;
+      const padding = 20;
+
+      // Get viewport dimensions
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Position to the right of cursor by default
+      let x = e.clientX + padding;
+      let y = e.clientY - 100;
+
+      // If preview would go off right edge, show on left of cursor
+      if (x + 420 > viewportWidth) {
+        x = e.clientX - 420 - padding;
+      }
+
+      // Keep within vertical bounds
+      if (y < padding) {
+        y = padding;
+      } else if (y + 420 > viewportHeight) {
+        y = viewportHeight - 420 - padding;
+      }
+
+      preview.style.left = x + 'px';
+      preview.style.top = y + 'px';
+    }
+
+    function hideHoverPreview() {
+      hoverPreview.classList.remove('active');
+    }
+
+    renderStyles();
+  </script>
+</body>
+</html>
