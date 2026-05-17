@@ -65,21 +65,34 @@ print(generate('...'))
 ```
 Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
 
-### Chave de API — fluxo gerenciado por você (agente)
+### ⚠️ Cowork desktop: o filesystem da pasta de trabalho é hostil
 
-O usuário **não** deve navegar até o diretório do plugin. Você cuida disso antes da primeira geração:
+No Cowork desktop a pasta de trabalho é um mount Windows→Linux que: **(a) trunca leitura** de arquivos (`.env` chega cortado em ~20 chars — bytes brutos truncados, não dá pra recuperar em código); **(b) barra criação** de arquivo em subdir (`outputs/`); **(c) barra `unlink`** (`new_session`). Diretórios nativos do sandbox (`/tmp`, área de outputs do sandbox) funcionam normal. É a causa raiz comum dos 3 bugs conhecidos.
 
-1. Se não houver `.env` com a chave preenchida na pasta de trabalho:
-   - Crie `.env` **na pasta de trabalho** (cwd) com o conteúdo `GEMINI_API_KEY=` (use o `${CLAUDE_PLUGIN_ROOT}/core/.env.example` como modelo de texto).
-   - Garanta que `.env`, `outputs/` e `.image_session.json` estejam no `.gitignore` da pasta de trabalho **se for um repositório git** — a chave não pode vazar.
-   - Peça ao usuário para abrir esse `.env` (que está na pasta dele, não no AppData), colar a chave do Gemini depois do `=`, salvar e mandar continuar. Chave em https://aistudio.google.com/apikey
-2. O padrão de invocação usa **`load_dotenv(find_dotenv(usecwd=True), override=True)`** + `.strip()` — não use `load_dotenv()` pelado.
+### Chave de API — passe inline (não dependa do .env montado)
 
-**Por que esse padrão exato é obrigatório** (0.3.1 — duas falhas que se somavam):
-- **`find_dotenv(usecwd=True)`**: `load_dotenv()` pelado resolve o `.env` a partir do diretório do *script* (`core/`), **não** do cwd — então o `.env` da pasta de trabalho nunca era encontrado sob `python -c`. `usecwd=True` ancora a busca no cwd (pasta de trabalho).
-- **`override=True`** + `userConfig` **removido** do `plugin.json`: o bug do Cowork (issues **#39455** / **#39827**) injeta a `GEMINI_API_KEY` **truncada** no ambiente; sem `override` essa variável contaminada vence o `.env` correto → API recusa como "inválida". `.strip()` remove `\r`/espaço (Windows/Notepad salvam CRLF).
+O caminho **suportado e confiável** no Cowork desktop é passar a chave **inline** no comando, nunca lê-la de um `.env` na pasta montada (trunca):
 
-Não reintroduza `userConfig`, não troque por `load_dotenv()` pelado, não remova `override` nem `usecwd=True` enquanto o bug do Cowork existir.
+```bash
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+GEMINI_API_KEY="<chave completa do usuário>" python -c "
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
+import os, tempfile
+os.environ['IMAGE_GEN_OUTPUT_DIR'] = os.path.join(tempfile.gettempdir(), 'io-imagegen')
+os.environ['IMAGE_GEN_SESSION_FILE'] = os.path.join(tempfile.gettempdir(), 'io-imagegen', '.session.json')
+from image_gen import generate
+print(generate('...'))
+"
+# depois: cp do PNG gerado (caminho impresso) para a pasta de trabalho do usuário
+```
+
+Como obter a chave: peça ao usuário que **cole a chave completa no chat** (é a chave dele, sessão dele) — não tente ler de um `.env` na pasta montada, ele virá truncado. Avise que a chave não deve ser commitada. Chave em https://aistudio.google.com/apikey
+
+O `image_gen.py` (0.3.2+) **falha rápido com mensagem clara** se a chave estiver truncada/ausente (em vez do críptico `API_KEY_INVALID`), **detecta `outputs/` não-gravável e cai pra um dir nativo** (imprime onde salvou — copie de lá pro workspace), e `new_session()` sobrevive a `unlink` barrado.
+
+Fallback (ambientes onde o `.env` É legível, ex.: não-desktop): `load_dotenv(find_dotenv(usecwd=True), override=True)` + `.strip()` continua válido. Não reintroduza `userConfig` (o bug #39455/#39827 injeta chave truncada). No Cowork desktop, **inline ganha do `.env`**.
 
 ## Scripts disponíveis
 
