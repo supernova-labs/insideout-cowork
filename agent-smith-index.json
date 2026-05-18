@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-18T18:00:00Z",
+  "lastUpdated": "2026-05-18T20:00:00Z",
 
   "components": {
     "skills": [
@@ -72,6 +72,22 @@
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["product-catalog", "brand", "social-media"]
+      },
+      {
+        "name": "generate-grid",
+        "path": "plugins/io-social-media/skills/generate-grid/SKILL.md",
+        "description": "Grid editorial mensal por marca — esqueleto canônico (marca×mês), ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
+        "supportingFiles": [
+          "plugins/io-social-media/core/grid_library.py",
+          "plugins/io-social-media/core/_libcommon.py",
+          "plugins/io-social-media/core/grid-template.html",
+          "plugins/io-social-media/core/grids.seed.json",
+          "plugins/io-social-media/core/rules-seed/clinique.md",
+          "plugins/io-social-media/core/calendar-seed/2026.md",
+          "plugins/io-social-media/core/get_grid.py"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["generate-grid", "editorial-calendar", "social-media"]
       }
     ],
 
@@ -157,6 +173,36 @@
       "type": "uses"
     },
     {
+      "from": "skills/generate-grid",
+      "to": "plugins/io-social-media/core/grid_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "plugins/io-social-media/core/grid_library.py",
+      "to": "plugins/io-social-media/core/_libcommon.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/generate-grid",
+      "to": "skills/product-catalog",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-grid",
+      "to": "skills/style-gallery",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-grid",
+      "to": "skills/image-generation",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-grid",
+      "to": "skills/analyze-briefing",
+      "type": "references"
+    },
+    {
       "from": "skills/about-insideout",
       "to": "plugins/io-social-media/skills/about-insideout/about.md",
       "type": "references"
@@ -172,9 +218,9 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "componentCounts": {
-        "skills": 5,
+        "skills": 6,
         "agents": 0,
         "hooks": 0,
         "scripts": 0

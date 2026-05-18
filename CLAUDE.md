@@ -10,12 +10,13 @@ Doc humana/mantenedor (skills, install, release): ver [`README.md`](README.md). 
 - `agent-smith-index.json` — Mapa de componentes (mode: marketplace)
 - `plugins/io-social-media/` — Plugin de análise de briefings e gestão de social media
   - `.claude-plugin/plugin.json` — Manifesto do plugin
-  - `core/` — Motor Python compartilhado (read-only/efêmero no Cowork): `_libcommon.py` (primitivos + disciplina UWP-safe, único ponto de verdade), `style_library.py` (contrato único de estilos), `product_library.py` (contrato único de produtos/marcas), `image_gen.py`, `style_extract.py`, `get_style.py`/`get_product.py` (shims), `gallery-template.html`/`product-catalog-template.html`, `styles.seed.json`/`products.seed.json` (+ `product-seed-photos/`)
+  - `core/` — Motor Python compartilhado (read-only/efêmero no Cowork): `_libcommon.py` (primitivos + disciplina UWP-safe, único ponto de verdade), `style_library.py` (contrato único de estilos), `product_library.py` (contrato único de produtos/marcas), `grid_library.py` (contrato único de grids editoriais), `image_gen.py`, `style_extract.py`, `get_style.py`/`get_product.py`/`get_grid.py` (shims), `gallery-template.html`/`product-catalog-template.html`/`grid-template.html`, `styles.seed.json`/`products.seed.json`/`grids.seed.json` (+ `product-seed-photos/`, `rules-seed/`, `calendar-seed/`)
   - `skills/about-insideout/` — Conhecimento sobre a empresa, serviços e modelo de operação
   - `skills/analyze-briefing/SKILL.md` — Skill de análise de briefings (framework + fluxo em 3 passos); Passo 4 opcional popula/atualiza marca no catálogo via `product_library.brand_from_briefing` (idempotente por slug, não inventa campos ausentes)
   - `skills/image-generation/` — Geração de imagens com IA (Gemini 3 Pro) para social media; consome estilos da galeria e junta produto do catálogo × estilo (`product_library.compose_generation_brief`, modos recriar/preservar). Roda da pasta de trabalho; `GEMINI_API_KEY` via `.env` na pasta de trabalho (o agente cria e gerencia). userConfig do plugin é alternativa quando o bug do Cowork #39455/#39827 for resolvido
   - `skills/style-gallery/` — Biblioteca de estilos visuais reutilizáveis do cliente ("como a peça parece"; CRUD conversacional + galeria HTML); dados em `<pasta de trabalho>/style-gallery/styles/*.json`
   - `skills/product-catalog/` — Catálogo de produtos por marca ("o que é o produto e como a marca fala": voz, mensagens-chave, público, fotos; CRUD + catálogo HTML); dados em `<pasta de trabalho>/product-catalog/{brands,products}/*.json` + `photos/`
+  - `skills/generate-grid/` — Grid editorial mensal por marca ("o que postar e quando": esqueleto canônico marca×mês, ingestão de planilha histórica 2026, edição conversacional de posts, regras/calendário editáveis + grid HTML); dados em `<pasta de trabalho>/grids/<marca>/<AAAA-MM>.json` + `rules/`, `calendar/`. Fase 1: sem geração-do-briefing (Fase 2) nem mockup (Fase 3)
 
 ## Uso
 

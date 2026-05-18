@@ -19,6 +19,12 @@ Thumbs.db
 **/product-catalog/product-catalog.html
 **/product-catalog/.trash/
 
+# grid editorial gerado na pasta de trabalho:
+#   versionar <marca>/*.json, rules/*.md, calendar/*.md, mockups/ (ativo editorial);
+#   ignorar o derivado e a lixeira
+**/grids/grids.html
+**/grids/.trash/
+
 **/__pycache__/
 *.pyc
 *.pyo
