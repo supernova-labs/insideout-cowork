@@ -138,17 +138,29 @@ def _seed_styles() -> list[dict]:
     return json.loads(_SEED_FILE.read_text(encoding="utf-8"))
 
 
-def bootstrap(lib_dir: Path) -> int:
+def bootstrap(lib_dir: Path, _render: bool = True) -> int:
     """
     Se `styles/` não tem nenhum *.json, semeia a partir de styles.seed.json
     (1 arquivo por estilo) e copia os thumbnails do seed. Idempotente:
     nunca sobrescreve arquivo de estilo já existente.
     Retorna quantos estilos foram semeados.
+
+    `_render=False` (uso interno do _ensure_ready) pula o render final pra
+    evitar recursão render_gallery → _ensure_ready → bootstrap.
     """
     lib_dir = _ensure_dirs(Path(lib_dir))
     styles_dir, thumbs_dir, _, _ = _subdirs(lib_dir)
     if any(styles_dir.glob("*.json")):
         return 0
+    # Falha alto se o plugin veio mal empacotado — melhor erro claro do que
+    # uma biblioteca vazia / "sem preview" silenciosa.
+    if not _SEED_FILE.exists():
+        raise StyleLibraryError(
+            f"styles.seed.json ausente em {_CORE_DIR} — plugin mal empacotado.")
+    src_thumbs = _CORE_DIR / "thumbnails"
+    if not src_thumbs.is_dir():
+        raise StyleLibraryError(
+            f"core/thumbnails ausente em {_CORE_DIR} — plugin mal empacotado.")
     seeded = 0
     for s in _seed_styles():
         dest = styles_dir / f"{s['slug']}.json"
@@ -156,14 +168,25 @@ def bootstrap(lib_dir: Path) -> int:
             continue
         _atomic_write(dest, json.dumps(s, ensure_ascii=False, indent=2) + "\n")
         seeded += 1
-    src_thumbs = _CORE_DIR / "thumbnails"
-    if src_thumbs.is_dir():
-        for img in src_thumbs.iterdir():
-            tgt = thumbs_dir / img.name
-            if img.is_file() and not tgt.exists():
-                shutil.copy2(img, tgt)
-    render_gallery(lib_dir)
+    for img in src_thumbs.iterdir():
+        tgt = thumbs_dir / img.name
+        if img.is_file() and not tgt.exists():
+            shutil.copy2(img, tgt)
+    if _render:
+        render_gallery(lib_dir)
     return seeded
+
+
+def _ensure_ready(lib_dir: Path | None = None) -> Path:
+    """Lazy-ensure: resolve a pasta da biblioteca (criando se preciso) e,
+    se `styles/` está vazia, semeia os 5 exemplos + thumbnails (idempotente,
+    sem render pra não recursar). Garante que o workspace seja a fonte única
+    ANTES de exibir/curar/mutar — elimina o fallback-fantasma de seed."""
+    lib_dir = _ensure_dirs(find_library_dir() if lib_dir is None else Path(lib_dir))
+    styles_dir, *_ = _subdirs(lib_dir)
+    if not any(styles_dir.glob("*.json")):
+        bootstrap(lib_dir, _render=False)
+    return lib_dir
 
 
 # --------------------------------------------------------------------------- #
@@ -244,7 +267,7 @@ def add_style(name: str, prompt: str, *, category: str, tags: list[str] | None =
     """Cria um estilo novo. Nunca sobrescreve outro (slug único, id monotônico)."""
     tags = list(tags or [])
     _validate(category, tags)
-    lib_dir = _ensure_dirs(find_library_dir() if lib_dir is None else Path(lib_dir))
+    lib_dir = _ensure_ready(lib_dir)  # materializa os 5 exemplos antes -> id segue em #6
     styles_dir, thumbs_dir, _, _ = _subdirs(lib_dir)
 
     slug = _unique_slug(styles_dir, slugify(name))
@@ -286,15 +309,13 @@ def _find_workspace_file(lib_dir: Path, ref) -> Path:
         if (s.isdigit() and d.get("id") == int(s)) or d.get("slug") == s or d.get("name") == ref:
             return fp
     raise StyleNotFound(
-        f"Estilo '{ref}' não existe na biblioteca do workspace "
-        f"(estilos do seed embarcado são read-only — crie o seu com add_style).")
+        f"Estilo '{ref}' não encontrado na biblioteca "
+        f"(use list_styles / get_style.py --list para ver os disponíveis).")
 
 
 def update_style(ref, *, lib_dir: Path | None = None, **fields) -> dict:
     """Atualiza campos de um estilo do workspace. slug e id são estáveis."""
-    lib_dir = find_library_dir(create=False) if lib_dir is None else Path(lib_dir)
-    if lib_dir is None:
-        raise StyleNotFound("Nenhuma biblioteca no workspace para atualizar.")
+    lib_dir = _ensure_ready(lib_dir)  # 5 exemplos viram arquivos reais editáveis
     fp = _find_workspace_file(Path(lib_dir), ref)
     style = json.loads(fp.read_text(encoding="utf-8"))
     for k in ("schemaVersion", "id", "slug", "createdAt"):
@@ -309,10 +330,7 @@ def update_style(ref, *, lib_dir: Path | None = None, **fields) -> dict:
 
 def delete_style(ref, *, lib_dir: Path | None = None) -> dict:
     """Soft-delete: move o JSON pra .trash/ (recuperável). Não apaga a thumbnail."""
-    lib_dir = find_library_dir(create=False) if lib_dir is None else Path(lib_dir)
-    if lib_dir is None:
-        raise StyleNotFound("Nenhuma biblioteca no workspace.")
-    lib_dir = Path(lib_dir)
+    lib_dir = _ensure_ready(lib_dir)
     fp = _find_workspace_file(lib_dir, ref)
     _, _, trash_dir, _ = _subdirs(lib_dir)
     trash_dir.mkdir(parents=True, exist_ok=True)
@@ -331,7 +349,7 @@ def render_gallery(lib_dir: Path | None = None,
     Lê o template, injeta os estilos (workspace ou seed) e escreve
     `<lib_dir>/style-gallery.html`. Sempre derivado — nunca lido como dado.
     """
-    lib_dir = _ensure_dirs(find_library_dir() if lib_dir is None else Path(lib_dir))
+    lib_dir = _ensure_ready(lib_dir)  # materializa os 5 exemplos -> HTML mostra reais c/ thumb
     styles = sorted(_resolve_read(lib_dir)[0], key=lambda s: s.get("id", 0))
     tpl = Path(template_path or _TEMPLATE_FILE).read_text(encoding="utf-8")
     if _PLACEHOLDER not in tpl:
