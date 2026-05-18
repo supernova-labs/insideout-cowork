@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-18T00:00:00Z",
+  "lastUpdated": "2026-05-18T12:00:00Z",
 
   "components": {
     "skills": [
@@ -30,6 +30,8 @@
           "plugins/io-social-media/core/style_extract.py",
           "plugins/io-social-media/core/get_style.py",
           "plugins/io-social-media/core/style_library.py",
+          "plugins/io-social-media/core/product_library.py",
+          "plugins/io-social-media/core/get_product.py",
           "plugins/io-social-media/core/_libcommon.py",
           "plugins/io-social-media/core/requirements.txt",
           "plugins/io-social-media/core/.env.example"
@@ -125,6 +127,11 @@
       "type": "references"
     },
     {
+      "from": "skills/image-generation",
+      "to": "plugins/io-social-media/core/product_library.py",
+      "type": "uses"
+    },
+    {
       "from": "plugins/io-social-media/core/style_library.py",
       "to": "plugins/io-social-media/core/_libcommon.py",
       "type": "uses"
@@ -150,7 +157,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "componentCounts": {
         "skills": 5,
         "agents": 0,

@@ -314,6 +314,108 @@ def get_product_resolved(ref, brand=None, lib_dir: Path | None = None) -> dict:
 
 
 # --------------------------------------------------------------------------- #
+# junção estilo × produto (Fase B) — consumida pela skill image-generation
+# --------------------------------------------------------------------------- #
+GENERATION_MODES = ("recriar", "preservar")
+
+_MODE_INSTRUCTION = {
+    "recriar": (
+        "Recrie o produto fotorrealisticamente GUIADO pelas fotos de "
+        "referência fornecidas (vários ângulos/composições). Mantenha "
+        "proporções, cor, material e rótulo fiéis à marca; o produto pode "
+        "ser reposicionado e reiluminado conforme o estilo pede."),
+    "preservar": (
+        "Use a foto de referência principal do produto como elemento "
+        "INTOCÁVEL: NÃO redesenhe nem reinterprete o produto. Componha "
+        "apenas o cenário, o fundo e o tratamento do estilo ao redor dele, "
+        "integrando luz e sombra de forma coerente com a foto original."),
+}
+
+
+def compose_generation_brief(style: dict, product: dict,
+                             brand: dict | None = None,
+                             mode: str = "recriar", *,
+                             lib_dir: Path | None = None) -> dict:
+    """
+    Junta as DUAS fontes de referência num briefing único pra geração:
+    estilo (tratamento — "como a peça parece") + produto (subject + fotos
+    como `reference_images`) + brief da marca (tom/composição/guardrails —
+    NUNCA copy automática). Determinístico e testável; o agente ainda faz o
+    enriquecimento final (skill image-generation) antes de chamar generate().
+
+    `style`   : dict de style_library.get_style (usa prompt/name).
+    `product` : dict de get_product / get_product_resolved.
+    `brand`   : dict da marca; se None, usa product['_brand_brief'].
+    `mode`    : 'recriar' (fotos guiam, modelo recria o produto) ou
+                'preservar' (foto real intocável, só o entorno muda).
+
+    Retorna {prompt, mode, reference_images, style, product, brand}.
+    `reference_images`: recriar → todas as fotos; preservar → a 1ª (principal).
+    """
+    if mode not in GENERATION_MODES:
+        raise ProductCatalogError(
+            f"Modo '{mode}' inválido. Use um de: {', '.join(GENERATION_MODES)}.")
+
+    if brand is None:
+        brand = product.get("_brand_brief")
+    brand = brand or {}
+
+    photos_abs = product.get("_photos_abs")
+    if photos_abs is None:
+        photos_abs = [_photo_abs(r, lib_dir) for r in product.get("photos", [])]
+    refs = photos_abs if mode == "recriar" else photos_abs[:1]
+
+    claims = ", ".join(product.get("claims", [])) or "—"
+    tags = ", ".join(product.get("tags", [])) or "—"
+    msgs = "; ".join(brand.get("keyMessages", [])) or "—"
+    bname = brand.get("name") or product.get("brand", "a marca")
+
+    prompt = (
+        f"**Tarefa:** Gerar uma peça de social media para "
+        f"\"{product.get('name', '')}\" da marca \"{bname}\", aplicando o "
+        f"estilo \"{style.get('name', '')}\".\n\n"
+
+        f"**Estilo (tratamento visual — como a peça deve parecer):**\n"
+        f"{style.get('prompt', '').strip()}\n\n"
+
+        f"**Produto (assunto — o que aparece na peça):**\n"
+        f"- {product.get('name', '')}: {product.get('description', '').strip()}\n"
+        f"- Claims/atributos a respeitar: {claims}\n"
+        f"- Tags do produto: {tags}\n"
+        f"- Substitua qualquer \"produto-herói\" / \"[subject]\" / "
+        f"\"[produto]\" do estilo por ESTE produto, com rótulo e embalagem "
+        f"fiéis.\n\n"
+
+        f"**Marca (tom e restrições — NÃO inventar copy):**\n"
+        f"- Tom de voz: {brand.get('voice', '—')}\n"
+        f"- Público-alvo: {brand.get('audience', '—')}\n"
+        f"- Paleta/luz: {brand.get('paletteHints', '—')}\n"
+        f"- Mensagens-chave (só para orientar mood/composição; NÃO escrever "
+        f"como texto na imagem salvo pedido explícito): {msgs}\n"
+        f"- Guardrails (restrições rígidas): "
+        f"{brand.get('guardrails', '—')}\n\n"
+
+        f"**Modo: {mode}**\n{_MODE_INSTRUCTION[mode]}\n\n"
+
+        f"**Restrições:**\n"
+        f"- Qualquer texto/UI da peça em português do Brasil.\n"
+        f"- SEM copy/headline/claim escrito na imagem a menos que solicitado "
+        f"explicitamente.\n"
+        f"- Respeitar os guardrails da marca como limites rígidos.\n"
+        f"- Coerência de luz/sombra entre o produto e o cenário."
+    )
+
+    return {
+        "prompt": prompt,
+        "mode": mode,
+        "reference_images": refs,
+        "style": style.get("id"),
+        "product": product.get("slug"),
+        "brand": brand.get("slug") or product.get("brand"),
+    }
+
+
+# --------------------------------------------------------------------------- #
 # escrita — marcas
 # --------------------------------------------------------------------------- #
 def add_brand(name: str, *, voice: str = "", key_messages: list[str] | None = None,
