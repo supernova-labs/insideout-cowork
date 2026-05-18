@@ -45,7 +45,13 @@ CANONICAL_TAGS = {
                  "infografico"],
 }
 
-_CORE_DIR = Path(__file__).resolve().parent
+# NUNCA usar .resolve() aqui: em apps empacotados (UWP/MSIX — Claude Desktop)
+# .resolve() segue a junção do pacote e devolve o caminho interno
+# (AppData\Local\Packages\...) que o processo NÃO consegue abrir/stat, mesmo
+# com listdir funcionando. Isso fazia is_file()/is_dir() mentirem "False" e a
+# cópia de thumbnails sumir silenciosamente. __file__ já é absoluto (a skill
+# injeta ${CLAUDE_PLUGIN_ROOT}/core absoluto no sys.path), então .parent basta.
+_CORE_DIR = Path(__file__).parent
 _SEED_FILE = _CORE_DIR / "styles.seed.json"
 _TEMPLATE_FILE = _CORE_DIR / "gallery-template.html"
 _PLACEHOLDER = "/*__STYLES_JSON__*/[]"
@@ -152,22 +158,47 @@ def bootstrap(lib_dir: Path, _render: bool = True) -> int:
     """
     lib_dir = _ensure_dirs(Path(lib_dir))
     styles_dir, thumbs_dir, _, _ = _subdirs(lib_dir)
-    # Falha alto se o plugin veio mal empacotado — melhor erro claro do que
-    # uma biblioteca vazia / "sem preview" silenciosa.
-    if not _SEED_FILE.exists():
+    # Empacotamento / acesso: NÃO confiar em .exists()/.is_dir()/.is_file() —
+    # em ambiente UWP/MSIX (Claude Desktop) o stat do caminho do plugin falha
+    # e pathlib engole o OSError, devolvendo "False" mentiroso. Foi a causa-raiz
+    # do bug de thumbnails que sobreviveu a 3 releases: a cópia sumia em
+    # silêncio. Aqui: validar lendo de fato + os.listdir + copiar de verdade,
+    # e FALHAR ALTO se nada vier — nunca publicar galeria "sem preview" mudo.
+    try:
+        _seed_styles()  # leitura real de styles.seed.json (não .exists())
+    except (OSError, ValueError) as e:
         raise StyleLibraryError(
-            f"styles.seed.json ausente em {_CORE_DIR} — plugin mal empacotado.")
+            f"styles.seed.json ilegível em {_CORE_DIR} ({e!r}) — plugin mal "
+            f"empacotado ou ambiente bloqueando acesso a arquivo.") from e
     src_thumbs = _CORE_DIR / "thumbnails"
-    if not src_thumbs.is_dir():
+    try:
+        entries = os.listdir(src_thumbs)
+    except OSError as e:
         raise StyleLibraryError(
-            f"core/thumbnails ausente em {_CORE_DIR} — plugin mal empacotado.")
-    # Copia thumbnails ausentes — independente de os styles já existirem.
-    # Idempotente por natureza (`not tgt.exists()`), então roda ANTES do guard:
-    # styles semeados e thumbnails copiados são responsabilidades distintas.
-    for img in src_thumbs.iterdir():
-        tgt = thumbs_dir / img.name
-        if img.is_file() and not tgt.exists():
-            shutil.copy2(img, tgt)
+            f"core/thumbnails ilegível em {src_thumbs} ({e!r}) — plugin mal "
+            f"empacotado ou ambiente bloqueando acesso a diretório.") from e
+    _IMG_EXT = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
+    imgs = [n for n in entries if os.path.splitext(n)[1].lower() in _IMG_EXT]
+    # Copia thumbnails ausentes — independente de os styles já existirem
+    # (responsabilidades distintas; roda ANTES do guard de idempotência).
+    copied = existed = 0
+    errors: list[str] = []
+    for name in imgs:
+        tgt = thumbs_dir / name           # tgt vive no workspace (FS normal)
+        if tgt.exists():
+            existed += 1
+            continue
+        try:
+            shutil.copy2(src_thumbs / name, tgt)
+            copied += 1
+        except OSError as e:
+            errors.append(f"{name}: {e!r}")
+    if imgs and copied == 0 and existed == 0:
+        raise StyleLibraryError(
+            f"Nenhum dos {len(imgs)} thumbnails do seed chegou ao workspace "
+            f"({src_thumbs} -> {thumbs_dir}). Erros: "
+            f"{errors or '[sem exceção; provável bloqueio silencioso de '
+            f'acesso ao diretório do plugin]'}.")
     # Guard de idempotência: styles só são semeados uma vez.
     if any(styles_dir.glob("*.json")):
         return 0
