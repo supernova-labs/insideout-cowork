@@ -108,3 +108,32 @@ Tudo que for responsabilidade da InsideOut:
 - Riscos de timing
 - Recursos necessários
 - Janela de aprovação do cliente para cada entregável produzido pela Inside Out — todo conteúdo criado/produzido precisa de aprovação do cliente antes de veiculação. Mapear se o cronograma comporta essa janela
+
+### Passo 4 — (opcional) Salvar a marca no catálogo de produtos
+
+Só se o briefing trouxer **sinais de identidade de marca** (marca em foco + ao menos um de: mensagens-chave, público-alvo, tom/estilo para creators) **e** o usuário confirmar. É curadoria de ativo de marca — não rode automático.
+
+- **Nunca invente.** Mapeie só o que está **explícito** no briefing. O que não veio fica vazio e a ponte devolve em `missing` para o usuário preencher depois (skill `product-catalog`). Vale a regra "Não presuma informações" — inferência de briefing não é fato.
+- Ofereça assim: "Quer que eu registre/atualize a marca **X** no catálogo com o que o briefing trouxe? (vou deixar em branco o que não estiver explícito: …)". Liste o que vai ficar faltando antes de gravar.
+- A ponte é **idempotente por slug**: marca nova → cria; marca já existente → atualiza só os campos não-vazios (não apaga o que já havia).
+
+Padrão de invocação (core read-only; rode da pasta de trabalho, importe via `sys.path` — ver skill `product-catalog`):
+```bash
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+python -c "
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
+import product_library as pc
+r = pc.brand_from_briefing({
+    'name': '<Cliente/Marca do Passo 1>',
+    # incluir SÓ os que o briefing trouxe explicitamente:
+    'voice': '<tom/estilo p/ creators, se houver>',
+    'key_messages': ['<mensagens-chave do Contexto Estratégico>'],
+    'audience': '<público-alvo, se houver>',
+    # 'palette_hints' e 'guardrails' raramente vêm em briefing mensal
+})
+print(r['action'], '| faltando:', r['missing'])
+"
+```
+Depois informe ao usuário a ação (`created`/`updated`) e **liste `missing`** ("a marca foi salva; falta preencher: paletteHints, guardrails — me peça quando tiver"). Gerenciar a marca depois é da skill `product-catalog`.
