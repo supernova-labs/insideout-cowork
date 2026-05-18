@@ -127,6 +127,41 @@ Retorna `id`, `name`, `prompt` (substitua `[subject]` pelo assunto), `category`,
 
 Os estilos vêm da **biblioteca do cliente** em `<pasta de trabalho>/style-gallery/styles/*.json`; sem biblioteca no workspace, cai automaticamente no **seed embarcado** (5 exemplos social/PR) — "estilo #N" funciona com zero config. Criar, editar, remover estilos e abrir a galeria visual é trabalho da skill **`style-gallery`** — encaminhe para lá quando o usuário quiser gerenciar.
 
+### 4. get_product.py + compose_generation_brief — junção produto × estilo
+
+Quando o usuário pedir uma peça de um **produto de marca** do catálogo ("gera um post do [produto] da [marca] no estilo #N"), junte as **duas fontes**: o estilo diz *como a peça parece*; o produto+marca diz *o que é o produto e como a marca fala*. O motor `image_gen.generate` **já aceita `reference_images`** — as fotos reais do produto entram como âncora; não há mudança de motor.
+
+Fluxo:
+```bash
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+python "$CORE/get_product.py" --list                 # marcas + produtos
+python "$CORE/get_product.py" <id|slug|nome>         # produto + brief + fotos abs
+python "$CORE/get_product.py" --brand <marca>        # produtos de uma marca
+```
+Depois componha o briefing (estilo + produto + brief da marca + modo) e gere:
+```bash
+python -c "
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
+from dotenv import load_dotenv; load_dotenv()
+import style_library as sl, product_library as pc
+from image_gen import generate
+style = sl.get_style(3)
+prod  = pc.get_product_resolved('serum-exemplo')      # já traz brief + fotos abs
+brief = pc.compose_generation_brief(style, prod, mode='recriar')  # ou 'preservar'
+# enriqueça brief['prompt'] (iluminação/mood/atmosfera/composição) e MOSTRE ao usuário
+print(generate(brief['prompt'], reference_images=brief['reference_images'],
+               aspect_ratio='3:4', resolution='1K'))
+"
+```
+
+**Modos** (o usuário escolhe; default `recriar`):
+- **`recriar`** — todas as fotos do produto entram como referência; o modelo recria o produto fielmente dentro do cenário/estilo. Mais liberdade de pose/ângulo; fidelidade de rótulo aproximada.
+- **`preservar`** — só a foto principal entra; o produto é **intocável**, o estilo compõe apenas o cenário ao redor. Fidelidade máxima do produto; menos liberdade.
+
+O `compose_generation_brief` **não escreve copy/headline na imagem** — o brief da marca só molda tom, paleta e composição. Só inclua texto na peça se o usuário pedir explicitamente (aí você adiciona a instrução de copy ao prompt, fora do compose). O enriquecimento obrigatório (iluminação/mood/atmosfera/composição) continua valendo **por cima** do `brief['prompt']`, e mostre o prompt final antes de gerar. Gerenciar marcas/produtos/fotos é da skill **`product-catalog`** — encaminhe para lá.
+
 ### Salvar como estilo (só sob pedido)
 
 **Apenas quando o usuário pedir explicitamente** ("salva esse visual como estilo", "guarda isso na galeria") — nunca ofereça proativamente. Confirme nome e categoria, então grave via o módulo compartilhado (`add_style` já prepara a biblioteca sozinho — lazy-ensure; não rode bootstrap manual):
@@ -148,6 +183,7 @@ A imagem recém-gerada vira o thumbnail. Categorias/tags canônicas e demais ope
 
 - **"Gere [algo] para [formato]"** → escolha o preset de aspect_ratio, alinhe à marca (about-insideout), enriqueça, mostre o prompt, gere com `image_gen.py` (continua a sessão).
 - **"Use o estilo #42"** (id ou slug) → `get_style.py 42`, troque `[subject]`, enriqueça, mostre, gere.
+- **"Gera [produto] da [marca] no estilo #N"** (produto do catálogo) → `get_product.py`/`get_product_resolved` + `get_style` + `compose_generation_brief(style, prod, mode=...)`; **pergunte o modo** (recriar vs preservar) se o usuário não disser; enriqueça por cima, mostre, gere com `reference_images=brief['reference_images']`. Ver seção "4. ... junção produto × estilo".
 - **"Salva esse visual como estilo"** (só se pedido explícito) → ver seção "Salvar como estilo (só sob pedido)". Gerenciar a galeria (listar/editar/remover/abrir) → skill `style-gallery`.
 - **"Use esta_imagem.jpg de referência"** → **extraia primeiro** com `style_extract.py`, incorpore a descrição ao prompt, gere com `reference_images=['esta_imagem.jpg']`.
 - **"Deixe mais escuro / mais quente / adicione X"** → **não** chame `new_session()`; enriqueça o ajuste e gere (a sessão continua a partir da última imagem).
@@ -155,7 +191,7 @@ A imagem recém-gerada vira o thumbnail. Categorias/tags canônicas e demais ope
 
 ## Regras importantes
 
-- **O `core/` é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`, `style_library.py`, `gallery-template.html`): não tente editar nem gravar nada lá. Lógica custom e dados rodam/vivem na pasta de trabalho importando o motor via `sys.path`.
+- **O `core/` é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`/`get_product.py`, `style_library.py`/`product_library.py`, `_libcommon.py`, `gallery-template.html`/`product-catalog-template.html`): não tente editar nem gravar nada lá. Lógica custom e dados rodam/vivem na pasta de trabalho importando o motor via `sys.path`.
 - **`.env`, `outputs/`, `.image_session.json` e `style-gallery/` vivem na pasta de trabalho.** Se ela for um repositório git, garanta no `.gitignore`: ignorar `.env`, `outputs/`, `.image_session.json`, `style-gallery/style-gallery.html`, `style-gallery/.trash/`; versionar `style-gallery/styles/` e `style-gallery/thumbnails/`.
 - Sempre retorne ao usuário o caminho da imagem gerada.
 - Dependências: `pip install -r "$CORE/requirements.txt"` (google-genai, python-dotenv, pillow) caso a geração falhe por import.
@@ -172,7 +208,7 @@ A imagem recém-gerada vira o thumbnail. Categorias/tags canônicas e demais ope
 - [ ] Preset de formato → aspect_ratio correto
 - [ ] Prompt enriquecido (iluminação, mood, textura, atmosfera, composição, espaço para copy)
 - [ ] Prompt mostrado ao usuário antes de gerar
-- [ ] Estilo #N: recuperado com `get_style.py` · Imagem custom: extraída com `style_extract.py`
+- [ ] Estilo #N: recuperado com `get_style.py` · Imagem custom: extraída com `style_extract.py` · Produto do catálogo: `get_product` + `compose_generation_brief` (modo recriar/preservar confirmado)
 - [ ] Sessão: continuar vs. nova decidido
 - [ ] Caminho da imagem devolvido ao usuário
 

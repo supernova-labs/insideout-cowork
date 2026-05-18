@@ -16,7 +16,7 @@ Fonte canônica de cada skill é o próprio `SKILL.md` (e o inventário em `agen
 |---|---|---|
 | [`about-insideout`](plugins/io-social-media/skills/about-insideout/SKILL.md) | `/io-social-media:about-insideout` | Base de conhecimento da agência (empresa, serviços, clientes, tendências). Consumida pelas demais. |
 | [`analyze-briefing`](plugins/io-social-media/skills/analyze-briefing/SKILL.md) | `/io-social-media:analyze-briefing` | Analisa um briefing de cliente pelo framework InsideOut (fluxo em 3 passos). |
-| [`image-generation`](plugins/io-social-media/skills/image-generation/SKILL.md) | `/io-social-media:image-generation` | Gera imagens (Gemini 3 Pro) para social media; enriquece prompt, consome estilos da galeria, extrai estilo de referência. |
+| [`image-generation`](plugins/io-social-media/skills/image-generation/SKILL.md) | `/io-social-media:image-generation` | Gera imagens (Gemini 3 Pro) para social media; enriquece prompt, consome estilos da galeria, extrai estilo de referência, **junta produto do catálogo × estilo** (modos recriar/preservar). |
 | [`style-gallery`](plugins/io-social-media/skills/style-gallery/SKILL.md) | `/io-social-media:style-gallery` | Biblioteca de estilos reutilizáveis do cliente ("como a peça parece"): criar/listar/editar/remover + galeria HTML. |
 | [`product-catalog`](plugins/io-social-media/skills/product-catalog/SKILL.md) | `/io-social-media:product-catalog` | Catálogo de produtos por marca ("o que é o produto e como a marca fala"): marcas (voz/mensagens/público), produtos, fotos + catálogo HTML. |
 
