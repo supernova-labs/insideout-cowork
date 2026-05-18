@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-18T20:00:00Z",
+  "lastUpdated": "2026-05-18T22:00:00Z",
 
   "components": {
     "skills": [
@@ -88,6 +88,18 @@
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["generate-grid", "editorial-calendar", "social-media"]
+      },
+      {
+        "name": "generate-copy",
+        "path": "plugins/io-social-media/skills/generate-copy/SKILL.md",
+        "description": "Cria copy de post (legenda) e lettering de imagem para social media/PR da InsideOut, alinhado à voz da marca; skill de processo (geração efêmera, sem dados na pasta de trabalho)",
+        "supportingFiles": [
+          "plugins/io-social-media/skills/generate-copy/references/copy-frameworks.md",
+          "plugins/io-social-media/core/get_product.py",
+          "plugins/io-social-media/core/product_library.py"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["generate-copy", "copywriting", "lettering", "social-media"]
       }
     ],
 
@@ -211,6 +223,41 @@
       "from": "skills/about-insideout",
       "to": "plugins/io-social-media/skills/about-insideout/trends.md",
       "type": "references"
+    },
+    {
+      "from": "skills/generate-copy",
+      "to": "plugins/io-social-media/skills/generate-copy/references/copy-frameworks.md",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-copy",
+      "to": "plugins/io-social-media/core/product_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/generate-copy",
+      "to": "skills/product-catalog",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-copy",
+      "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-copy",
+      "to": "skills/analyze-briefing",
+      "type": "references"
+    },
+    {
+      "from": "skills/image-generation",
+      "to": "skills/generate-copy",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-grid",
+      "to": "skills/generate-copy",
+      "type": "references"
     }
   ],
 
@@ -218,9 +265,9 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "componentCounts": {
-        "skills": 6,
+        "skills": 7,
         "agents": 0,
         "hooks": 0,
         "scripts": 0

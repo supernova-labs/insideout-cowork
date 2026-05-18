@@ -160,7 +160,7 @@ print(generate(brief['prompt'], reference_images=brief['reference_images'],
 - **`recriar`** — todas as fotos do produto entram como referência; o modelo recria o produto fielmente dentro do cenário/estilo. Mais liberdade de pose/ângulo; fidelidade de rótulo aproximada.
 - **`preservar`** — só a foto principal entra; o produto é **intocável**, o estilo compõe apenas o cenário ao redor. Fidelidade máxima do produto; menos liberdade.
 
-O `compose_generation_brief` **não escreve copy/headline na imagem** — o brief da marca só molda tom, paleta e composição. Só inclua texto na peça se o usuário pedir explicitamente (aí você adiciona a instrução de copy ao prompt, fora do compose). O enriquecimento obrigatório (iluminação/mood/atmosfera/composição) continua valendo **por cima** do `brief['prompt']`, e mostre o prompt final antes de gerar. Gerenciar marcas/produtos/fotos é da skill **`product-catalog`** — encaminhe para lá.
+O `compose_generation_brief` **não escreve copy/headline na imagem** — o brief da marca só molda tom, paleta e composição. Só inclua texto na peça se o usuário pedir explicitamente. Quando ele pedir, **não escreva o lettering de improviso**: chame a skill **`generate-copy`** (Output B — bloco `LETTERING` estruturado, alinhado à voz da marca e às regras de tipografia/contraste) e injete esse bloco como a instrução explícita de copy do prompt, **fora** do compose. O enriquecimento obrigatório (iluminação/mood/atmosfera/composição) continua valendo **por cima** do `brief['prompt']`, e mostre o prompt final antes de gerar. Gerenciar marcas/produtos/fotos é da skill **`product-catalog`** — encaminhe para lá.
 
 ### Salvar como estilo (só sob pedido)
 
@@ -184,6 +184,7 @@ A imagem recém-gerada vira o thumbnail. Categorias/tags canônicas e demais ope
 - **"Gere [algo] para [formato]"** → escolha o preset de aspect_ratio, alinhe à marca (about-insideout), enriqueça, mostre o prompt, gere com `image_gen.py` (continua a sessão).
 - **"Use o estilo #42"** (id ou slug) → `get_style.py 42`, troque `[subject]`, enriqueça, mostre, gere.
 - **"Gera [produto] da [marca] no estilo #N"** (produto do catálogo) → `get_product.py`/`get_product_resolved` + `get_style` + `compose_generation_brief(style, prod, mode=...)`; **pergunte o modo** (recriar vs preservar) se o usuário não disser; enriqueça por cima, mostre, gere com `reference_images=brief['reference_images']`. Ver seção "4. ... junção produto × estilo".
+- **"Gera com esse texto / com copy/headline na arte"** (texto na imagem) → chame a skill **`generate-copy`** (Output B — bloco `LETTERING`), injete o bloco como instrução explícita de copy **por cima** do prompt (fora do compose), mostre o prompt final, gere. Escrever a legenda do post também é da `generate-copy`.
 - **"Salva esse visual como estilo"** (só se pedido explícito) → ver seção "Salvar como estilo (só sob pedido)". Gerenciar a galeria (listar/editar/remover/abrir) → skill `style-gallery`.
 - **"Use esta_imagem.jpg de referência"** → **extraia primeiro** com `style_extract.py`, incorpore a descrição ao prompt, gere com `reference_images=['esta_imagem.jpg']`.
 - **"Deixe mais escuro / mais quente / adicione X"** → **não** chame `new_session()`; enriqueça o ajuste e gere (a sessão continua a partir da última imagem).
