@@ -17,6 +17,7 @@ Doc humana/mantenedor (skills, install, release): ver [`README.md`](README.md). 
   - `skills/style-gallery/` — Biblioteca de estilos visuais reutilizáveis do cliente ("como a peça parece"; CRUD conversacional + galeria HTML); dados em `<pasta de trabalho>/style-gallery/styles/*.json`
   - `skills/product-catalog/` — Catálogo de produtos por marca ("o que é o produto e como a marca fala": voz, mensagens-chave, público, fotos; CRUD + catálogo HTML); dados em `<pasta de trabalho>/product-catalog/{brands,products}/*.json` + `photos/`
   - `skills/generate-grid/` — Grid editorial mensal por marca ("o que postar e quando": esqueleto canônico marca×mês, ingestão de planilha histórica 2026, edição conversacional de posts, regras/calendário editáveis + grid HTML); dados em `<pasta de trabalho>/grids/<marca>/<AAAA-MM>.json` + `rules/`, `calendar/`. Fase 1: sem geração-do-briefing (Fase 2) nem mockup (Fase 3)
+  - `skills/generate-copy/SKILL.md` — Copy de post + lettering de imagem ("o que o texto diz"): legenda (Hook→Valor→CTA, por plataforma) e bloco de lettering injetável pela `image-generation`/`generate-grid`, alinhados à voz da marca (`product_library` via `get_product.py`, read-only). **Skill de processo: geração efêmera, sem store/seed/HTML, nenhum dado na pasta de trabalho**; frameworks em `references/copy-frameworks.md`
 
 ## Uso
 
