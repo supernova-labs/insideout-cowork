@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Style Library</title>
+  <title>Biblioteca de Estilos · Inside Out</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Instrument+Serif&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0a0b;
-      --bg-secondary: #141416;
-      --bg-tertiary: #1c1c1f;
-      --border: #2a2a2e;
-      --text-primary: #fafafa;
-      --text-secondary: #888;
-      --text-muted: #555;
-      --accent: #e8ff47;
-      --accent-dim: #a3b832;
-      --success: #47ffb4;
+      /* Inside Out PR — kraft editorial + petróleo + terracota */
+      --bg-primary: #f0e8d8;     /* papel kraft / creme */
+      --bg-secondary: #e9dfc9;   /* card / hover de linha */
+      --bg-tertiary: #e3d8bf;    /* bloco de prompt / tag */
+      --border: #d2c4a6;         /* taupe quente */
+      --text-primary: #173e3e;   /* petróleo profundo */
+      --text-secondary: #5d6f6a; /* petróleo dessaturado */
+      --text-muted: #9a917c;     /* areia */
+      --accent: #bd5a39;         /* terracota (cor de assinatura) */
+      --accent-dim: #9a4528;     /* terracota escuro */
+      --success: #1e7a6f;        /* teal (estado "copiado") */
+      --on-accent: #fdf6e7;      /* texto sobre terracota/teal */
+      --shadow: rgba(20, 46, 46, 0.18);
     }
 
     * {
@@ -30,15 +33,36 @@
       background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
+      position: relative;
       background-image:
-        radial-gradient(ellipse at 0% 0%, rgba(232, 255, 71, 0.03) 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 100%, rgba(71, 255, 180, 0.02) 0%, transparent 50%);
+        radial-gradient(ellipse at 0% 0%, rgba(189, 90, 57, 0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 100%, rgba(23, 62, 62, 0.04) 0%, transparent 55%);
+    }
+
+    /* Sol radiante da marca Inside Out — marca d'água sutil no canto */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -260px;
+      right: -200px;
+      width: 620px;
+      height: 620px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      background: repeating-conic-gradient(from 0deg at 50% 50%,
+        rgba(189, 90, 57, 0) 0deg 3.2deg,
+        rgba(189, 90, 57, 0.16) 3.2deg 5deg);
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 26%, transparent 62%);
+      mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 26%, transparent 62%);
     }
 
     .container {
       max-width: 1400px;
       margin: 0 auto;
       padding: 3rem 2rem;
+      position: relative;
+      z-index: 1;
     }
 
     header {
@@ -98,7 +122,7 @@
     .filter-btn.active {
       background: var(--accent);
       border-color: var(--accent);
-      color: var(--bg-primary);
+      color: var(--on-accent);
     }
 
     .tag-filters {
@@ -136,7 +160,7 @@
     .tag-filter-btn.active {
       background: var(--success);
       border-color: var(--success);
-      color: var(--bg-primary);
+      color: var(--on-accent);
     }
 
     .style-table {
@@ -197,7 +221,7 @@
 
     .thumbnail:hover {
       border-color: var(--accent);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px var(--shadow);
     }
 
     /* Placeholder intencional para estilos sem thumbnail versionado.
@@ -220,6 +244,7 @@
       padding: 4px;
       box-sizing: border-box;
       user-select: none;
+      color: var(--text-muted);
     }
 
     /* Hover preview styles */
@@ -231,7 +256,7 @@
       max-width: 400px;
       max-height: 400px;
       border-radius: 8px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 60px rgba(20, 46, 46, 0.35);
       border: 1px solid var(--border);
       background: var(--bg-secondary);
       padding: 4px;
@@ -269,7 +294,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(20, 46, 46, 0.92);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -285,7 +310,7 @@
       max-height: 90%;
       object-fit: contain;
       border-radius: 8px;
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 80px rgba(20, 46, 46, 0.45);
       animation: lightboxFadeIn 0.2s ease;
     }
 
@@ -375,11 +400,11 @@
       max-height: 300px;
       overflow-y: auto;
       z-index: 50;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 40px var(--shadow);
     }
 
     .prompt-text::after {
-      content: 'Click to copy';
+      content: 'Clique para copiar';
       position: absolute;
       bottom: 0.5rem;
       right: 0.75rem;
@@ -402,7 +427,7 @@
     }
 
     .prompt-text.copied::after {
-      content: 'Copied!';
+      content: 'Copiado!';
       color: var(--success);
       opacity: 1;
     }
@@ -483,20 +508,19 @@
 <body>
   <div class="container">
     <header>
-      <h1>Style <span>Library</span></h1>
-      <p class="subtitle">Your personal collection of reusable visual styles. Tell Claude the index # to use any style.</p>
+      <h1>Biblioteca <span>de Estilos</span></h1>
+      <p class="subtitle">Coleção de referências visuais reutilizáveis da Inside Out. Diga ao Claude o nº do índice para aplicar um estilo.</p>
     </header>
 
     <div class="filters">
       <div class="category-filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="Framework">Framework</button>
-        <button class="filter-btn" data-filter="Flow">Flow</button>
-        <button class="filter-btn" data-filter="Architecture">Architecture</button>
-        <button class="filter-btn" data-filter="Mockup">Mockup</button>
-        <button class="filter-btn" data-filter="Persona">Persona</button>
-        <button class="filter-btn" data-filter="Marketing">Marketing</button>
-        <button class="filter-btn" data-filter="Artistic">Artistic</button>
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="Produto">Produto</button>
+        <button class="filter-btn" data-filter="Campanha">Campanha</button>
+        <button class="filter-btn" data-filter="Pessoas">Pessoas</button>
+        <button class="filter-btn" data-filter="Editorial">Editorial</button>
+        <button class="filter-btn" data-filter="Evento">Evento</button>
+        <button class="filter-btn" data-filter="Imprensa">Imprensa</button>
       </div>
       <div class="tag-filters" id="tag-filters">
         <!-- Populated by JS when category is selected -->
@@ -507,11 +531,11 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Preview</th>
-          <th>Style</th>
-          <th>Category</th>
-          <th>Prompt (click to copy)</th>
-          <th>Good For</th>
+          <th>Prévia</th>
+          <th>Estilo</th>
+          <th>Categoria</th>
+          <th>Prompt (clique para copiar)</th>
+          <th>Indicado para</th>
         </tr>
       </thead>
       <tbody id="styles-body">
@@ -520,22 +544,22 @@
     </table>
 
     <div class="empty-state" id="empty-state" style="display: none;">
-      <h2>No styles match this filter</h2>
-      <p>Try a different category or add more styles to your library.</p>
+      <h2>Nenhum estilo neste filtro</h2>
+      <p>Tente outra categoria ou adicione novos estilos à biblioteca.</p>
     </div>
   </div>
 
-  <div class="toast" id="toast">Copied to clipboard</div>
+  <div class="toast" id="toast">Copiado</div>
 
   <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
     <span class="lightbox-close">&times;</span>
-    <img src="" alt="Expanded view" id="lightbox-img">
+    <img src="" alt="Visualização ampliada" id="lightbox-img">
   </div>
 
   <!-- Hover Preview -->
   <div class="hover-preview" id="hover-preview">
-    <img src="" alt="Preview" id="hover-preview-img">
+    <img src="" alt="Prévia" id="hover-preview-img">
   </div>
 
   <script>
@@ -543,16 +567,15 @@
     // CANONICAL CATEGORIES AND TAGS
     // When adding new styles, Claude MUST use these categories and tags only.
     // ===========================================
-    const CATEGORIES = ["Framework", "Flow", "Architecture", "Mockup", "Persona", "Marketing", "Artistic"];
+    const CATEGORIES = ["Produto", "Campanha", "Pessoas", "Editorial", "Evento", "Imprensa"];
 
     const CANONICAL_TAGS = {
-      "Framework": ["2x2-matrix", "pyramid", "venn", "canvas", "concentric", "triangle"],
-      "Flow": ["process", "journey-map", "flowchart", "steps", "sequence"],
-      "Architecture": ["hierarchy", "hub-spoke", "system-diagram", "org-chart", "tree"],
-      "Mockup": ["wireframe", "device-frame", "ui-concept", "landing-page", "mobile", "desktop"],
-      "Persona": ["portrait", "lifestyle", "headshot", "context", "illustrated", "scene"],
-      "Marketing": ["ad", "social", "announcement", "banner", "hero"],
-      "Artistic": ["flat-illustration", "hand-drawn", "watercolor", "photography", "retro", "minimalist", "bold-graphic", "3d-render"]
+      "Produto": ["packshot", "flat-lay", "still-life", "em-cenario", "macro-textura", "lancamento", "gerado-por-ia"],
+      "Campanha": ["sazonal", "data-comemorativa", "key-visual", "teaser", "oferta", "flat-lay", "feito-a-mao", "gerado-por-ia"],
+      "Pessoas": ["beauty", "retrato", "lifestyle", "close-pele", "kol-influencer", "diversidade"],
+      "Editorial": ["moodboard", "colagem", "color-story", "capa-editorial", "serie", "flat-lay"],
+      "Evento": ["cobertura", "cenografia", "bastidores", "convite", "press-trip"],
+      "Imprensa": ["clipping", "card-resultado", "citacao", "anuncio-na-midia", "infografico"]
     };
 
     // Style library data - Claude can add entries here

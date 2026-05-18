@@ -28,19 +28,21 @@ SCHEMA_VERSION = 1
 LIB_DIRNAME = "style-gallery"
 ENV_OVERRIDE = "STYLE_GALLERY_DIR"
 
-# Espelham gallery-template.html (CATEGORIES linha ~546, CANONICAL_TAGS ~548).
-# Se mudar lá, mudar aqui (e vice-versa).
-CATEGORIES = ["Framework", "Flow", "Architecture", "Mockup",
-              "Persona", "Marketing", "Artistic"]
+# Espelham gallery-template.html (CATEGORIES/CANONICAL_TAGS no <script>).
+# Se mudar lá, mudar aqui (e vice-versa). Taxonomia de social/PR — Inside Out.
+CATEGORIES = ["Produto", "Campanha", "Pessoas", "Editorial", "Evento", "Imprensa"]
 CANONICAL_TAGS = {
-    "Framework": ["2x2-matrix", "pyramid", "venn", "canvas", "concentric", "triangle"],
-    "Flow": ["process", "journey-map", "flowchart", "steps", "sequence"],
-    "Architecture": ["hierarchy", "hub-spoke", "system-diagram", "org-chart", "tree"],
-    "Mockup": ["wireframe", "device-frame", "ui-concept", "landing-page", "mobile", "desktop"],
-    "Persona": ["portrait", "lifestyle", "headshot", "context", "illustrated", "scene"],
-    "Marketing": ["ad", "social", "announcement", "banner", "hero"],
-    "Artistic": ["flat-illustration", "hand-drawn", "watercolor", "photography",
-                 "retro", "minimalist", "bold-graphic", "3d-render"],
+    "Produto": ["packshot", "flat-lay", "still-life", "em-cenario",
+                "macro-textura", "lancamento", "gerado-por-ia"],
+    "Campanha": ["sazonal", "data-comemorativa", "key-visual", "teaser",
+                 "oferta", "flat-lay", "feito-a-mao", "gerado-por-ia"],
+    "Pessoas": ["beauty", "retrato", "lifestyle", "close-pele",
+                "kol-influencer", "diversidade"],
+    "Editorial": ["moodboard", "colagem", "color-story", "capa-editorial",
+                  "serie", "flat-lay"],
+    "Evento": ["cobertura", "cenografia", "bastidores", "convite", "press-trip"],
+    "Imprensa": ["clipping", "card-resultado", "citacao", "anuncio-na-midia",
+                 "infografico"],
 }
 
 _CORE_DIR = Path(__file__).resolve().parent
