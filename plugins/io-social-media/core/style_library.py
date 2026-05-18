@@ -150,8 +150,6 @@ def bootstrap(lib_dir: Path, _render: bool = True) -> int:
     """
     lib_dir = _ensure_dirs(Path(lib_dir))
     styles_dir, thumbs_dir, _, _ = _subdirs(lib_dir)
-    if any(styles_dir.glob("*.json")):
-        return 0
     # Falha alto se o plugin veio mal empacotado — melhor erro claro do que
     # uma biblioteca vazia / "sem preview" silenciosa.
     if not _SEED_FILE.exists():
@@ -161,6 +159,16 @@ def bootstrap(lib_dir: Path, _render: bool = True) -> int:
     if not src_thumbs.is_dir():
         raise StyleLibraryError(
             f"core/thumbnails ausente em {_CORE_DIR} — plugin mal empacotado.")
+    # Copia thumbnails ausentes — independente de os styles já existirem.
+    # Idempotente por natureza (`not tgt.exists()`), então roda ANTES do guard:
+    # styles semeados e thumbnails copiados são responsabilidades distintas.
+    for img in src_thumbs.iterdir():
+        tgt = thumbs_dir / img.name
+        if img.is_file() and not tgt.exists():
+            shutil.copy2(img, tgt)
+    # Guard de idempotência: styles só são semeados uma vez.
+    if any(styles_dir.glob("*.json")):
+        return 0
     seeded = 0
     for s in _seed_styles():
         dest = styles_dir / f"{s['slug']}.json"
@@ -168,24 +176,20 @@ def bootstrap(lib_dir: Path, _render: bool = True) -> int:
             continue
         _atomic_write(dest, json.dumps(s, ensure_ascii=False, indent=2) + "\n")
         seeded += 1
-    for img in src_thumbs.iterdir():
-        tgt = thumbs_dir / img.name
-        if img.is_file() and not tgt.exists():
-            shutil.copy2(img, tgt)
     if _render:
         render_gallery(lib_dir)
     return seeded
 
 
 def _ensure_ready(lib_dir: Path | None = None) -> Path:
-    """Lazy-ensure: resolve a pasta da biblioteca (criando se preciso) e,
-    se `styles/` está vazia, semeia os 5 exemplos + thumbnails (idempotente,
-    sem render pra não recursar). Garante que o workspace seja a fonte única
-    ANTES de exibir/curar/mutar — elimina o fallback-fantasma de seed."""
+    """Lazy-ensure: resolve a pasta da biblioteca (criando se preciso) e
+    chama bootstrap (idempotente, sem render pra não recursar). Garante que o
+    workspace seja a fonte única ANTES de exibir/curar/mutar — elimina o
+    fallback-fantasma de seed. bootstrap sempre roda: o guard de seed vive
+    dentro dele, e a cópia de thumbnails precisa rodar mesmo com styles já
+    existentes (ex: thumbs sumidos por mount hostil do Cowork desktop)."""
     lib_dir = _ensure_dirs(find_library_dir() if lib_dir is None else Path(lib_dir))
-    styles_dir, *_ = _subdirs(lib_dir)
-    if not any(styles_dir.glob("*.json")):
-        bootstrap(lib_dir, _render=False)
+    bootstrap(lib_dir, _render=False)
     return lib_dir
 
 
