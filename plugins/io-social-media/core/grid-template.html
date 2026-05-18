@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Editorial · Inside Out</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Instrument+Serif&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Inside Out PR — mesmos tokens da Biblioteca de Estilos e do Catálogo
+         (identidade visual única: kraft + petróleo + terracota) */
+      --bg-primary: #f0e8d8;
+      --bg-secondary: #e9dfc9;
+      --bg-tertiary: #e3d8bf;
+      --border: #d2c4a6;
+      --text-primary: #173e3e;
+      --text-secondary: #5d6f6a;
+      --text-muted: #9a917c;
+      --accent: #bd5a39;
+      --accent-dim: #9a4528;
+      --success: #1e7a6f;
+      --on-accent: #fdf6e7;
+      --shadow: rgba(20, 46, 46, 0.18);
+      /* abordagens (taxonomia da planilha da Estela) */
+      --ab-lancamento: #bd5a39;
+      --ab-farma: #1e7a6f;
+      --ab-educacional: #3f6f9a;
+      --ab-data: #b07d2a;
+      --ab-trend: #7e57c2;
+      --ab-produto: #5d6f6a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
+      background-image:
+        radial-gradient(ellipse at 0% 0%, rgba(189, 90, 57, 0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 100%, rgba(23, 62, 62, 0.04) 0%, transparent 55%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -260px;
+      right: -200px;
+      width: 620px;
+      height: 620px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      background: repeating-conic-gradient(from 0deg at 50% 50%,
+        rgba(189, 90, 57, 0) 0deg 3.2deg,
+        rgba(189, 90, 57, 0.16) 3.2deg 5deg);
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 26%, transparent 62%);
+      mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 26%, transparent 62%);
+    }
+
+    .container {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    header { margin-bottom: 2.5rem; }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--on-accent);
+    }
+
+    .grid-block { margin-bottom: 3.5rem; }
+
+    .grid-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .grid-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .grid-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .focus-row {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .focus-row .focus-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      margin-right: 0.35rem;
+    }
+
+    .week { margin-bottom: 1rem; }
+
+    .week-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.4rem;
+    }
+
+    .dow-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-align: center;
+      padding-bottom: 0.25rem;
+    }
+
+    .day {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      min-height: 130px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .day:hover { box-shadow: 0 6px 18px var(--shadow); }
+
+    .day--empty {
+      background: transparent;
+      border-style: dashed;
+      opacity: 0.5;
+    }
+
+    .day-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      color: var(--on-accent);
+      align-self: flex-start;
+    }
+
+    .badge--lancamento { background: var(--ab-lancamento); }
+    .badge--farma { background: var(--ab-farma); }
+    .badge--educacional { background: var(--ab-educacional); }
+    .badge--data { background: var(--ab-data); }
+    .badge--trend { background: var(--ab-trend); }
+    .badge--produto { background: var(--ab-produto); }
+    .badge--none { background: var(--text-muted); }
+
+    .day-subject {
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .day-product {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .day-channel {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .day-lettering {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      border-top: 1px dashed var(--border);
+      padding-top: 0.25rem;
+      margin-top: auto;
+    }
+
+    .day-mockup {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 1000px) {
+      h1 { font-size: 2.5rem; }
+      .week-grid { grid-template-columns: repeat(7, minmax(90px, 1fr)); overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Grid <span>Editorial</span></h1>
+      <p class="subtitle">Calendário mensal por marca — produto, abordagem, lettering e mockup. Converse com o Claude para gerar, mover ou regenerar posts.</p>
+    </header>
+
+    <div class="filters" id="grid-filters">
+      <!-- Populated by JS (safe DOM) -->
+    </div>
+
+    <div id="grid-body">
+      <!-- Populated by JS (safe DOM) -->
+    </div>
+
+    <div class="empty-state" id="empty-state" style="display: none;">
+      <h2>Nenhum grid ainda</h2>
+      <p>Peça ao Claude para gerar um grid ou ingerir uma planilha histórica.</p>
+    </div>
+  </div>
+
+  <script>
+    // { grids: [...] }. Injetado por grid_library.render_grids (placeholder).
+    const gridData = /*__GRID_JSON__*/null;
+    const data = gridData || { grids: [] };
+
+    // --- Construtores de DOM seguros (sem innerHTML de conteúdo dinâmico) ---
+    // Todo dado dinâmico entra como TEXT NODE — zero HTML interpretado.
+    function el(tag, props, children) {
+      const e = document.createElement(tag);
+      if (props) {
+        for (const k in props) {
+          const v = props[k];
+          if (v == null) continue;
+          if (k === 'class') e.className = v;
+          else if (k === 'text') e.textContent = v;
+          else if (k === 'dataset') Object.assign(e.dataset, v);
+          else if (k.slice(0, 2) === 'on' && typeof v === 'function')
+            e.addEventListener(k.slice(2), v);
+          else e.setAttribute(k, v);
+        }
+      }
+      if (children != null) {
+        const arr = Array.isArray(children) ? children : [children];
+        for (const c of arr) {
+          if (c == null) continue;
+          e.append(c.nodeType ? c : document.createTextNode(String(c)));
+        }
+      }
+      return e;
+    }
+
+    const DOW = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    const filtersEl = document.getElementById('grid-filters');
+    const bodyEl = document.getElementById('grid-body');
+    const emptyState = document.getElementById('empty-state');
+    let currentKey = 'all';
+
+    function gridKey(g) { return g.brand + '/' + g.month; }
+
+    function abClass(approach) {
+      const a = (approach || '').toUpperCase();
+      if (a.indexOf('LAN') === 0) return 'badge--lancamento';
+      if (a.indexOf('FARMA') === 0) return 'badge--farma';
+      if (a.indexOf('EDUC') === 0) return 'badge--educacional';
+      if (a.indexOf('DATA') === 0) return 'badge--data';
+      if (a.indexOf('TREND') === 0) return 'badge--trend';
+      if (a.indexOf('PRODUTO') === 0) return 'badge--produto';
+      return 'badge--none';
+    }
+
+    function letteringSnippet(lettering) {
+      if (!lettering || typeof lettering !== 'object') return null;
+      const order = ['topo', 'centro', 'bolsa'];
+      for (const k of order) {
+        if (lettering[k]) return lettering[k];
+      }
+      if (Array.isArray(lettering.telas) && lettering.telas.length)
+        return lettering.telas.join(' · ');
+      if (lettering.raw) return String(lettering.raw).slice(0, 90);
+      return null;
+    }
+
+    function dayCell(d) {
+      const cell = el('div', { class: 'day' });
+      const dt = new Date(d.date + 'T00:00:00');
+      const num = isNaN(dt) ? '' : String(dt.getUTCDate());
+      cell.append(el('div', { class: 'day-num' }, [
+        el('span', { text: num }),
+        el('span', { text: d.dow || '' })
+      ]));
+
+      if (d.approach)
+        cell.append(el('span', {
+          class: 'badge ' + abClass(d.approach), text: d.approach
+        }));
+
+      if (d.subject)
+        cell.append(el('div', { class: 'day-subject', text: d.subject }));
+      if (d.product)
+        cell.append(el('div', { class: 'day-product', text: d.product }));
+      if (d.channel)
+        cell.append(el('div', { class: 'day-channel', text: d.channel }));
+
+      if (d.mockup)
+        cell.append(el('img', {
+          class: 'day-mockup', src: d.mockup, alt: d.subject || 'mockup',
+          onerror: function () { this.remove(); }
+        }));
+
+      const snip = letteringSnippet(d.lettering);
+      if (snip)
+        cell.append(el('div', { class: 'day-lettering', text: snip }));
+
+      return cell;
+    }
+
+    function weekRow(week) {
+      const wrap = el('div', { class: 'week' });
+      wrap.append(el('div', { class: 'week-label',
+        text: 'Semana ' + (week.n || '') }));
+      const grid = el('div', { class: 'week-grid' });
+      for (const name of DOW)
+        grid.append(el('div', { class: 'dow-head', text: name }));
+      // posiciona cada dia na coluna do seu dia-da-semana (dom=0..sab=6)
+      const slots = [null, null, null, null, null, null, null];
+      for (const d of (week.days || [])) {
+        const dt = new Date(d.date + 'T00:00:00');
+        const idx = isNaN(dt) ? DOW.indexOf(d.dow) : (dt.getUTCDay());
+        if (idx >= 0 && idx < 7) slots[idx] = d;
+      }
+      for (const s of slots)
+        grid.append(s ? dayCell(s)
+                       : el('div', { class: 'day day--empty' }));
+      wrap.append(grid);
+      return wrap;
+    }
+
+    function gridBlock(g) {
+      const block = el('div', { class: 'grid-block' });
+      block.append(el('div', { class: 'grid-head' }, [
+        el('span', { class: 'grid-name', text: g.brand }),
+        el('span', { class: 'grid-meta', text: g.month })
+      ]));
+      const fp = g.focusProducts || [];
+      if (fp.length) {
+        block.append(el('div', { class: 'focus-row' }, [
+          el('span', { text: 'Foco: ' }),
+          ...fp.map(p => el('span', { class: 'focus-tag', text: p }))
+        ]));
+      }
+      for (const w of (g.weeks || [])) block.append(weekRow(w));
+      return block;
+    }
+
+    function render() {
+      const grids = (data.grids || []).slice().sort((a, b) =>
+        (a.brand + a.month).localeCompare(b.brand + b.month));
+
+      filtersEl.replaceChildren();
+      bodyEl.replaceChildren();
+
+      if (!grids.length) {
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      filtersEl.append(el('button', {
+        class: 'filter-btn' + (currentKey === 'all' ? ' active' : ''),
+        text: 'Todos',
+        onclick: () => { currentKey = 'all'; render(); }
+      }));
+      for (const g of grids) {
+        const k = gridKey(g);
+        filtersEl.append(el('button', {
+          class: 'filter-btn' + (currentKey === k ? ' active' : ''),
+          text: g.brand + ' · ' + g.month,
+          onclick: () => { currentKey = k; render(); }
+        }));
+      }
+
+      const shown = currentKey === 'all'
+        ? grids : grids.filter(g => gridKey(g) === currentKey);
+      for (const g of shown) bodyEl.append(gridBlock(g));
+    }
+
+    render();
+  </script>
+</body>
+</html>
