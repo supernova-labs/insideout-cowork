@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-18T12:00:00Z",
+  "lastUpdated": "2026-05-18T18:00:00Z",
 
   "components": {
     "skills": [
@@ -18,8 +18,13 @@
       {
         "name": "analyze-briefing",
         "path": "plugins/io-social-media/skills/analyze-briefing/SKILL.md",
-        "description": "Analisa um briefing de cliente seguindo o framework InsideOut PR",
-        "tags": ["briefing", "analysis"]
+        "description": "Analisa um briefing de cliente seguindo o framework InsideOut PR; opcionalmente popula/atualiza a marca no catálogo a partir dos sinais de identidade do briefing",
+        "supportingFiles": [
+          "plugins/io-social-media/core/product_library.py",
+          "plugins/io-social-media/core/_libcommon.py"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["briefing", "analysis", "brand"]
       },
       {
         "name": "image-generation",
@@ -79,6 +84,16 @@
     {
       "from": "skills/analyze-briefing",
       "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
+      "from": "skills/analyze-briefing",
+      "to": "plugins/io-social-media/core/product_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/analyze-briefing",
+      "to": "skills/product-catalog",
       "type": "references"
     },
     {
@@ -157,7 +172,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "componentCounts": {
         "skills": 5,
         "agents": 0,

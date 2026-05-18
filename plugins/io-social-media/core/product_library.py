@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
@@ -311,6 +312,97 @@ def get_product_resolved(ref, brand=None, lib_dir: Path | None = None) -> dict:
         "_brand_brief": brand_brief,
         "_photos_abs": [_photo_abs(r, lib_dir) for r in prod.get("photos", [])],
     }
+
+
+# --------------------------------------------------------------------------- #
+# ponte briefing → marca (Fase C) — consumida pela skill analyze-briefing
+# --------------------------------------------------------------------------- #
+# Campos de marca que o briefing PODE alimentar. Mapeamento explícito
+# briefing -> brand.json. NÃO inventa nada: o que não veio fica vazio e é
+# reportado em 'missing' pra um humano preencher (regra do analyze-briefing:
+# "Não presuma informações" + fricção de inferência de briefing ruidoso).
+_BRIEFING_MAP = {
+    "voice": "voice",
+    "key_messages": "keyMessages",
+    "audience": "audience",
+    "palette_hints": "paletteHints",
+    "guardrails": "guardrails",
+}
+_BRAND_OPTIONAL = ("voice", "keyMessages", "audience",
+                   "paletteHints", "guardrails")
+
+
+def _norm_messages(v) -> list[str]:
+    """keyMessages pode vir como lista ou string solta do briefing."""
+    if v is None:
+        return []
+    if isinstance(v, (list, tuple)):
+        return [str(x).strip() for x in v if str(x).strip()]
+    parts = re.split(r"[;\n]+", str(v))
+    return [p.strip(" -•\t") for p in parts if p.strip(" -•\t")]
+
+
+def brand_from_briefing(briefing: dict, *, lib_dir: Path | None = None,
+                        overwrite: bool = False) -> dict:
+    """
+    Ponte analyze-briefing -> brand.json. Determinística e idempotente.
+
+    NÃO INVENTA: mapeia só os campos que o briefing trouxe; o que faltar
+    fica vazio e volta em 'missing' pra um humano preencher (a skill
+    confirma com o usuário antes de chamar isto — não é auto-executado).
+
+    `briefing` aceita: name (obrigatório), voice, key_messages (list|str),
+    audience, palette_hints, guardrails.
+
+    Idempotente por slug: marca nova -> add_brand; marca existente ->
+    update_brand, e por padrão só sobrescreve um campo se o novo valor não
+    for vazio (não apaga o que já estava). overwrite=True força o briefing
+    a mandar mesmo com valor vazio.
+
+    Retorna {"brand": <dict>, "action": "created"|"updated",
+             "missing": [campos brand.json ainda vazios]}.
+    """
+    name = (briefing.get("name") or "").strip()
+    if not name:
+        raise ProductCatalogError(
+            "briefing sem 'name' — a marca precisa de um nome "
+            "(o analyze-briefing extrai 'Cliente/Marca' no Passo 1).")
+
+    mapped: dict = {}
+    for src, dst in _BRIEFING_MAP.items():
+        if src not in briefing:
+            continue
+        val = (_norm_messages(briefing[src]) if dst == "keyMessages"
+               else (str(briefing[src]).strip() if briefing[src] is not None
+                     else ""))
+        mapped[dst] = val
+
+    lib_dir = _ensure_ready(lib_dir)
+    slug = lc.slugify(name, fallback="item")
+    existing = next((b for b in _read_brands(lib_dir)
+                     if b.get("slug") == slug), None)
+
+    if existing is None:
+        brand = add_brand(
+            name,
+            voice=mapped.get("voice", ""),
+            key_messages=mapped.get("keyMessages", []),
+            audience=mapped.get("audience", ""),
+            palette_hints=mapped.get("paletteHints", ""),
+            guardrails=mapped.get("guardrails", ""),
+            lib_dir=lib_dir)
+        action = "created"
+    else:
+        changes = {}
+        for dst, val in mapped.items():
+            if overwrite or val not in ("", [], None):
+                changes[dst] = val
+        brand = (update_brand(slug, lib_dir=lib_dir, **changes)
+                 if changes else existing)
+        action = "updated"
+
+    missing = [f for f in _BRAND_OPTIONAL if not brand.get(f)]
+    return {"brand": brand, "action": action, "missing": missing}
 
 
 # --------------------------------------------------------------------------- #

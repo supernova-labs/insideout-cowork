@@ -133,6 +133,12 @@ identidade da InsideOut, consulte a skill `about-insideout` antes de cadastrar.
 
 - "cadastra/cria a marca X", "registra a marca" → confirme voz, mensagens-chave
   e público com o usuário antes; `add_brand`.
+- "popula/atualiza a marca a partir do briefing", "salva a marca desse briefing"
+  → `brand_from_briefing(briefing_dict)` — ponte idempotente por slug (cria ou
+  atualiza só campos não-vazios). **Não inventa**: o que o briefing não trouxe
+  volta em `missing`; reporte ao usuário o que falta preencher. O fluxo natural
+  vem da skill `analyze-briefing` (Passo 4 opcional) — aqui você fecha o que
+  ficou faltando depois.
 - "adiciona o produto Y na marca X", "cadastra esse produto" → a marca tem que
   existir (senão crie antes); peça as fotos; `add_product`.
 - "que marcas/produtos eu tenho", "abre o catálogo" → `list_brands` /
