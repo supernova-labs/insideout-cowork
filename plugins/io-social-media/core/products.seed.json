@@ -1,0 +1,64 @@
+{
+  "brands": [
+    {
+      "schemaVersion": 1,
+      "id": 1,
+      "slug": "marca-exemplo",
+      "name": "Marca Exemplo",
+      "voice": "Calorosa, próxima e confiante. Fala como uma amiga que entende de pele — sem jargão clínico, sem promessa exagerada. Frases curtas, verbo no presente, foco no benefício real.",
+      "keyMessages": [
+        "Ciência que cabe na sua rotina",
+        "Resultado que você sente antes de ver",
+        "Cuidado sem complicação"
+      ],
+      "audience": "Mulheres 25–45, urbanas, rotina corrida, já têm o básico de skincare e querem subir um degrau sem virar dermatologista.",
+      "paletteHints": "Off-white, verde-eucalipto suave, toques de coral quente. Luz natural difusa, nada de neon.",
+      "guardrails": "Nunca prometer cura nem 'milagre'. Não usar antes/depois agressivo. Manter o rótulo fiel e legível. Diversidade real de tons de pele.",
+      "createdAt": "2026-05-18T00:00:00Z",
+      "updatedAt": "2026-05-18T00:00:00Z"
+    }
+  ],
+  "products": [
+    {
+      "schemaVersion": 1,
+      "id": 1,
+      "slug": "hidratante-exemplo",
+      "brand": "marca-exemplo",
+      "name": "Hidratante Exemplo",
+      "description": "Hidratante facial de uso diário, textura gel-creme, absorção rápida. Bisnaga de 50ml.",
+      "claims": [
+        "48h de hidratação",
+        "Não comedogênico",
+        "Com ácido hialurônico"
+      ],
+      "tags": ["packshot", "rotina-diaria"],
+      "photos": [
+        "photos/marca-exemplo/hidratante-exemplo/01.jpg",
+        "photos/marca-exemplo/hidratante-exemplo/02.jpg"
+      ],
+      "createdAt": "2026-05-18T00:00:00Z",
+      "updatedAt": "2026-05-18T00:00:00Z"
+    },
+    {
+      "schemaVersion": 1,
+      "id": 2,
+      "slug": "serum-exemplo",
+      "brand": "marca-exemplo",
+      "name": "Sérum Exemplo",
+      "description": "Sérum concentrado de vitamina C, frasco âmbar com conta-gotas, 30ml. Uso pela manhã.",
+      "claims": [
+        "10% vitamina C estável",
+        "Antioxidante",
+        "Ilumina e uniformiza"
+      ],
+      "tags": ["packshot", "em-cenario", "manha"],
+      "photos": [
+        "photos/marca-exemplo/serum-exemplo/01.jpg",
+        "photos/marca-exemplo/serum-exemplo/02.jpg",
+        "photos/marca-exemplo/serum-exemplo/03.jpg"
+      ],
+      "createdAt": "2026-05-18T00:00:00Z",
+      "updatedAt": "2026-05-18T00:00:00Z"
+    }
+  ]
+}

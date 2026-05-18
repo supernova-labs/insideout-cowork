@@ -17,9 +17,10 @@ Fonte canônica de cada skill é o próprio `SKILL.md` (e o inventário em `agen
 | [`about-insideout`](plugins/io-social-media/skills/about-insideout/SKILL.md) | `/io-social-media:about-insideout` | Base de conhecimento da agência (empresa, serviços, clientes, tendências). Consumida pelas demais. |
 | [`analyze-briefing`](plugins/io-social-media/skills/analyze-briefing/SKILL.md) | `/io-social-media:analyze-briefing` | Analisa um briefing de cliente pelo framework InsideOut (fluxo em 3 passos). |
 | [`image-generation`](plugins/io-social-media/skills/image-generation/SKILL.md) | `/io-social-media:image-generation` | Gera imagens (Gemini 3 Pro) para social media; enriquece prompt, consome estilos da galeria, extrai estilo de referência. |
-| [`style-gallery`](plugins/io-social-media/skills/style-gallery/SKILL.md) | `/io-social-media:style-gallery` | Biblioteca de estilos reutilizáveis do cliente: criar/listar/editar/remover + galeria HTML. |
+| [`style-gallery`](plugins/io-social-media/skills/style-gallery/SKILL.md) | `/io-social-media:style-gallery` | Biblioteca de estilos reutilizáveis do cliente ("como a peça parece"): criar/listar/editar/remover + galeria HTML. |
+| [`product-catalog`](plugins/io-social-media/skills/product-catalog/SKILL.md) | `/io-social-media:product-catalog` | Catálogo de produtos por marca ("o que é o produto e como a marca fala"): marcas (voz/mensagens/público), produtos, fotos + catálogo HTML. |
 
-`core/` é o motor Python compartilhado (read-only): `style_library.py` é o contrato único de estilos; `image_gen.py`, `style_extract.py`, `get_style.py` (shim), `gallery-template.html`, `styles.seed.json`.
+`core/` é o motor Python compartilhado (read-only): `_libcommon.py` centraliza os primitivos e a disciplina UWP-safe; `style_library.py` é o contrato único de estilos e `product_library.py` o de produtos/marcas; `image_gen.py`, `style_extract.py`, `get_style.py`/`get_product.py` (shims), `gallery-template.html`/`product-catalog-template.html`, `styles.seed.json`/`products.seed.json` (+ `product-seed-photos/`).
 
 ## Instalar / atualizar
 
