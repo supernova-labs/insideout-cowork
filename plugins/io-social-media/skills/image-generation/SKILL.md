@@ -56,43 +56,24 @@ python -c "
 import sys; sys.path.insert(0, r'$CORE')
 try: sys.stdout.reconfigure(encoding='utf-8')
 except Exception: pass
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv(usecwd=True), override=True)   # .env da pasta de trabalho VENCE env contaminado
-import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
+from dotenv import load_dotenv; load_dotenv()   # carrega .env do cwd = pasta de trabalho
 from image_gen import generate
 print(generate('...'))
 "
 ```
 Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
 
-### ⚠️ Cowork desktop: o filesystem da pasta de trabalho é hostil
+### Chave de API — fluxo gerenciado por você (agente)
 
-No Cowork desktop a pasta de trabalho é um mount Windows→Linux que: **(a) trunca leitura** de arquivos (`.env` chega cortado em ~20 chars — bytes brutos truncados, não dá pra recuperar em código); **(b) barra criação** de arquivo em subdir (`outputs/`); **(c) barra `unlink`** (`new_session`). Diretórios nativos do sandbox (`/tmp`, área de outputs do sandbox) funcionam normal. É a causa raiz comum dos 3 bugs conhecidos.
+O usuário **não** deve navegar até o diretório do plugin. Você cuida disso antes da primeira geração:
 
-### Chave de API — passe inline (não dependa do .env montado)
+1. Se `GEMINI_API_KEY` não estiver no ambiente **e** não houver `.env` com a chave preenchida na pasta de trabalho:
+   - Crie `.env` **na pasta de trabalho** (cwd) com o conteúdo `GEMINI_API_KEY=` (use o `${CLAUDE_PLUGIN_ROOT}/core/.env.example` como modelo de texto).
+   - Garanta que `.env`, `outputs/` e `.image_session.json` estejam no `.gitignore` da pasta de trabalho **se for um repositório git** — a chave não pode vazar.
+   - Peça ao usuário para abrir esse `.env` (que está na pasta dele, não no AppData), colar a chave do Gemini depois do `=`, salvar e mandar continuar. Chave em https://aistudio.google.com/apikey
+2. Com a chave no `.env` da pasta de trabalho, `load_dotenv()` a carrega automaticamente (cwd = pasta de trabalho).
 
-O caminho **suportado e confiável** no Cowork desktop é passar a chave **inline** no comando, nunca lê-la de um `.env` na pasta montada (trunca):
-
-```bash
-CORE="${CLAUDE_PLUGIN_ROOT}/core"
-GEMINI_API_KEY="<chave completa do usuário>" python -c "
-import sys; sys.path.insert(0, r'$CORE')
-try: sys.stdout.reconfigure(encoding='utf-8')
-except Exception: pass
-import os, tempfile
-os.environ['IMAGE_GEN_OUTPUT_DIR'] = os.path.join(tempfile.gettempdir(), 'io-imagegen')
-os.environ['IMAGE_GEN_SESSION_FILE'] = os.path.join(tempfile.gettempdir(), 'io-imagegen', '.session.json')
-from image_gen import generate
-print(generate('...'))
-"
-# depois: cp do PNG gerado (caminho impresso) para a pasta de trabalho do usuário
-```
-
-Como obter a chave: peça ao usuário que **cole a chave completa no chat** (é a chave dele, sessão dele) — não tente ler de um `.env` na pasta montada, ele virá truncado. Avise que a chave não deve ser commitada. Chave em https://aistudio.google.com/apikey
-
-O `image_gen.py` (0.3.2+) **falha rápido com mensagem clara** se a chave estiver truncada/ausente (em vez do críptico `API_KEY_INVALID`), **detecta `outputs/` não-gravável e cai pra um dir nativo** (imprime onde salvou — copie de lá pro workspace), e `new_session()` sobrevive a `unlink` barrado.
-
-Fallback (ambientes onde o `.env` É legível, ex.: não-desktop): `load_dotenv(find_dotenv(usecwd=True), override=True)` + `.strip()` continua válido. Não reintroduza `userConfig` (o bug #39455/#39827 injeta chave truncada). No Cowork desktop, **inline ganha do `.env`**.
+`userConfig` do plugin (Cowork pede a chave na instalação) seria o ideal, mas há um bug conhecido na UI do Cowork (issues **#39455** e **#39827**) que impede a injeção — por isso o fluxo via `.env` na pasta de trabalho é o caminho atual. O script tenta `os.environ` primeiro, então quando o bug for corrigido o userConfig também funciona sem `.env`.
 
 ## Scripts disponíveis
 
@@ -109,9 +90,7 @@ python -c "
 import sys; sys.path.insert(0, r'$CORE')
 try: sys.stdout.reconfigure(encoding='utf-8')
 except Exception: pass
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv(usecwd=True), override=True)
-import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
+from dotenv import load_dotenv; load_dotenv()
 from image_gen import generate
 result = generate('prompt enriquecido aqui...', aspect_ratio='9:16', resolution='1K')
 print(f'Gerada: {result}')
@@ -129,9 +108,7 @@ python -c "
 import sys; sys.path.insert(0, r'$CORE')
 try: sys.stdout.reconfigure(encoding='utf-8')
 except Exception: pass
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv(usecwd=True), override=True)
-import os; os.environ['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY','').strip()
+from dotenv import load_dotenv; load_dotenv()
 from style_extract import extract_style
 print(extract_style('caminho/para/referencia.jpg'))
 "
