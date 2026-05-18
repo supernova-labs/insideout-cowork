@@ -12,17 +12,18 @@ Princípios (ver plano swift-prancing-gosling):
 - Sem workspace, cai no seed embarcado (read-only) — zero-config mantém os
   5 exemplos funcionando.
 
+A disciplina UWP-safe (nunca `.resolve()` em `__file__` de plugin; desconfiar
+de todo stat do plugin dir — `os.listdir` + cópia real + falha alto) vive em
+`_libcommon` (um único ponto de verdade, compartilhado com `product_library`).
+
 Este módulo só é importado; não tem efeitos colaterais no import.
 """
 from __future__ import annotations
 
 import json
-import os
-import re
-import shutil
-import unicodedata
-from datetime import datetime, timezone
 from pathlib import Path
+
+import _libcommon as lc
 
 SCHEMA_VERSION = 1
 LIB_DIRNAME = "style-gallery"
@@ -45,19 +46,15 @@ CANONICAL_TAGS = {
                  "infografico"],
 }
 
-# NUNCA usar .resolve() aqui: em apps empacotados (UWP/MSIX — Claude Desktop)
-# .resolve() segue a junção do pacote e devolve o caminho interno
-# (AppData\Local\Packages\...) que o processo NÃO consegue abrir/stat, mesmo
-# com listdir funcionando. Isso fazia is_file()/is_dir() mentirem "False" e a
-# cópia de thumbnails sumir silenciosamente. __file__ já é absoluto (a skill
-# injeta ${CLAUDE_PLUGIN_ROOT}/core absoluto no sys.path), então .parent basta.
-_CORE_DIR = Path(__file__).parent
+# _CORE_DIR vem de _libcommon (Path(__file__).parent SEM .resolve() — ver lá o
+# porquê: junção UWP/MSIX faz .resolve() devolver caminho não-stat-ável).
+_CORE_DIR = lc.CORE_DIR
 _SEED_FILE = _CORE_DIR / "styles.seed.json"
 _TEMPLATE_FILE = _CORE_DIR / "gallery-template.html"
 _PLACEHOLDER = "/*__STYLES_JSON__*/[]"
 
 
-class StyleLibraryError(Exception):
+class StyleLibraryError(lc.LibCommonError):
     """Erro base da biblioteca."""
 
 
@@ -76,26 +73,9 @@ class InvalidTag(StyleLibraryError):
 # --------------------------------------------------------------------------- #
 # helpers
 # --------------------------------------------------------------------------- #
-def _now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
 def slugify(name: str) -> str:
-    n = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
-    n = re.sub(r"[^a-zA-Z0-9]+", "-", n).strip("-").lower()
-    n = re.sub(r"-{2,}", "-", n)
-    return n or "style"
-
-
-def _atomic_write(path: Path, text: str) -> None:
-    """Escreve via arquivo temporário no mesmo diretório + os.replace (atômico)."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(f".{path.name}.tmp.{os.getpid()}")
-    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
-        f.write(text)
-        f.flush()
-        os.fsync(f.fileno())
-    os.replace(tmp, path)
+    # Mantém o fallback histórico "style" (vs. "item" genérico do _libcommon).
+    return lc.slugify(name, fallback="style")
 
 
 def _subdirs(lib_dir: Path):
@@ -105,8 +85,7 @@ def _subdirs(lib_dir: Path):
 
 def _ensure_dirs(lib_dir: Path) -> Path:
     styles, thumbs, trash, _ = _subdirs(lib_dir)
-    for d in (lib_dir, styles, thumbs, trash):
-        d.mkdir(parents=True, exist_ok=True)
+    lc.ensure_dirs(lib_dir, styles, thumbs, trash)
     return lib_dir
 
 
@@ -122,28 +101,14 @@ def find_library_dir(start: Path | None = None, create: bool = True) -> Path | N
       3. Se nada e create=True: cria `<cwd>/style-gallery/`.
          Se create=False: retorna None.
     """
-    env = os.environ.get(ENV_OVERRIDE)
-    if env:
-        p = Path(env).expanduser().resolve()
-        return _ensure_dirs(p) if create else (p if p.exists() else None)
-
-    start = Path(start).resolve() if start else Path.cwd().resolve()
-    cur = start
-    while True:
-        cand = cur / LIB_DIRNAME
-        if cand.is_dir():
-            return cand
-        if (cur / ".git").exists() or cur.parent == cur:
-            break
-        cur = cur.parent
-
-    if create:
-        return _ensure_dirs(start / LIB_DIRNAME)
-    return None
+    d = lc.find_library_dir(LIB_DIRNAME, ENV_OVERRIDE, start, create)
+    if d is not None and create:
+        return _ensure_dirs(d)
+    return d
 
 
 def _seed_styles() -> list[dict]:
-    return json.loads(_SEED_FILE.read_text(encoding="utf-8"))
+    return lc.read_json_strict(_SEED_FILE)
 
 
 def bootstrap(lib_dir: Path, _render: bool = True) -> int:
@@ -158,47 +123,23 @@ def bootstrap(lib_dir: Path, _render: bool = True) -> int:
     """
     lib_dir = _ensure_dirs(Path(lib_dir))
     styles_dir, thumbs_dir, _, _ = _subdirs(lib_dir)
-    # Empacotamento / acesso: NÃO confiar em .exists()/.is_dir()/.is_file() —
-    # em ambiente UWP/MSIX (Claude Desktop) o stat do caminho do plugin falha
-    # e pathlib engole o OSError, devolvendo "False" mentiroso. Foi a causa-raiz
-    # do bug de thumbnails que sobreviveu a 3 releases: a cópia sumia em
-    # silêncio. Aqui: validar lendo de fato + os.listdir + copiar de verdade,
-    # e FALHAR ALTO se nada vier — nunca publicar galeria "sem preview" mudo.
+
+    # Empacotamento / acesso: NÃO confiar em stat do plugin dir. Validar lendo
+    # de fato + os.listdir + copiar de verdade, FALHAR ALTO se nada vier —
+    # nunca publicar galeria "sem preview" mudo. (disciplina em _libcommon)
     try:
-        _seed_styles()  # leitura real de styles.seed.json (não .exists())
+        lc.read_json_strict(_SEED_FILE)  # leitura real (não .exists())
     except (OSError, ValueError) as e:
         raise StyleLibraryError(
             f"styles.seed.json ilegível em {_CORE_DIR} ({e!r}) — plugin mal "
             f"empacotado ou ambiente bloqueando acesso a arquivo.") from e
-    src_thumbs = _CORE_DIR / "thumbnails"
-    try:
-        entries = os.listdir(src_thumbs)
-    except OSError as e:
-        raise StyleLibraryError(
-            f"core/thumbnails ilegível em {src_thumbs} ({e!r}) — plugin mal "
-            f"empacotado ou ambiente bloqueando acesso a diretório.") from e
-    _IMG_EXT = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
-    imgs = [n for n in entries if os.path.splitext(n)[1].lower() in _IMG_EXT]
+
     # Copia thumbnails ausentes — independente de os styles já existirem
     # (responsabilidades distintas; roda ANTES do guard de idempotência).
-    copied = existed = 0
-    errors: list[str] = []
-    for name in imgs:
-        tgt = thumbs_dir / name           # tgt vive no workspace (FS normal)
-        if tgt.exists():
-            existed += 1
-            continue
-        try:
-            shutil.copy2(src_thumbs / name, tgt)
-            copied += 1
-        except OSError as e:
-            errors.append(f"{name}: {e!r}")
-    if imgs and copied == 0 and existed == 0:
-        raise StyleLibraryError(
-            f"Nenhum dos {len(imgs)} thumbnails do seed chegou ao workspace "
-            f"({src_thumbs} -> {thumbs_dir}). Erros: "
-            f"{errors or '[sem exceção; provável bloqueio silencioso de '
-            f'acesso ao diretório do plugin]'}.")
+    lc.copy_seed_assets(_CORE_DIR / "thumbnails", thumbs_dir,
+                        exts=lc.IMG_EXT, error_cls=StyleLibraryError,
+                        label="core/thumbnails")
+
     # Guard de idempotência: styles só são semeados uma vez.
     if any(styles_dir.glob("*.json")):
         return 0
@@ -207,7 +148,7 @@ def bootstrap(lib_dir: Path, _render: bool = True) -> int:
         dest = styles_dir / f"{s['slug']}.json"
         if dest.exists():
             continue
-        _atomic_write(dest, json.dumps(s, ensure_ascii=False, indent=2) + "\n")
+        lc.atomic_write(dest, json.dumps(s, ensure_ascii=False, indent=2) + "\n")
         seeded += 1
     if _render:
         render_gallery(lib_dir)
@@ -231,13 +172,7 @@ def _ensure_ready(lib_dir: Path | None = None) -> Path:
 # --------------------------------------------------------------------------- #
 def _read_workspace(lib_dir: Path) -> list[dict]:
     styles_dir, *_ = _subdirs(lib_dir)
-    out = []
-    for fp in styles_dir.glob("*.json"):
-        try:
-            out.append(json.loads(fp.read_text(encoding="utf-8")))
-        except (json.JSONDecodeError, OSError):
-            continue
-    return out
+    return lc.read_workspace_json(styles_dir)
 
 
 def _resolve_read(lib_dir):
@@ -268,7 +203,8 @@ def get_style(ref, lib_dir: Path | None = None) -> dict:
     for st in styles:
         if st.get("slug") == s or st.get("name") == ref:
             return st
-    raise StyleNotFound(f"Estilo '{ref}' não encontrado (use --list para ver os disponíveis).")
+    raise StyleNotFound(
+        f"Estilo '{ref}' não encontrado (use --list para ver os disponíveis).")
 
 
 # --------------------------------------------------------------------------- #
@@ -287,21 +223,19 @@ def _validate(category: str, tags: list[str]) -> None:
 
 
 def _unique_slug(styles_dir: Path, base: str) -> str:
-    slug, i = base, 2
-    while (styles_dir / f"{slug}.json").exists():
-        slug = f"{base}-{i}"
-        i += 1
-    return slug
+    return lc.unique_slug(styles_dir, base)
 
 
 def _next_id(styles: list[dict]) -> int:
-    return 1 + max((s.get("id", 0) for s in styles), default=0)
+    return lc.next_id(styles)
 
 
 def add_style(name: str, prompt: str, *, category: str, tags: list[str] | None = None,
               example_use: str = "", thumbnail: str | None = None,
               lib_dir: Path | None = None) -> dict:
     """Cria um estilo novo. Nunca sobrescreve outro (slug único, id monotônico)."""
+    import shutil
+
     tags = list(tags or [])
     _validate(category, tags)
     lib_dir = _ensure_ready(lib_dir)  # materializa os 5 exemplos antes -> id segue em #6
@@ -315,7 +249,7 @@ def add_style(name: str, prompt: str, *, category: str, tags: list[str] | None =
             ext = src.suffix.lower() or ".png"
             shutil.copy2(src, thumbs_dir / f"{slug}{ext}")
             thumb_rel = f"thumbnails/{slug}{ext}"
-    ts = _now()
+    ts = lc.now()
     style = {
         "schemaVersion": SCHEMA_VERSION,
         "id": _next_id(_read_workspace(lib_dir)),
@@ -329,25 +263,19 @@ def add_style(name: str, prompt: str, *, category: str, tags: list[str] | None =
         "createdAt": ts,
         "updatedAt": ts,
     }
-    _atomic_write(styles_dir / f"{slug}.json",
-                  json.dumps(style, ensure_ascii=False, indent=2) + "\n")
+    lc.atomic_write(styles_dir / f"{slug}.json",
+                    json.dumps(style, ensure_ascii=False, indent=2) + "\n")
     render_gallery(lib_dir)
     return style
 
 
 def _find_workspace_file(lib_dir: Path, ref) -> Path:
     styles_dir, *_ = _subdirs(lib_dir)
-    s = str(ref).strip()
-    for fp in styles_dir.glob("*.json"):
-        try:
-            d = json.loads(fp.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, OSError):
-            continue
-        if (s.isdigit() and d.get("id") == int(s)) or d.get("slug") == s or d.get("name") == ref:
-            return fp
-    raise StyleNotFound(
-        f"Estilo '{ref}' não encontrado na biblioteca "
-        f"(use list_styles / get_style.py --list para ver os disponíveis).")
+    return lc.find_workspace_file(
+        styles_dir, ref, error_cls=StyleNotFound,
+        not_found_msg=(
+            f"Estilo '{ref}' não encontrado na biblioteca "
+            f"(use list_styles / get_style.py --list para ver os disponíveis)."))
 
 
 def update_style(ref, *, lib_dir: Path | None = None, **fields) -> dict:
@@ -359,19 +287,23 @@ def update_style(ref, *, lib_dir: Path | None = None, **fields) -> dict:
         fields.pop(k, None)  # imutáveis
     style.update(fields)
     _validate(style.get("category"), style.get("tags") or [])
-    style["updatedAt"] = _now()
-    _atomic_write(fp, json.dumps(style, ensure_ascii=False, indent=2) + "\n")
+    style["updatedAt"] = lc.now()
+    lc.atomic_write(fp, json.dumps(style, ensure_ascii=False, indent=2) + "\n")
     render_gallery(lib_dir)
     return style
 
 
 def delete_style(ref, *, lib_dir: Path | None = None) -> dict:
     """Soft-delete: move o JSON pra .trash/ (recuperável). Não apaga a thumbnail."""
+    import os
+    from datetime import datetime, timezone
+
     lib_dir = _ensure_ready(lib_dir)
     fp = _find_workspace_file(lib_dir, ref)
     _, _, trash_dir, _ = _subdirs(lib_dir)
     trash_dir.mkdir(parents=True, exist_ok=True)
-    dest = trash_dir / f"{fp.stem}.{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json"
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    dest = trash_dir / f"{fp.stem}.{stamp}.json"
     os.replace(fp, dest)
     render_gallery(lib_dir)
     return {"deleted": fp.name, "trash": str(dest)}
@@ -389,12 +321,11 @@ def render_gallery(lib_dir: Path | None = None,
     lib_dir = _ensure_ready(lib_dir)  # materializa os 5 exemplos -> HTML mostra reais c/ thumb
     styles = sorted(_resolve_read(lib_dir)[0], key=lambda s: s.get("id", 0))
     tpl = Path(template_path or _TEMPLATE_FILE).read_text(encoding="utf-8")
-    if _PLACEHOLDER not in tpl:
-        raise StyleLibraryError(
-            f"Placeholder {_PLACEHOLDER!r} ausente no template — template corrompido.")
-    injected = tpl.replace(_PLACEHOLDER, json.dumps(styles, ensure_ascii=False), 1)
+    injected = lc.inject_placeholder(
+        tpl, _PLACEHOLDER, json.dumps(styles, ensure_ascii=False),
+        StyleLibraryError)
     _, _, _, html_path = _subdirs(lib_dir)
-    _atomic_write(html_path, injected)
+    lc.atomic_write(html_path, injected)
     return html_path
 
 

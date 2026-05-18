@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-17T00:00:00Z",
+  "lastUpdated": "2026-05-18T00:00:00Z",
 
   "components": {
     "skills": [
@@ -30,6 +30,7 @@
           "plugins/io-social-media/core/style_extract.py",
           "plugins/io-social-media/core/get_style.py",
           "plugins/io-social-media/core/style_library.py",
+          "plugins/io-social-media/core/_libcommon.py",
           "plugins/io-social-media/core/requirements.txt",
           "plugins/io-social-media/core/.env.example"
         ],
@@ -42,6 +43,7 @@
         "description": "Biblioteca de estilos visuais reutilizáveis — criar, listar, editar, remover estilos e gerar/abrir a galeria HTML; dados por arquivo na pasta de trabalho",
         "supportingFiles": [
           "plugins/io-social-media/core/style_library.py",
+          "plugins/io-social-media/core/_libcommon.py",
           "plugins/io-social-media/core/gallery-template.html",
           "plugins/io-social-media/core/styles.seed.json",
           "plugins/io-social-media/core/get_style.py",
@@ -49,6 +51,20 @@
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["style-library", "social-media", "gallery"]
+      },
+      {
+        "name": "product-catalog",
+        "path": "plugins/io-social-media/skills/product-catalog/SKILL.md",
+        "description": "Catálogo de produtos por marca — marcas (voz, mensagens-chave, público, paleta, guardrails), produtos e fotos; CRUD conversacional + catálogo HTML; dados por arquivo na pasta de trabalho",
+        "supportingFiles": [
+          "plugins/io-social-media/core/product_library.py",
+          "plugins/io-social-media/core/_libcommon.py",
+          "plugins/io-social-media/core/product-catalog-template.html",
+          "plugins/io-social-media/core/products.seed.json",
+          "plugins/io-social-media/core/get_product.py"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["product-catalog", "brand", "social-media"]
       }
     ],
 
@@ -89,6 +105,36 @@
       "type": "references"
     },
     {
+      "from": "skills/product-catalog",
+      "to": "plugins/io-social-media/core/product_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/product-catalog",
+      "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
+      "from": "skills/product-catalog",
+      "to": "skills/image-generation",
+      "type": "references"
+    },
+    {
+      "from": "skills/image-generation",
+      "to": "skills/product-catalog",
+      "type": "references"
+    },
+    {
+      "from": "plugins/io-social-media/core/style_library.py",
+      "to": "plugins/io-social-media/core/_libcommon.py",
+      "type": "uses"
+    },
+    {
+      "from": "plugins/io-social-media/core/product_library.py",
+      "to": "plugins/io-social-media/core/_libcommon.py",
+      "type": "uses"
+    },
+    {
       "from": "skills/about-insideout",
       "to": "plugins/io-social-media/skills/about-insideout/about.md",
       "type": "references"
@@ -104,9 +150,9 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.3.7",
+      "version": "0.4.0",
       "componentCounts": {
-        "skills": 4,
+        "skills": 5,
         "agents": 0,
         "hooks": 0,
         "scripts": 0

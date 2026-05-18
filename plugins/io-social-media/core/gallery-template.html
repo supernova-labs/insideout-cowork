@@ -523,7 +523,7 @@
         <button class="filter-btn" data-filter="Imprensa">Imprensa</button>
       </div>
       <div class="tag-filters" id="tag-filters">
-        <!-- Populated by JS when category is selected -->
+        <!-- Populated by JS (safe DOM) -->
       </div>
     </div>
 
@@ -539,7 +539,7 @@
         </tr>
       </thead>
       <tbody id="styles-body">
-        <!-- Populated by JS -->
+        <!-- Populated by JS (safe DOM) -->
       </tbody>
     </table>
 
@@ -566,6 +566,7 @@
     // ===========================================
     // CANONICAL CATEGORIES AND TAGS
     // When adding new styles, Claude MUST use these categories and tags only.
+    // (espelha style_library.py CATEGORIES/CANONICAL_TAGS)
     // ===========================================
     const CATEGORIES = ["Produto", "Campanha", "Pessoas", "Editorial", "Evento", "Imprensa"];
 
@@ -578,8 +579,35 @@
       "Imprensa": ["clipping", "card-resultado", "citacao", "anuncio-na-midia", "infografico"]
     };
 
-    // Style library data - Claude can add entries here
+    // Style library data - injetado por style_library.render_gallery
     const styles = /*__STYLES_JSON__*/[];
+
+    // --- Construtores de DOM seguros (sem innerHTML de conteúdo dinâmico) ---
+    // Todo dado dinâmico entra como TEXT NODE (createTextNode / textContent),
+    // nunca como HTML interpretado. Elimina o vetor de XSS por completo.
+    function el(tag, props, children) {
+      const e = document.createElement(tag);
+      if (props) {
+        for (const k in props) {
+          const v = props[k];
+          if (v == null) continue;
+          if (k === 'class') e.className = v;
+          else if (k === 'text') e.textContent = v;
+          else if (k === 'dataset') Object.assign(e.dataset, v);
+          else if (k.slice(0, 2) === 'on' && typeof v === 'function')
+            e.addEventListener(k.slice(2), v);
+          else e.setAttribute(k, v);
+        }
+      }
+      if (children != null) {
+        const arr = Array.isArray(children) ? children : [children];
+        for (const c of arr) {
+          if (c == null) continue;
+          e.append(c.nodeType ? c : document.createTextNode(String(c)));
+        }
+      }
+      return e;
+    }
 
     const tbody = document.getElementById('styles-body');
     const emptyState = document.getElementById('empty-state');
@@ -590,133 +618,149 @@
     let currentTag = null;
 
     function renderTagFilters() {
+      tagFiltersContainer.replaceChildren();
       if (currentFilter === 'all') {
         tagFiltersContainer.classList.remove('active');
-        tagFiltersContainer.innerHTML = '';
         return;
       }
-
       const tags = CANONICAL_TAGS[currentFilter] || [];
       if (tags.length === 0) {
         tagFiltersContainer.classList.remove('active');
-        tagFiltersContainer.innerHTML = '';
         return;
       }
-
-      tagFiltersContainer.innerHTML = tags.map(tag =>
-        `<button class="tag-filter-btn${currentTag === tag ? ' active' : ''}" data-tag="${tag}">${tag}</button>`
-      ).join('');
-      tagFiltersContainer.classList.add('active');
-
-      // Add click handlers for tag buttons
-      document.querySelectorAll('.tag-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const clickedTag = btn.dataset.tag;
-          if (currentTag === clickedTag) {
-            // Deselect if clicking same tag
-            currentTag = null;
-          } else {
-            currentTag = clickedTag;
+      for (const tag of tags) {
+        const btn = el('button', {
+          class: 'tag-filter-btn' + (currentTag === tag ? ' active' : ''),
+          text: tag,
+          onclick: () => {
+            currentTag = (currentTag === tag) ? null : tag;
+            renderTagFilters();
+            renderStyles();
           }
-          renderTagFilters();
-          renderStyles();
         });
-      });
+        tagFiltersContainer.append(btn);
+      }
+      tagFiltersContainer.classList.add('active');
     }
 
-    // Simple markdown to HTML converter
-    function renderMarkdown(text) {
-      return text
-        // Bold: **text** or __text__
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/__(.+?)__/g, '<strong>$1</strong>')
-        // Italic: *text* or _text_
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-        .replace(/_([^_]+)_/g, '<em>$1</em>')
-        // Line breaks to paragraphs (double newline)
-        .split(/\n\n+/)
-        .map(para => {
-          // Check if paragraph is a list
-          const lines = para.split('\n');
-          if (lines[0].match(/^[-•]\s/)) {
-            // Unordered list
-            const items = lines.map(line => `<li>${line.replace(/^[-•]\s+/, '')}</li>`).join('');
-            return `<ul>${items}</ul>`;
+    // Markdown limitado -> NÓS de DOM (não string HTML). Suporta **negrito**,
+    // *itálico*, listas com - / • e parágrafos. Usa matchAll (sem .exec) e
+    // textContent — zero HTML interpretado a partir de dado dinâmico.
+    function mdInline(text, parent) {
+      const re = /(\*\*|__)([^]+?)\1|(\*|_)([^]+?)\3/g;
+      let last = 0;
+      for (const m of String(text).matchAll(re)) {
+        if (m.index > last) {
+          parent.append(document.createTextNode(text.slice(last, m.index)));
+        }
+        if (m[2] != null) {
+          parent.append(el('strong', null, m[2]));
+        } else {
+          parent.append(el('em', null, m[4]));
+        }
+        last = m.index + m[0].length;
+      }
+      if (last < text.length) {
+        parent.append(document.createTextNode(text.slice(last)));
+      }
+    }
+
+    function renderMarkdownInto(container, text) {
+      const blocks = String(text).split(/\n\n+/);
+      for (const block of blocks) {
+        const lines = block.split('\n');
+        if (lines[0].match(/^[-•]\s/)) {
+          const ul = el('ul');
+          for (const line of lines) {
+            const li = el('li');
+            mdInline(line.replace(/^[-•]\s+/, ''), li);
+            ul.append(li);
           }
-          // Regular paragraph - convert single newlines to <br>
-          return `<p>${para.replace(/\n/g, '<br>')}</p>`;
-        })
-        .join('');
+          container.append(ul);
+        } else {
+          const p = el('p');
+          const parts = block.split('\n');
+          parts.forEach((part, i) => {
+            mdInline(part, p);
+            if (i < parts.length - 1) p.append(el('br'));
+          });
+          container.append(p);
+        }
+      }
     }
 
-    // Fallback automático: se um estilo não tiver thumbnail (ex.: referência
-    // nova que a Inside.out adicionou e ainda não gerou preview), troca a
-    // imagem por um placeholder limpo. Zero manutenção de lista.
+    // Fallback: estilo sem thumbnail -> placeholder limpo "sem preview".
     function thumbFallback(img) {
-      const d = document.createElement('div');
-      d.className = 'thumbnail--none';
-      d.appendChild(document.createTextNode('sem'));
-      d.appendChild(document.createElement('br'));
-      d.appendChild(document.createTextNode('preview'));
+      const d = el('div', { class: 'thumbnail--none' });
+      d.append(document.createTextNode('sem'));
+      d.append(el('br'));
+      d.append(document.createTextNode('preview'));
       img.replaceWith(d);
+    }
+
+    function styleRow(style) {
+      const tr = el('tr', { dataset: { category: style.category } });
+
+      const tdIdx = el('td', null,
+        el('span', { class: 'index', text: String(style.id).padStart(2, '0') }));
+
+      const img = el('img', {
+        class: 'thumbnail', src: style.thumbnail, alt: style.name,
+        onerror: function () { thumbFallback(this); },
+        onclick: function () { openLightbox(this.src); },
+        onmouseenter: function (e) { showHoverPreview(this.src, e); },
+        onmousemove: function (e) { moveHoverPreview(e); },
+        onmouseleave: hideHoverPreview
+      });
+      const tdThumb = el('td', null, img);
+
+      const nameDiv = el('div', { class: 'style-name', text: style.name });
+      const tagsDiv = el('div', { class: 'style-tags' },
+        (style.tags || []).map(t => el('span', { class: 'tag', text: t })));
+      const tdName = el('td', null, [nameDiv, tagsDiv]);
+
+      const tdCat = el('td', null,
+        el('span', { class: 'category-badge', text: style.category }));
+
+      const promptDiv = el('div', {
+        class: 'prompt-text',
+        dataset: { prompt: encodeURIComponent(style.prompt) },
+        onclick: function () { copyPrompt(this); }
+      });
+      renderMarkdownInto(promptDiv, style.prompt);
+      const tdPrompt = el('td', { class: 'prompt-cell' }, promptDiv);
+
+      const tdUse = el('td', null,
+        el('span', { class: 'example-use', text: style.exampleUse }));
+
+      tr.append(tdIdx, tdThumb, tdName, tdCat, tdPrompt, tdUse);
+      return tr;
     }
 
     function renderStyles() {
       let filtered = currentFilter === 'all'
         ? styles
         : styles.filter(s => s.category === currentFilter);
-
-      // Apply tag filter if set
       if (currentTag) {
-        filtered = filtered.filter(s => s.tags.includes(currentTag));
+        filtered = filtered.filter(s => (s.tags || []).includes(currentTag));
       }
 
+      tbody.replaceChildren();
       if (filtered.length === 0) {
-        tbody.innerHTML = '';
         emptyState.style.display = 'block';
         return;
       }
-
       emptyState.style.display = 'none';
-      tbody.innerHTML = filtered.map(style => `
-        <tr data-category="${style.category}">
-          <td><span class="index">${String(style.id).padStart(2, '0')}</span></td>
-          <td><img class="thumbnail" src="${style.thumbnail}" alt="${style.name}" onerror="thumbFallback(this)"></td>
-          <td>
-            <div class="style-name">${style.name}</div>
-            <div class="style-tags">
-              ${style.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-          </td>
-          <td><span class="category-badge">${style.category}</span></td>
-          <td class="prompt-cell">
-            <div class="prompt-text" data-prompt="${encodeURIComponent(style.prompt)}">${renderMarkdown(style.prompt)}</div>
-          </td>
-          <td><span class="example-use">${style.exampleUse}</span></td>
-        </tr>
-      `).join('');
-
-      // Add click handlers for copy
-      document.querySelectorAll('.prompt-text').forEach(el => {
-        el.addEventListener('click', () => copyPrompt(el));
-      });
-
-      // Add click handlers for lightbox
-      document.querySelectorAll('img.thumbnail').forEach(el => {
-        el.addEventListener('click', () => openLightbox(el.src));
-        el.addEventListener('mouseenter', (e) => showHoverPreview(el.src, e));
-        el.addEventListener('mousemove', (e) => moveHoverPreview(e));
-        el.addEventListener('mouseleave', hideHoverPreview);
-      });
+      for (const style of filtered) tbody.append(styleRow(style));
     }
 
-    function copyPrompt(el) {
-      const prompt = decodeURIComponent(el.dataset.prompt);
+    function copyPrompt(elm) {
+      const prompt = decodeURIComponent(elm.dataset.prompt);
       navigator.clipboard.writeText(prompt).then(() => {
-        el.classList.add('copied');
+        elm.classList.add('copied');
         toast.classList.add('show');
         setTimeout(() => {
-          el.classList.remove('copied');
+          elm.classList.remove('copied');
           toast.classList.remove('show');
         }, 2000);
       });
@@ -727,13 +771,13 @@
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentFilter = btn.dataset.filter;
-        currentTag = null; // Reset tag when category changes
+        currentTag = null;
         renderTagFilters();
         renderStyles();
       });
     });
 
-    // Lightbox functionality
+    // Lightbox
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxClose = document.querySelector('.lightbox-close');
@@ -755,7 +799,7 @@
       if (e.key === 'Escape') closeLightbox();
     });
 
-    // Hover preview functionality
+    // Hover preview
     const hoverPreview = document.getElementById('hover-preview');
     const hoverPreviewImg = document.getElementById('hover-preview-img');
 
@@ -766,31 +810,20 @@
     }
 
     function moveHoverPreview(e) {
-      const preview = hoverPreview;
-      const padding = 20;
-
-      // Get viewport dimensions
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-
-      // Position to the right of cursor by default
-      let x = e.clientX + padding;
+      let x = e.clientX + 20;
       let y = e.clientY - 100;
-
-      // If preview would go off right edge, show on left of cursor
       if (x + 420 > viewportWidth) {
-        x = e.clientX - 420 - padding;
+        x = e.clientX - 420 - 20;
       }
-
-      // Keep within vertical bounds
-      if (y < padding) {
-        y = padding;
+      if (y < 20) {
+        y = 20;
       } else if (y + 420 > viewportHeight) {
-        y = viewportHeight - 420 - padding;
+        y = viewportHeight - 420 - 20;
       }
-
-      preview.style.left = x + 'px';
-      preview.style.top = y + 'px';
+      hoverPreview.style.left = x + 'px';
+      hoverPreview.style.top = y + 'px';
     }
 
     function hideHoverPreview() {

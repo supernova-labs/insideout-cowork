@@ -14,6 +14,11 @@ Thumbs.db
 **/style-gallery/style-gallery.html
 **/style-gallery/.trash/
 
+# catálogo de produtos gerado na pasta de trabalho:
+#   versionar brands/ products/ photos/ (ativo de marca); ignorar derivado e lixeira
+**/product-catalog/product-catalog.html
+**/product-catalog/.trash/
+
 **/__pycache__/
 *.pyc
 *.pyo
