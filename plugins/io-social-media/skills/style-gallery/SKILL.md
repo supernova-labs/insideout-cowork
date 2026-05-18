@@ -54,14 +54,14 @@ print(sl.get_style('product-launch-gradient'))  # por slug
 **Criar** (valida categoria/tags; slug único; id monotônico; escrita atômica):
 ```python
 sl.add_style("Tom Institucional Azul", "<prompt completo>",
-             category="Marketing", tags=["social","banner"],
+             category="Campanha", tags=["sazonal","key-visual"],
              example_use="posts institucionais",
              thumbnail="caminho/opcional/para/imagem.png")
 ```
 
 **Editar** (slug e id são estáveis; revalida categoria/tags):
 ```python
-sl.update_style(6, exampleUse="...", category="Artistic", tags=["photography"])
+sl.update_style(6, exampleUse="...", category="Editorial", tags=["moodboard"])
 ```
 
 **Remover** (soft-delete reversível — move pra `.trash/`, **não** apaga a imagem; **não existe** "apagar tudo"):
@@ -94,8 +94,8 @@ Informe ao usuário o caminho e diga para abrir esse arquivo no navegador. Ele v
 
 Use **somente** estas (espelham a galeria; `add/update` rejeitam fora disso):
 
-- **Categorias**: Framework, Flow, Architecture, Mockup, Persona, Marketing, Artistic
-- **Tags por categoria** (ex.): Marketing → `ad, social, announcement, banner, hero`; Artistic → `flat-illustration, hand-drawn, watercolor, photography, retro, minimalist, bold-graphic, 3d-render`; Persona → `portrait, lifestyle, headshot, context, illustrated, scene`. Lista completa: `python -c "import sys;sys.path.insert(0,r'$CORE');import style_library as sl;print(sl.CANONICAL_TAGS)"`.
+- **Categorias**: Produto, Campanha, Pessoas, Editorial, Evento, Imprensa
+- **Tags por categoria** (ex.): Produto → `packshot, flat-lay, still-life, em-cenario, macro-textura, lancamento`; Campanha → `sazonal, data-comemorativa, key-visual, teaser, oferta, feito-a-mao`; Editorial → `moodboard, colagem, color-story, capa-editorial, serie`; Pessoas → `beauty, retrato, lifestyle, close-pele, kol-influencer, diversidade`. Lista completa: `python -c "import sys;sys.path.insert(0,r'$CORE');import style_library as sl;print(sl.CANONICAL_TAGS)"`.
 
 Para peça da InsideOut, alinhe à marca via skill `about-insideout` antes de definir nome/categoria.
 

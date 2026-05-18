@@ -2,76 +2,80 @@
   {
     "schemaVersion": 1,
     "id": 1,
-    "slug": "instagram-product-post",
-    "name": "Instagram Product Post",
-    "category": "Marketing",
+    "slug": "io-ilustracao-infantil-papel",
+    "name": "Ilustração Infantil em Papel",
+    "category": "Campanha",
     "tags": [
-      "social"
+      "data-comemorativa",
+      "feito-a-mao"
     ],
-    "thumbnail": "thumbnails/social-instagram-product.png",
-    "prompt": "**Task:** Create an Instagram-native product showcase post\n\n**Style:**\n- Vibrant, thumb-stopping design\n- Gradient background (purple to blue)\n- Modern rounded typography\n- 3D-style floating UI mockups\n\n**Output:**\n- Square format (1080x1080px)\n- Rich gradient with subtle texture\n\n**Content:**\n- Headline: \"Ship Faster With Smart Roadmaps\"\n- Visual: 3D perspective mockups of roadmap interface\n- Branding: Small logo bottom corner\n- Emoji: Rocket ship 🚀\n\n**Layout:**\n- Centered composition\n- Headline at top with padding\n- Mockups arranged in perspective stack\n- Balanced negative space\n\n**Constraints:**\n- English text only\n- High contrast for mobile viewing\n- Instagram-optimized colors",
-    "exampleUse": "Instagram posts, product showcases, feature highlights on social media",
+    "thumbnail": "thumbnails/io-ilustracao-infantil-papel.png",
+    "prompt": "**Tarefa:** Ilustrar o produto-herói como um desenho feito à mão por uma criança.\n\n**Estilo:**\n- Traço de lápis de cor / giz de cera, contornos imperfeitos e propositalmente \"tortos\"\n- Fundo de papel off-white levemente texturizado (grão de papel sketch/aquarela)\n- Rabiscos infantis espalhados ao redor — corações, estrelas, garatujas — em cores primárias de marcador (rosa, azul, verde, laranja, vermelho)\n- Reflexo suave e desenhado embaixo do produto\n- Atmosfera afetiva, manual, ingênua e calorosa\n\n**Formato:**\n- Retrato 4:5 (1080x1350px), nativo de feed\n- Sem fundo fotográfico — só o papel\n\n**Conteúdo:**\n- Produto-herói centralizado, desenhado à mão (manter rótulo legível e fiel à marca)\n- Manchete curta no topo, em caixa-alta preta, sans condensada, bem espaçada (ex.: data comemorativa)\n\n**Layout:**\n- Herói no centro com respiro generoso\n- Doodles preenchendo as margens sem competir com o produto\n- Manchete ancorada no topo\n\n**Restrições:**\n- Texto em português do Brasil\n- Nada de aparência 3D ou fotorrealista — manter o charme \"feito à mão\"\n- Paleta de doodles vibrante, mas papel sempre neutro",
+    "exampleUse": "Datas afetivas (Dia das Mães/Pais), campanhas com tom lúdico e feito à mão",
     "createdAt": "2026-05-17T00:00:00Z",
     "updatedAt": "2026-05-17T00:00:00Z"
   },
   {
     "schemaVersion": 1,
     "id": 2,
-    "slug": "linkedin-professional-graphic",
-    "name": "LinkedIn Professional Graphic",
-    "category": "Marketing",
+    "slug": "io-produto-heroi-cenario-ia",
+    "name": "Produto Herói em Cenário (IA)",
+    "category": "Produto",
     "tags": [
-      "social"
+      "em-cenario",
+      "gerado-por-ia"
     ],
-    "thumbnail": "thumbnails/social-linkedin-professional.png",
-    "prompt": "**Task:** Create a professional LinkedIn insight post\n\n**Style:**\n- Clean, corporate aesthetic\n- Professional color scheme (navy, white, gold accent)\n- Serif and sans-serif combination\n- Data visualization elements\n\n**Output:**\n- Landscape format (1200x627px, LinkedIn native)\n- Solid or subtle gradient background\n\n**Content:**\n- Headline: \"The State of Product Management 2025\"\n- Supporting stat: \"73% of PMs say AI changed their workflow\"\n- Visual: Simple bar chart or infographic element\n- Branding: Company name \"ProductFlow Insights\"\n\n**Layout:**\n- Text-heavy design, left-aligned\n- Chart/visual element right side\n- Professional spacing and hierarchy\n- Subtle brand accent at bottom\n\n**Constraints:**\n- English text only\n- Corporate professional tone\n- Optimized for LinkedIn feed",
-    "exampleUse": "LinkedIn posts, industry insights, thought leadership content, B2B marketing",
+    "thumbnail": "thumbnails/io-produto-heroi-cenario-ia.png",
+    "prompt": "**Tarefa:** Posicionar o produto-herói como protagonista fotorreal dentro de um cenário icônico, com styling lúdico.\n\n**Estilo:**\n- Fotorrealismo de alta qualidade, profundidade de campo cinematográfica\n- Produto em primeiro plano, nítido, sobre superfície real (madeira polida, pedra, etc.)\n- Adereços-miniatura divertidos no produto (óculos de sol, câmera no pescoço) — antropomorfização leve e bem-humorada\n- Cenário de fundo grandioso e reconhecível (paisagem natural, marco turístico), luz natural intensa\n- Tom alegre, surreal-mas-crível, de parar o scroll\n\n**Formato:**\n- Retrato 4:5 (1080x1350px)\n- Profundidade real: produto em foco, fundo com leve desfoque atmosférico\n\n**Conteúdo:**\n- Produto-herói com rótulo fiel à marca, escala plausível na cena\n- Disclaimer discreto no rodapé quando a imagem for gerada por IA (ex.: \"*Imagem gerada por IA\")\n\n**Layout:**\n- Produto no terço inferior central, cenário preenchendo o quadro\n- Espaço de respiro no céu/topo para eventual texto\n\n**Restrições:**\n- Texto em português do Brasil\n- Manter coerência de luz/sombra entre produto e cenário\n- Lúdico sem infantilizar a marca premium",
+    "exampleUse": "Hero de produto em paisagem icônica, campanhas conceituais lúdicas geradas por IA",
     "createdAt": "2026-05-17T00:00:00Z",
     "updatedAt": "2026-05-17T00:00:00Z"
   },
   {
     "schemaVersion": 1,
     "id": 3,
-    "slug": "twitter-x-announcement-card",
-    "name": "Twitter/X Announcement Card",
-    "category": "Marketing",
+    "slug": "io-flatlay-editorial-sazonal",
+    "name": "Flat-lay Editorial Sazonal",
+    "category": "Campanha",
     "tags": [
-      "social",
-      "announcement"
+      "sazonal",
+      "flat-lay"
     ],
-    "thumbnail": "thumbnails/social-twitter-announcement.png",
-    "prompt": "**Task:** Create a Twitter/X card for feature announcement\n\n**Style:**\n- Bold, punchy design\n- High-contrast colors (black background, electric blue accents)\n- Condensed bold typography\n- Minimal graphic elements\n\n**Output:**\n- Twitter card format (1200x675px)\n- Dark background with neon accents\n\n**Content:**\n- Headline: \"NEW: Real-Time Sync\"\n- Subtext: \"Your team, always in sync. Zero lag.\"\n- Icon: Sync symbol with glow effect\n- Branding: \"TaskFlow\" wordmark\n\n**Layout:**\n- Centered text\n- Large icon top center\n- Headline middle\n- Brand bottom\n- Plenty of breathing room\n\n**Constraints:**\n- English text only\n- High contrast for timeline scanning\n- Eye-catching but not cluttered",
-    "exampleUse": "Twitter/X announcements, quick feature drops, social media launch teasers",
+    "thumbnail": "thumbnails/io-flatlay-editorial-sazonal.png",
+    "prompt": "**Tarefa:** Compor um flat-lay editorial sazonal de produtos com manchete forte.\n\n**Estilo:**\n- Vista superior (top-down) sobre mármore branco/cinza claro\n- Produtos dispostos em diagonal, com elementos naturais da estação (folhas de outono, flores, frutas) espalhados com intenção\n- Luz natural suave, sombras delicadas, muito espaço negativo\n- Estética premium, clean, editorial de revista\n\n**Formato:**\n- Retrato 4:5 (1080x1350px)\n- Fundo de mármore claro, uniforme\n\n**Conteúdo:**\n- Wordmark da marca discreto no topo\n- Manchete curta e impactante em sans/grotesca preta pesada (ex.: \"Outono chegou.\")\n- Subtítulo-pergunta mais leve em um canto inferior\n- 2 a 4 produtos com rótulo fiel\n\n**Layout:**\n- Texto ancorado à esquerda; produtos e elementos sazonais ocupando o restante\n- Hierarquia tipográfica clara (wordmark < manchete > subtítulo)\n\n**Restrições:**\n- Texto em português do Brasil\n- Paleta dos elementos sazonais coerente com a estação; base sempre neutra\n- Nada de poluição visual — respiro é parte do estilo",
+    "exampleUse": "Posts sazonais com manchete forte, produtos sobre mármore e elementos da estação",
     "createdAt": "2026-05-17T00:00:00Z",
     "updatedAt": "2026-05-17T00:00:00Z"
   },
   {
     "schemaVersion": 1,
     "id": 4,
-    "slug": "product-launch-gradient",
-    "name": "Product Launch Gradient",
-    "category": "Marketing",
+    "slug": "io-still-life-lifestyle-overhead",
+    "name": "Still Life Lifestyle Overhead",
+    "category": "Produto",
     "tags": [
-      "announcement"
+      "still-life",
+      "flat-lay"
     ],
-    "thumbnail": "thumbnails/announcement-launch-gradient.png",
-    "prompt": "**Task:** Create an exciting product launch announcement\n\n**Style:**\n- Futuristic gradient design\n- Multi-color gradient (cyan to purple to pink)\n- Bold geometric typography\n- Light rays and glow effects\n\n**Output:**\n- Landscape format (1920x1080px)\n- Dynamic flowing gradient background\n\n**Content:**\n- Headline: \"Introducing PulseFlow 2.0\"\n- Subheadline: \"The future of agile project management\"\n- Launch date: \"Available January 15, 2025\"\n- Visual: Abstract geometric shapes suggesting movement\n\n**Layout:**\n- Text centered with dramatic spacing\n- Geometric elements framing the text\n- Symmetrical composition\n- Glowing accents\n\n**Constraints:**\n- English text only\n- All text prominently displayed\n- Exciting, launch-worthy energy",
-    "exampleUse": "Major product launches, version releases, big announcements, event promotion",
+    "thumbnail": "thumbnails/io-still-life-lifestyle-overhead.png",
+    "prompt": "**Tarefa:** Fotografar uma composição overhead lifestyle misturando o produto com objetos do cotidiano.\n\n**Estilo:**\n- Vista perfeitamente superior (bird's-eye)\n- Produtos dentro/sobre um objeto-cenário do dia a dia (cesto de arame cromado, bandeja, mesa de trabalho)\n- Mix com objetos de papelaria/rotina (lápis, caderno, clips, fita) arranjados com naturalidade controlada\n- Paleta de tons pastel + branco + cromado; luz natural suave coando sombras delicadas\n- Sensação tátil, organizada, \"volta à rotina\"\n\n**Formato:**\n- Retrato 4:5 ou quadrado (1:1)\n- Fundo branco/neutro\n\n**Conteúdo:**\n- Produto(s) com rótulo fiel como ponto focal entre os objetos\n- Sem manchete (ou texto mínimo) — a composição fala\n\n**Layout:**\n- Objeto-cenário centralizado, preenchendo a maior parte do quadro\n- Arranjo equilibrado, com microespaços entre os itens\n\n**Restrições:**\n- Fotografia realista, sem aparência 3D/render\n- Paleta restrita e harmônica\n- Sombras suaves apenas",
+    "exampleUse": "Composições overhead lifestyle misturando produto e objetos do cotidiano",
     "createdAt": "2026-05-17T00:00:00Z",
     "updatedAt": "2026-05-17T00:00:00Z"
   },
   {
     "schemaVersion": 1,
     "id": 5,
-    "slug": "product-flat-lay-photography",
-    "name": "Product Flat Lay Photography",
-    "category": "Artistic",
+    "slug": "io-moodboard-editorial-cor",
+    "name": "Moodboard Editorial de Cor",
+    "category": "Editorial",
     "tags": [
-      "photography"
+      "moodboard",
+      "color-story"
     ],
-    "thumbnail": "thumbnails/photography-flatlay.png",
-    "prompt": "**Task:** Create an artistic flat lay photograph of productivity tools and stationery.\n\n**Style:**\n- Overhead photography with clean, organized arrangement\n- Natural light from above creating soft shadows\n- Minimalist aesthetic with plenty of negative space\n- Professional product photography quality\n- Soft focus on edges, crisp center\n\n**Output:**\n- Square aspect ratio (1:1)\n- Clean white or neutral background\n\n**Content:**\n- Tech gadgets (laptop, phone, headphones)\n- Notebooks, pens, coffee cup\n- Geometric arrangement with intentional spacing\n- Conveys productivity and organization\n\n**Layout:**\n- Perfectly overhead view (bird's eye)\n- Objects arranged in pleasing grid or diagonal\n- Balanced composition with breathing room\n\n**Constraints:**\n- No text or logos\n- Clean, professional aesthetic\n- Realistic photography\n- Subtle shadows only",
-    "exampleUse": "Product showcases, tool collections, organizational systems, professional aesthetics",
+    "thumbnail": "thumbnails/io-moodboard-editorial-cor.png",
+    "prompt": "**Tarefa:** Montar um moodboard editorial monocromático construído a partir de uma paleta/tema.\n\n**Estilo:**\n- Colagem de fotos retangulares sobrepostas, levemente giradas, com aparência de \"prints\" sobre fundo branco\n- Mix de planos: close extremo de pele/lábios (modelos de tons variados), macro de textura/fruta, produto, elemento tátil (fita de veludo, tecido) costurando a composição\n- Color story monocromática e saturada (ex.: vermelho-cereja/borgonha) contra o branco\n- Sensorial, editorial de beleza, premium, tátil\n\n**Formato:**\n- Retrato 4:5 (1080x1350px)\n- Base branca limpa entre os recortes\n\n**Conteúdo:**\n- 5 a 7 imagens da mesma família cromática, incluindo ao menos um rosto e um produto com rótulo fiel\n- Sem manchete — a paleta e a colagem são a mensagem\n\n**Layout:**\n- Sobreposições assimétricas com hierarquia (uma imagem-âncora maior)\n- Ângulos sutis (-8° a +8°), bordas brancas tipo polaroid opcionais\n\n**Restrições:**\n- Manter rigor cromático — tudo na mesma paleta\n- Fotografia real; colagem digital limpa, sem filtros datados\n- Equilíbrio entre rosto, produto e textura",
+    "exampleUse": "Colagem-conceito por paleta/tema (ex.: vermelho-cereja), lançamentos de maquiagem",
     "createdAt": "2026-05-17T00:00:00Z",
     "updatedAt": "2026-05-17T00:00:00Z"
   }

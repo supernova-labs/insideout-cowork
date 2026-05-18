@@ -17,3 +17,8 @@ Thumbs.db
 **/__pycache__/
 *.pyc
 *.pyo
+
+# Scratch de automação de browser / verificação visual (Playwright MCP)
+.playwright-mcp/
+page-*.jpeg
+page-*.png
