@@ -40,11 +40,9 @@ Se for um repositório git, garanta no `.gitignore` da pasta de trabalho: ignora
 
 ## Operações
 
-**Primeiro uso / semear exemplos** — só quando o usuário quiser partir dos exemplos:
-```python
-lib = sl.find_library_dir(); sl.bootstrap(lib); print(sl.render_gallery(lib))
-```
-`bootstrap` é idempotente e nunca sobrescreve estilo existente. Se o cliente quer começar **do zero**, não chame bootstrap — só comece a adicionar.
+**Primeiro uso é automático** — não chame `bootstrap` manualmente. Qualquer operação que exibe/cura/muta (`render_gallery`, `open_gallery`, `add_style`, `update_style`, `delete_style`) já faz **lazy-ensure**: na primeira vez materializa os 5 exemplos + thumbnails no workspace (idempotente, nunca sobrescreve estilo existente). O usuário simplesmente pede o que quer; a biblioteca se prepara sozinha.
+
+Ação avançada opcional — **restaurar exemplos** (se o usuário apagou os exemplos e quer de volta): mover/limpar `styles/` e rodar `sl.bootstrap(sl.find_library_dir())`. Não é pré-requisito de nada.
 
 **Listar / ver:**
 ```python
@@ -121,7 +119,7 @@ Para peça da InsideOut, alinhe à marca via skill `about-insideout` antes de de
 ## Tratamento de erros
 
 - **`InvalidCategory` / `InvalidTag`**: a mensagem traz as opções válidas — escolha uma delas e repita.
-- **`StyleNotFound`**: confira com `list_styles()`; estilos do seed embarcado são read-only (para editar, crie o seu com `add_style`).
-- **Biblioteca não encontrada para editar/remover**: não há `style-gallery/` no workspace ainda — `add_style`/`bootstrap` criam.
+- **`StyleNotFound`**: confira com `list_styles()`; os 5 exemplos são materializados no 1º uso (lazy-ensure) e são editáveis como qualquer estilo.
+- **`StyleLibraryError` "plugin mal empacotado"**: `styles.seed.json`/`thumbnails` ausentes no `core/` instalado — reinstalar/atualizar o plugin.
 - **Import falha**: `pip install -r "$CORE/requirements.txt"`.
 - **`extract_style` falha**: confirme `GEMINI_API_KEY` (fluxo `.env` na pasta de trabalho — ver `image-generation`) e que o caminho da imagem existe.

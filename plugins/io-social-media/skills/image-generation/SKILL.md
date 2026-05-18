@@ -129,7 +129,7 @@ Os estilos vêm da **biblioteca do cliente** em `<pasta de trabalho>/style-galle
 
 ### Salvar como estilo (só sob pedido)
 
-**Apenas quando o usuário pedir explicitamente** ("salva esse visual como estilo", "guarda isso na galeria") — nunca ofereça proativamente. Confirme nome e categoria, então grave via o módulo compartilhado:
+**Apenas quando o usuário pedir explicitamente** ("salva esse visual como estilo", "guarda isso na galeria") — nunca ofereça proativamente. Confirme nome e categoria, então grave via o módulo compartilhado (`add_style` já prepara a biblioteca sozinho — lazy-ensure; não rode bootstrap manual):
 ```bash
 CORE="${CLAUDE_PLUGIN_ROOT}/core"
 python -c "
