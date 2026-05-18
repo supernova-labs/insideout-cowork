@@ -104,7 +104,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "componentCounts": {
         "skills": 4,
         "agents": 0,

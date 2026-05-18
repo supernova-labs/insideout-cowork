@@ -15,58 +15,25 @@ load_dotenv()
 from google import genai
 from google.genai import types
 
-# Configuration — env-overridable. No Cowork desktop o filesystem da pasta
-# de trabalho (mount Windows→Linux) pode ser hostil: trunca leitura, barra
-# criação de arquivo em subdir e barra unlink. Use IMAGE_GEN_OUTPUT_DIR /
-# IMAGE_GEN_SESSION_FILE para apontar pra área nativa do sandbox.
-SESSION_FILE = os.environ.get("IMAGE_GEN_SESSION_FILE", ".image_session.json")
-OUTPUT_DIR = os.environ.get("IMAGE_GEN_OUTPUT_DIR", "outputs")
+# Configuration
+SESSION_FILE = ".image_session.json"
+OUTPUT_DIR = "outputs"
 DEFAULT_MODEL = "gemini-3-pro-image-preview"
 DEFAULT_ASPECT_RATIO = "1:1"
 DEFAULT_RESOLUTION = "1K"
 
 
 def _get_client():
-    """Initialize Gemini client. Valida a chave antes de chamar a API —
-    no Cowork desktop o mount trunca a leitura do .env e a chave chega
-    cortada (~20 chars), gerando um API_KEY_INVALID críptico. Falhamos
-    rápido com mensagem acionável."""
-    api_key = (os.environ.get('GEMINI_API_KEY') or '').strip()
+    """Initialize Gemini client"""
+    api_key = os.environ.get('GEMINI_API_KEY')
     if not api_key:
-        raise ValueError(
-            "GEMINI_API_KEY ausente. Passe a chave inline no comando: "
-            "GEMINI_API_KEY=<chave> python3 ... (não dependa de .env na "
-            "pasta de trabalho montada — o Cowork desktop trunca a leitura).")
-    if len(api_key) < 30 or not api_key.startswith("AIza"):
-        raise ValueError(
-            f"GEMINI_API_KEY parece truncada/inválida (len={len(api_key)}, "
-            f"esperado ~39 e começar com 'AIza'). Causa provável: o mount da "
-            f"pasta de trabalho no Cowork desktop trunca a leitura do .env. "
-            f"Workaround: passe a chave inline — GEMINI_API_KEY=<chave completa> "
-            f"python3 -c \"...\" — em vez de gravá-la num .env na pasta montada.")
+        raise ValueError("GEMINI_API_KEY not found in environment. Check your .env file.")
     return genai.Client(api_key=api_key)
 
 
 def _ensure_output_dir():
-    """Garante um diretório de saída GRAVÁVEL. Se OUTPUT_DIR não aceitar
-    escrita (mount hostil do Cowork), cai pra área nativa do sandbox e
-    avisa onde os arquivos realmente foram parar."""
-    global OUTPUT_DIR
-    try:
-        Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
-        probe = Path(OUTPUT_DIR) / ".write_probe"
-        probe.write_bytes(b"ok")
-        probe.unlink()
-        return OUTPUT_DIR
-    except (OSError, PermissionError):
-        import tempfile
-        fallback = os.path.join(tempfile.gettempdir(), "image-gen-outputs")
-        Path(fallback).mkdir(parents=True, exist_ok=True)
-        print(f"[image_gen] AVISO: '{OUTPUT_DIR}' não é gravável (mount "
-              f"hostil do Cowork?). Usando fallback nativo: {fallback}. "
-              f"Copie os arquivos pra pasta de trabalho com 'cp' depois.")
-        OUTPUT_DIR = fallback
-        return OUTPUT_DIR
+    """Create outputs directory if it doesn't exist"""
+    Path(OUTPUT_DIR).mkdir(exist_ok=True)
 
 
 def _load_session():
@@ -114,16 +81,9 @@ def _reconstruct_history(raw_history):
 
 
 def _save_session(session):
-    """Save session to file. Mount hostil do Cowork pode barrar a escrita —
-    degrada com aviso em vez de derrubar uma geração bem-sucedida."""
-    try:
-        with open(SESSION_FILE, 'w') as f:
-            json.dump(session, f)
-    except (OSError, PermissionError) as e:
-        print(f"[image_gen] AVISO: não consegui salvar a sessão "
-              f"({SESSION_FILE}: {e}). Geração ok; histórico multi-turn "
-              f"pode não persistir. Defina IMAGE_GEN_SESSION_FILE para um "
-              f"caminho gravável (área nativa do sandbox).")
+    """Save session to file"""
+    with open(SESSION_FILE, 'w') as f:
+        json.dump(session, f)
 
 
 def _get_next_output_path(session):
@@ -135,22 +95,11 @@ def _get_next_output_path(session):
 
 
 def new_session():
-    """Clear the current session and start fresh. Mount hostil do Cowork
-    barra unlink (PermissionError) — nesse caso sobrescreve com sessão
-    vazia em vez de deletar."""
-    empty = {"history": [], "outputs": [], "turn": 0}
+    """Clear the current session and start fresh"""
     if os.path.exists(SESSION_FILE):
-        try:
-            os.remove(SESSION_FILE)
-        except (PermissionError, OSError):
-            try:
-                with open(SESSION_FILE, 'w') as f:
-                    json.dump(empty, f)
-            except (PermissionError, OSError) as e:
-                print(f"[image_gen] AVISO: não consegui limpar a sessão "
-                      f"({e}). Use IMAGE_GEN_SESSION_FILE num caminho gravável.")
+        os.remove(SESSION_FILE)
     print("Session cleared. Ready for new image generation.")
-    return empty
+    return {"history": [], "outputs": [], "turn": 0}
 
 
 def session_info():
