@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-18T22:00:00Z",
+  "lastUpdated": "2026-05-19T15:30:00Z",
 
   "components": {
     "skills": [
@@ -265,7 +265,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.8.0",
+      "version": "0.8.1",
       "componentCounts": {
         "skills": 7,
         "agents": 0,

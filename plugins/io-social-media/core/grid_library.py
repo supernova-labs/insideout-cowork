@@ -527,6 +527,98 @@ def _cellval(v) -> str:
     return str(v).strip()
 
 
+# Coluna B..H do grid semanal = DOM..SÁB. `datetime.weekday()` é Seg=0..Dom=6;
+# `(wd + 1) % 7` reindexa pra Dom=0 (mesma convenção de `_DOW`/`_build_weeks`).
+# +1 porque a coluna A (índice 0) é o rótulo da linha, não um dia.
+def _expected_day1_col(year: int, mm: int) -> int:
+    return ((calendar.weekday(year, mm, 1) + 1) % 7) + 1
+
+
+def _day1_col(rows: list) -> int | None:
+    """Acha a coluna (1..7) onde o dia 1 aparece na 1ª linha de números do
+    grid. Sinal determinístico de calendário — nome de aba e célula-título
+    da planilha são comprovadamente mentirosos (ex.: aba 'CL JANEIRO' com
+    título 'NOVEMBRO'); o layout dos dias não mente."""
+    for row in rows:
+        if not row:
+            continue
+        for c in range(1, 8):
+            v = row[c] if c < len(row) else None
+            if isinstance(v, (int, float)) and float(v).is_integer() \
+                    and int(v) == 1:
+                return c
+    return None
+
+
+def _max_day(rows: list) -> int:
+    """Maior número de dia presente no grid (1..31). 2ª âncora: comprovar o
+    MÊS, não só o ano — pega aba de mês trocado cujo dia-1 cai na mesma
+    coluna por coincidência (ex.: novembro/30d disfarçado de janeiro/31d)."""
+    mx = 0
+    for row in rows:
+        if not row:
+            continue
+        for c in range(1, 8):
+            v = row[c] if c < len(row) else None
+            if isinstance(v, (int, float)) and float(v).is_integer() \
+                    and 1 <= int(v) <= 31:
+                mx = max(mx, int(v))
+    return mx
+
+
+def _verify_2026(rows: list, sheet: str, yy: int, mm: int) -> None:
+    """Recusa ingestão de aba que não **prove** ser {mm}/2026.
+
+    A `ingest_xlsx` antiga confiava cegamente no `year` do chamador e só
+    bloqueava year!=2026 — carimbando 2026 em abas 2025/sem-ano (bug que
+    fabricou 8 meses falsos no teste-io). Agora a planilha tem que provar:
+      1. ano no nome da aba (Briefing Design tem) ≠ 2026 → recusa imediata;
+      2. âncora de calendário: a coluna do dia-1 no grid tem que casar com
+         `weekday(2026, mm, 1)`. Não casou → recusa (e diz quais anos casam).
+    """
+    name_year = re.search(r"20\d\d", sheet)
+    if name_year and int(name_year.group(0)) != INGEST_YEAR:
+        raise GridError(
+            f"Aba '{sheet}' tem ano {name_year.group(0)} no nome — ingestão "
+            f"limitada a {INGEST_YEAR} (Fase 1). Recusada.")
+    got = _day1_col(rows)
+    if got is None:
+        raise GridError(
+            f"Aba '{sheet}': não achei a linha de números do grid pra provar "
+            f"o ano. Ingestão {INGEST_YEAR}-only recusa o que não prova.")
+    want = _expected_day1_col(yy, mm)
+    if got != want:
+        matches = [y for y in range(yy - 3, yy + 3)
+                   if _expected_day1_col(y, mm) == got]
+        raise GridError(
+            f"Aba '{sheet}': o layout de dias do mês {mm:02d} põe o dia 1 na "
+            f"coluna {got}, mas {yy}-{mm:02d} exige coluna {want}. Esta aba "
+            f"corresponde a {matches or 'nenhum ano próximo'}, não a {yy}. "
+            f"Ingestão {INGEST_YEAR}-only recusou (nome/título de aba são "
+            f"não-confiáveis; calendário é a prova).")
+    ndays = calendar.monthrange(yy, mm)[1]
+    got_max = _max_day(rows)
+    if got_max != ndays:
+        raise GridError(
+            f"Aba '{sheet}': o grid vai até o dia {got_max}, mas "
+            f"{yy}-{mm:02d} tem {ndays} dias. Mês trocado (provável aba de "
+            f"outro mês com dia-1 coincidente) — ingestão {INGEST_YEAR}-only "
+            f"recusou. Falha-alto é o lado seguro: não regrava com mês errado.")
+
+
+def _assert_no_mojibake(grid: dict, sheet: str) -> None:
+    """Falha-alto se algum valor ingerido tiver U+FFFD (caractere de
+    substituição). O parser in-process preserva UTF-8; FFFD só aparece se a
+    ingestão foi conduzida por console/round-trip cp1252 (origem do `�` no
+    teste-io). Nunca persistir mojibake silencioso."""
+    blob = json.dumps(grid, ensure_ascii=False)
+    if "�" in blob:
+        raise GridError(
+            f"Aba '{sheet}': valor ingerido contém U+FFFD (mojibake). A "
+            f"ingestão tem que rodar in-process — nunca via console/`python "
+            f"-c` capturado (cp1252 corrompe acento). Recusado sem gravar.")
+
+
 def ingest_xlsx(path: str, *, sheet: str, brand: str, month,
                 year: int = INGEST_YEAR, lib_dir: Path | None = None) -> dict:
     """
@@ -535,8 +627,10 @@ def ingest_xlsx(path: str, *, sheet: str, brand: str, month,
     Escopo travado (Lucas 2026-05-18): só **2026**. `year` != 2026 levanta —
     o histórico 2025 fica fora; já valida o modelo com o ano corrente.
 
-    Como o ano não está no nome de aba na planilha de Estratégia, `sheet`,
-    `brand`, `month` e `year` são EXPLÍCITOS (use `xlsx_sheets()` p/ escolher).
+    `sheet`, `brand`, `month` e `year` são EXPLÍCITOS, MAS não confiados: a
+    aba tem que **provar** ser {month}/2026 (`_verify_2026` — ano no nome
+    quando há + âncora de calendário do dia-1). Aba que não prova é RECUSADA,
+    nunca regravada com ano errado. Use `xlsx_sheets()` p/ escolher.
     Detecta o layout pelo rótulo da coluna A das linhas:
       - "ABORDAGEM" → Estratégia Mensal (PRODUTO + ABORDAGEM por dia);
       - "STORY"     → Briefing Design (PRODUTO + bloco STORY por dia).
@@ -561,6 +655,10 @@ def ingest_xlsx(path: str, *, sheet: str, brand: str, month,
                              max_col=26)]
     finally:
         wb.close()
+
+    # Prova que a aba É {mm}/2026 antes de mapear qualquer dia (senão um
+    # maio/2025 vira maio/2026 silenciosamente — o bug do teste-io).
+    _verify_2026(rows, sheet, yy, mm)
 
     grid = new_grid(brand, m, focus_products=None, lib_dir=lib_dir,
                     save=False)
@@ -618,6 +716,7 @@ def ingest_xlsx(path: str, *, sheet: str, brand: str, month,
         "file": Path(path).name, "sheet": sheet,
         "at": lc.now(),
     }
+    _assert_no_mojibake(grid, sheet)
     return save_grid(grid, lib_dir=lib_dir)
 
 
