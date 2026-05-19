@@ -87,14 +87,22 @@ gl.new_grid("clinique", "2026-05",
 ```python
 gl.xlsx_sheets("/caminho/PLANILHA.xlsx")          # lista as abas
 gl.ingest_xlsx("/caminho/ESTRATEGIA.xlsx",
-               sheet="CL MAIO", brand="clinique", month="05", year=2026)
+               sheet="CL_MAIO", brand="clinique", month="05", year=2026)
 gl.ingest_xlsx("/caminho/BRIEFING DESIGN.xlsx",
                sheet="CLINIQUE - MAIO 2026", brand="clinique", month="05")
 ```
-`sheet`, `brand` e `month` são **explícitos** (na planilha de Estratégia o ano
-não está no nome da aba). Detecta o layout sozinho: linha `ABORDAGEM` →
-Estratégia Mensal; linha `STORY` → Briefing Design. **Só 2026** — `year`
-diferente levanta erro de propósito (o histórico 2025 fica fora nesta fase).
+`sheet`, `brand` e `month` são **explícitos**, mas **não confiados**: a aba
+tem que **provar** ser {mês}/2026 ou é recusada (nunca regravada com ano/mês
+errado). A prova é determinística: ano no nome da aba quando existe (Briefing
+Design) + âncora de calendário (coluna do dia-1 e nº de dias do mês). Nome e
+célula-título da aba **mentem** (vimos `CL JANEIRO` com título `NOVEMBRO`, e
+`CL MAIO` que é maio/2025); o layout dos dias não mente. Detecta o tipo
+sozinho: linha `ABORDAGEM` → Estratégia Mensal; `STORY` → Briefing Design.
+
+⚠️ **Rode a ingestão SEMPRE in-process** (este bloco Python único), **nunca**
+por `python -c` cujo stdout é capturado: o console Windows (cp1252) corrompe
+acento e grava `�` silencioso. Há guard que recusa U+FFFD, mas a regra é não
+expor a ingestão ao round-trip de console.
 
 **Editar posts (reescreve o JSON canônico atomicamente — NUNCA o HTML):**
 ```python
@@ -184,8 +192,13 @@ lettering e mockup (quando houver).
   uso (lazy-ensure) e é editável como qualquer registro.
 - **`InvalidGrid`**: mês fora de `AAAA-MM`, grid sem brand/month, ou campo de
   post não editável — corrija conforme a mensagem.
-- **`GridError` "Ingestão limitada a 2026"**: a planilha histórica só entra
-  pra 2026 nesta fase (decisão de escopo, não bug).
+- **`GridError` "Ingestão limitada a 2026"** / **"tem ano … no nome"** /
+  **"corresponde a [outros anos]"** / **"vai até o dia N, mas … tem M dias"**:
+  a aba **não provou** ser {mês}/2026 (é 2025, ano no nome, ou mês trocado).
+  Recusa proposital — não é bug. Escolha a aba 2026 certa (`xlsx_sheets()`);
+  na Estratégia o redo 2026 costuma ser a variante com underscore (`CL_MAIO`).
+- **`GridError` "contém U+FFFD (mojibake)"**: a ingestão foi conduzida por
+  console/`python -c` capturado (cp1252 corrompeu acento). Rode in-process.
 - **`GridError` "openpyxl ausente"**: `pip install -r "$CORE/requirements.txt"`.
 - **`GridError` "plugin mal empacotado"**: `grids.seed.json` /
   `rules-seed` / `calendar-seed` ausentes ou inacessíveis no `core/`
