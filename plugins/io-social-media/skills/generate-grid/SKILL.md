@@ -1,8 +1,8 @@
 ---
 name: generate-grid
-description: 'Grid editorial mensal por marca da InsideOut — criar grid do mês, ingerir planilha histórica (2026), mover/trocar/editar posts e abrir o grid HTML. Use para "cria o grid de maio da Clinique", "ingere essa planilha", "move o post do dia 6 pro dia 8", "troca os posts do dia 3 e 5", "abre o grid", "edita o post do dia 10".'
+description: 'Grid editorial mensal por marca da InsideOut — gerar grid do mês a partir do briefing, ingerir planilha histórica (2026), mover/trocar/editar posts e abrir o grid HTML. Use para "gera o grid de maio da Clinique do briefing", "cria o grid de maio da Clinique", "ingere essa planilha", "move o post do dia 6 pro dia 8", "troca os posts do dia 3 e 5", "abre o grid", "edita o post do dia 10".'
 allowed-tools: Bash, Read, Write
-argument-hint: '[criar grid | ingerir planilha | mover/trocar post | editar post | abrir grid]'
+argument-hint: '[gerar do briefing | criar grid vazio | ingerir planilha | mover/trocar post | editar post | abrir grid]'
 disable-model-invocation: false
 ---
 
@@ -14,12 +14,13 @@ fala"**; aqui mora **"o que postar e quando"**: um grid = 1 marca × 1 mês,
 colapsando num único artefato canônico as duas planilhas Excel que a Estela
 (social media Clinique/EL/TF) mantém hoje à mão.
 
-> **Escopo desta versão (Fase 1):** esqueleto canônico + ingestão do histórico
-> **2026** + edição conversacional de posts + grid HTML navegável. **Ainda
-> não** gera grid a partir do briefing (Fase 2) nem mockup por post (Fase 3).
-> As **regras da Estela** (`rules/<marca>.md`) e o **calendário comemorativo**
-> (`calendar/<ano>.md`) já são materializados aqui pra Estela/Carol curarem
-> cedo — são consumidos na geração da Fase 2.
+> **Escopo desta versão (Fase 2):** esqueleto canônico + **geração do grid a
+> partir do briefing** (andaime mecânico + loop de julgamento) + ingestão do
+> histórico **2026** + edição conversacional de posts + grid HTML navegável.
+> **Ainda não** gera mockup por post (Fase 3). As **regras da Estela**
+> (`rules/<marca>.md`) e o **calendário comemorativo** (`calendar/<ano>.md`)
+> são editáveis em Markdown e consumidos na geração — o **julgamento** é seu
+> guiado por elas, o código só cuida do mecânico.
 
 ## Onde rodar (crítico)
 
@@ -104,6 +105,87 @@ por `python -c` cujo stdout é capturado: o console Windows (cp1252) corrompe
 acento e grava `�` silencioso. Há guard que recusa U+FFFD, mas a regra é não
 expor a ingestão ao round-trip de console.
 
+**Gerar do briefing (Fase 2) — andaime mecânico + loop de julgamento:**
+
+A geração é **híbrida** de propósito: o código (`grid_library`) faz o
+**mecânico** — esqueleto do mês, ancora `launches`, casa datas comemorativas,
+propõe intercalação, garante invariantes de cadência (gap≤2, ≥28 posts) — e
+marca cada dia com um `_slot` tipado (`launch_anchor`, `launch_intensity`,
+`calendar_hook`, `focus_intercalation`, `hero_fill`, `free`). **Você** faz o
+**julgamento** — qual produto na data, hero, ref de estilo, spoiler-ou-não —
+guiado pelas regras editáveis em `grids/rules/<marca>.md` e materializa cada
+decisão via `set_post(..., rationale=<porquê>)`. O código não chama LLM nem
+decide conteúdo; o conteúdo do dia (`product`/`subject`/`ref`/`lettering`)
+sai vazio do andaime — é você que preenche.
+
+O input é o dict `brief` (boundary object com `analyze-briefing` — Passo 5
+de lá emite esse dict; também pode vir de conversa direta):
+```python
+brief = {
+    "brand": "clinique", "month": "2026-05",
+    "launches": [{"date": "2026-05-04", "product": "<slug>",
+                  "label": "...", "important": True}],
+    "focusProducts": ["<slug>", "..."],
+    "globalContent": [{"date": None, "note": "campanha Global semana 3"}],  # opc.
+    "directionalNotes": "...",                                                # opc.
+}
+```
+
+```python
+v = gl._validate_brief(brief)     # falha-alto em brand/month; reporta slug fantasma em v['missing']
+print('missing:', v['missing'])
+g = gl.generate_from_briefing(v['brief'])   # andaime + _slot por dia; persiste e regera HTML
+pc = gl.plan_card(g)              # dossiê: rules/<marca>.md inline + slots a decidir
+```
+Se o grid <marca>/<mês> já existe com algum dia preenchido, `generate_from_briefing`
+**recusa por segurança** (não obliterar curadoria). Pergunte ao usuário antes
+de passar `overwrite=True` — é destrutivo.
+
+**Loop de julgamento (você, não código):** itere `pc['slotsTodo']` (lista de dias
+ainda sem `subject`/`product`). Para cada slot:
+
+1. Leia o **plan-card**: `pc['rules']['text']` é o texto integral de
+   `grids/rules/<marca>.md` — **leia inteiro a cada lote** (a Estela edita).
+   `pc['launches']` + `pc['focusProducts']` + `pc['calendarMonthWide']` dão o
+   panorama. `slot['_slot']` traz `kind`, `hint`, `product` (se proposto pela
+   âncora) e `calendarHook` (se a data tem gancho comemorativo).
+2. Decida `product`/`subject`/`ref`/`channel`/`lettering`/`spoiler`
+   consultando o que precisar: `pc.list_products` (em `product-catalog`),
+   `pc.list_styles` (em `style-gallery`).
+3. Materialize com `gl.set_post(..., rationale="<por que essa escolha>")`.
+   **Sempre preencha o `rationale`** — é o log de aprendizado pedido pelo
+   Lucas. Em slots `launch_anchor` (locked), respeite o `product` proposto.
+4. A cada lote (5-10 slots), rode `gl.audit_grid(g['brand'], g['month'])` e
+   **recompute** `gl.plan_card(gl.get_grid(...))` — o slot decidido some de
+   `slotsTodo` e os warnings se atualizam.
+5. Antes de apresentar o grid pronto: `audit_grid` zerado de `warnings` é o
+   sinal de que o mecânico fechou. Julgamento (qual produto era certo na data)
+   é **revisão da Estela**, não checagem automática.
+
+```python
+# loop pragmático
+g = gl.generate_from_briefing(v['brief'])
+while True:
+    pc = gl.plan_card(g)
+    if not pc['slotsTodo']:
+        break
+    s = pc['slotsTodo'][0]
+    # ... decida product/subject/ref/etc. lendo pc['rules']['text'] ...
+    gl.set_post(g['brand'], g['month'], s['date'],
+                product='<slug>', subject='<...>', approach='<...>',
+                channel='<feed|story|reels|carrossel>',
+                ref={'kind':'style','id':<N>},
+                rationale='<por que essa escolha>')
+    g = gl.get_grid(g['brand'], g['month'])
+print(gl.audit_grid(g))            # warnings vazios = mecânico fechou
+print(gl.open_grids())
+```
+
+**Em edição manual** (`set_post`/`move_post`/`swap_posts` depois do grid
+pronto): rode `audit_grid` e **avise** o usuário se a edição quebrou regra
+codificável (gap>2, foco sumiu) — mas **não bloqueie**. A Estela é a dona;
+o aviso é dela pra ela.
+
 **Editar posts (reescreve o JSON canônico atomicamente — NUNCA o HTML):**
 ```python
 gl.move_post("clinique", "2026-05", "2026-05-10", "2026-05-11")  # puxa pra outro dia
@@ -145,10 +227,12 @@ lettering e mockup (quando houver).
 
 ## Relação com as outras skills
 
-- **`analyze-briefing`** alimenta a Fase 2 (gerar grid do briefing) — ainda
-  não implementada; por ora o grid é criado vazio (`new_grid`) ou ingerido.
-- **`product-catalog`** é a fonte do campo `product` (slug). Cadastre o
-  produto lá antes de referenciá-lo no grid.
+- **`analyze-briefing`** Passo 5 emite o dict `brief` (boundary object) que
+  esta skill consome em `generate_from_briefing`. A comunicação é só via esse
+  dict — sem estado compartilhado.
+- **`product-catalog`** é a fonte do campo `product` (slug). `_validate_brief`
+  reporta slugs fantasma; cadastre o produto lá antes de referenciá-lo no
+  grid (ou ajuste o slug do briefing).
 - **`style-gallery`** é a biblioteca de refs: `ref.kind="style"` aponta pra um
   estilo curado lá. (A geração do mockup por post — juntar grid × produto ×
   estilo via `compose_generation_brief` — é Fase 3.)
@@ -156,23 +240,28 @@ lettering e mockup (quando houver).
 
 ## Lógica de decisão
 
-- "cria/monta o grid de <mês> da <marca>" → `new_grid` (esqueleto vazio do
-  mês; Fase 1 não gera do briefing — diga isso e ofereça preencher post a
-  post ou ingerir uma planilha).
+- "gera o grid do mês a partir do briefing" → `_validate_brief` →
+  `generate_from_briefing` → `plan_card` → **loop de julgamento** (set_post
+  por slot, lendo `rules/<marca>.md`) → `audit_grid` antes de apresentar.
+  Se o briefing veio da skill `analyze-briefing`, o dict `brief` já chega
+  pronto do Passo 5 de lá.
+- "cria/monta o grid de <mês> da <marca>" (sem briefing) → `new_grid`
+  (esqueleto vazio do mês). Útil pra começar manual; ofereça também o
+  caminho do briefing.
 - "ingere/importa essa planilha", "puxa o histórico" → `xlsx_sheets` pra
   achar a aba, confirme marca/mês, `ingest_xlsx` (só 2026).
 - "move/puxa o post do dia X pro dia Y" → `move_post`.
 - "troca os posts do dia X e Y" → `swap_posts`.
 - "muda/edita o post do dia X" (produto, abordagem, legenda, canal…) →
-  `set_post`.
+  `set_post`. Após editar, considere `audit_grid` pra avisar se quebrou
+  regra codificável (gap>2, foco sumiu).
 - "tira/esvazia o post do dia X" → `clear_post` (confirme).
 - "apaga o grid de <mês>" → **confirme explicitamente**; `delete_grid`
   (reversível via `.trash/`).
 - "que grids eu tenho", "abre o grid" → `list_grids` / `open_grids`.
 - "ajusta as regras / adiciona data comemorativa" → editar
   `grids/rules/<marca>.md` ou `grids/calendar/<ano>.md` com Read+Edit.
-- "gera o mockup do post", "gera o grid a partir do briefing" → **ainda não**
-  (Fase 3 / Fase 2): explique o escopo atual e o que dá pra fazer agora.
+- "gera o mockup do post" → **ainda não** (Fase 3): explique o escopo atual.
 
 ## Regras importantes
 
