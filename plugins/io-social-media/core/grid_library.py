@@ -1281,6 +1281,448 @@ def plan_card(grid: dict, *, lib_dir: Path | None = None) -> dict:
 
 
 # --------------------------------------------------------------------------- #
+# mockup por post (Fase 3 — orquestra image_gen sem decidir conteúdo)
+# --------------------------------------------------------------------------- #
+# Preços do Gemini 3 Pro Image. Fonte da verdade está em
+# `skills/image-generation/SKILL.md`; aqui é cópia consciente (fronteira
+# aceita — image_gen.py não expõe esse mapa). Mudança de preço requer
+# atualizar nos dois lugares.
+_RESOLUTION_COST_USD = {"1K": 0.10, "2K": 0.20, "4K": 0.40}
+
+# Canal do post → aspect ratio default. Override por kwarg em
+# mockup_for_post.
+_CHANNEL_ASPECT = {
+    "story": "9:16",
+    "reels": "9:16",
+    "feed": "1:1",
+    "carrossel": "1:1",
+}
+
+# Stub style usado em `product_only`. Mantém o caminho canônico do
+# compose_generation_brief (que exige style não-None) em vez de
+# reimplementar o prompt-building. O sidecar marca kind="product_only",
+# então não há ambiguidade auditável.
+_STUB_STYLE_PRODUCT_ONLY = {
+    "id": None, "slug": "neutro", "name": "neutro/limpo",
+    "prompt": ("Fundo limpo, iluminação suave de produto, composição com "
+               "espaço pra copy/lettering, fotorrealismo profissional."),
+}
+
+
+def _derive_kind(post: dict) -> str:
+    """Auto-deriva o modo de mockup pelos campos do post.
+
+    product + ref(style|url) → 'ref+product' (compose nativo)
+    product sozinho         → 'product_only' (compose + stub style)
+    ref sozinho             → 'ref_only'     (bypass do compose)
+    nada                    → GridError
+    """
+    has_product = bool((post.get("product") or "").strip())
+    ref = post.get("ref")
+    has_ref = isinstance(ref, dict) and ref.get("kind") in ("style", "url")
+    if has_product and has_ref:
+        return "ref+product"
+    if has_product:
+        return "product_only"
+    if has_ref:
+        return "ref_only"
+    raise GridError(
+        f"Post {post.get('date')} sem product nem ref — não dá pra gerar "
+        f"mockup. Preencha um dos dois (set_post product=... ou "
+        f"ref={{'kind':'style','id':N}}) antes.")
+
+
+def _derive_aspect_ratio(channel) -> str:
+    """story/reels → 9:16; feed/carrossel → 1:1; default 1:1."""
+    return _CHANNEL_ASPECT.get(str(channel or "").strip().lower(), "1:1")
+
+
+def _estimate_cost(resolution: str) -> float:
+    """Custo estimado de 1 imagem na resolução pedida (USD)."""
+    return _RESOLUTION_COST_USD.get(str(resolution).upper(), 0.10)
+
+
+def _download_url_ref(url: str, *, timeout: int = 10) -> str:
+    """Baixa ref-URL pra arquivo temporário; recusa-fofa em falha.
+
+    1 tentativa só, User-Agent de browser pra driblar bloqueios triviais.
+    Hosts JS-render (Pinterest moderno etc.) vão falhar — a mensagem
+    de erro empurra pra `style-gallery` como caminho canônico.
+    """
+    import urllib.request
+    import urllib.error
+    import tempfile
+    import mimetypes
+    import shutil as _shutil
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            ctype = resp.headers.get_content_type() or "image/jpeg"
+            ext = mimetypes.guess_extension(ctype) or ".jpg"
+            tmp = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
+            _shutil.copyfileobj(resp, tmp)
+            tmp.close()
+            return tmp.name
+    except (urllib.error.URLError, OSError, TimeoutError) as e:
+        raise GridError(
+            f"Não consegui baixar a ref URL '{url}' "
+            f"({type(e).__name__}: {e}). Cadastre o estilo em "
+            f"style-gallery (caminho canônico) ou aponte o ref pra "
+            f"um id de estilo curado.") from e
+
+
+def _compose_ref_only_prompt(subject: str, style: dict,
+                              brand_brief: dict) -> str:
+    """Prompt do modo ref_only (sem produto do catálogo).
+
+    Espelha a estrutura de compose_generation_brief mas SEM seção de
+    produto — não dá pra usar o compose nativo (ele exige product
+    não-None).
+    """
+    voice = (brand_brief.get("voice") or "—").strip() or "—"
+    audience = (brand_brief.get("audience") or "—").strip() or "—"
+    palette = (brand_brief.get("paletteHints") or "—").strip() or "—"
+    msgs = brand_brief.get("keyMessages") or []
+    msgs_str = "; ".join(str(m) for m in msgs) if msgs else "—"
+    guards = (brand_brief.get("guardrails") or "—").strip() or "—"
+    style_name = (style.get("name") or "—").strip() or "—"
+    style_prompt = (style.get("prompt") or "").strip()
+    return (
+        f"Tarefa: gerar imagem editorial para social media (sem produto "
+        f"do catálogo).\n\n"
+        f"Subject (tema): {subject}\n\n"
+        f"Estilo curado: {style_name}\n"
+        f"{style_prompt}\n\n"
+        f"Marca (contexto):\n"
+        f"- Voz: {voice}\n"
+        f"- Audiência: {audience}\n"
+        f"- Paleta: {palette}\n"
+        f"- Mensagens-chave: {msgs_str}\n"
+        f"- Guardrails: {guards}\n\n"
+        f"Restrições: composição com espaço pra texto/copy; sem "
+        f"texto/lettering integrado à imagem (lettering é feito depois)."
+    )
+
+
+def _sibling_lib(lib_dir: Path | None, name: str) -> Path | None:
+    """Resolve um dir irmão do `lib_dir` (grids) no mesmo workspace.
+
+    Os 3 'produtos' (grids, product-catalog, style-gallery) vivem
+    lado a lado em `<workspace>/<nome>/`. Quando `mockup_for_post`
+    recebe `lib_dir=<workspace>/grids`, as chamadas a pl/sl precisam
+    apontar pros DELES (`<workspace>/product-catalog`,
+    `<workspace>/style-gallery`) — passar lib_dir do grids quebra
+    as funções irmãs (procuram dados no lugar errado).
+    """
+    if lib_dir is None:
+        return None
+    return Path(lib_dir).parent / name
+
+
+def _build_brief(post: dict, brand_slug: str, kind: str, compose_mode: str,
+                  lib_dir: Path | None) -> dict:
+    """Monta o brief (prompt + reference_images) conforme o kind.
+
+    `brand_slug` vem do grid (nível superior, não do post — o schema do
+    post não carrega brand). Retorna
+    {prompt, reference_images, kind, compose_mode}.
+
+    Libs irmãs entram por lazy import (mesmo padrão de _validate_brief
+    — boundary preservada). lib_dir do grids é traduzido pros dirs
+    irmãos via `_sibling_lib`.
+    """
+    import product_library as pl
+    import style_library as sl
+
+    pc_dir = _sibling_lib(lib_dir, "product-catalog")
+    sg_dir = _sibling_lib(lib_dir, "style-gallery")
+    ref = post.get("ref") or {}
+
+    def _resolve_style_from_ref() -> tuple[dict, str | None]:
+        """Devolve (style, url_tmp_path|None) — style=='url-ref'
+        fabricado quando ref.kind=='url'."""
+        if ref.get("kind") == "style":
+            return sl.get_style(ref.get("id"), lib_dir=sg_dir), None
+        if ref.get("kind") == "url":
+            tmp = _download_url_ref(ref.get("url") or "")
+            stub = {"id": None, "slug": "url-ref",
+                    "name": f"ref externa ({ref.get('url')})",
+                    "prompt": ""}
+            return stub, tmp
+        raise GridError(
+            f"Post {post.get('date')}: ref.kind "
+            f"'{ref.get('kind')}' não suportado (use 'style' ou 'url').")
+
+    if kind == "ref+product":
+        product = pl.get_product_resolved(post["product"], brand_slug,
+                                          lib_dir=pc_dir)
+        style, url_tmp = _resolve_style_from_ref()
+        brief = pl.compose_generation_brief(
+            style, product, brand=None, mode=compose_mode, lib_dir=pc_dir)
+        refs = list(brief.get("reference_images") or [])
+        if url_tmp:
+            refs.append(url_tmp)
+        return {
+            "prompt": brief["prompt"],
+            "reference_images": refs,
+            "kind": "ref+product",
+            "compose_mode": compose_mode,
+        }
+
+    if kind == "product_only":
+        product = pl.get_product_resolved(post["product"], brand_slug,
+                                          lib_dir=pc_dir)
+        brief = pl.compose_generation_brief(
+            _STUB_STYLE_PRODUCT_ONLY, product, brand=None,
+            mode=compose_mode, lib_dir=pc_dir)
+        return {
+            "prompt": brief["prompt"],
+            "reference_images": list(brief.get("reference_images") or []),
+            "kind": "product_only",
+            "compose_mode": compose_mode,
+        }
+
+    if kind == "ref_only":
+        style, url_tmp = _resolve_style_from_ref()
+        try:
+            brand_brief = pl.get_brand(brand_slug, lib_dir=pc_dir)
+        except Exception:
+            brand_brief = {}
+        subject = (post.get("subject") or "").strip() or "Conteúdo editorial"
+        ref_imgs: list[str] = []
+        if url_tmp:
+            ref_imgs.append(url_tmp)
+        # thumbnail do estilo curado (caminho relativo a style-gallery/)
+        thumb = style.get("thumbnail")
+        if thumb and sg_dir is not None:
+            full = sg_dir / thumb
+            if full.is_file():
+                ref_imgs.append(str(full.resolve()))
+        prompt = _compose_ref_only_prompt(subject, style, brand_brief)
+        return {
+            "prompt": prompt,
+            "reference_images": ref_imgs,
+            "kind": "ref_only",
+            "compose_mode": None,
+        }
+
+    raise GridError(f"kind '{kind}' desconhecido em _build_brief.")
+
+
+def _save_mockup(lib_dir: Path, month: str, date_iso: str,
+                  src_png: str) -> tuple[str, str]:
+    """Move o PNG gerado pra `<lib_dir>/mockups/<month>/<date>.png`.
+
+    Devolve (rel_path_pra_grids_html, absolute_path). Overwrite
+    intencional: histórico vive no git da pasta de trabalho. `shutil.move`
+    cobre cross-device automaticamente."""
+    import shutil as _shutil
+    _, _, mock_dir, _, _ = _subdirs(lib_dir)
+    target_dir = mock_dir / month
+    target_dir.mkdir(parents=True, exist_ok=True)
+    dest = target_dir / f"{date_iso}.png"
+    if dest.exists():
+        dest.unlink()
+    _shutil.move(src_png, dest)
+    # path relativo a grids.html (que vive em lib_dir/grids.html)
+    return f"mockups/{month}/{date_iso}.png", str(dest.resolve())
+
+
+def _write_mockup_sidecar(lib_dir: Path, month: str, date_iso: str,
+                           payload: dict) -> str:
+    """Sidecar JSON `<lib_dir>/mockups/<month>/<date>.json` com brief +
+    metadados de geração. Versionável, conta a história da peça."""
+    _, _, mock_dir, _, _ = _subdirs(lib_dir)
+    target_dir = mock_dir / month
+    target_dir.mkdir(parents=True, exist_ok=True)
+    dest = target_dir / f"{date_iso}.json"
+    lc.atomic_write(dest, json.dumps(payload, ensure_ascii=False,
+                                       indent=2) + "\n")
+    return str(dest.resolve())
+
+
+def mockup_for_post(
+    brand: str,
+    month,
+    date: str,
+    *,
+    kind: str | None = None,
+    compose_mode: str = "preservar",
+    aspect_ratio: str | None = None,
+    resolution: str = "1K",
+    continue_session: bool = False,
+    prompt_override: str | None = None,
+    dry_run: bool = False,
+    lib_dir: Path | None = None,
+) -> dict:
+    """Gera (ou pré-visualiza com dry_run=True) o mockup de UM post.
+
+    Orquestra `image_gen.generate` via `compose_generation_brief` no
+    caminho nativo (ref+product / product_only com stub style) ou prompt
+    direto (ref_only). Código não decide conteúdo — apenas mecânica.
+    O agente enriquece `brief["prompt"]` entre o dry_run e a chamada
+    real (regra herdada de image-generation: iluminação/mood/composição)
+    e passa em `prompt_override`.
+
+    `compose_mode`: 'preservar' (default — packaging do produto intocado)
+    ou 'recriar' (Gemini regenera o produto a partir das fotos).
+    Só aplica em ref+product / product_only.
+
+    `continue_session=True` mantém o histórico multi-turn do Gemini
+    (refinamento conversacional). Default isola (`new_session()`).
+
+    Retorna {post, brief, cost_estimate_usd, mockup, absolute_path,
+    dry_run}.
+    """
+    lib_dir = _ensure_ready(lib_dir)
+    month_norm = _norm_month(month)
+    grid = get_grid(brand, month_norm, lib_dir=lib_dir)
+    post = _find_day(grid, date)
+
+    resolved_kind = kind or _derive_kind(post)
+    resolved_ar = aspect_ratio or _derive_aspect_ratio(post.get("channel"))
+    cost = _estimate_cost(resolution)
+
+    # ref_only não usa compose — compose_mode é ignorado, mas registramos
+    # como None pra o sidecar não confundir auditoria.
+    effective_compose = compose_mode if resolved_kind != "ref_only" else None
+
+    brief = _build_brief(post, grid["brand"], resolved_kind,
+                          effective_compose or "preservar", lib_dir)
+    brief["aspect_ratio"] = resolved_ar
+    brief["resolution"] = resolution
+
+    base_return = {
+        "post": {"brand": brand, "month": month_norm, "date": date,
+                  "channel": post.get("channel"),
+                  "subject": post.get("subject"),
+                  "product": post.get("product"),
+                  "ref": post.get("ref")},
+        "brief": brief,
+        "cost_estimate_usd": cost,
+        "mockup": None,
+        "absolute_path": None,
+        "dry_run": dry_run,
+    }
+    if dry_run:
+        return base_return
+
+    # ---- F3.2: integração real com Gemini ----
+    # Import lazy: image_gen tem dependência pesada (google-genai, PIL,
+    # dotenv) e lê GEMINI_API_KEY na import-time. Quem fizer só dry_run
+    # nunca importa o motor.
+    import image_gen
+    if not continue_session:
+        image_gen.new_session()
+    final_prompt = prompt_override if prompt_override else brief["prompt"]
+    src_png = image_gen.generate(
+        final_prompt,
+        reference_images=brief["reference_images"],
+        aspect_ratio=resolved_ar,
+        resolution=resolution,
+    )
+    if not src_png:
+        raise GridError(
+            "image_gen.generate não retornou caminho de imagem. Verifique "
+            "GEMINI_API_KEY (.env na cwd), conta/cota, filtro de conteúdo "
+            "do Gemini, e o prompt enriquecido (não muito longo).")
+    rel_path, abs_path = _save_mockup(lib_dir, month_norm, date, src_png)
+    sidecar_payload = {
+        "brief": brief,
+        "kind": brief["kind"],
+        "compose_mode": brief.get("compose_mode"),
+        "aspect_ratio": resolved_ar,
+        "resolution": resolution,
+        "cost_estimate_usd": cost,
+        "generated_at": lc.now(),
+        "model": getattr(image_gen, "DEFAULT_MODEL",
+                          "gemini-3-pro-image-preview"),
+        "prompt_was_overridden": prompt_override is not None,
+    }
+    _write_mockup_sidecar(lib_dir, month_norm, date, sidecar_payload)
+    # Atualiza o campo `mockup` do post via caminho público (set_post
+    # regrava o JSON canônico + regera o HTML).
+    set_post(brand, month_norm, date, mockup=rel_path, lib_dir=lib_dir)
+    base_return["mockup"] = rel_path
+    base_return["absolute_path"] = abs_path
+    base_return["dry_run"] = False
+    return base_return
+
+
+def batch_mockups(
+    brand: str,
+    month,
+    *,
+    dates: list[str] | None = None,
+    only_empty: bool = True,
+    kind: str | None = None,
+    compose_mode: str = "preservar",
+    aspect_ratio: str | None = None,
+    resolution: str = "1K",
+    dry_run: bool = False,
+    lib_dir: Path | None = None,
+) -> dict:
+    """Gera (ou previa) mockups de N posts em sequência.
+
+    `dates=None` → todos os dias do grid; `only_empty=True` → só dias com
+    `mockup` vazio. Posts sem product nem ref viram `skipped` (com razão),
+    não bloqueiam o lote. Sessão Gemini é isolada entre cada call
+    (`new_session()` automático no `mockup_for_post`).
+
+    **Confirmação de custo é responsabilidade do agente** — esta função
+    devolve `total_cost_estimate_usd`, e a SKILL.md exige
+    `dry_run=True` antes de queimar tokens em batch.
+
+    Retorna {generated:[{date, mockup, cost}], skipped:[{date, reason}],
+             total_cost_estimate_usd, dry_run}.
+    """
+    lib_dir = _ensure_ready(lib_dir)
+    month_norm = _norm_month(month)
+    grid = get_grid(brand, month_norm, lib_dir=lib_dir)
+    all_days = [d for w in grid.get("weeks", []) for d in w.get("days", [])]
+
+    if dates is None:
+        targets = all_days
+    else:
+        by_date = {d["date"]: d for d in all_days}
+        targets = [by_date[dt] for dt in dates if dt in by_date]
+
+    generated: list[dict] = []
+    skipped: list[dict] = []
+    total_cost = 0.0
+    for d in targets:
+        if only_empty and (d.get("mockup") or "").strip():
+            skipped.append({"date": d["date"],
+                             "reason": "já tem mockup (only_empty=True)"})
+            continue
+        has_product = bool((d.get("product") or "").strip())
+        ref = d.get("ref")
+        has_ref = isinstance(ref, dict) and ref.get("kind") in ("style", "url")
+        if not (has_product or has_ref):
+            skipped.append({"date": d["date"],
+                             "reason": "sem product nem ref"})
+            continue
+        try:
+            r = mockup_for_post(
+                brand, month_norm, d["date"],
+                kind=kind, compose_mode=compose_mode,
+                aspect_ratio=aspect_ratio, resolution=resolution,
+                continue_session=False, dry_run=dry_run, lib_dir=lib_dir)
+            generated.append({"date": d["date"],
+                               "mockup": r["mockup"],
+                               "cost": r["cost_estimate_usd"]})
+            total_cost += r["cost_estimate_usd"]
+        except (GridError, GridNotFound) as e:
+            skipped.append({"date": d["date"],
+                             "reason": f"{type(e).__name__}: {e}"})
+
+    return {"generated": generated, "skipped": skipped,
+            "total_cost_estimate_usd": round(total_cost, 4),
+            "dry_run": dry_run}
+
+
+# --------------------------------------------------------------------------- #
 # render
 # --------------------------------------------------------------------------- #
 def render_grids(lib_dir: Path | None = None,

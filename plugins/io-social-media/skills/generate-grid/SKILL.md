@@ -14,13 +14,14 @@ fala"**; aqui mora **"o que postar e quando"**: um grid = 1 marca × 1 mês,
 colapsando num único artefato canônico as duas planilhas Excel que a Estela
 (social media Clinique/EL/TF) mantém hoje à mão.
 
-> **Escopo desta versão (Fase 2):** esqueleto canônico + **geração do grid a
-> partir do briefing** (andaime mecânico + loop de julgamento) + ingestão do
-> histórico **2026** + edição conversacional de posts + grid HTML navegável.
-> **Ainda não** gera mockup por post (Fase 3). As **regras da Estela**
-> (`rules/<marca>.md`) e o **calendário comemorativo** (`calendar/<ano>.md`)
-> são editáveis em Markdown e consumidos na geração — o **julgamento** é seu
-> guiado por elas, o código só cuida do mecânico.
+> **Escopo desta versão (Fase 3):** esqueleto canônico + **geração do grid a
+> partir do briefing** (Fase 2) + **mockup por post via Gemini 3 Pro**
+> (Fase 3) + ingestão do histórico **2026** + edição conversacional + grid
+> HTML navegável. As **regras da Estela** (`rules/<marca>.md`) e o
+> **calendário comemorativo** (`calendar/<ano>.md`) são editáveis em
+> Markdown e consumidos na geração — o **julgamento** é seu guiado por elas,
+> o código só cuida do mecânico. Validação visual dos mockups é da Estela
+> — sem gate automático (image gen é não-determinístico).
 
 ## Onde rodar (crítico)
 
@@ -53,8 +54,9 @@ Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`
 
 Estrutura: `grids/<marca>/<AAAA-MM>.json` (1 arquivo por grid marca-mês),
 `grids/rules/<marca>.md` (regras editáveis da marca), `grids/calendar/<ano>.md`
-(calendário comemorativo compartilhado), `grids/mockups/` (Fase 3),
-`grids/grids.html` (gerado), `grids/.trash/`. Sem grid no workspace, leitura
+(calendário comemorativo compartilhado), `grids/mockups/<AAAA-MM>/<dia>.{png,json}`
+(mockup IA por post + sidecar JSON de auditoria), `grids/grids.html` (gerado),
+`grids/.trash/`. Sem grid no workspace, leitura
 cai no **seed embarcado** (1 grid Clinique exemplo) — funciona com zero config.
 
 Se for um repositório git, garanta no `.gitignore` da pasta de trabalho:
@@ -225,6 +227,81 @@ Informe o caminho ao usuário e diga para abrir no navegador. Filtro por
 marca/mês no topo; cada dia mostra abordagem (cor), subject/produto, canal,
 lettering e mockup (quando houver).
 
+**Mockup por post (Fase 3) — orquestração de Gemini 3 Pro Image:**
+
+A geração de mockup é **híbrida**: o código (`grid_library`) faz o mecânico
+(monta brief via `compose_generation_brief` em ref+product/product_only,
+ou prompt direto em ref_only; move PNG; escreve sidecar JSON; atualiza
+`post.mockup`); **você** faz o enriquecimento do prompt
+(iluminação/mood/atmosfera/composição — regra herdada da skill
+`image-generation`) entre o dry-run e a chamada real.
+
+Pré-condições:
+- `.env` na pasta de trabalho com `GEMINI_API_KEY` (mesmo padrão da
+  `image-generation`; o agente cria/gerencia).
+- Pelo menos `product` OU `ref` preenchido no post — `set_post` antes se
+  necessário.
+
+**Padrão dry-run-first (regra forte, não opcional)** — agente pré-visualiza
+o brief + custo antes de queimar tokens:
+```python
+# 1) preview: monta brief sem chamar Gemini, custo estimado, $0
+out = gl.mockup_for_post("clinique", "2026-05", "2026-05-10", dry_run=True)
+print(out["brief"]["prompt"][:400])
+print("custo estimado:", out["cost_estimate_usd"], "USD")
+# 2) enriqueça out["brief"]["prompt"] com iluminação/mood/composição
+enriched = out["brief"]["prompt"] + (
+    "\n\n[ENRIQUECIMENTO DO AGENTE]: iluminação difusa de manhã, "
+    "fundo neutro com textura sutil, composição centralizada com 30% "
+    "de área livre superior pra lettering, mood acolhedor."
+)
+# 3) geração real (consome ~$0.10 / 1K)
+final = gl.mockup_for_post("clinique", "2026-05", "2026-05-10",
+                            prompt_override=enriched)
+print("mockup em:", final["mockup"])
+```
+Defaults: `compose_mode="preservar"` (packaging real intocado);
+`resolution="1K"`; `aspect_ratio` deriva de `channel` (story/reels→9:16;
+feed/carrossel→1:1). Override por kwarg quando necessário.
+
+**Refinamento conversacional** (Estela: "mais clean", "mais ar"):
+```python
+gl.mockup_for_post("clinique", "2026-05", "2026-05-10",
+                    continue_session=True,
+                    prompt_override="ajuste: mais clean, menos cluttered")
+```
+`continue_session=True` mantém o histórico multi-turn do Gemini só pra
+esse refinamento. Default isola (`new_session()` automático antes da call).
+
+**Batch (gerar todos os mockups que faltam):**
+```python
+# 1) dry_run primeiro pra ver custo agregado
+out = gl.batch_mockups("clinique", "2026-05",
+                        only_empty=True, dry_run=True)
+print(f"{len(out['generated'])} mockups a gerar, "
+      f"~${out['total_cost_estimate_usd']} total. "
+      f"{len(out['skipped'])} skip: {out['skipped'][:3]}...")
+# 2) CONFIRMAR custo com o usuário antes do real
+# 3) real
+out = gl.batch_mockups("clinique", "2026-05", only_empty=True)
+```
+Sessão Gemini isolada entre cada post (sem cross-contamination).
+
+**Sidecar JSON** (`mockups/<AAAA-MM>/<dia>.json`): cada mockup grava brief
+completo + metadados (kind, compose_mode, resolution, custo,
+generated_at, model, flag `prompt_was_overridden`). Versionável,
+auditável, conta a história da peça.
+
+**Limites conhecidos:**
+- URL refs (`ref.kind="url"`): 1 tentativa com `User-Agent: Mozilla/5.0`,
+  timeout 10s. Hosts JS-render (Pinterest moderno) falham — recusa-fofa
+  empurra pro caminho canônico (cadastrar o estilo em `style-gallery`).
+- `_download_url_ref` não valida que o conteúdo baixado é imagem; URL
+  que retorna HTML vira "arquivo" e o Gemini falhará ao ler. Prefira
+  sempre `style-gallery` quando possível.
+- Image gen é não-determinístico — não há gate automático de qualidade.
+  Validação é visual, pela Estela.
+
 ## Relação com as outras skills
 
 - **`analyze-briefing`** Passo 5 emite o dict `brief` (boundary object) que
@@ -233,10 +310,13 @@ lettering e mockup (quando houver).
 - **`product-catalog`** é a fonte do campo `product` (slug). `_validate_brief`
   reporta slugs fantasma; cadastre o produto lá antes de referenciá-lo no
   grid (ou ajuste o slug do briefing).
-- **`style-gallery`** é a biblioteca de refs: `ref.kind="style"` aponta pra um
-  estilo curado lá. (A geração do mockup por post — juntar grid × produto ×
-  estilo via `compose_generation_brief` — é Fase 3.)
-- **`image-generation`** fará o mockup do post na Fase 3.
+- **`style-gallery`** é a biblioteca de refs: `ref.kind="style"` aponta pra
+  um estilo curado lá. A Fase 3 consome `style-gallery` em todos os modos
+  de mockup com ref.
+- **`image-generation`** é o motor que a Fase 3 orquestra (`image_gen.generate`
+  via boundary lazy import). A skill `image-generation` mesmo continua sendo
+  pra criação ad-hoc fora do contexto de grid; `generate-grid` Fase 3 usa o
+  mesmo motor pra mockup-por-post com sidecar de auditoria.
 
 ## Lógica de decisão
 
@@ -261,7 +341,17 @@ lettering e mockup (quando houver).
 - "que grids eu tenho", "abre o grid" → `list_grids` / `open_grids`.
 - "ajusta as regras / adiciona data comemorativa" → editar
   `grids/rules/<marca>.md` ou `grids/calendar/<ano>.md` com Read+Edit.
-- "gera o mockup do post" → **ainda não** (Fase 3): explique o escopo atual.
+- "gera o mockup do dia X" → **dry-run primeiro** (`mockup_for_post(...,
+  dry_run=True)`) → enriqueça o prompt → real (`prompt_override=...`).
+  Reporte o caminho do PNG e do sidecar JSON.
+- "regenera o do dia X mais clean / com mais ar / outra abordagem" →
+  `mockup_for_post(..., continue_session=True,
+  prompt_override="<ajuste>")` no mesmo post.
+- "gera todos os mockups que faltam" → `batch_mockups(only_empty=True,
+  dry_run=True)` primeiro → **confirme custo agregado** com o usuário →
+  `batch_mockups(only_empty=True)` real.
+- "muda o estilo do dia X pra #N e regenera o mockup" → `set_post(ref=
+  {"kind":"style","id":N})` + `mockup_for_post`.
 
 ## Regras importantes
 
@@ -274,6 +364,16 @@ lettering e mockup (quando houver).
 - Sempre reporte o caminho do `grids.html` ao abrir/atualizar.
 - Não exponha caminhos de arquivo a menos que o usuário peça — fale em
   "marca/mês" e datas.
+- **Fase 3 — `.env` com `GEMINI_API_KEY` na pasta de trabalho** (mesma
+  regra de `image-generation`; o agente cria/gerencia). Sem chave, a
+  primeira chamada real estoura `ValueError "GEMINI_API_KEY not found"`.
+- **Fase 3 — dry-run-first é não-negociável.** Toda primeira invocação
+  de `mockup_for_post(dry_run=False)` ou `batch_mockups(dry_run=False)`
+  sai com dry-run antes, prompt enriquecido pelo agente, custo confirmado
+  com o usuário. Sem atalho.
+- **Fase 3 — overwrite intencional.** Regenerar mockup sobrescreve PNG
+  **e** sidecar JSON. Auditoria histórica vive no git do workspace,
+  não em versionamento manual de arquivos.
 
 ## Tratamento de erros
 
@@ -294,3 +394,17 @@ lettering e mockup (quando houver).
   instalado — reinstalar/atualizar o plugin. (Falha **alto** de propósito:
   mesma disciplina do bug UWP 0.3.7.)
 - **Import falha**: `pip install -r "$CORE/requirements.txt"`.
+- **`GridError` "Post X sem product nem ref"** (Fase 3) — preencha um
+  dos dois via `set_post` antes de gerar mockup. Slots vazios não viram
+  imagem.
+- **`GridError` "Não consegui baixar a ref URL"** (Fase 3) — host
+  bloqueou ou caiu. Cadastre o estilo em `style-gallery` (caminho
+  canônico) ou aponte o ref pra um id de estilo curado lá.
+- **`GridError` "image_gen.generate não retornou caminho"** (Fase 3) —
+  verifique `GEMINI_API_KEY`, quota da conta, filtro de conteúdo
+  (NSFW), e o tamanho do prompt enriquecido.
+- **`ValueError "GEMINI_API_KEY not found"`** (Fase 3, vem do
+  `image_gen`) — crie `.env` na pasta de trabalho com a chave do
+  https://aistudio.google.com/apikey. Idem padrão da `image-generation`.
+- **`ProductCatalogError "modo inválido"`** (Fase 3) — `compose_mode`
+  só aceita `"preservar"` (default) ou `"recriar"`.

@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-19T22:00:00Z",
+  "lastUpdated": "2026-05-20T14:00:00Z",
 
   "components": {
     "skills": [
@@ -76,7 +76,7 @@
       {
         "name": "generate-grid",
         "path": "plugins/io-social-media/skills/generate-grid/SKILL.md",
-        "description": "Grid editorial mensal por marca — geração do andaime mecânico a partir do briefing (boundary com analyze-briefing) + loop de julgamento guiado por rules/<marca>.md, ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
+        "description": "Grid editorial mensal por marca — geração do andaime mecânico a partir do briefing (boundary com analyze-briefing) + loop de julgamento guiado por rules/<marca>.md + mockup por post via Gemini 3 Pro Image (3 modos: ref+product / product_only / ref_only, com sidecar JSON de auditoria), ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
         "supportingFiles": [
           "plugins/io-social-media/core/grid_library.py",
           "plugins/io-social-media/core/_libcommon.py",
@@ -84,10 +84,11 @@
           "plugins/io-social-media/core/grids.seed.json",
           "plugins/io-social-media/core/rules-seed/clinique.md",
           "plugins/io-social-media/core/calendar-seed/2026.md",
-          "plugins/io-social-media/core/get_grid.py"
+          "plugins/io-social-media/core/get_grid.py",
+          "plugins/io-social-media/core/image_gen.py"
         ],
         "allowedTools": ["Bash", "Read", "Write"],
-        "tags": ["generate-grid", "editorial-calendar", "social-media"]
+        "tags": ["generate-grid", "editorial-calendar", "social-media", "image-generation"]
       },
       {
         "name": "generate-copy",
@@ -270,7 +271,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.9.0",
+      "version": "0.10.0",
       "componentCounts": {
         "skills": 7,
         "agents": 0,
