@@ -2,6 +2,7 @@
   "grids": [
     {
       "schemaVersion": 1,
+      "_seed": true,
       "brand": "clinique",
       "month": "2026-05",
       "focusProducts": [

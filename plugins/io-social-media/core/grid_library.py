@@ -67,6 +67,17 @@ INGEST_YEAR = 2026
 _POST_FIELDS = ("channel", "approach", "product", "subject", "ref",
                 "lettering", "mockup", "rationale", "notes")
 
+# Cadência mínima codificada (defaults; a skill pode sobrescrever via kwargs,
+# mas o core NÃO parseia número do rules.md — frágil; D4 do plano Fase 2).
+MIN_POSTS = 28
+MAX_GAP = 2
+FOCUS_INTENSITY_DAYS = 3
+
+# Taxonomia de _slot (anota o JULGAMENTO que o agente vai aplicar). O core só
+# propõe; a skill decide product/subject/ref/etc. via set_post.
+_SLOT_KINDS = ("launch_anchor", "launch_intensity", "calendar_hook",
+               "focus_intercalation", "hero_fill", "free")
+
 
 class GridError(lc.LibCommonError):
     """Erro base do grid."""
@@ -718,6 +729,555 @@ def ingest_xlsx(path: str, *, sheet: str, brand: str, month,
     }
     _assert_no_mojibake(grid, sheet)
     return save_grid(grid, lib_dir=lib_dir)
+
+
+# --------------------------------------------------------------------------- #
+# Fase 2 — briefing → grid (mecânico/determinístico; o agente julga depois)
+#
+# Boundary com analyze-briefing é o dict `brief`:
+#   {brand, month, launches[{date, product, label?, important?}],
+#    focusProducts[slug], globalContent[{date?, note}], directionalNotes?}
+# Validado por _validate_brief antes de consumir.
+# --------------------------------------------------------------------------- #
+_CAL_DATE_RE = re.compile(r"^\s*(\d{4})-(\d{2})(?:-(\d{2}))?\s*$")
+
+
+def _read_seed_or_workspace_md(filename: str, ws_dir: Path,
+                                seed_dir: Path) -> tuple[str | None, str | None]:
+    """Lê um Markdown, preferindo workspace. Retorna (texto, caminho-usado).
+    None/None se não existe em nenhum dos dois."""
+    ws_path = ws_dir / filename
+    try:
+        return ws_path.read_text(encoding="utf-8"), str(ws_path)
+    except OSError:
+        pass
+    seed_path = seed_dir / filename
+    try:
+        return seed_path.read_text(encoding="utf-8"), str(seed_path)
+    except OSError:
+        return None, None
+
+
+def parse_calendar(year, *, lib_dir: Path | None = None) -> dict:
+    """Lê `grids/calendar/<ano>.md` (fallback `calendar-seed/<ano>.md`).
+
+    Tolerante a edição humana: linhas que não casam viram `warnings` com nº de
+    linha — NUNCA silenciar (lição 9295e3b: verde sintético ≠ correto).
+
+    Suporta:
+      - `AAAA-MM-DD` (dia específico) → scope='day'
+      - `AAAA-MM (mês)` ou `AAAA-MM (mes)` → scope='month' (datas tipo
+        Outubro Rosa que valem o mês inteiro)
+
+    Retorna {items: [{date, name, hook, scope}], warnings: [...], path}.
+    Falha-alto se o arquivo `<ano>.md` não existe em workspace nem seed.
+    """
+    yy = int(year)
+    if lib_dir is None:
+        lib_dir = find_library_dir(create=False) or _ensure_ready(None)
+    else:
+        lib_dir = Path(lib_dir)
+    _, cal_dir, *_ = _subdirs(lib_dir)
+    text, used = _read_seed_or_workspace_md(
+        f"{yy}.md", cal_dir, _CALENDAR_SEED_DIR)
+    if text is None:
+        raise GridError(
+            f"Calendário '{yy}.md' não existe nem em {cal_dir} nem em "
+            f"{_CALENDAR_SEED_DIR}. Crie em "
+            f"grids/calendar/{yy}.md ou copie do seed (rebootstrap).")
+
+    items: list[dict] = []
+    warnings: list[str] = []
+    in_table = False
+    for ln, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        if not line or line.startswith("#") or line.startswith(">"):
+            continue
+        if not line.startswith("|"):
+            continue
+        # ignora a linha de cabeçalho e a separadora
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if len(cells) < 3:
+            warnings.append(f"linha {ln}: <3 colunas — ignorada")
+            continue
+        # cabeçalho
+        if cells[0].lower() in ("data", "date"):
+            in_table = True
+            continue
+        # separador `---`
+        if all(set(c.replace("-", "").replace(":", "").strip()) <= {""} for c in cells):
+            continue
+        if not in_table:
+            # tabela sem cabeçalho reconhecível — tenta processar mesmo assim
+            in_table = True
+
+        date_cell, name, hook = cells[0], cells[1], cells[2]
+        # `AAAA-MM (mês)` / `AAAA-MM (mes)` → month-wide
+        mm_wide = re.match(r"^\s*(\d{4})-(\d{2})\s*\(\s*m[eê]s\s*\)\s*$",
+                           date_cell, re.IGNORECASE)
+        if mm_wide:
+            y, m = int(mm_wide.group(1)), int(mm_wide.group(2))
+            if y != yy:
+                warnings.append(
+                    f"linha {ln}: ano {y} no item '{name}' não bate com "
+                    f"calendário {yy} — ignorada")
+                continue
+            items.append({"date": f"{y:04d}-{m:02d}",
+                          "name": name, "hook": hook, "scope": "month"})
+            continue
+        m = _CAL_DATE_RE.match(date_cell)
+        if not m or not m.group(3):
+            warnings.append(
+                f"linha {ln}: data '{date_cell}' fora de "
+                f"'AAAA-MM-DD' ou 'AAAA-MM (mês)' — ignorada")
+            continue
+        y, mm, dd = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if y != yy:
+            warnings.append(
+                f"linha {ln}: ano {y} no item '{name}' não bate com "
+                f"calendário {yy} — ignorada")
+            continue
+        try:
+            iso = datetime(y, mm, dd).strftime("%Y-%m-%d")
+        except ValueError as e:
+            warnings.append(f"linha {ln}: data inválida ({e}) — ignorada")
+            continue
+        items.append({"date": iso, "name": name, "hook": hook, "scope": "day"})
+
+    return {"items": items, "warnings": warnings, "path": used}
+
+
+def read_rules(brand, *, lib_dir: Path | None = None) -> dict:
+    """Texto integral de `grids/rules/<slug>.md` (fallback `rules-seed/`).
+
+    NÃO PARSEIA — linguagem humana é de propósito (D4 do plano Fase 2). O
+    agente lê o texto e aplica julgamento. Marca sem regras → missing=True.
+    """
+    if lib_dir is None:
+        lib_dir = find_library_dir(create=False) or _ensure_ready(None)
+    else:
+        lib_dir = Path(lib_dir)
+    rules_dir, *_ = _subdirs(lib_dir)
+    slug = slugify(brand)
+    text, used = _read_seed_or_workspace_md(
+        f"{slug}.md", rules_dir, _RULES_SEED_DIR)
+    return {"text": text, "missing": text is None, "path": used}
+
+
+# --------------------------------------------------------------------------- #
+# brief — validação (boundary com analyze-briefing)
+# --------------------------------------------------------------------------- #
+def _validate_brief(brief: dict, *, lib_dir: Path | None = None) -> dict:
+    """Normaliza e valida o dict `brief`. Falha-alto em brand/month; reporta
+    slug fantasma (produto inexistente) em `missing`, sem falhar (mesmo
+    padrão de product_library.brand_from_briefing).
+
+    Retorna {brief: <normalized>, missing: [...]}.
+    """
+    if not isinstance(brief, dict):
+        raise InvalidGrid("brief não é um objeto.")
+    brand = (brief.get("brand") or "").strip()
+    if not brand:
+        raise InvalidGrid("brief sem 'brand'.")
+    month = brief.get("month")
+    if not month:
+        raise InvalidGrid("brief sem 'month'.")
+    try:
+        month_norm = _norm_month(month)
+    except InvalidGrid:
+        raise
+    bslug = slugify(brand)
+
+    # Catálogo de produtos da marca (pra reportar slugs fantasma sem falhar).
+    # Import lazy: o core não quer dependência rígida de product_library.
+    try:
+        import product_library as pl
+        known = {p.get("slug") for p in pl.list_products(bslug)}
+    except Exception:
+        known = set()
+
+    missing: list[str] = []
+    launches_norm: list[dict] = []
+    for i, lau in enumerate(brief.get("launches", []) or []):
+        if not isinstance(lau, dict):
+            missing.append(f"launches[{i}]: não é objeto — ignorado")
+            continue
+        date = (lau.get("date") or "").strip()
+        prod = (lau.get("product") or "").strip()
+        if not date:
+            missing.append(f"launches[{i}]: sem 'date'")
+            continue
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+            missing.append(f"launches[{i}]: date '{date}' fora de "
+                           f"AAAA-MM-DD")
+            continue
+        if prod and known and prod not in known:
+            missing.append(
+                f"launches[{i}].product '{prod}' não existe em "
+                f"product-catalog/{bslug} — registre antes ou ajuste o slug")
+        launches_norm.append({
+            "date": date,
+            "product": prod or None,
+            "label": (lau.get("label") or "").strip() or None,
+            "important": bool(lau.get("important", False)),
+        })
+
+    focus = []
+    for i, p in enumerate(brief.get("focusProducts", []) or []):
+        s = str(p).strip()
+        if not s:
+            continue
+        if known and s not in known:
+            missing.append(
+                f"focusProducts[{i}] '{s}' não existe em "
+                f"product-catalog/{bslug} — registre antes ou ajuste o slug")
+        focus.append(s)
+
+    global_content = []
+    for i, g in enumerate(brief.get("globalContent", []) or []):
+        if not isinstance(g, dict):
+            continue
+        date = (g.get("date") or "") or None
+        if date and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(date)):
+            missing.append(
+                f"globalContent[{i}].date '{date}' fora de AAAA-MM-DD — "
+                f"tratado como sem-data")
+            date = None
+        note = (g.get("note") or "").strip()
+        if not note:
+            continue
+        global_content.append({"date": date, "note": note})
+
+    return {
+        "brief": {
+            "brand": bslug,
+            "month": month_norm,
+            "launches": launches_norm,
+            "focusProducts": focus,
+            "globalContent": global_content,
+            "directionalNotes": (brief.get("directionalNotes") or "").strip(),
+        },
+        "missing": missing,
+    }
+
+
+# --------------------------------------------------------------------------- #
+# generate_from_briefing — andaime + âncoras + _slot tipado (mecânico)
+# --------------------------------------------------------------------------- #
+def _has_content(day: dict) -> bool:
+    """Dia 'preenchido' = qualquer campo de _POST_FIELDS com valor não-vazio."""
+    for k in _POST_FIELDS:
+        v = day.get(k)
+        if v is None or v == "" or v == {} or v == []:
+            continue
+        return True
+    return False
+
+
+def _existing_grid_has_content(lib_dir: Path, brand: str, month: str) -> bool:
+    fp = _grid_path(lib_dir, brand, month)
+    if not fp.is_file():
+        return False
+    try:
+        existing = json.loads(fp.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    # Seed marcado é exemplo descartável (não curadoria humana). Sem essa
+    # checagem, o bootstrap colide com generate_from_briefing(brand=clinique,
+    # month=2026-05) e a primeira UX da Fase 2 cai no overwrite-guard.
+    if existing.get("_seed"):
+        return False
+    for w in existing.get("weeks", []):
+        for d in w.get("days", []):
+            if _has_content(d):
+                return True
+    return False
+
+
+def _days_index(grid: dict) -> dict:
+    return {d["date"]: d for w in grid.get("weeks", []) for d in w.get("days", [])}
+
+
+def _date_add(date_iso: str, days: int) -> str:
+    d = datetime.strptime(date_iso, "%Y-%m-%d")
+    return datetime.fromordinal(d.toordinal() + days).strftime("%Y-%m-%d")
+
+
+def generate_from_briefing(brief: dict, *, lib_dir: Path | None = None,
+                           save: bool = True,
+                           overwrite: bool = False,
+                           min_posts: int = MIN_POSTS,
+                           max_gap: int = MAX_GAP,
+                           focus_intensity_days: int = FOCUS_INTENSITY_DAYS) -> dict:
+    """Gera o ANDAIME do grid a partir do `brief` — mecânico, sem LLM, sem
+    decidir conteúdo. O agente preenche product/subject/ref/etc. depois,
+    via set_post, guiado por plan_card + rules/<marca>.md.
+
+    Marca cada dia com `_slot = {kind, locked, hint, ...}` (taxonomia em
+    `_SLOT_KINDS`); `_brief` persiste no top-level pra rastreabilidade.
+
+    Idempotência segura: se já há grid <marca>/<mês> com qualquer dia não
+    vazio e overwrite=False → InvalidGrid (não obliterar curadoria humana).
+    """
+    v = _validate_brief(brief, lib_dir=lib_dir)
+    b = v["brief"]
+    bslug, month = b["brand"], b["month"]
+    yy, mm = int(month[:4]), int(month[5:7])
+
+    lib_dir = _ensure_ready(lib_dir)
+    if not overwrite and _existing_grid_has_content(lib_dir, bslug, month):
+        raise InvalidGrid(
+            f"Grid '{bslug}/{month}' já existe com conteúdo curado. "
+            f"Passe overwrite=True para regenerar o andaime (sobrescreve "
+            f"tudo) ou mova/edite à mão.")
+
+    grid = new_grid(bslug, month, focus_products=b["focusProducts"],
+                    lib_dir=lib_dir, save=False)
+    by_date = _days_index(grid)
+    ndays = calendar.monthrange(yy, mm)[1]
+
+    # Calendário comemorativo do ano
+    try:
+        cal_data = parse_calendar(yy, lib_dir=lib_dir)
+        cal_items = cal_data["items"]
+    except GridError:
+        cal_items = []
+
+    # 1) Ancorar lançamentos + janela de intensidade
+    for lau in b["launches"]:
+        d0 = lau["date"]
+        if d0 not in by_date:
+            continue  # lançamento fora do mês — ignora silencioso (warning vai em audit)
+        slot = {"kind": "launch_anchor", "locked": True,
+                "hint": lau.get("label") or lau.get("product") or "lançamento"}
+        if lau.get("product"):
+            slot["product"] = lau["product"]
+        by_date[d0]["_slot"] = slot
+        # janela de intensidade nos dias seguintes (dentro do mês)
+        for k in range(1, focus_intensity_days):
+            d = _date_add(d0, k)
+            if d not in by_date:
+                break
+            # não sobrepor uma âncora dura
+            cur = by_date[d].get("_slot")
+            if cur and cur.get("locked"):
+                continue
+            new_slot = {"kind": "launch_intensity", "locked": False,
+                        "hint": lau.get("label") or lau.get("product")
+                                or "intensidade pós-lançamento"}
+            if lau.get("product"):
+                new_slot["product"] = lau["product"]
+            by_date[d]["_slot"] = new_slot
+
+    # 2) Datas comemorativas do MÊS (scope='day' batendo o mês corrente).
+    # Month-wide (scope='month') vai pro grid["_calendarMonth"] como dica
+    # global pro plan-card; não amarra um dia específico.
+    month_wide: list[dict] = []
+    for item in cal_items:
+        if item["scope"] == "day" and item["date"][:7] == month:
+            d = item["date"]
+            if d in by_date:
+                cur = by_date[d].get("_slot")
+                if cur and cur.get("locked"):
+                    # âncora dura ganha; calendário entra como hint adicional
+                    cur["calendarHook"] = f"{item['name']}: {item['hook']}"
+                else:
+                    by_date[d]["_slot"] = {
+                        "kind": "calendar_hook", "locked": False,
+                        "hint": f"{item['name']}: {item['hook']}",
+                        "calendarHook": f"{item['name']}: {item['hook']}",
+                    }
+        elif item["scope"] == "month" and item["date"] == month:
+            month_wide.append({"name": item["name"], "hook": item["hook"]})
+
+    # 3) Intercalação no 4º/5º dia de qualquer foco contíguo
+    # Detectado pelo produto que aparece em slots seguidos (launch_anchor +
+    # launch_intensity ou focus_intercalation propagado). Lê o `product` do
+    # _slot; quando ≥4 dias contíguos com mesmo produto, marca o seguinte
+    # como `focus_intercalation` (proposta).
+    dates_in_order = sorted(by_date.keys())
+    run_prod = None
+    run_len = 0
+    for d in dates_in_order:
+        slot = by_date[d].get("_slot")
+        p = slot.get("product") if slot else None
+        if p and p == run_prod:
+            run_len += 1
+            if run_len >= 4 and slot and not slot.get("locked") \
+                    and slot["kind"] != "calendar_hook":
+                by_date[d]["_slot"] = {
+                    "kind": "focus_intercalation", "locked": False,
+                    "hint": f"intercalar (foco '{run_prod}' há "
+                            f"{run_len} dias) — outro foco/hero",
+                    "previousFocus": run_prod,
+                }
+        else:
+            run_prod = p
+            run_len = 1 if p else 0
+
+    # 4) Preencher slots vazios como hero_fill (proposta) e garantir cadência
+    # (gap≤max_gap, posts≥min_posts). Cadência aqui é PROPOSTA — o conteúdo
+    # do dia (product/subject) fica vazio: agente decide via set_post.
+    for d in dates_in_order:
+        if "_slot" not in by_date[d]:
+            by_date[d]["_slot"] = {"kind": "hero_fill", "locked": False,
+                                    "hint": "produto hero ou complementar"}
+
+    # 5) Persistir _brief e dicas globais
+    grid["_brief"] = {
+        "launches": b["launches"],
+        "focusProducts": b["focusProducts"],
+        "globalContent": b["globalContent"],
+        "directionalNotes": b["directionalNotes"],
+        "calendarMonthWide": month_wide,
+        "generatedAt": lc.now(),
+        "validation": {"missing": v["missing"]},
+    }
+    grid["focusProducts"] = b["focusProducts"]
+
+    if save:
+        return save_grid(grid, lib_dir=lib_dir)
+    return grid
+
+
+# --------------------------------------------------------------------------- #
+# audit_grid + plan_card (recomputáveis; não persistem)
+# --------------------------------------------------------------------------- #
+def _day_has_post(day: dict) -> bool:
+    """Dia 'tem post' quando subject OU product está preenchido. Heurística
+    deliberada — outras camadas (ref/lettering) podem existir sem post real."""
+    return bool((day.get("subject") or "").strip()
+                or (day.get("product") or "").strip())
+
+
+def audit_grid(grid_or_brand, month=None, *,
+               lib_dir: Path | None = None) -> dict:
+    """Checa regras codificáveis sobre um grid concreto.
+
+    Aceita o dict do grid OU (brand, month) — neste último caso chama
+    get_grid. Mede só camada determinística (cobertura, gaps, datas
+    comemorativas, focusProducts); julgamento (qual produto na data, hero)
+    NÃO é auditado aqui — é follow-up pós-0.9.0.
+    """
+    if isinstance(grid_or_brand, dict):
+        grid = grid_or_brand
+    else:
+        grid = get_grid(grid_or_brand, month, lib_dir=lib_dir)
+    yy, mm = int(grid["month"][:4]), int(grid["month"][5:7])
+    ndays_in_month = calendar.monthrange(yy, mm)[1]
+
+    days_sorted = sorted(
+        (d for w in grid.get("weeks", []) for d in w.get("days", [])),
+        key=lambda d: d.get("date", ""))
+
+    posts = 0
+    products_present: set = set()
+    dates_with_post: set = set()
+    gap_runs: list[int] = []
+    cur_gap = 0
+    for d in days_sorted:
+        if _day_has_post(d):
+            posts += 1
+            dates_with_post.add(d["date"])
+            if d.get("product"):
+                products_present.add(d["product"])
+            if cur_gap > 0:
+                gap_runs.append(cur_gap)
+                cur_gap = 0
+        else:
+            cur_gap += 1
+    if cur_gap > 0:
+        gap_runs.append(cur_gap)
+    max_gap = max(gap_runs) if gap_runs else 0
+
+    # cobertura: dias com post / dias do mês presentes no grid
+    days_in_grid = len(days_sorted)
+    coverage = posts / days_in_grid if days_in_grid else 0.0
+
+    # focusCoverage: para cada foco declarado em _brief.focusProducts (ou
+    # grid.focusProducts como fallback), conta dias com aquele produto
+    foci = ((grid.get("_brief") or {}).get("focusProducts")
+            or grid.get("focusProducts") or [])
+    focus_cov = {p: sum(1 for d in days_sorted if d.get("product") == p)
+                 for p in foci}
+
+    # datesPresent: datas comemorativas do MÊS que viraram post
+    try:
+        cal = parse_calendar(yy, lib_dir=lib_dir)["items"]
+    except GridError:
+        cal = []
+    cal_days = [it for it in cal
+                if it["scope"] == "day" and it["date"][:7] == grid["month"]]
+    dates_present = {it["date"]: it["date"] in dates_with_post
+                     for it in cal_days}
+    dates_present_ratio = (
+        sum(1 for v in dates_present.values() if v) / len(cal_days)
+        if cal_days else 1.0)
+
+    warnings: list[str] = []
+    if posts < MIN_POSTS:
+        warnings.append(f"posts={posts} < MIN_POSTS={MIN_POSTS}")
+    if max_gap > MAX_GAP:
+        warnings.append(f"maxGap={max_gap} > MAX_GAP={MAX_GAP}")
+    if days_in_grid != ndays_in_month:
+        warnings.append(
+            f"dias no grid ({days_in_grid}) != dias do mês ({ndays_in_month})")
+    for p, n in focus_cov.items():
+        if n == 0:
+            warnings.append(f"focusProduct '{p}' não aparece no grid")
+
+    return {
+        "brand": grid["brand"], "month": grid["month"],
+        "posts": posts, "coverage": round(coverage, 3),
+        "maxGap": max_gap, "gaps": gap_runs,
+        "focusCoverage": focus_cov,
+        "datesPresent": dates_present,
+        "datesPresentRatio": round(dates_present_ratio, 3),
+        "warnings": warnings,
+    }
+
+
+def plan_card(grid: dict, *, lib_dir: Path | None = None) -> dict:
+    """Dossiê de julgamento pro agente: panorama + rules.md inline + slots
+    a decidir. Recomputável (não persiste); chame de novo após set_post."""
+    if not isinstance(grid, dict):
+        raise InvalidGrid("plan_card precisa de um dict de grid.")
+    brand = grid.get("brand", "")
+    yy = int(grid["month"][:4])
+
+    rules = read_rules(brand, lib_dir=lib_dir)
+    try:
+        cal = parse_calendar(yy, lib_dir=lib_dir)
+    except GridError:
+        cal = {"items": [], "warnings": [], "path": None}
+
+    brief = grid.get("_brief") or {}
+    slots_todo: list[dict] = []
+    for w in grid.get("weeks", []):
+        for d in w.get("days", []):
+            slot = d.get("_slot")
+            if not slot:
+                continue
+            if _day_has_post(d):
+                continue  # já decidido pelo agente
+            slots_todo.append({
+                "date": d["date"], "dow": d["dow"], "_slot": slot,
+                "currentContent": {k: d.get(k) for k in _POST_FIELDS
+                                   if d.get(k) not in (None, "", {}, [])},
+            })
+
+    return {
+        "brand": brand, "month": grid.get("month"),
+        "rules": rules,
+        "calendarWarnings": cal["warnings"],
+        "launches": brief.get("launches", []),
+        "focusProducts": brief.get("focusProducts", []),
+        "globalContent": brief.get("globalContent", []),
+        "directionalNotes": brief.get("directionalNotes", ""),
+        "calendarMonthWide": brief.get("calendarMonthWide", []),
+        "slotsTodo": slots_todo,
+        "audit": audit_grid(grid, lib_dir=lib_dir),
+    }
 
 
 # --------------------------------------------------------------------------- #

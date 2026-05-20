@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-19T15:30:00Z",
+  "lastUpdated": "2026-05-19T22:00:00Z",
 
   "components": {
     "skills": [
@@ -76,7 +76,7 @@
       {
         "name": "generate-grid",
         "path": "plugins/io-social-media/skills/generate-grid/SKILL.md",
-        "description": "Grid editorial mensal por marca — esqueleto canônico (marca×mês), ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
+        "description": "Grid editorial mensal por marca — geração do andaime mecânico a partir do briefing (boundary com analyze-briefing) + loop de julgamento guiado por rules/<marca>.md, ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
         "supportingFiles": [
           "plugins/io-social-media/core/grid_library.py",
           "plugins/io-social-media/core/_libcommon.py",
@@ -215,6 +215,11 @@
       "type": "references"
     },
     {
+      "from": "skills/generate-grid",
+      "to": "skills/analyze-briefing",
+      "type": "consumes-brief"
+    },
+    {
       "from": "skills/about-insideout",
       "to": "plugins/io-social-media/skills/about-insideout/about.md",
       "type": "references"
@@ -265,7 +270,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.8.1",
+      "version": "0.9.0",
       "componentCounts": {
         "skills": 7,
         "agents": 0,

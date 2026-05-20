@@ -137,3 +137,52 @@ print(r['action'], '| faltando:', r['missing'])
 "
 ```
 Depois informe ao usuário a ação (`created`/`updated`) e **liste `missing`** ("a marca foi salva; falta preencher: paletteHints, guardrails — me peça quando tiver"). Gerenciar a marca depois é da skill `product-catalog`.
+
+### Passo 5 — (opcional) Gerar o grid editorial do mês
+
+Só se o briefing trouxer **plano editorial mensal** (ao menos um de: lançamentos com data, produtos-foco, campanhas globais com data) **e** o usuário confirmar. É o gatilho da skill `generate-grid` (Fase 2).
+
+- **Nunca invente.** Mesma regra dos Passos 2/4: o que não veio explícito fica de fora — o validador devolve em `missing` pra um humano preencher (slug de produto não cadastrado em `product-catalog`, data ausente, etc.).
+- Antes de invocar, **liste o dict `brief` para o usuário** com o que foi extraído + o que vai entrar em `missing`. Espere o OK.
+- Não é auto-executado nem encadeado em silêncio: o usuário decide se quer o andaime agora ou depois.
+
+O `brief` é o **boundary object** com a skill `generate-grid` — só esse dict atravessa as skills, nada de estado compartilhado. Formato:
+```python
+brief = {
+    "brand": "<slug ou nome da marca-foco do briefing>",
+    "month": "<AAAA-MM>",                              # ou nome PT + 'year' embutido
+    "launches": [                                       # cada lançamento com data
+        {"date": "AAAA-MM-DD",
+         "product": "<slug do product-catalog>",
+         "label": "<nome curto pra hint>",
+         "important": True}],
+    "focusProducts": ["<slug>", "..."],                 # produtos prioritários do mês
+    "globalContent": [{"date": None, "note": "..."}],   # campanhas globais (data opc.)
+    "directionalNotes": "<direcional curto do deck, se houver>"
+}
+```
+
+Padrão de invocação (in-process, mesma disciplina dos Passos anteriores):
+```bash
+CORE="${CLAUDE_PLUGIN_ROOT}/core"
+python -c "
+import sys; sys.path.insert(0, r'$CORE')
+try: sys.stdout.reconfigure(encoding='utf-8')
+except Exception: pass
+import grid_library as gl
+brief = { ... }                              # extraído do briefing
+v = gl._validate_brief(brief)                # falha-alto em brand/month
+print('missing:', v['missing'])              # slugs fantasma, datas malformadas, etc.
+g = gl.generate_from_briefing(v['brief'])    # andaime + _slot por dia; persiste e regera HTML
+print('grid:', g['brand'], g['month'], 'weeks:', len(g['weeks']))
+print('html:', gl.open_grids())
+"
+```
+
+Reporte ao usuário:
+- **action**: andaime gerado em `<marca>/<AAAA-MM>`;
+- **missing** do validador (se houver) — peça pra ele cadastrar o produto faltante em `product-catalog` ou ajustar o slug **antes** do loop de julgamento;
+- **caminho do `grids.html`** pra abrir;
+- a próxima etapa é com a skill `generate-grid` (loop de julgamento sobre o plan-card — produto/hero/ref/spoiler por slot, guiado por `grids/rules/<marca>.md`).
+
+Se o grid `<marca>/<mês>` já existir com conteúdo curado, `generate_from_briefing` recusa por segurança. Pergunte ao usuário se ele quer regenerar (`overwrite=True` apaga e refaz o andaime — **destrutivo**) ou trabalhar a partir do que está lá.
