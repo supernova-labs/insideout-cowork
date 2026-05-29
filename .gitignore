@@ -9,20 +9,16 @@ Thumbs.db
 **/core/outputs/
 **/core/.image_session.json
 
-# galeria de estilos gerada na pasta de trabalho:
-#   versionar styles/ e thumbnails/ (ativo de marca); ignorar o derivado e a lixeira
-**/style-gallery/style-gallery.html
+# painel unificado gerado na pasta de trabalho (estilos × produtos × grid):
+#   é derivado (regenerado dos JSONs) — não versionar
+insideout-painel.html
+
+# dados das três bibliotecas (versionar o ativo, ignorar só a lixeira):
+#   style-gallery: versionar styles/ e thumbnails/
+#   product-catalog: versionar brands/ products/ photos/
+#   grids: versionar <marca>/*.json, rules/*.md, calendar/*.md, mockups/
 **/style-gallery/.trash/
-
-# catálogo de produtos gerado na pasta de trabalho:
-#   versionar brands/ products/ photos/ (ativo de marca); ignorar derivado e lixeira
-**/product-catalog/product-catalog.html
 **/product-catalog/.trash/
-
-# grid editorial gerado na pasta de trabalho:
-#   versionar <marca>/*.json, rules/*.md, calendar/*.md, mockups/ (ativo editorial);
-#   ignorar o derivado e a lixeira
-**/grids/grids.html
 **/grids/.trash/
 
 **/__pycache__/

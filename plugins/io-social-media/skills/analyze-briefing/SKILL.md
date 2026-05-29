@@ -175,14 +175,14 @@ v = gl._validate_brief(brief)                # falha-alto em brand/month
 print('missing:', v['missing'])              # slugs fantasma, datas malformadas, etc.
 g = gl.generate_from_briefing(v['brief'])    # andaime + _slot por dia; persiste e regera HTML
 print('grid:', g['brand'], g['month'], 'weeks:', len(g['weeks']))
-print('html:', gl.open_grids())
+print('painel:', gl.open_grids())            # abre o painel unificado na aba Grid
 "
 ```
 
 Reporte ao usuário:
 - **action**: andaime gerado em `<marca>/<AAAA-MM>`;
 - **missing** do validador (se houver) — peça pra ele cadastrar o produto faltante em `product-catalog` ou ajustar o slug **antes** do loop de julgamento;
-- **caminho do `grids.html`** pra abrir;
+- **caminho do painel (`insideout-painel.html`, aba Grid)** pra abrir;
 - a próxima etapa é com a skill `generate-grid` (loop de julgamento sobre o plan-card — produto/hero/ref/spoiler por slot, guiado por `grids/rules/<marca>.md`).
 
 Se o grid `<marca>/<mês>` já existir com conteúdo curado, `generate_from_briefing` recusa por segurança. Pergunte ao usuário se ele quer regenerar (`overwrite=True` apaga e refaz o andaime — **destrutivo**) ou trabalhar a partir do que está lá.

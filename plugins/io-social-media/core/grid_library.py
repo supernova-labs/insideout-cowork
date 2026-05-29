@@ -42,8 +42,6 @@ _CORE_DIR = lc.CORE_DIR
 _SEED_FILE = _CORE_DIR / "grids.seed.json"
 _RULES_SEED_DIR = _CORE_DIR / "rules-seed"
 _CALENDAR_SEED_DIR = _CORE_DIR / "calendar-seed"
-_TEMPLATE_FILE = _CORE_DIR / "grid-template.html"
-_PLACEHOLDER = "/*__GRID_JSON__*/null"
 
 # Subdirs reservados dentro de grids/ — NÃO são marcas.
 _RESERVED = {"rules", "calendar", "mockups", ".trash"}
@@ -284,6 +282,14 @@ def list_grids(brand=None, lib_dir: Path | None = None) -> list[dict]:
          "posts": sum(len(w.get("days", [])) for w in g.get("weeks", []))}
         for g in sorted(items, key=_sort_key)
     ]
+
+
+def list_grids_full(lib_dir: Path | None = None) -> list[dict]:
+    """Lista os grids COMPLETOS (weeks→days), ordenados por marca-mês. Contrato
+    público consumido pelo `dashboard` (o painel precisa do grid inteiro, não do
+    resumo de `list_grids`)."""
+    items, _ = _resolve(lib_dir)
+    return sorted(items, key=_sort_key)
 
 
 def get_grid(brand, month, lib_dir: Path | None = None) -> dict:
@@ -1525,7 +1531,7 @@ def _save_mockup(lib_dir: Path, month: str, date_iso: str,
     if dest.exists():
         dest.unlink()
     _shutil.move(src_png, dest)
-    # path relativo a grids.html (que vive em lib_dir/grids.html)
+    # path relativo a lib_dir (grids/) — o painel reprefixará p/ "grids/mockups/..."
     return f"mockups/{month}/{date_iso}.png", str(dest.resolve())
 
 
@@ -1725,20 +1731,17 @@ def batch_mockups(
 # --------------------------------------------------------------------------- #
 # render
 # --------------------------------------------------------------------------- #
-def render_grids(lib_dir: Path | None = None,
-                 template_path: Path | None = None) -> Path:
-    """Lê o template, injeta {grids:[...]} (workspace ou seed) e escreve
-    `<lib_dir>/grids.html`. Sempre derivado — nunca lido como dado."""
+def render_grids(lib_dir: Path | None = None) -> Path:
+    """Regenera o painel unificado da InsideOut (`insideout-painel.html`) com a
+    aba Grid. O grid editorial virou uma aba do painel único; este wrapper
+    preserva o nome histórico que o CRUD chama. Os mockups são reescritos
+    relativos ao painel (`grids/mockups/...`) pelo orquestrador. Sempre derivado."""
     lib_dir = _ensure_ready(lib_dir)
-    grids = sorted(_resolve(lib_dir)[0], key=_sort_key)
-    payload = json.dumps({"grids": grids}, ensure_ascii=False)
-    tpl = Path(template_path or _TEMPLATE_FILE).read_text(encoding="utf-8")
-    injected = lc.inject_placeholder(tpl, _PLACEHOLDER, payload, GridError)
-    _, _, _, _, html_path = _subdirs(lib_dir)
-    lc.atomic_write(html_path, injected)
-    return html_path
+    import dashboard  # import tardio: quebra o ciclo dashboard <-> libs
+    return dashboard.render_dashboard(active_tab="grid", grid_dir=lib_dir)
 
 
 def open_grids(lib_dir: Path | None = None) -> Path:
-    """Regenera e devolve o caminho do grids.html (a skill manda abrir)."""
+    """Regenera e devolve o caminho do painel (a skill instrui a abrir na aba
+    Grid via `#grid`)."""
     return render_grids(lib_dir)

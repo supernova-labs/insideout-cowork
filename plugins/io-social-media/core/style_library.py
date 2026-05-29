@@ -29,7 +29,7 @@ SCHEMA_VERSION = 1
 LIB_DIRNAME = "style-gallery"
 ENV_OVERRIDE = "STYLE_GALLERY_DIR"
 
-# Espelham gallery-template.html (CATEGORIES/CANONICAL_TAGS no <script>).
+# Espelham dashboard-template.html (CATEGORIES/CANONICAL_TAGS no <script>).
 # Se mudar lá, mudar aqui (e vice-versa). Taxonomia de social/PR — Inside Out.
 CATEGORIES = ["Produto", "Campanha", "Pessoas", "Editorial", "Evento", "Imprensa"]
 CANONICAL_TAGS = {
@@ -50,8 +50,6 @@ CANONICAL_TAGS = {
 # porquê: junção UWP/MSIX faz .resolve() devolver caminho não-stat-ável).
 _CORE_DIR = lc.CORE_DIR
 _SEED_FILE = _CORE_DIR / "styles.seed.json"
-_TEMPLATE_FILE = _CORE_DIR / "gallery-template.html"
-_PLACEHOLDER = "/*__STYLES_JSON__*/[]"
 
 
 class StyleLibraryError(lc.LibCommonError):
@@ -312,23 +310,17 @@ def delete_style(ref, *, lib_dir: Path | None = None) -> dict:
 # --------------------------------------------------------------------------- #
 # render
 # --------------------------------------------------------------------------- #
-def render_gallery(lib_dir: Path | None = None,
-                   template_path: Path | None = None) -> Path:
-    """
-    Lê o template, injeta os estilos (workspace ou seed) e escreve
-    `<lib_dir>/style-gallery.html`. Sempre derivado — nunca lido como dado.
-    """
-    lib_dir = _ensure_ready(lib_dir)  # materializa os 5 exemplos -> HTML mostra reais c/ thumb
-    styles = sorted(_resolve_read(lib_dir)[0], key=lambda s: s.get("id", 0))
-    tpl = Path(template_path or _TEMPLATE_FILE).read_text(encoding="utf-8")
-    injected = lc.inject_placeholder(
-        tpl, _PLACEHOLDER, json.dumps(styles, ensure_ascii=False),
-        StyleLibraryError)
-    _, _, _, html_path = _subdirs(lib_dir)
-    lc.atomic_write(html_path, injected)
-    return html_path
+def render_gallery(lib_dir: Path | None = None) -> Path:
+    """Regenera o painel unificado da InsideOut (`insideout-painel.html`) com a
+    aba Estilos. A galeria virou uma aba do painel único; este wrapper preserva
+    o nome histórico que o CRUD/bootstrap chamam. O painel é gravado na raiz
+    comum das três pastas-domínio, não em `style-gallery/`. Sempre derivado."""
+    lib_dir = _ensure_ready(lib_dir)  # materializa os 5 exemplos + thumbnails
+    import dashboard  # import tardio: quebra o ciclo dashboard <-> libs
+    return dashboard.render_dashboard(active_tab="styles", style_dir=lib_dir)
 
 
 def open_gallery(lib_dir: Path | None = None) -> Path:
-    """Regenera e devolve o caminho do HTML (a skill instrui o usuário a abrir)."""
+    """Regenera e devolve o caminho do painel (a skill instrui a abrir na aba
+    Estilos via `#styles`)."""
     return render_gallery(lib_dir)

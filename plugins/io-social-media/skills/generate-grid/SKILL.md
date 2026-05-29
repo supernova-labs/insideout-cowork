@@ -55,12 +55,13 @@ Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`
 Estrutura: `grids/<marca>/<AAAA-MM>.json` (1 arquivo por grid marca-mês),
 `grids/rules/<marca>.md` (regras editáveis da marca), `grids/calendar/<ano>.md`
 (calendário comemorativo compartilhado), `grids/mockups/<AAAA-MM>/<dia>.{png,json}`
-(mockup IA por post + sidecar JSON de auditoria), `grids/grids.html` (gerado),
-`grids/.trash/`. Sem grid no workspace, leitura
-cai no **seed embarcado** (1 grid Clinique exemplo) — funciona com zero config.
+(mockup IA por post + sidecar JSON de auditoria), `grids/.trash/`. Sem grid no
+workspace, leitura cai no **seed embarcado** (1 grid Clinique exemplo) — funciona
+com zero config. A visualização HTML é o **painel unificado** (`insideout-painel.html`,
+gerado na raiz da pasta de trabalho, aba Grid) — ver "Abrir o grid".
 
 Se for um repositório git, garanta no `.gitignore` da pasta de trabalho:
-ignorar `grids/grids.html` e `grids/.trash/`; **versionar**
+ignorar `insideout-painel.html` (derivado) e `grids/.trash/`; **versionar**
 `grids/<marca>/*.json`, `grids/rules/*.md`, `grids/calendar/*.md` e
 `grids/mockups/` (é o ativo editorial do cliente).
 
@@ -221,11 +222,13 @@ lettering, mockup, rationale, notes` (data e dia-da-semana são imutáveis).
 
 **Abrir o grid:**
 ```python
-print(gl.open_grids())   # regenera e devolve o caminho do grids.html
+print(gl.open_grids())   # regenera o painel unificado e devolve o caminho (abre na aba Grid)
 ```
-Informe o caminho ao usuário e diga para abrir no navegador. Filtro por
-marca/mês no topo; cada dia mostra abordagem (cor), subject/produto, canal,
-lettering e mockup (quando houver).
+O grid virou a **aba Grid** do painel único da InsideOut (`insideout-painel.html`,
+na raiz da pasta de trabalho). Informe o caminho ao usuário e diga para abrir no
+navegador — o painel abre direto na aba Grid (deep-link `#grid`). Seletor de marca
+global no topo + sub-filtro de mês na aba; cada dia mostra abordagem (cor),
+subject/produto, canal, lettering e mockup (quando houver).
 
 **Mockup por post (Fase 3) — orquestração de Gemini 3 Pro Image:**
 
@@ -356,12 +359,12 @@ auditável, conta a história da peça.
 ## Regras importantes
 
 - Confirme antes de deletar/esvaziar; nunca delete em lote.
-- Nunca edite `grids.html` nem os `*.json` na mão — use as funções (escrita
+- Nunca edite `insideout-painel.html` (derivado) nem os `*.json` na mão — use as funções (escrita
   atômica + regen do grid). A planilha apodrecia exatamente por edição manual.
 - `core/` é read-only: nunca grave lá; toda escrita vai pra pasta de trabalho.
 - Ao editar um post, preencha o `rationale` (1 linha do porquê) quando o
   usuário der a razão — é o log de aprendizado pedido pelo Lucas.
-- Sempre reporte o caminho do `grids.html` ao abrir/atualizar.
+- Sempre reporte o caminho do painel (`insideout-painel.html`) ao abrir/atualizar.
 - Não exponha caminhos de arquivo a menos que o usuário peça — fale em
   "marca/mês" e datas.
 - **Fase 3 — `.env` com `GEMINI_API_KEY` na pasta de trabalho** (mesma

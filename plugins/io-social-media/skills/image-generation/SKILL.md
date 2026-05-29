@@ -192,8 +192,8 @@ A imagem recém-gerada vira o thumbnail. Categorias/tags canônicas e demais ope
 
 ## Regras importantes
 
-- **O `core/` é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`/`get_product.py`, `style_library.py`/`product_library.py`, `_libcommon.py`, `gallery-template.html`/`product-catalog-template.html`): não tente editar nem gravar nada lá. Lógica custom e dados rodam/vivem na pasta de trabalho importando o motor via `sys.path`.
-- **`.env`, `outputs/`, `.image_session.json` e `style-gallery/` vivem na pasta de trabalho.** Se ela for um repositório git, garanta no `.gitignore`: ignorar `.env`, `outputs/`, `.image_session.json`, `style-gallery/style-gallery.html`, `style-gallery/.trash/`; versionar `style-gallery/styles/` e `style-gallery/thumbnails/`.
+- **O `core/` é read-only** (`image_gen.py`, `style_extract.py`, `get_style.py`/`get_product.py`, `style_library.py`/`product_library.py`, `_libcommon.py`, `dashboard.py`/`dashboard-template.html`): não tente editar nem gravar nada lá. Lógica custom e dados rodam/vivem na pasta de trabalho importando o motor via `sys.path`.
+- **`.env`, `outputs/`, `.image_session.json` e `style-gallery/` vivem na pasta de trabalho.** Se ela for um repositório git, garanta no `.gitignore`: ignorar `.env`, `outputs/`, `.image_session.json`, `insideout-painel.html` (painel derivado), `style-gallery/.trash/`; versionar `style-gallery/styles/` e `style-gallery/thumbnails/`.
 - Sempre retorne ao usuário o caminho da imagem gerada.
 - Dependências: `pip install -r "$CORE/requirements.txt"` (google-genai, python-dotenv, pillow) caso a geração falhe por import.
 
