@@ -46,12 +46,13 @@ Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
 
 Estrutura: `product-catalog/brands/<slug>.json` (1 arquivo por marca),
 `products/<slug>.json` (1 por produto, com FK `brand`), `photos/<marca>/<produto>/`,
-`product-catalog.html` (gerado), `.trash/`. Sem catálogo no workspace, leitura
-cai no **seed embarcado** (1 marca exemplo + 2 produtos) — funciona com zero
-config.
+`.trash/`. Sem catálogo no workspace, leitura cai no **seed embarcado** (1 marca
+exemplo + 2 produtos) — funciona com zero config. A visualização HTML é o
+**painel unificado** (`insideout-painel.html`, gerado na raiz da pasta de
+trabalho, aba Produtos) — ver "Abrir o catálogo".
 
 Se for um repositório git, garanta no `.gitignore` da pasta de trabalho:
-ignorar `product-catalog/product-catalog.html` e `product-catalog/.trash/`;
+ignorar `insideout-painel.html` (derivado) e `product-catalog/.trash/`;
 **versionar** `product-catalog/brands/`, `product-catalog/products/` e
 `product-catalog/photos/` (é o ativo de marca do cliente).
 
@@ -115,11 +116,14 @@ O catálogo HTML é regenerado automaticamente após todo add/update/delete.
 ## Abrir o catálogo
 
 ```python
-print(pc.open_catalog())   # regenera e devolve o caminho do product-catalog.html
+print(pc.open_catalog())   # regenera o painel unificado e devolve o caminho (abre na aba Produtos)
 ```
-Informe ao usuário o caminho e diga para abrir no navegador. Ele vive ao lado
-de `photos/`, então os previews carregam; produto sem foto mostra placeholder
-limpo ("sem fotos") automaticamente.
+O catálogo virou a **aba Produtos** do painel único da InsideOut
+(`insideout-painel.html`, na raiz da pasta de trabalho). Informe o caminho ao
+usuário e diga para abrir no navegador — o painel abre direto na aba Produtos
+(deep-link `#products`), com o seletor de marca no topo. As fotos carregam via
+caminho relativo; produto sem foto mostra placeholder limpo ("sem fotos")
+automaticamente.
 
 ## Relação com a geração de imagens
 
@@ -160,7 +164,7 @@ identidade da InsideOut, consulte a skill `about-insideout` antes de cadastrar.
   fotos, id ("produto #id").
 - Não exponha `slug`/caminhos de arquivo a menos que o usuário peça — fale em
   nome e "#id".
-- Sempre reporte o caminho do `product-catalog.html` ao abrir/atualizar.
+- Sempre reporte o caminho do painel (`insideout-painel.html`) ao abrir/atualizar.
 - `core/` é read-only: nunca grave lá; toda escrita vai para a pasta de
   trabalho via o módulo.
 - Não edite `brands/*.json` / `products/*.json` na mão — use as funções

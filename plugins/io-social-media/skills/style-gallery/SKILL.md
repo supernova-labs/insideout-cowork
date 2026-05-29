@@ -34,9 +34,9 @@ Dependências (se faltar import): `pip install -r "$CORE/requirements.txt"`.
 2. busca **pra cima** a partir do cwd por uma pasta `style-gallery/` existente (para na raiz do git/filesystem) — assim rodar de uma subpasta não cria biblioteca duplicada;
 3. se nada: cria `<pasta de trabalho>/style-gallery/`.
 
-Estrutura: `style-gallery/styles/<slug>.json` (1 arquivo por estilo — fonte da verdade), `thumbnails/`, `style-gallery.html` (gerado), `.trash/`. Sem biblioteca no workspace, leitura cai no **seed embarcado** (5 exemplos) — funciona com zero config.
+Estrutura: `style-gallery/styles/<slug>.json` (1 arquivo por estilo — fonte da verdade), `thumbnails/`, `.trash/`. Sem biblioteca no workspace, leitura cai no **seed embarcado** (5 exemplos) — funciona com zero config. A visualização HTML é o **painel unificado** (`insideout-painel.html`, gerado na raiz da pasta de trabalho, aba Estilos) — ver "Abrir a galeria".
 
-Se for um repositório git, garanta no `.gitignore` da pasta de trabalho: ignorar `style-gallery/style-gallery.html` e `style-gallery/.trash/`; **versionar** `style-gallery/styles/` e `style-gallery/thumbnails/` (é o ativo de marca do cliente).
+Se for um repositório git, garanta no `.gitignore` da pasta de trabalho: ignorar `insideout-painel.html` (derivado) e `style-gallery/.trash/`; **versionar** `style-gallery/styles/` e `style-gallery/thumbnails/` (é o ativo de marca do cliente).
 
 ## Operações
 
@@ -86,9 +86,9 @@ A própria imagem de referência vira o thumbnail (sem custo de geração extra)
 ## Abrir a galeria
 
 ```python
-print(sl.open_gallery())   # regenera e devolve o caminho do style-gallery.html
+print(sl.open_gallery())   # regenera o painel unificado e devolve o caminho (abre na aba Estilos)
 ```
-Informe ao usuário o caminho e diga para abrir esse arquivo no navegador. Ele vive ao lado de `thumbnails/`, então os previews carregam; estilo sem thumbnail mostra placeholder limpo ("sem preview") automaticamente.
+A galeria virou a **aba Estilos** do painel único da InsideOut (`insideout-painel.html`, na raiz da pasta de trabalho, junto das pastas `style-gallery/`/`product-catalog/`/`grids/`). Informe o caminho ao usuário e diga para abrir no navegador — o painel abre direto na aba Estilos (deep-link `#styles`). Os thumbnails carregam via caminho relativo; estilo sem thumbnail mostra placeholder limpo ("sem preview") automaticamente.
 
 ## Categorias e tags canônicas
 
@@ -112,7 +112,7 @@ Para peça da InsideOut, alinhe à marca via skill `about-insideout` antes de de
 - Confirme antes de deletar; nunca delete em lote nem ofereça "limpar tudo".
 - Após criar, resuma ao usuário: nome, categoria, tags, id (referência "estilo #id").
 - Não exponha `slug`/caminhos de arquivo a menos que o usuário peça — fale em nome e "#id".
-- Sempre reporte o caminho do `style-gallery.html` ao abrir/atualizar a galeria.
+- Sempre reporte o caminho do painel (`insideout-painel.html`) ao abrir/atualizar a galeria.
 - `core/` é read-only: nunca tente gravar lá; toda escrita vai para a pasta de trabalho via o módulo.
 - Não edite `styles/*.json` na mão — use as funções (escrita atômica + regen da galeria).
 

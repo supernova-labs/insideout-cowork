@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel · Inside Out</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Instrument+Serif&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Inside Out PR — kraft editorial + petróleo + terracota (identidade única) */
+      --bg-primary: #f0e8d8;     /* papel kraft / creme */
+      --bg-secondary: #e9dfc9;   /* card / hover de linha */
+      --bg-tertiary: #e3d8bf;    /* bloco de prompt / tag */
+      --border: #d2c4a6;         /* taupe quente */
+      --text-primary: #173e3e;   /* petróleo profundo */
+      --text-secondary: #5d6f6a; /* petróleo dessaturado */
+      --text-muted: #9a917c;     /* areia */
+      --accent: #bd5a39;         /* terracota (cor de assinatura) */
+      --accent-dim: #9a4528;     /* terracota escuro */
+      --success: #1e7a6f;        /* teal (estado "copiado") */
+      --on-accent: #fdf6e7;      /* texto sobre terracota/teal */
+      --shadow: rgba(20, 46, 46, 0.18);
+      /* abordagens do grid (taxonomia da planilha da Estela) */
+      --ab-lancamento: #bd5a39;
+      --ab-farma: #1e7a6f;
+      --ab-educacional: #3f6f9a;
+      --ab-data: #b07d2a;
+      --ab-trend: #7e57c2;
+      --ab-produto: #5d6f6a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
+      background-image:
+        radial-gradient(ellipse at 0% 0%, rgba(189, 90, 57, 0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 100%, rgba(23, 62, 62, 0.04) 0%, transparent 55%);
+    }
+
+    /* Sol radiante da marca Inside Out — marca d'água sutil no canto */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -260px;
+      right: -200px;
+      width: 620px;
+      height: 620px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      background: repeating-conic-gradient(from 0deg at 50% 50%,
+        rgba(189, 90, 57, 0) 0deg 3.2deg,
+        rgba(189, 90, 57, 0.16) 3.2deg 5deg);
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 26%, transparent 62%);
+      mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 26%, transparent 62%);
+    }
+
+    .container {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    header { margin-bottom: 2rem; }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+
+    /* ----- Barra de navegação (abas + seletor de marca global) ----- */
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tabs { display: flex; gap: 0.4rem; }
+
+    .tab-btn {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.25rem;
+      padding: 0.4rem 1.1rem;
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .tab-btn:hover { color: var(--text-primary); }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .brand-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-control.hidden { display: none; }
+
+    .brand-control label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .brand-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.45rem 0.9rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 100px;
+      cursor: pointer;
+    }
+
+    /* ----- Filtros (compartilhado: estilos / grid-mês) ----- */
+    .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filters.row { flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+
+    .category-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--on-accent);
+    }
+
+    .tag-filters {
+      display: none;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      width: 100%;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+    }
+
+    .tag-filters.active { display: flex; }
+
+    .tag-filter-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      padding: 0.35rem 0.7rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tag-filter-btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
+
+    .tag-filter-btn.active {
+      background: var(--success);
+      border-color: var(--success);
+      color: var(--on-accent);
+    }
+
+    /* ----- Painéis ----- */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ===== Estilos ===== */
+    .style-table { width: 100%; border-collapse: collapse; }
+
+    .style-table th {
+      text-align: left;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .style-table th:first-child { width: 60px; }
+    .style-table th:nth-child(2) { width: 100px; }
+
+    .style-table tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+
+    .style-table tbody tr:hover { background: var(--bg-secondary); }
+
+    .style-table td { padding: 1.25rem 1rem; vertical-align: top; }
+
+    .index {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .thumbnail:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    /* Placeholder intencional para estilos sem thumbnail versionado. */
+    .thumbnail--none {
+      width: 80px;
+      height: 80px;
+      border-radius: 6px;
+      border: 1px dashed var(--border);
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 8px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 4px;
+      box-sizing: border-box;
+      user-select: none;
+      color: var(--text-muted);
+    }
+
+    .style-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.35rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .style-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+    }
+
+    .category-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.35rem 0.65rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .prompt-cell { position: relative; max-width: 400px; }
+
+    .prompt-text {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.75rem;
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      max-height: 5.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .prompt-text:hover {
+      border-color: var(--accent-dim);
+      color: var(--text-primary);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 50;
+      box-shadow: 0 10px 40px var(--shadow);
+    }
+
+    .prompt-text::after {
+      content: 'Clique para copiar';
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .prompt-text:hover::after { opacity: 1; }
+    .prompt-text.copied { border-color: var(--success); }
+    .prompt-text.copied::after { content: 'Copiado!'; color: var(--success); opacity: 1; }
+
+    .prompt-text strong { color: var(--accent); font-weight: 600; }
+    .prompt-text ul, .prompt-text ol { margin: 0.3rem 0; padding-left: 1.2rem; }
+    .prompt-text li { margin: 0.15rem 0; }
+    .prompt-text p { margin: 0.4rem 0; }
+    .prompt-text p:first-child { margin-top: 0; }
+
+    .example-use { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
+    /* ===== Produtos ===== */
+    .brand-block { margin-bottom: 3.5rem; }
+
+    .brand-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      color: var(--text-primary);
+    }
+
+    .brand-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .brand-brief {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem 1.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .brief-field { font-size: 0.9rem; line-height: 1.5; }
+
+    .brief-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .brief-value { color: var(--text-secondary); }
+    .brief-value ul { margin: 0.2rem 0 0 1.1rem; }
+    .brief-value li { margin: 0.1rem 0; }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .product-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .product-card:hover { box-shadow: 0 8px 24px var(--shadow); }
+
+    .product-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-name { font-family: 'Instrument Serif', serif; font-size: 1.3rem; }
+
+    .product-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .product-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 0.6rem;
+    }
+
+    .product-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .claims {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 0.75rem;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      gap: 0.4rem;
+    }
+
+    .photo-thumb {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .photo-thumb:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .photo--none {
+      grid-column: 1 / -1;
+      border: 1px dashed var(--border);
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      padding: 1rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== Grid editorial ===== */
+    .grid-block { margin-bottom: 3.5rem; }
+
+    .grid-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .grid-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .grid-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .focus-row { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+    .focus-row .focus-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      margin-right: 0.35rem;
+    }
+
+    .week { margin-bottom: 1rem; }
+
+    .week-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
+
+    .dow-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-align: center;
+      padding-bottom: 0.25rem;
+    }
+
+    .day {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      min-height: 130px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .day:hover { box-shadow: 0 6px 18px var(--shadow); }
+
+    .day--empty { background: transparent; border-style: dashed; opacity: 0.5; }
+
+    .day-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      color: var(--on-accent);
+      align-self: flex-start;
+    }
+
+    .badge--lancamento { background: var(--ab-lancamento); }
+    .badge--farma { background: var(--ab-farma); }
+    .badge--educacional { background: var(--ab-educacional); }
+    .badge--data { background: var(--ab-data); }
+    .badge--trend { background: var(--ab-trend); }
+    .badge--produto { background: var(--ab-produto); }
+    .badge--none { background: var(--text-muted); }
+
+    .day-subject { font-weight: 600; color: var(--text-primary); line-height: 1.25; }
+    .day-product { font-size: 0.68rem; color: var(--text-secondary); font-style: italic; }
+
+    .day-channel {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .day-lettering {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      border-top: 1px dashed var(--border);
+      padding-top: 0.25rem;
+      margin-top: auto;
+    }
+
+    .day-mockup {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    /* ===== Compartilhado: empty-state / lightbox / hover / toast ===== */
+    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+
+    .empty-state h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .hover-preview {
+      display: none;
+      position: fixed;
+      z-index: 500;
+      pointer-events: none;
+      max-width: 400px;
+      max-height: 400px;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(20, 46, 46, 0.35);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      padding: 4px;
+    }
+
+    .hover-preview.active { display: block; animation: previewFadeIn 0.15s ease; }
+
+    .hover-preview img {
+      max-width: 100%;
+      max-height: 392px;
+      object-fit: contain;
+      border-radius: 6px;
+      display: block;
+    }
+
+    @keyframes previewFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(20, 46, 46, 0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 20px 80px rgba(20, 46, 46, 0.45);
+      animation: lightboxFadeIn 0.2s ease;
+    }
+
+    @keyframes lightboxFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 2rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .lightbox-close:hover { color: var(--text-primary); }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--success);
+      color: var(--bg-primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @media (max-width: 1000px) {
+      h1 { font-size: 2.5rem; }
+      .style-table th:nth-child(5),
+      .style-table td:nth-child(5) { display: none; }
+      .prompt-cell { max-width: 250px; }
+      .week-grid { grid-template-columns: repeat(7, minmax(90px, 1fr)); overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Painel <span>Inside Out</span></h1>
+      <p class="subtitle" id="subtitle">Estilos, produtos e grid editorial num só lugar.</p>
+    </header>
+
+    <div class="topbar">
+      <div class="tabs" id="tabs">
+        <button class="tab-btn" data-tab="styles">Estilos</button>
+        <button class="tab-btn" data-tab="products">Produtos</button>
+        <button class="tab-btn" data-tab="grid">Grid</button>
+      </div>
+      <div class="brand-control" id="brand-control">
+        <label for="brand-select">Marca</label>
+        <select class="brand-select" id="brand-select"></select>
+      </div>
+    </div>
+
+    <!-- ===== Painel: Estilos ===== -->
+    <section class="panel" id="tab-styles">
+      <div class="filters">
+        <div class="category-filters" id="category-filters">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="Produto">Produto</button>
+          <button class="filter-btn" data-filter="Campanha">Campanha</button>
+          <button class="filter-btn" data-filter="Pessoas">Pessoas</button>
+          <button class="filter-btn" data-filter="Editorial">Editorial</button>
+          <button class="filter-btn" data-filter="Evento">Evento</button>
+          <button class="filter-btn" data-filter="Imprensa">Imprensa</button>
+        </div>
+        <div class="tag-filters" id="tag-filters"></div>
+      </div>
+
+      <table class="style-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Prévia</th>
+            <th>Estilo</th>
+            <th>Categoria</th>
+            <th>Prompt (clique para copiar)</th>
+            <th>Indicado para</th>
+          </tr>
+        </thead>
+        <tbody id="styles-body"></tbody>
+      </table>
+      <div class="empty-state" id="styles-empty" style="display: none;">
+        <h2>Nenhum estilo neste filtro</h2>
+        <p>Tente outra categoria ou adicione novos estilos à biblioteca.</p>
+      </div>
+    </section>
+
+    <!-- ===== Painel: Produtos ===== -->
+    <section class="panel" id="tab-products">
+      <div id="products-body"></div>
+      <div class="empty-state" id="products-empty" style="display: none;">
+        <h2>Catálogo vazio</h2>
+        <p>Adicione uma marca e produtos para começar.</p>
+      </div>
+    </section>
+
+    <!-- ===== Painel: Grid editorial ===== -->
+    <section class="panel" id="tab-grid">
+      <div class="filters row" id="grid-month-filters"></div>
+      <div id="grid-body"></div>
+      <div class="empty-state" id="grid-empty" style="display: none;">
+        <h2>Nenhum grid ainda</h2>
+        <p>Peça ao Claude para gerar um grid ou ingerir uma planilha histórica.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">Copiado</div>
+
+  <!-- Lightbox (singleton) -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img src="" alt="Visualização ampliada" id="lightbox-img">
+  </div>
+
+  <!-- Hover Preview (singleton) -->
+  <div class="hover-preview" id="hover-preview">
+    <img src="" alt="Prévia" id="hover-preview-img">
+  </div>
+
+  <script>
+    // ===========================================
+    // CANONICAL CATEGORIES AND TAGS (espelha style_library.py)
+    // ===========================================
+    const CATEGORIES = ["Produto", "Campanha", "Pessoas", "Editorial", "Evento", "Imprensa"];
+    const CANONICAL_TAGS = {
+      "Produto": ["packshot", "flat-lay", "still-life", "em-cenario", "macro-textura", "lancamento", "gerado-por-ia"],
+      "Campanha": ["sazonal", "data-comemorativa", "key-visual", "teaser", "oferta", "flat-lay", "feito-a-mao", "gerado-por-ia"],
+      "Pessoas": ["beauty", "retrato", "lifestyle", "close-pele", "kol-influencer", "diversidade"],
+      "Editorial": ["moodboard", "colagem", "color-story", "capa-editorial", "serie", "flat-lay"],
+      "Evento": ["cobertura", "cenografia", "bastidores", "convite", "press-trip"],
+      "Imprensa": ["clipping", "card-resultado", "citacao", "anuncio-na-midia", "infografico"]
+    };
+
+    // Payload único — injetado por dashboard.render_dashboard.
+    // { styles:[...], catalog:{brands,products}, grids:[...], activeTab, meta:{brands:[{slug,name}]} }
+    const data = /*__DASHBOARD_JSON__*/null || {};
+    const STYLES  = data.styles  || [];
+    const CATALOG = data.catalog || { brands: [], products: [] };
+    const GRIDS   = data.grids   || [];
+    const META    = data.meta    || { brands: [] };
+
+    // --- Construtor de DOM seguro (sem innerHTML de conteúdo dinâmico) ---
+    // Todo dado dinâmico entra como TEXT NODE — zero HTML interpretado.
+    function el(tag, props, children) {
+      const e = document.createElement(tag);
+      if (props) {
+        for (const k in props) {
+          const v = props[k];
+          if (v == null) continue;
+          if (k === 'class') e.className = v;
+          else if (k === 'text') e.textContent = v;
+          else if (k === 'dataset') Object.assign(e.dataset, v);
+          else if (k.slice(0, 2) === 'on' && typeof v === 'function')
+            e.addEventListener(k.slice(2), v);
+          else e.setAttribute(k, v);
+        }
+      }
+      if (children != null) {
+        const arr = Array.isArray(children) ? children : [children];
+        for (const c of arr) {
+          if (c == null) continue;
+          e.append(c.nodeType ? c : document.createTextNode(String(c)));
+        }
+      }
+      return e;
+    }
+
+    // ============ Singletons: lightbox / hover-preview / toast ============
+    const toast = document.getElementById('toast');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.querySelector('.lightbox-close');
+    const hoverPreview = document.getElementById('hover-preview');
+    const hoverPreviewImg = document.getElementById('hover-preview-img');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    lightbox.addEventListener('click', closeLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+    function showHoverPreview(src, e) {
+      hoverPreviewImg.src = src;
+      hoverPreview.classList.add('active');
+      moveHoverPreview(e);
+    }
+    function moveHoverPreview(e) {
+      const vw = window.innerWidth, vh = window.innerHeight;
+      let x = e.clientX + 20;
+      let y = e.clientY - 100;
+      if (x + 420 > vw) x = e.clientX - 420 - 20;
+      if (y < 20) y = 20;
+      else if (y + 420 > vh) y = vh - 420 - 20;
+      hoverPreview.style.left = x + 'px';
+      hoverPreview.style.top = y + 'px';
+    }
+    function hideHoverPreview() { hoverPreview.classList.remove('active'); }
+
+    // ============================ ESTILOS ============================
+    const stylesBody = document.getElementById('styles-body');
+    const stylesEmpty = document.getElementById('styles-empty');
+    const categoryFilters = document.getElementById('category-filters');
+    const tagFiltersContainer = document.getElementById('tag-filters');
+    let styleCat = 'all';
+    let styleTag = null;
+
+    function renderTagFilters() {
+      tagFiltersContainer.replaceChildren();
+      if (styleCat === 'all') { tagFiltersContainer.classList.remove('active'); return; }
+      const tags = CANONICAL_TAGS[styleCat] || [];
+      if (tags.length === 0) { tagFiltersContainer.classList.remove('active'); return; }
+      for (const tag of tags) {
+        tagFiltersContainer.append(el('button', {
+          class: 'tag-filter-btn' + (styleTag === tag ? ' active' : ''),
+          text: tag,
+          onclick: () => {
+            styleTag = (styleTag === tag) ? null : tag;
+            renderTagFilters();
+            renderStyles();
+          }
+        }));
+      }
+      tagFiltersContainer.classList.add('active');
+    }
+
+    // Markdown limitado -> NÓS de DOM (não string HTML). Usa matchAll (sem .exec)
+    // e textContent — zero HTML interpretado a partir de dado dinâmico.
+    function mdInline(text, parent) {
+      const re = /(\*\*|__)([^]+?)\1|(\*|_)([^]+?)\3/g;
+      let last = 0;
+      for (const m of String(text).matchAll(re)) {
+        if (m.index > last) parent.append(document.createTextNode(text.slice(last, m.index)));
+        if (m[2] != null) parent.append(el('strong', null, m[2]));
+        else parent.append(el('em', null, m[4]));
+        last = m.index + m[0].length;
+      }
+      if (last < text.length) parent.append(document.createTextNode(text.slice(last)));
+    }
+
+    function renderMarkdownInto(container, text) {
+      const blocks = String(text).split(/\n\n+/);
+      for (const block of blocks) {
+        const lines = block.split('\n');
+        if (lines[0].match(/^[-•]\s/)) {
+          const ul = el('ul');
+          for (const line of lines) {
+            const li = el('li');
+            mdInline(line.replace(/^[-•]\s+/, ''), li);
+            ul.append(li);
+          }
+          container.append(ul);
+        } else {
+          const p = el('p');
+          const parts = block.split('\n');
+          parts.forEach((part, i) => {
+            mdInline(part, p);
+            if (i < parts.length - 1) p.append(el('br'));
+          });
+          container.append(p);
+        }
+      }
+    }
+
+    function thumbFallback(img) {
+      const d = el('div', { class: 'thumbnail--none' });
+      d.append(document.createTextNode('sem'));
+      d.append(el('br'));
+      d.append(document.createTextNode('preview'));
+      img.replaceWith(d);
+    }
+
+    function styleRow(style) {
+      const tr = el('tr', { dataset: { category: style.category } });
+      const tdIdx = el('td', null,
+        el('span', { class: 'index', text: String(style.id).padStart(2, '0') }));
+      const img = el('img', {
+        class: 'thumbnail', src: style.thumbnail, alt: style.name,
+        onerror: function () { thumbFallback(this); },
+        onclick: function () { openLightbox(this.src); },
+        onmouseenter: function (e) { showHoverPreview(this.src, e); },
+        onmousemove: function (e) { moveHoverPreview(e); },
+        onmouseleave: hideHoverPreview
+      });
+      const tdThumb = el('td', null, img);
+      const nameDiv = el('div', { class: 'style-name', text: style.name });
+      const tagsDiv = el('div', { class: 'style-tags' },
+        (style.tags || []).map(t => el('span', { class: 'tag', text: t })));
+      const tdName = el('td', null, [nameDiv, tagsDiv]);
+      const tdCat = el('td', null,
+        el('span', { class: 'category-badge', text: style.category }));
+      const promptDiv = el('div', {
+        class: 'prompt-text',
+        dataset: { prompt: encodeURIComponent(style.prompt) },
+        onclick: function () { copyPrompt(this); }
+      });
+      renderMarkdownInto(promptDiv, style.prompt);
+      const tdPrompt = el('td', { class: 'prompt-cell' }, promptDiv);
+      const tdUse = el('td', null,
+        el('span', { class: 'example-use', text: style.exampleUse }));
+      tr.append(tdIdx, tdThumb, tdName, tdCat, tdPrompt, tdUse);
+      return tr;
+    }
+
+    function renderStyles() {
+      let filtered = styleCat === 'all'
+        ? STYLES : STYLES.filter(s => s.category === styleCat);
+      if (styleTag) filtered = filtered.filter(s => (s.tags || []).includes(styleTag));
+      stylesBody.replaceChildren();
+      if (filtered.length === 0) { stylesEmpty.style.display = 'block'; return; }
+      stylesEmpty.style.display = 'none';
+      for (const style of filtered) stylesBody.append(styleRow(style));
+    }
+
+    function copyPrompt(elm) {
+      const prompt = decodeURIComponent(elm.dataset.prompt);
+      navigator.clipboard.writeText(prompt).then(() => {
+        elm.classList.add('copied');
+        toast.classList.add('show');
+        setTimeout(() => {
+          elm.classList.remove('copied');
+          toast.classList.remove('show');
+        }, 2000);
+      });
+    }
+
+    categoryFilters.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryFilters.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        styleCat = btn.dataset.filter;
+        styleTag = null;
+        renderTagFilters();
+        renderStyles();
+      });
+    });
+
+    // ============================ PRODUTOS ============================
+    const productsBody = document.getElementById('products-body');
+    const productsEmpty = document.getElementById('products-empty');
+
+    function briefField(label, valueNode) {
+      return el('div', { class: 'brief-field' }, [
+        el('span', { class: 'brief-label', text: label }),
+        valueNode
+      ]);
+    }
+
+    function brandBrief(b) {
+      if (!b) return null;
+      const fields = [];
+      if (b.voice)
+        fields.push(briefField('Tom de voz', el('span', { class: 'brief-value', text: b.voice })));
+      if (b.keyMessages && b.keyMessages.length) {
+        const ul = el('ul');
+        for (const m of b.keyMessages) ul.append(el('li', { text: m }));
+        fields.push(briefField('Mensagens-chave', el('span', { class: 'brief-value' }, ul)));
+      }
+      if (b.audience)
+        fields.push(briefField('Público-alvo', el('span', { class: 'brief-value', text: b.audience })));
+      if (b.paletteHints)
+        fields.push(briefField('Paleta', el('span', { class: 'brief-value', text: b.paletteHints })));
+      if (b.guardrails)
+        fields.push(briefField('Guardrails', el('span', { class: 'brief-value', text: b.guardrails })));
+      if (!fields.length) return null;
+      return el('div', { class: 'brand-brief' }, fields);
+    }
+
+    function productCard(p) {
+      const head = el('div', { class: 'product-head' }, [
+        el('span', { class: 'product-name', text: p.name }),
+        el('span', { class: 'product-id', text: '#' + String(p.id).padStart(2, '0') })
+      ]);
+      const children = [head];
+      if (p.description)
+        children.push(el('div', { class: 'product-desc', text: p.description }));
+      if ((p.tags || []).length)
+        children.push(el('div', { class: 'product-tags' },
+          p.tags.map(t => el('span', { class: 'tag', text: t }))));
+      if ((p.claims || []).length)
+        children.push(el('div', { class: 'claims', text: p.claims.join(' · ') }));
+      const grid = el('div', { class: 'photo-grid' });
+      const photos = p.photos || [];
+      if (photos.length) {
+        for (const src of photos) {
+          grid.append(el('img', {
+            class: 'photo-thumb', src: src, alt: p.name,
+            onerror: function () { this.replaceWith(el('div', { class: 'photo--none', text: 'sem foto' })); },
+            onclick: function () { openLightbox(this.src); },
+            onmouseenter: function (e) { showHoverPreview(this.src, e); },
+            onmousemove: function (e) { moveHoverPreview(e); },
+            onmouseleave: hideHoverPreview
+          }));
+        }
+      } else {
+        grid.append(el('div', { class: 'photo--none', text: 'sem fotos' }));
+      }
+      children.push(grid);
+      return el('div', { class: 'product-card' }, children);
+    }
+
+    function renderProducts() {
+      const brands = (CATALOG.brands || []).slice().sort((a, b) => (a.id || 0) - (b.id || 0));
+      const products = CATALOG.products || [];
+      productsBody.replaceChildren();
+      if (!brands.length && !products.length) {
+        productsEmpty.style.display = 'block';
+        return;
+      }
+      productsEmpty.style.display = 'none';
+      const shown = currentBrand === 'all'
+        ? brands : brands.filter(b => b.slug === currentBrand);
+      if (!shown.length) {
+        productsBody.append(el('div', { class: 'empty-state' },
+          el('p', { text: 'Nenhuma marca para este filtro.' })));
+        return;
+      }
+      for (const b of shown) {
+        const bp = products
+          .filter(p => p.brand === b.slug)
+          .sort((x, y) => (x.id || 0) - (y.id || 0));
+        const block = el('div', { class: 'brand-block' });
+        block.append(el('div', { class: 'brand-head' }, [
+          el('span', { class: 'brand-name', text: b.name }),
+          el('span', { class: 'brand-count', text: bp.length + ' produto(s)' })
+        ]));
+        const brief = brandBrief(b);
+        if (brief) block.append(brief);
+        if (bp.length) {
+          block.append(el('div', { class: 'products' }, bp.map(productCard)));
+        } else {
+          block.append(el('div', { class: 'empty-state' },
+            el('p', { text: 'Nenhum produto nesta marca ainda.' })));
+        }
+        productsBody.append(block);
+      }
+    }
+
+    // ============================ GRID ============================
+    const DOW = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    const gridBody = document.getElementById('grid-body');
+    const gridEmpty = document.getElementById('grid-empty');
+    const gridMonthFilters = document.getElementById('grid-month-filters');
+    let currentMonth = 'all';
+
+    function abClass(approach) {
+      const a = (approach || '').toUpperCase();
+      if (a.indexOf('LAN') === 0) return 'badge--lancamento';
+      if (a.indexOf('FARMA') === 0) return 'badge--farma';
+      if (a.indexOf('EDUC') === 0) return 'badge--educacional';
+      if (a.indexOf('DATA') === 0) return 'badge--data';
+      if (a.indexOf('TREND') === 0) return 'badge--trend';
+      if (a.indexOf('PRODUTO') === 0) return 'badge--produto';
+      return 'badge--none';
+    }
+
+    function letteringSnippet(lettering) {
+      if (!lettering || typeof lettering !== 'object') return null;
+      const order = ['topo', 'centro', 'bolsa'];
+      for (const k of order) if (lettering[k]) return lettering[k];
+      if (Array.isArray(lettering.telas) && lettering.telas.length)
+        return lettering.telas.join(' · ');
+      if (lettering.raw) return String(lettering.raw).slice(0, 90);
+      return null;
+    }
+
+    function dayCell(d) {
+      const cell = el('div', { class: 'day' });
+      const dt = new Date(d.date + 'T00:00:00');
+      const num = isNaN(dt) ? '' : String(dt.getUTCDate());
+      cell.append(el('div', { class: 'day-num' }, [
+        el('span', { text: num }),
+        el('span', { text: d.dow || '' })
+      ]));
+      if (d.approach)
+        cell.append(el('span', { class: 'badge ' + abClass(d.approach), text: d.approach }));
+      if (d.subject) cell.append(el('div', { class: 'day-subject', text: d.subject }));
+      if (d.product) cell.append(el('div', { class: 'day-product', text: d.product }));
+      if (d.channel) cell.append(el('div', { class: 'day-channel', text: d.channel }));
+      if (d.mockup)
+        cell.append(el('img', {
+          class: 'day-mockup', src: d.mockup, alt: d.subject || 'mockup',
+          onerror: function () { this.remove(); }
+        }));
+      const snip = letteringSnippet(d.lettering);
+      if (snip) cell.append(el('div', { class: 'day-lettering', text: snip }));
+      return cell;
+    }
+
+    function weekRow(week) {
+      const wrap = el('div', { class: 'week' });
+      wrap.append(el('div', { class: 'week-label', text: 'Semana ' + (week.n || '') }));
+      const grid = el('div', { class: 'week-grid' });
+      for (const name of DOW) grid.append(el('div', { class: 'dow-head', text: name }));
+      const slots = [null, null, null, null, null, null, null];
+      for (const d of (week.days || [])) {
+        const dt = new Date(d.date + 'T00:00:00');
+        const idx = isNaN(dt) ? DOW.indexOf(d.dow) : (dt.getUTCDay());
+        if (idx >= 0 && idx < 7) slots[idx] = d;
+      }
+      for (const s of slots)
+        grid.append(s ? dayCell(s) : el('div', { class: 'day day--empty' }));
+      wrap.append(grid);
+      return wrap;
+    }
+
+    function gridBlock(g) {
+      const block = el('div', { class: 'grid-block' });
+      block.append(el('div', { class: 'grid-head' }, [
+        el('span', { class: 'grid-name', text: g.brand }),
+        el('span', { class: 'grid-meta', text: g.month })
+      ]));
+      const fp = g.focusProducts || [];
+      if (fp.length) {
+        block.append(el('div', { class: 'focus-row' }, [
+          el('span', { text: 'Foco: ' }),
+          ...fp.map(p => el('span', { class: 'focus-tag', text: p }))
+        ]));
+      }
+      for (const w of (g.weeks || [])) block.append(weekRow(w));
+      return block;
+    }
+
+    function renderGrid() {
+      const all = (GRIDS || []).slice().sort((a, b) =>
+        (a.brand + a.month).localeCompare(b.brand + b.month));
+      // filtra por marca global (Produtos/Grid compartilham o seletor do topo)
+      const byBrand = currentBrand === 'all'
+        ? all : all.filter(g => g.brand === currentBrand);
+
+      // sub-filtro local de mês — meses disponíveis para a marca atual
+      const months = Array.from(new Set(byBrand.map(g => g.month))).sort();
+      if (currentMonth !== 'all' && !months.includes(currentMonth)) currentMonth = 'all';
+      gridMonthFilters.replaceChildren();
+      if (months.length > 1) {
+        gridMonthFilters.append(el('button', {
+          class: 'filter-btn' + (currentMonth === 'all' ? ' active' : ''),
+          text: 'Todos os meses',
+          onclick: () => { currentMonth = 'all'; renderGrid(); }
+        }));
+        for (const m of months) {
+          gridMonthFilters.append(el('button', {
+            class: 'filter-btn' + (currentMonth === m ? ' active' : ''),
+            text: m,
+            onclick: () => { currentMonth = m; renderGrid(); }
+          }));
+        }
+      }
+
+      const shown = currentMonth === 'all'
+        ? byBrand : byBrand.filter(g => g.month === currentMonth);
+
+      gridBody.replaceChildren();
+      if (!shown.length) { gridEmpty.style.display = 'block'; return; }
+      gridEmpty.style.display = 'none';
+      for (const g of shown) gridBody.append(gridBlock(g));
+    }
+
+    // ===================== Navegação (abas + marca via hash) =====================
+    const TABS = ['styles', 'products', 'grid'];
+    const SUBTITLES = {
+      styles: 'Biblioteca de estilos reutilizáveis — "como a peça parece". Clique no prompt para copiar.',
+      products: 'Produtos por marca — fotos, tom de voz, mensagens-chave e público.',
+      grid: 'Calendário editorial por marca — produto, abordagem, lettering e mockup.'
+    };
+    let currentTab = 'styles';
+    let currentBrand = 'all';
+
+    const tabsEl = document.getElementById('tabs');
+    const brandControl = document.getElementById('brand-control');
+    const brandSelect = document.getElementById('brand-select');
+    const subtitleEl = document.getElementById('subtitle');
+    const panels = {
+      styles: document.getElementById('tab-styles'),
+      products: document.getElementById('tab-products'),
+      grid: document.getElementById('tab-grid')
+    };
+    let stylesRendered = false;
+
+    function populateBrandSelect() {
+      brandSelect.replaceChildren();
+      brandSelect.append(el('option', { value: 'all', text: 'Todas as marcas' }));
+      for (const b of (META.brands || []))
+        brandSelect.append(el('option', { value: b.slug, text: b.name || b.slug }));
+      brandSelect.value = currentBrand;
+    }
+
+    function parseHash() {
+      const raw = (location.hash || '').replace(/^#/, '');
+      if (!raw) return;
+      const [tab, brand] = raw.split('/');
+      if (TABS.includes(tab)) currentTab = tab;
+      if (brand) currentBrand = decodeURIComponent(brand);
+    }
+
+    function syncHash() {
+      const base = '#' + currentTab;
+      const wantsBrand = currentTab !== 'styles' && currentBrand !== 'all';
+      const next = wantsBrand ? base + '/' + encodeURIComponent(currentBrand) : base;
+      if (location.hash !== next) {
+        // evita re-trigger do hashchange -> loop
+        history.replaceState(null, '', next);
+      }
+    }
+
+    function applyState() {
+      for (const t of TABS) panels[t].classList.toggle('active', t === currentTab);
+      tabsEl.querySelectorAll('.tab-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.tab === currentTab));
+      subtitleEl.textContent = SUBTITLES[currentTab] || '';
+      // seletor de marca só faz sentido em Produtos/Grid (estilo é cross-marca)
+      brandControl.classList.toggle('hidden', currentTab === 'styles');
+      brandSelect.value = currentBrand;
+
+      if (currentTab === 'styles') {
+        if (!stylesRendered) { renderTagFilters(); renderStyles(); stylesRendered = true; }
+      } else if (currentTab === 'products') {
+        renderProducts();
+      } else if (currentTab === 'grid') {
+        renderGrid();
+      }
+      syncHash();
+    }
+
+    tabsEl.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => { currentTab = btn.dataset.tab; applyState(); });
+    });
+
+    brandSelect.addEventListener('change', () => {
+      currentBrand = brandSelect.value;
+      currentMonth = 'all';
+      applyState();
+    });
+
+    window.addEventListener('hashchange', () => { parseHash(); applyState(); });
+
+    // ===================== Boot =====================
+    currentTab = TABS.includes(data.activeTab) ? data.activeTab : 'styles';
+    parseHash();                 // hash do usuário sobrepõe o activeTab do payload
+    populateBrandSelect();
+    applyState();
+  </script>
+</body>
+</html>

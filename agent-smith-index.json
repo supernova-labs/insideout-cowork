@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-20T14:00:00Z",
+  "lastUpdated": "2026-05-29T19:00:00Z",
 
   "components": {
     "skills": [
@@ -51,7 +51,8 @@
         "supportingFiles": [
           "plugins/io-social-media/core/style_library.py",
           "plugins/io-social-media/core/_libcommon.py",
-          "plugins/io-social-media/core/gallery-template.html",
+          "plugins/io-social-media/core/dashboard.py",
+          "plugins/io-social-media/core/dashboard-template.html",
           "plugins/io-social-media/core/styles.seed.json",
           "plugins/io-social-media/core/get_style.py",
           "plugins/io-social-media/core/style_extract.py"
@@ -66,7 +67,8 @@
         "supportingFiles": [
           "plugins/io-social-media/core/product_library.py",
           "plugins/io-social-media/core/_libcommon.py",
-          "plugins/io-social-media/core/product-catalog-template.html",
+          "plugins/io-social-media/core/dashboard.py",
+          "plugins/io-social-media/core/dashboard-template.html",
           "plugins/io-social-media/core/products.seed.json",
           "plugins/io-social-media/core/get_product.py"
         ],
@@ -80,7 +82,8 @@
         "supportingFiles": [
           "plugins/io-social-media/core/grid_library.py",
           "plugins/io-social-media/core/_libcommon.py",
-          "plugins/io-social-media/core/grid-template.html",
+          "plugins/io-social-media/core/dashboard.py",
+          "plugins/io-social-media/core/dashboard-template.html",
           "plugins/io-social-media/core/grids.seed.json",
           "plugins/io-social-media/core/rules-seed/clinique.md",
           "plugins/io-social-media/core/calendar-seed/2026.md",
@@ -264,6 +267,21 @@
       "from": "skills/generate-grid",
       "to": "skills/generate-copy",
       "type": "references"
+    },
+    {
+      "from": "plugins/io-social-media/core/dashboard.py",
+      "to": "plugins/io-social-media/core/style_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "plugins/io-social-media/core/dashboard.py",
+      "to": "plugins/io-social-media/core/product_library.py",
+      "type": "uses"
+    },
+    {
+      "from": "plugins/io-social-media/core/dashboard.py",
+      "to": "plugins/io-social-media/core/grid_library.py",
+      "type": "uses"
     }
   ],
 
@@ -271,7 +289,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.10.0",
+      "version": "0.11.0",
       "componentCounts": {
         "skills": 7,
         "agents": 0,

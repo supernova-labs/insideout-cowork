@@ -36,8 +36,6 @@ ENV_OVERRIDE = "PRODUCT_CATALOG_DIR"
 _CORE_DIR = lc.CORE_DIR
 _SEED_FILE = _CORE_DIR / "products.seed.json"
 _SEED_PHOTOS_DIR = _CORE_DIR / "product-seed-photos"
-_TEMPLATE_FILE = _CORE_DIR / "product-catalog-template.html"
-_PLACEHOLDER = "/*__CATALOG_JSON__*/null"
 
 
 class ProductCatalogError(lc.LibCommonError):
@@ -719,28 +717,17 @@ def remove_photo(product_ref, photo: str, *,
 # --------------------------------------------------------------------------- #
 # render
 # --------------------------------------------------------------------------- #
-def render_catalog(lib_dir: Path | None = None,
-                   template_path: Path | None = None) -> Path:
-    """
-    Lê o template, injeta {brands, products} (workspace ou seed) e escreve
-    `<lib_dir>/product-catalog.html`. Sempre derivado — nunca lido como dado.
-    As fotos são referenciadas relativas a este arquivo (vivem ao lado, em
-    `photos/`), então os previews carregam ao abrir no navegador.
-    """
+def render_catalog(lib_dir: Path | None = None) -> Path:
+    """Regenera o painel unificado da InsideOut (`insideout-painel.html`) com a
+    aba Produtos. O catálogo virou uma aba do painel único; este wrapper preserva
+    o nome histórico que o CRUD chama. As fotos são reescritas relativas ao painel
+    (`product-catalog/photos/...`) pelo orquestrador. Sempre derivado."""
     lib_dir = _ensure_ready(lib_dir)
-    brands = sorted(_resolve(lib_dir, "brands")[0], key=lambda b: b.get("id", 0))
-    products = sorted(_resolve(lib_dir, "products")[0],
-                      key=lambda p: p.get("id", 0))
-    payload = json.dumps({"brands": brands, "products": products},
-                         ensure_ascii=False)
-    tpl = Path(template_path or _TEMPLATE_FILE).read_text(encoding="utf-8")
-    injected = lc.inject_placeholder(tpl, _PLACEHOLDER, payload,
-                                     ProductCatalogError)
-    _, _, _, _, html_path = _subdirs(lib_dir)
-    lc.atomic_write(html_path, injected)
-    return html_path
+    import dashboard  # import tardio: quebra o ciclo dashboard <-> libs
+    return dashboard.render_dashboard(active_tab="products", product_dir=lib_dir)
 
 
 def open_catalog(lib_dir: Path | None = None) -> Path:
-    """Regenera e devolve o caminho do HTML (a skill instrui o usuário a abrir)."""
+    """Regenera e devolve o caminho do painel (a skill instrui a abrir na aba
+    Produtos via `#products`)."""
     return render_catalog(lib_dir)
