@@ -333,7 +333,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "componentCounts": {
         "skills": 8,
         "agents": 0,
