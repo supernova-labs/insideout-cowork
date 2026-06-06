@@ -667,6 +667,48 @@
       pointer-events: none;
     }
 
+    /* Dia clicável → abre o modal de detalhe com o conteúdo completo. */
+    .day--clickable { cursor: pointer; }
+
+    /* ===== Modal de detalhe do dia (conteúdo completo, sem corte) ===== */
+    .day-modal {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(20, 46, 46, 0.92);
+      z-index: 1000;
+      justify-content: center; align-items: center;
+      padding: 2rem;
+    }
+    .day-modal.active { display: flex; animation: lightboxFadeIn 0.2s ease; }
+    .day-modal__card {
+      position: relative;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%; max-width: 620px;
+      max-height: 88vh; overflow-y: auto;
+      padding: 2rem 2.25rem;
+      box-shadow: 0 20px 80px rgba(20, 46, 46, 0.45);
+    }
+    .day-modal__close {
+      position: absolute; top: 0.9rem; right: 1.1rem;
+      font-size: 1.6rem; line-height: 1; cursor: pointer;
+      font-family: 'JetBrains Mono', monospace; color: var(--text-muted);
+    }
+    .day-modal__close:hover { color: var(--text-primary); }
+    .dm-date { font-family: 'Instrument Serif', serif; font-size: 1.7rem; color: var(--text-primary); }
+    .dm-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0.5rem 0 0.75rem; }
+    .dm-channel { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .dm-product { font-style: italic; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .dm-subject { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; margin-bottom: 1rem; }
+    .dm-media { width: 100%; max-height: 56vh; object-fit: contain; display: block; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-secondary); margin-bottom: 1rem; }
+    .dm-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 1rem 0 0.35rem; }
+    .dm-copy { font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); white-space: pre-wrap; }
+    .dm-lettering { font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary); margin: 0.2rem 0 0 1.1rem; }
+    .dm-lettering li { margin: 0.2rem 0; }
+    .dm-lettering strong { color: var(--text-primary); }
+    .dm-foot { font-size: 0.8rem; color: var(--text-muted); font-style: italic; border-top: 1px dashed var(--border); margin-top: 1rem; padding-top: 0.75rem; }
+
     /* ===== Compartilhado: empty-state / lightbox / hover / toast ===== */
     .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
 
@@ -855,7 +897,14 @@
   <div class="lightbox" id="lightbox">
     <span class="lightbox-close">&times;</span>
     <img src="" alt="Visualização ampliada" id="lightbox-img">
-    <video id="lightbox-video" controls playsinline style="display: none; max-width: 90%; max-height: 90%; border-radius: 8px;"></video>
+  </div>
+
+  <!-- Modal de detalhe do dia (singleton) — conteúdo completo, sem corte -->
+  <div class="day-modal" id="day-modal">
+    <div class="day-modal__card" id="day-modal-card">
+      <span class="day-modal__close" id="day-modal-close">&times;</span>
+      <div id="day-modal-body"></div>
+    </div>
   </div>
 
   <!-- Hover Preview (singleton) -->
@@ -915,41 +964,88 @@
     const toast = document.getElementById('toast');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxVideo = document.getElementById('lightbox-video');
     const lightboxClose = document.querySelector('.lightbox-close');
     const hoverPreview = document.getElementById('hover-preview');
     const hoverPreviewImg = document.getElementById('hover-preview-img');
 
     function openLightbox(src) {
-      lightboxVideo.pause();
-      lightboxVideo.style.display = 'none';
-      lightboxImg.style.display = '';
       lightboxImg.src = src;
       lightbox.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
-    function openVideoLightbox(src) {
-      lightboxImg.style.display = 'none';
-      lightboxImg.src = '';
-      lightboxVideo.src = src;
-      lightboxVideo.style.display = '';
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      const p = lightboxVideo.play();
-      if (p && p.catch) p.catch(() => {});  // autoplay pode ser bloqueado; controles ficam
-    }
     function closeLightbox() {
       lightbox.classList.remove('active');
       document.body.style.overflow = '';
-      lightboxVideo.pause();
-      lightboxVideo.removeAttribute('src');
-      lightboxVideo.load();
-      lightboxImg.src = '';
     }
     lightbox.addEventListener('click', closeLightbox);
-    lightboxVideo.addEventListener('click', (e) => e.stopPropagation());  // usar controles sem fechar
     lightboxClose.addEventListener('click', closeLightbox);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+    // ---- Modal de detalhe do dia (conteúdo completo, sem corte) ----
+    const dayModal = document.getElementById('day-modal');
+    const dayModalBody = document.getElementById('day-modal-body');
+
+    function fmtDayDate(iso) {
+      const dt = new Date(iso + 'T00:00:00');
+      if (isNaN(dt)) return iso || '';
+      const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+      return dt.getUTCDate() + ' de ' + meses[dt.getUTCMonth()] + ' · ' + dias[dt.getUTCDay()];
+    }
+    function letteringPairs(lettering) {
+      if (!lettering || typeof lettering !== 'object') return [];
+      const out = [];
+      for (const k of ['topo', 'centro', 'bolsa']) if (lettering[k]) out.push([k, lettering[k]]);
+      if (Array.isArray(lettering.telas)) lettering.telas.forEach((t, i) => out.push(['tela ' + (i + 1), t]));
+      for (const k in lettering) {
+        if (['topo', 'centro', 'bolsa', 'telas', 'raw'].includes(k)) continue;
+        if (typeof lettering[k] === 'string' && lettering[k]) out.push([k, lettering[k]]);
+      }
+      if (!out.length && lettering.raw) out.push(['', String(lettering.raw)]);
+      return out;
+    }
+    function openDayModal(d) {
+      dayModalBody.replaceChildren();
+      dayModalBody.append(el('div', { class: 'dm-date', text: fmtDayDate(d.date) }));
+      const meta = el('div', { class: 'dm-meta' });
+      if (d.approach) meta.append(el('span', { class: 'badge ' + abClass(d.approach), text: d.approach }));
+      if (d.channel) meta.append(el('span', { class: 'dm-channel', text: d.channel }));
+      dayModalBody.append(meta);
+      if (d.product) dayModalBody.append(el('div', { class: 'dm-product', text: d.product }));
+      if (d.subject) dayModalBody.append(el('div', { class: 'dm-subject', text: d.subject }));
+      if (d.video)
+        dayModalBody.append(el('video', { class: 'dm-media', src: d.video, controls: '', playsinline: '', preload: 'metadata' }));
+      else if (d.mockup)
+        dayModalBody.append(el('img', { class: 'dm-media', src: d.mockup, alt: d.subject || '' }));
+      if (d.copy) {
+        dayModalBody.append(el('div', { class: 'dm-section-label', text: 'Legenda' }));
+        dayModalBody.append(el('div', { class: 'dm-copy', text: d.copy }));
+      }
+      const lp = letteringPairs(d.lettering);
+      if (lp.length) {
+        dayModalBody.append(el('div', { class: 'dm-section-label', text: 'Lettering' }));
+        const ul = el('ul', { class: 'dm-lettering' });
+        for (const [k, v] of lp)
+          ul.append(el('li', null, k ? [el('strong', null, k + ': '), v] : v));
+        dayModalBody.append(ul);
+      }
+      if (d.rationale) dayModalBody.append(el('div', { class: 'dm-foot', text: d.rationale }));
+      dayModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDayModal() {
+      dayModal.classList.remove('active');
+      document.body.style.overflow = '';
+      const v = dayModalBody.querySelector('video');
+      if (v) v.pause();
+      dayModalBody.replaceChildren();
+    }
+    dayModal.addEventListener('click', closeDayModal);
+    document.getElementById('day-modal-card').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('day-modal-close').addEventListener('click', closeDayModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeLightbox(); closeDayModal(); }
+    });
 
     function showHoverPreview(src, e) {
       hoverPreviewImg.src = src;
@@ -1255,7 +1351,7 @@
       if (d.product) cell.append(el('div', { class: 'day-product', text: d.product }));
       if (d.channel) cell.append(el('div', { class: 'day-channel', text: d.channel }));
       if (d.video) {
-        // vídeo: 1º frame como pôster + selo ▶; clique abre e toca no lightbox
+        // vídeo: 1º frame como pôster + selo ▶ (o clique no dia abre o detalhe)
         const vwrap = el('div', { class: 'day-video' });
         const vid = el('video', {
           class: 'day-mockup', src: d.video + '#t=0.1', preload: 'metadata',
@@ -1263,7 +1359,6 @@
           onerror: function () { vwrap.remove(); }
         });
         vwrap.append(vid, el('div', { class: 'day-video__play', text: '▶' }));
-        vwrap.addEventListener('click', function (e) { e.stopPropagation(); openVideoLightbox(d.video); });
         cell.append(vwrap);
       } else if (d.mockup) {
         cell.append(el('img', {
@@ -1278,6 +1373,13 @@
           class: 'day-copy' + (snip ? '' : ' day-copy--top'),
           title: d.copy, text: d.copy
         }));
+      // dia com conteúdo é clicável → abre o detalhe completo (copy/lettering sem corte)
+      const hasContent = d.approach || d.subject || d.product || d.mockup ||
+                         d.video || d.copy || snip;
+      if (hasContent) {
+        cell.classList.add('day--clickable');
+        cell.addEventListener('click', function () { openDayModal(d); });
+      }
       return cell;
     }
 
