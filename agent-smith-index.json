@@ -18,10 +18,11 @@
       {
         "name": "analyze-briefing",
         "path": "plugins/io-social-media/skills/analyze-briefing/SKILL.md",
-        "description": "Analisa um briefing de cliente seguindo o framework InsideOut PR; opcionalmente popula/atualiza a marca no catálogo a partir dos sinais de identidade do briefing",
+        "description": "Analisa um briefing de cliente seguindo o framework InsideOut PR; valida o briefing contra o escopo contratado do cliente (red flags fora de escopo) e opcionalmente popula/atualiza a marca no catálogo a partir dos sinais de identidade do briefing",
         "supportingFiles": [
           "plugins/io-social-media/core/product_library.py",
-          "plugins/io-social-media/core/_libcommon.py"
+          "plugins/io-social-media/core/_libcommon.py",
+          "plugins/io-social-media/skills/analyze-briefing/scopes/clinique.md"
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["briefing", "analysis", "brand"]
@@ -321,7 +322,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.12.1",
+      "version": "0.13.0",
       "componentCounts": {
         "skills": 8,
         "agents": 0,

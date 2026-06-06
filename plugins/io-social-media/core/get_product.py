@@ -67,8 +67,12 @@ def _print_full(prod):
             for m in brief["keyMessages"]:
                 print(f"  - {m}")
         print(f"Público: {brief.get('audience', 'N/A')}")
+        if brief.get("positioning"):
+            print(f"Posicionamento: {brief['positioning']}")
         if brief.get("paletteHints"):
             print(f"Paleta: {brief['paletteHints']}")
+        if brief.get("brandGuide"):
+            print(f"Guia de identidade visual: {brief['brandGuide']}")
         if brief.get("guardrails"):
             print(f"Guardrails: {brief['guardrails']}")
 

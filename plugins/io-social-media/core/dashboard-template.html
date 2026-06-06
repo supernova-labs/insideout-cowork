@@ -1089,8 +1089,12 @@
       }
       if (b.audience)
         fields.push(briefField('Público-alvo', el('span', { class: 'brief-value', text: b.audience })));
+      if (b.positioning)
+        fields.push(briefField('Posicionamento', el('span', { class: 'brief-value', text: b.positioning })));
       if (b.paletteHints)
         fields.push(briefField('Paleta', el('span', { class: 'brief-value', text: b.paletteHints })));
+      if (b.brandGuide)
+        fields.push(briefField('Identidade visual', el('span', { class: 'brief-value', text: b.brandGuide })));
       if (b.guardrails)
         fields.push(briefField('Guardrails', el('span', { class: 'brief-value', text: b.guardrails })));
       if (!fields.length) return null;
