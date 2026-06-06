@@ -1,6 +1,7 @@
 ---
 name: analyze-briefing
 description: Analisa um briefing de cliente seguindo o framework InsideOut PR
+allowed-tools: Bash, Read, Write
 ---
 
 Você é um analista de briefings da InsideOut PR. Use a skill `about-insideout` como base de conhecimento sobre a empresa.
@@ -110,6 +111,8 @@ Tudo que for responsabilidade da InsideOut:
 - Riscos de timing
 - Recursos necessários
 - Janela de aprovação do cliente para cada entregável produzido pela Inside Out — todo conteúdo criado/produzido precisa de aprovação do cliente antes de veiculação. Mapear se o cronograma comporta essa janela
+
+**Validação contra o escopo contratado (obrigatório).** Antes de fechar os pontos de atenção, leia o escopo do cliente em `${CLAUDE_PLUGIN_ROOT}/skills/analyze-briefing/scopes/<marca>.md` (ex.: `scopes/clinique.md`) e **bata o briefing contra ele**. Para cada pedido do briefing que cair **fora do escopo contratado** (ex.: assessoria de imprensa, marketing de influência ou produção de evento de grande porte quando o contrato da marca é só social/digital), levante uma **red flag** explícita: "o pedido **X** parece fora do escopo contratado da <marca> — validar comercial/cobrança antes de executar". Idem para **estouro de cota** (mais telas/saídas/vídeos do que o contrato prevê). Se não existir `scopes/<marca>.md`, avise que não há escopo cadastrado para validar e siga. (Lembrete do tom: fale em "fora do contrato", não em "arquivo/escopo .md".)
 
 ### Passo 4 — (opcional) Salvar a marca no catálogo de produtos
 

@@ -325,9 +325,12 @@ _BRIEFING_MAP = {
     "audience": "audience",
     "palette_hints": "paletteHints",
     "guardrails": "guardrails",
+    "positioning": "positioning",
 }
+# brandGuide NÃO entra no briefing mensal — vem do brand-guidelines (set via
+# update_brand). positioning pode vir do contexto do cliente OU do briefing.
 _BRAND_OPTIONAL = ("voice", "keyMessages", "audience",
-                   "paletteHints", "guardrails")
+                   "paletteHints", "guardrails", "positioning", "brandGuide")
 
 
 def _norm_messages(v) -> list[str]:
@@ -388,6 +391,7 @@ def brand_from_briefing(briefing: dict, *, lib_dir: Path | None = None,
             audience=mapped.get("audience", ""),
             palette_hints=mapped.get("paletteHints", ""),
             guardrails=mapped.get("guardrails", ""),
+            positioning=mapped.get("positioning", ""),
             lib_dir=lib_dir)
         action = "created"
     else:
@@ -479,7 +483,11 @@ def compose_generation_brief(style: dict, product: dict,
         f"**Marca (tom e restrições — NÃO inventar copy):**\n"
         f"- Tom de voz: {brand.get('voice', '—')}\n"
         f"- Público-alvo: {brand.get('audience', '—')}\n"
+        f"- Posicionamento (porquê/ancoragem da marca — orienta mood e "
+        f"intenção, não vira texto): {brand.get('positioning') or '—'}\n"
         f"- Paleta/luz: {brand.get('paletteHints', '—')}\n"
+        f"- Guia de identidade visual (paleta, fontes, princípios de composição "
+        f"— RESPEITAR como diretriz visual): {brand.get('brandGuide') or '—'}\n"
         f"- Mensagens-chave (só para orientar mood/composição; NÃO escrever "
         f"como texto na imagem salvo pedido explícito): {msgs}\n"
         f"- Guardrails (restrições rígidas): "
@@ -510,8 +518,13 @@ def compose_generation_brief(style: dict, product: dict,
 # --------------------------------------------------------------------------- #
 def add_brand(name: str, *, voice: str = "", key_messages: list[str] | None = None,
               audience: str = "", palette_hints: str = "", guardrails: str = "",
+              positioning: str = "", brand_guide: str = "",
               lib_dir: Path | None = None) -> dict:
-    """Cria uma marca. Slug único, id monotônico, escrita atômica."""
+    """Cria uma marca. Slug único, id monotônico, escrita atômica.
+
+    `positioning` (contexto do cliente — por que a marca existe, ancoragem) e
+    `brand_guide` (identidade visual: paleta, fontes, princípios, tom) alimentam
+    a geração via compose_generation_brief."""
     lib_dir = _ensure_ready(lib_dir)
     brands_dir, *_ = _subdirs(lib_dir)
     slug = lc.unique_slug(brands_dir, slugify(name))
@@ -526,6 +539,8 @@ def add_brand(name: str, *, voice: str = "", key_messages: list[str] | None = No
         "audience": audience,
         "paletteHints": palette_hints,
         "guardrails": guardrails,
+        "positioning": positioning,
+        "brandGuide": brand_guide,
         "createdAt": ts,
         "updatedAt": ts,
     }
