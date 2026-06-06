@@ -10,6 +10,8 @@ disable-model-invocation: false
 
 Cria e mantém a biblioteca de estilos visuais reutilizáveis do cliente. Cada estilo é um prompt de imagem nomeado, com categoria, tags e thumbnail. A skill `image-generation` consome esta biblioteca ("gere usando o estilo #N").
 
+> **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de estilo, visual e referência; **nunca** de implementação (HTML, JSON, caminho, "renderizar", encoding). Resolva erros nos bastidores e relate só o essencial.
+
 ## Onde rodar (crítico)
 
 O diretório do plugin (`${CLAUDE_PLUGIN_ROOT}`) é **read-only e efêmero por sessão** no Cowork. A biblioteca **viva** do cliente vive na **pasta de trabalho**, não no plugin. Nunca faça `cd` para o `core/`; importe via `sys.path` com cwd = pasta de trabalho.

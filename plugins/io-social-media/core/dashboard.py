@@ -76,6 +76,38 @@ def _reprefix(path: str | None, prefix: str) -> str | None:
     return f"{prefix}/{p}" if prefix not in ("", ".") else p
 
 
+def _resolve_mockup(path: str | None, gdir: Path, home: Path) -> str | None:
+    """Resolve o caminho do mockup pro ARQUIVO real e devolve-o relativo ao home
+    do painel (com '/'). Tolerante à origem do caminho — o `mockup` de um post
+    pode ter vindo do fluxo canônico (relativo a grids/: 'mockups/...'), de um
+    caminho visto da raiz do workspace ('grids/mockups/...'), de uma imagem
+    ad-hoc da image-generation ('outputs/...'), ou absoluto. URLs/data ficam
+    intactas. Conserta de uma vez o sumiço (caminho que não resolve) e a
+    duplicação 'grids/grids/...' que o prefixo cego do _reprefix gerava.
+
+    Workspace = FS normal, então `.is_file()`/relpath são confiáveis aqui (a
+    disciplina UWP de nunca confiar em stat vale só pro diretório do plugin)."""
+    if not path:
+        return path
+    p = str(path).replace("\\", "/")
+    if p.startswith(("http://", "https://", "data:")):
+        return p
+    pp = Path(p)
+    if pp.is_absolute() or (len(p) > 1 and p[1] == ":"):
+        candidates = [pp]
+    else:
+        candidates = [Path(gdir) / p,   # canônico: relativo a grids/
+                      Path(home) / p]   # relativo ao workspace (grids/..., outputs/...)
+    for c in candidates:
+        try:
+            if c.is_file():
+                return os.path.relpath(str(c), str(home)).replace(os.sep, "/")
+        except OSError:
+            continue
+    # não achou o arquivo — prefixo cego antigo (sem regredir o que ainda não existe)
+    return _reprefix(p, _rel_prefix(Path(gdir), Path(home)))
+
+
 # --------------------------------------------------------------------------- #
 # composição do payload
 # --------------------------------------------------------------------------- #
@@ -95,7 +127,6 @@ def build_payload(*, active_tab="styles",
 
     style_pfx = _rel_prefix(Path(sdir), home)
     product_pfx = _rel_prefix(Path(pdir), home)
-    grid_pfx = _rel_prefix(Path(gdir), home)
 
     # --- estilos (thumbnail relativo a style-gallery/) ---
     styles = []
@@ -123,7 +154,7 @@ def build_payload(*, active_tab="styles",
             for d in w.get("days", []):
                 d = dict(d)
                 if d.get("mockup"):
-                    d["mockup"] = _reprefix(d["mockup"], grid_pfx)
+                    d["mockup"] = _resolve_mockup(d["mockup"], gdir, home)
                 days.append(d)
             w["days"] = days
             new_weeks.append(w)

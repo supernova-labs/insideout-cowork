@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "mode": "marketplace",
-  "lastUpdated": "2026-05-29T19:00:00Z",
+  "lastUpdated": "2026-06-06T00:00:00Z",
 
   "components": {
     "skills": [
@@ -104,6 +104,18 @@
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["generate-copy", "copywriting", "lettering", "social-media"]
+      },
+      {
+        "name": "generate-video",
+        "path": "plugins/io-social-media/skills/generate-video/SKILL.md",
+        "description": "Geração de vídeo curto com IA (Veo) para social media da InsideOut — stories, reels e teasers, a partir de prompt enriquecido e imagem-âncora (image-to-video) para consistência de cena",
+        "supportingFiles": [
+          "plugins/io-social-media/core/video_gen.py",
+          "plugins/io-social-media/core/requirements.txt",
+          "plugins/io-social-media/core/.env.example"
+        ],
+        "allowedTools": ["Bash", "Read", "Write"],
+        "tags": ["generate-video", "video-generation", "social-media", "veo"]
       }
     ],
 
@@ -282,6 +294,26 @@
       "from": "plugins/io-social-media/core/dashboard.py",
       "to": "plugins/io-social-media/core/grid_library.py",
       "type": "uses"
+    },
+    {
+      "from": "skills/generate-video",
+      "to": "plugins/io-social-media/core/video_gen.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/generate-video",
+      "to": "skills/image-generation",
+      "type": "references"
+    },
+    {
+      "from": "skills/generate-video",
+      "to": "skills/about-insideout",
+      "type": "references"
+    },
+    {
+      "from": "skills/image-generation",
+      "to": "skills/generate-video",
+      "type": "references"
     }
   ],
 
@@ -289,9 +321,9 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.11.0",
+      "version": "0.12.0",
       "componentCounts": {
-        "skills": 7,
+        "skills": 8,
         "agents": 0,
         "hooks": 0,
         "scripts": 0

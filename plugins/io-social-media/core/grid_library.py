@@ -63,7 +63,7 @@ INGEST_YEAR = 2026
 # Campos de um "dia" do grid que as operações de post podem mover/editar
 # (data e dow são identidade do slot, não conteúdo).
 _POST_FIELDS = ("channel", "approach", "product", "subject", "ref",
-                "lettering", "mockup", "rationale", "notes")
+                "lettering", "copy", "mockup", "rationale", "notes")
 
 # Cadência mínima codificada (defaults; a skill pode sobrescrever via kwargs,
 # mas o core NÃO parseia número do rules.md — frágil; D4 do plano Fase 2).
@@ -324,6 +324,7 @@ def _empty_day(date_iso: str) -> dict:
         "subject": None,
         "ref": None,
         "lettering": {},
+        "copy": "",
         "mockup": None,
         "rationale": "",
         "notes": "",
@@ -437,7 +438,7 @@ def _content(day: dict) -> dict:
 def _clear(day: dict) -> None:
     for k in _POST_FIELDS:
         day[k] = {} if k == "lettering" else (
-            "" if k in ("rationale", "notes") else None)
+            "" if k in ("rationale", "notes", "copy") else None)
 
 
 def move_post(brand, month, src_date: str, dst_date: str, *,
@@ -464,6 +465,21 @@ def swap_posts(brand, month, date_a: str, date_b: str, *,
     return save_grid(grid, lib_dir=lib_dir)
 
 
+def _assert_fields_clean(fields: dict) -> None:
+    """Falha-alto se algum campo de texto sendo gravado contiver U+FFFD
+    (mojibake). Texto correto vem do agente in-process; FFFD só aparece em
+    round-trip de console/`python -c` cp1252 (acento corrompido) — a mesma
+    origem do `�` que a ingestão já barra (_assert_no_mojibake). Recusa antes
+    de gravar, pra copy/subject/lettering nunca caírem sem acento no grid."""
+    blob = json.dumps(fields, ensure_ascii=False)
+    if "�" in blob:
+        raise InvalidGrid(
+            "Texto com U+FFFD (mojibake) — acento corrompido por round-trip de "
+            "console/`python -c` cp1252. Escreva o texto in-process (ou via "
+            "arquivo UTF-8 lido em processo), nunca como literal acentuado num "
+            "comando de shell. Recusado sem gravar.")
+
+
 def set_post(brand, month, date: str, *, lib_dir: Path | None = None,
              **fields) -> dict:
     """Edita campos de um post. Só os de _POST_FIELDS; data/dow são imutáveis."""
@@ -472,6 +488,7 @@ def set_post(brand, month, date: str, *, lib_dir: Path | None = None,
         raise InvalidGrid(
             f"Campos não editáveis: {', '.join(bad)}. "
             f"Editáveis: {', '.join(_POST_FIELDS)}.")
+    _assert_fields_clean(fields)
     grid = get_grid(brand, month, lib_dir)
     day = _find_day(grid, date)
     day.update(fields)
@@ -1654,6 +1671,45 @@ def mockup_for_post(
     base_return["absolute_path"] = abs_path
     base_return["dry_run"] = False
     return base_return
+
+
+def attach_mockup(brand: str, month, date: str, image_path: str, *,
+                  lib_dir: Path | None = None) -> dict:
+    """Anexa uma imagem JÁ EXISTENTE (ad-hoc da `image-generation`, print colado,
+    download) como mockup de um post — COPIANDO pro caminho canônico
+    `mockups/<mês>/<dia>.png` e gravando o caminho relativo via `set_post`.
+
+    É o caminho abençoado pra "põe essa imagem no grid": evita o agente setar
+    `mockup=` com caminho cru (relativo à cwd, ou já prefixado com 'grids/'),
+    que o painel não resolvia — a imagem sumia, ou o caminho duplicava em
+    'grids/grids/...'. A imagem original fica onde está; o grid passa a apontar
+    pro canônico, que o painel resolve em qualquer máquina.
+
+    Overwrite intencional do canônico (histórico vive no git do workspace).
+    Retorna {brand, month, date, mockup (rel), absolute_path}.
+    """
+    import shutil as _shutil
+    lib_dir = _ensure_ready(lib_dir)
+    month_norm = _norm_month(month)
+    grid = get_grid(brand, month_norm, lib_dir=lib_dir)
+    _find_day(grid, date)  # valida a data no grid (levanta GridNotFound se não)
+
+    src = Path(image_path)
+    if not src.is_file():
+        raise GridError(
+            f"Imagem não encontrada: {image_path!r}. Gere ou baixe a imagem "
+            f"antes de anexá-la ao post.")
+    _, _, mock_dir, _, _ = _subdirs(lib_dir)
+    target_dir = mock_dir / month_norm
+    target_dir.mkdir(parents=True, exist_ok=True)
+    dest = target_dir / f"{date}.png"
+    if dest.exists():
+        dest.unlink()
+    _shutil.copy2(src, dest)
+    rel_path = f"mockups/{month_norm}/{date}.png"
+    set_post(brand, month_norm, date, mockup=rel_path, lib_dir=lib_dir)
+    return {"brand": slugify(brand), "month": month_norm, "date": date,
+            "mockup": rel_path, "absolute_path": str(dest.resolve())}
 
 
 def batch_mockups(

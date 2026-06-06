@@ -15,6 +15,8 @@ tom de voz, mensagens-chave, público-alvo, paleta e guardrails; cada **produto*
 tem descrição, claims, tags e várias **fotos** em ângulos/composições. A skill
 `image-generation` consome este catálogo para compor uma peça (estilo × produto).
 
+> **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de marca, produto e foto; **nunca** de implementação (HTML, JSON, caminho, "renderizar", encoding). Resolva erros nos bastidores e relate só o essencial.
+
 ## Onde rodar (crítico)
 
 O diretório do plugin (`${CLAUDE_PLUGIN_ROOT}`) é **read-only e efêmero por

@@ -10,6 +10,10 @@ disable-model-invocation: false
 
 Gera imagens de alta qualidade com Gemini 3 Pro para peças de social media e PR, com enriquecimento de prompt e alinhamento à marca do cliente.
 
+> **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de marca, post, data e referência; **nunca** de implementação (HTML, JSON, caminho, "renderizar", encoding). Resolva erros nos bastidores e relate só o essencial.
+
+> **Pôr uma imagem no grid:** depois de gerar/ajustar uma imagem aqui, para colocá-la num dia do grid use **`grid_library.attach_mockup(marca, mês, dia, <caminho da imagem>)`** — ele cuida de guardar a imagem no lugar certo e fazer ela aparecer no painel em qualquer máquina. **Nunca** grave o mockup com um caminho cru à mão (`set_post(mockup=...)`): foi o que fazia a imagem sumir do grid.
+
 ## Princípio central: sempre enriqueça o prompt
 
 **OBRIGATÓRIO**: enriqueça todo prompt do usuário antes de gerar. Adicione detalhes de:

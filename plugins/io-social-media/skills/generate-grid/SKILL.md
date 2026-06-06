@@ -14,6 +14,11 @@ fala"**; aqui mora **"o que postar e quando"**: um grid = 1 marca × 1 mês,
 colapsando num único artefato canônico as duas planilhas Excel que a Estela
 (social media Clinique/EL/TF) mantém hoje à mão.
 
+> **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique
+> `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de grid, post, dia, marca;
+> **nunca** de implementação (HTML, JSON, campo, caminho, "renderizar", encoding).
+> Resolva erros nos bastidores e relate só o essencial.
+
 > **Escopo desta versão (Fase 3):** esqueleto canônico + **geração do grid a
 > partir do briefing** (Fase 2) + **mockup por post via Gemini 3 Pro**
 > (Fase 3) + ingestão do histórico **2026** + edição conversacional + grid
@@ -144,6 +149,15 @@ Se o grid <marca>/<mês> já existe com algum dia preenchido, `generate_from_bri
 **recusa por segurança** (não obliterar curadoria). Pergunte ao usuário antes
 de passar `overwrite=True` — é destrutivo.
 
+> **⚠️ `generate_from_briefing` sozinho NÃO é um grid pronto.** Ele só monta o
+> andaime com os slots vazios — apresentar esse calendário em branco ao usuário
+> é o bug nº 1 relatado pela Carol. O loop de julgamento abaixo é **obrigatório
+> e contínuo**: quando o usuário pede "gera o grid", rode o loop **na mesma
+> sequência** até `gl.plan_card(g)['slotsTodo']` esvaziar, depois `audit_grid`,
+> e **só então** apresente. Nunca pare no andaime nem diga "grid criado" com os
+> dias vazios. Sem mockups no primeiro take (vêm num passo posterior). Vale aqui
+> e quando a `analyze-briefing` engatilha a geração.
+
 **Loop de julgamento (você, não código):** itere `pc['slotsTodo']` (lista de dias
 ainda sem `subject`/`product`). Para cada slot:
 
@@ -202,7 +216,11 @@ gl.set_post("clinique", "2026-05", "2026-05-06",
 gl.clear_post("clinique", "2026-05", "2026-05-06")               # esvazia o slot
 ```
 Campos editáveis de um post: `channel, approach, product, subject, ref,
-lettering, mockup, rationale, notes` (data e dia-da-semana são imutáveis).
+lettering, copy, mockup, rationale, notes` (data e dia-da-semana são imutáveis).
+`copy` é a **legenda do post** (Hook→Valor→CTA, vinda da `generate-copy`) — é o
+que aparece no rodapé do card no painel; `subject` é só o assunto curto, `notes`
+não aparece no painel. Legenda com acento entra **in-process** (a `set_post`
+recusa texto corrompido por console/`python -c` cp1252).
 `approach` segue a taxonomia da planilha: `LANÇAMENTO`, `FARMA`,
 `EDUCACIONAL`, `DATA OPORTUNIDADE`, `PRODUTO`, `TREND`. `product` é o slug do
 `product-catalog` quando há produto; `null` em data-oportunidade (use
@@ -364,6 +382,13 @@ auditável, conta a história da peça.
 - `core/` é read-only: nunca grave lá; toda escrita vai pra pasta de trabalho.
 - Ao editar um post, preencha o `rationale` (1 linha do porquê) quando o
   usuário der a razão — é o log de aprendizado pedido pelo Lucas.
+- **Legenda (copy)** vai no campo `copy` via `set_post(copy=...)` — nunca no
+  `subject`/`notes`. Texto com acento é escrito **in-process** (a `set_post`
+  recusa mojibake de console/`python -c` cp1252).
+- **Imagem ad-hoc no grid** (criada na `image-generation`, print, download) →
+  `attach_mockup(marca, mês, dia, <caminho>)`, **nunca** `set_post(mockup=...)`
+  com caminho cru (era o que fazia a imagem sumir do painel / duplicar em
+  `grids/grids/...`).
 - Sempre reporte o caminho do painel (`insideout-painel.html`) ao abrir/atualizar.
 - Não exponha caminhos de arquivo a menos que o usuário peça — fale em
   "marca/mês" e datas.
