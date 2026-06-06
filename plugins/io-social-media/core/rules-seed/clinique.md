@@ -43,17 +43,16 @@ trinca, e nem sempre interessa. **Farmácia** normalmente **não forma trinca** 
 entra como **conteúdo avulso**, sem forçar 3 seguidos. Vale pra qualquer tema sem
 material suficiente pra 3 peças que se sustentem.
 
-**Avulso e janelas cheias — PROPOSTA, validar com Estela/Brendo:**
-> _Pendente de sign-off do time. Default proposto até validarem:_
-> - **Avulso entre trincas:** conteúdo que não forma trinca (farmácia, data
->   pontual, recado) entra **entre** trincas, como respiro — sem quebrar uma
->   trinca em andamento.
-> - **Muitos assuntos em janela curta** (ex.: início de junho — Farmácia +
->   Happys + Minis intensivos até dia 12): quando não dá pra formar todas as
->   trincas no feed, **priorizar a trinca do lançamento/foco principal** e
->   distribuir os demais como **avulsos** (feed pontual ou story), em vez de
->   espremer várias trincas incompletas. Stories absorvem o excedente sem poluir
->   o desenho do feed.
+**Avulso e janelas cheias:**
+- **Avulso entre trincas:** conteúdo que não forma trinca (farmácia, data
+  pontual, recado) entra **entre** trincas, como respiro — sem quebrar uma
+  trinca em andamento.
+- **Muitos assuntos em janela curta** (ex.: início de junho — Farmácia +
+  Happys + Minis intensivos até dia 12): quando não dá pra formar todas as
+  trincas no feed, **priorizar a trinca do lançamento/foco principal** e
+  distribuir os demais como **avulsos** (feed pontual ou story), em vez de
+  espremer várias trincas incompletas. Stories absorvem o excedente sem poluir
+  o desenho do feed.
 
 ## Intercalação (dar respiro)
 
