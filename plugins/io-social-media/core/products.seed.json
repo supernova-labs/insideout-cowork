@@ -103,6 +103,62 @@
       ],
       "createdAt": "2026-05-18T00:00:00Z",
       "updatedAt": "2026-05-18T00:00:00Z"
+    },
+    {
+      "schemaVersion": 1,
+      "id": 5,
+      "slug": "even-better-makeup",
+      "brand": "clinique",
+      "name": "Even Better Makeup Broad Spectrum SPF 15",
+      "description": "Base de cobertura média da franquia Even Better que trata enquanto cobre: empareja e ilumina o tom da pele e, com uso diário ao longo das semanas, ajuda a reduzir a aparência de manchas escuras. Acabamento natural, hidratante, com proteção solar.",
+      "claims": [
+        "Ajuda a reduzir a aparência de manchas escuras com uso diário (~12 semanas)",
+        "Empareja e ilumina o tom da pele",
+        "Broad Spectrum SPF 15",
+        "Com niacinamida, vitamina C e ácido hialurônico",
+        "Allergy Tested. 100% Fragrance Free."
+      ],
+      "tags": ["makeup", "base", "foundation", "tratamento", "spf"],
+      "photos": [],
+      "createdAt": "2026-06-06T00:00:00Z",
+      "updatedAt": "2026-06-06T00:00:00Z"
+    },
+    {
+      "schemaVersion": 1,
+      "id": 6,
+      "slug": "chubby-stick",
+      "brand": "clinique",
+      "name": "Chubby Stick Moisturizing Lip Colour Balm",
+      "description": "Bálsamo labial com cor em formato de lápis gordinho que sobe girando (não precisa apontar). Cor translúcida e buildable em tons à prova de erro, com brilho suave e manteigas de manga e karité que deixam os lábios macios.",
+      "claims": [
+        "Bálsamo com cor, hidratante e buildable",
+        "Manteigas de manga e karité",
+        "Tons à prova de erro, fáceis de misturar e sobrepor",
+        "Acabamento de brilho suave e natural",
+        "Allergy Tested. 100% Fragrance Free."
+      ],
+      "tags": ["makeup", "labios", "balm", "cor", "icone"],
+      "photos": [],
+      "createdAt": "2026-06-06T00:00:00Z",
+      "updatedAt": "2026-06-06T00:00:00Z"
+    },
+    {
+      "schemaVersion": 1,
+      "id": 7,
+      "slug": "my-happy",
+      "brand": "clinique",
+      "name": "My Happy (coleção de fragrâncias)",
+      "description": "Coleção de fragrâncias My Happy em 6 aromas, feitos para usar sozinhos ou em camadas (layering) e criar um perfume só seu — de Cocoa & Cashmere a Peony Picnic. Borrifáveis, em tamanho compacto.",
+      "claims": [
+        "6 aromas para usar sozinhos ou em layering",
+        "Aromas como Cocoa & Cashmere, Peony Picnic, Indigo Mist e Baby Bouquet",
+        "Dermatologicamente testado",
+        "Sem parabenos e sem ftalatos"
+      ],
+      "tags": ["fragrancia", "perfume", "colecao", "lancamento"],
+      "photos": [],
+      "createdAt": "2026-06-06T00:00:00Z",
+      "updatedAt": "2026-06-06T00:00:00Z"
     }
   ]
 }
