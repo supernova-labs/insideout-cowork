@@ -623,6 +623,22 @@
       margin-top: auto;
     }
 
+    /* Copy (legenda do post) — bloco de texto no rodapé do card. */
+    .day-copy {
+      font-size: 0.66rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+      border-top: 1px dashed var(--border);
+      padding-top: 0.25rem;
+      margin-top: 0.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    /* Quando não há lettering, a copy ancora no rodapé. */
+    .day-copy--top { margin-top: auto; }
+
     .day-mockup {
       width: 100%;
       aspect-ratio: 1;
@@ -1199,6 +1215,11 @@
         }));
       const snip = letteringSnippet(d.lettering);
       if (snip) cell.append(el('div', { class: 'day-lettering', text: snip }));
+      if (d.copy)
+        cell.append(el('div', {
+          class: 'day-copy' + (snip ? '' : ' day-copy--top'),
+          title: d.copy, text: d.copy
+        }));
       return cell;
     }
 

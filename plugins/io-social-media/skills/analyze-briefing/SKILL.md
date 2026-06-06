@@ -5,6 +5,8 @@ description: Analisa um briefing de cliente seguindo o framework InsideOut PR
 
 Você é um analista de briefings da InsideOut PR. Use a skill `about-insideout` como base de conhecimento sobre a empresa.
 
+> **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de briefing, marca, campanha e data; **nunca** de implementação (HTML, JSON, caminho, "renderizar", encoding). Resolva erros nos bastidores e relate só o essencial.
+
 ## Regras
 
 - Nem sempre todos os serviços estão presentes em todos os briefings
@@ -179,10 +181,25 @@ print('painel:', gl.open_grids())            # abre o painel unificado na aba Gr
 "
 ```
 
-Reporte ao usuário:
-- **action**: andaime gerado em `<marca>/<AAAA-MM>`;
-- **missing** do validador (se houver) — peça pra ele cadastrar o produto faltante em `product-catalog` ou ajustar o slug **antes** do loop de julgamento;
-- **caminho do painel (`insideout-painel.html`, aba Grid)** pra abrir;
-- a próxima etapa é com a skill `generate-grid` (loop de julgamento sobre o plan-card — produto/hero/ref/spoiler por slot, guiado por `grids/rules/<marca>.md`).
+**CRÍTICO — o andaime NÃO é o entregável.** `generate_from_briefing` só cria o
+esqueleto com os slots marcados; um calendário com dias vazios **não é um grid
+pronto**. Quando o usuário pede "gera o grid", ele espera um **primeiro take
+preenchido** (produtos distribuídos por dia), não um calendário em branco.
+Logo após gerar o andaime, **continue imediatamente no loop de julgamento da
+skill `generate-grid`** (preencher produto/subject/ref/abordagem por slot, lendo
+`grids/rules/<marca>.md`) **até `gl.plan_card(g)['slotsTodo']` esvaziar** — depois
+`gl.audit_grid(...)` — e **só então** apresente o grid. **NUNCA pare no andaime
+vazio nem o reporte como "grid criado".** Mockups ficam pra depois (não entram no
+primeiro take — é a distribuição que a Estela revisa e ajusta).
 
-Se o grid `<marca>/<mês>` já existir com conteúdo curado, `generate_from_briefing` recusa por segurança. Pergunte ao usuário se ele quer regenerar (`overwrite=True` apaga e refaz o andaime — **destrutivo**) ou trabalhar a partir do que está lá.
+Depois do grid **preenchido**, reporte em linguagem de negócio (sem jargão de
+implementação — ver `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md`):
+- o grid do mês ficou pronto como **primeiro take** — produtos distribuídos por
+  dia, pronto pra ele revisar e pedir ajustes;
+- **missing** do validador (se houver) — peça pra cadastrar o produto faltante ou
+  corrigir **antes** de preencher os slots que dependem dele;
+- onde abrir o painel (aba Grid) pra ver.
+
+Se o grid `<marca>/<mês>` já existir com conteúdo curado, `generate_from_briefing`
+recusa por segurança. Pergunte ao usuário se ele quer regenerar (`overwrite=True`
+apaga e refaz o andaime — **destrutivo**) ou trabalhar a partir do que está lá.

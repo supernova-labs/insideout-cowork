@@ -13,6 +13,19 @@ parece"**; o `product-catalog` diz **"o que é o produto e como a marca fala"**;
 a `generate-grid` diz **"o que postar e quando"**; aqui mora **"o que o texto
 diz"** — a **copy do post** (legenda) e o **lettering** (texto dentro da arte).
 
+> **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique
+> `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de legenda, hook, post;
+> **nunca** de implementação (HTML, JSON, campo, caminho, encoding). Resolva
+> erros nos bastidores e relate só o essencial.
+
+> **Copy de um post do grid:** quando a legenda é pra um dia específico do grid,
+> grave-a no **campo `copy`** do post via `generate-grid`
+> (`set_post(..., copy="<legenda>")`) — é o que aparece no card do painel.
+> **Nunca** jogue a legenda no `subject` nem no `notes` (o `subject` é o assunto
+> curto; o `notes` não aparece no painel). **Acento:** texto com acento é escrito
+> **in-process** (ou via arquivo UTF-8 lido em processo) — nunca como literal
+> acentuado dentro de um comando de shell (`python -c`), que corrompe o acento.
+
 Existe um buraco deliberado no resto do plugin: a geração de imagem **não
 escreve texto na peça** ("o brief da marca só molda tom, paleta e composição").
 Esta skill preenche esse buraco — e gera também a legenda que acompanha o post.

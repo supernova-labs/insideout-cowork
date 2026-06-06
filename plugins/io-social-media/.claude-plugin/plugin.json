@@ -1,10 +1,10 @@
 {
   "name": "io-social-media",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Plugin da InsideOut PR para análise de briefings e gestão de social media",
   "author": { "name": "InsideOut PR" },
   "homepage": "https://insideoutpr.com.br",
-  "keywords": ["briefing", "social-media", "pr", "marketing", "image-generation"],
+  "keywords": ["briefing", "social-media", "pr", "marketing", "image-generation", "video-generation"],
   "skills": ["./skills"],
   "userConfig": {
     "GEMINI_API_KEY": {

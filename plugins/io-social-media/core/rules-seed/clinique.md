@@ -2,7 +2,8 @@
 
 > Editável pela Estela/Carol. Linguagem humana de propósito — estas regras são
 > lidas pela skill `generate-grid` na geração (Fase 2), não pelo código.
-> Semente extraída da entrevista com a Estela (20/abr/2026). Mude à vontade:
+> Semente extraída da entrevista com a Estela (20/abr/2026) e refinada com o
+> feedback de Estela/Brendo (jun/2026 — seção "Trincas"). Mude à vontade:
 > o que está aqui manda mais que o default.
 
 ## Ponto de partida
@@ -17,6 +18,42 @@ lançamentos, datas comemorativas relevantes, sazonalidade. Só depois preenche.
 - Padrão da Estela: **~3 dias seguidos** do produto que lança, e até **3
   trincas (≈9 dias)** de comunicação intensa de produtos-foco no começo do mês.
 - Mesmo intenso, **não precisa ser todo dia o mesmo** — ver "Não tudo todo dia".
+
+## Trincas (a combinação do feed)
+
+**O que é uma trinca:** um bloco de **3 posts de feed relacionados e
+consecutivos** (mesmo produto-foco ou mesmo tema) que formam um conjunto visual
+na página de perfil. Como o Instagram mostra 3 por linha, até **3 trincas
+seguidas** preenchem a **matriz 3×3 (9 posts)** que aparece ao abrir o perfil —
+é o "desenho" do feed.
+
+**Modo automático em lançamento/foco:** quando há lançamento ou produto-foco do
+mês, montar a comunicação em **trincas** e manter os **3 posts de uma trinca
+consecutivos no feed** — **não** intercalar outro tema no meio de uma trinca.
+> Erro a evitar (visto no grid de junho): 3 posts de My Happys **intercalados**
+> por Minis e Moisture Surge. O certo é os 3 My Happys **seguidos**, com os
+> outros temas organizados em torno.
+
+**Respiro é ENTRE trincas, não DENTRO.** A intercalação pra audiência não cansar
+(seção abaixo) acontece **entre** uma trinca e a próxima — trocando de
+produto-foco, hero ou tema. Dentro da trinca, os 3 ficam juntos.
+
+**Exceção — temas com pouco material (ex.: Farmácia):** nem todo tema rende uma
+trinca, e nem sempre interessa. **Farmácia** normalmente **não forma trinca** —
+entra como **conteúdo avulso**, sem forçar 3 seguidos. Vale pra qualquer tema sem
+material suficiente pra 3 peças que se sustentem.
+
+**Avulso e janelas cheias — PROPOSTA, validar com Estela/Brendo:**
+> _Pendente de sign-off do time. Default proposto até validarem:_
+> - **Avulso entre trincas:** conteúdo que não forma trinca (farmácia, data
+>   pontual, recado) entra **entre** trincas, como respiro — sem quebrar uma
+>   trinca em andamento.
+> - **Muitos assuntos em janela curta** (ex.: início de junho — Farmácia +
+>   Happys + Minis intensivos até dia 12): quando não dá pra formar todas as
+>   trincas no feed, **priorizar a trinca do lançamento/foco principal** e
+>   distribuir os demais como **avulsos** (feed pontual ou story), em vez de
+>   espremer várias trincas incompletas. Stories absorvem o excedente sem poluir
+>   o desenho do feed.
 
 ## Intercalação (dar respiro)
 
