@@ -216,7 +216,9 @@ gl.set_post("clinique", "2026-05", "2026-05-06",
 gl.clear_post("clinique", "2026-05", "2026-05-06")               # esvazia o slot
 ```
 Campos editáveis de um post: `channel, approach, product, subject, ref,
-lettering, copy, mockup, rationale, notes` (data e dia-da-semana são imutáveis).
+lettering, copy, mockup, video, rationale, notes` (data e dia-da-semana são
+imutáveis). `mockup` é a imagem do dia; `video` é o vídeo do dia (mp4) — o card
+mostra o vídeo como pôster + ▶ quando há.
 `copy` é a **legenda do post** (Hook→Valor→CTA, vinda da `generate-copy`) — é o
 que aparece no rodapé do card no painel; `subject` é só o assunto curto, `notes`
 não aparece no painel. Legenda com acento entra **in-process** (a `set_post`
@@ -323,6 +325,29 @@ auditável, conta a história da peça.
 - Image gen é não-determinístico — não há gate automático de qualidade.
   Validação é visual, pela Estela.
 
+**Vídeo por post (Veo) — grid-nativo, gera-e-anexa:**
+
+Para vídeo (stories/reels), o caminho é `video_for_post` — espelha o mockup:
+**dry-run-first**, o agente enriquece o **movimento**, e ele **anexa o vídeo ao
+dia sozinho**. Usa o `mockup` (imagem) do próprio post como **frame-âncora**
+(image-to-video) quando existir, pra consistência de cena.
+
+```python
+# 1) dry-run: monta o prompt-base + nota de custo, $0, sem gerar
+out = gl.video_for_post("clinique", "2026-05", "2026-05-11", dry_run=True)
+print(out["brief"]["prompt"][:400]); print(out["cost_note"])
+# 2) enriqueça out["brief"]["prompt"] com MOVIMENTO de câmera, ação e mood
+enriched = out["brief"]["prompt"] + "\n\n[MOVIMENTO]: zoom-in lento no produto, ..."
+# 3) CONFIRME custo/tempo com o usuário (vídeo é caro e lento) e gere
+final = gl.video_for_post("clinique", "2026-05", "2026-05-11",
+                           prompt_override=enriched, aspect_ratio="9:16")
+print("vídeo em:", final["video"])
+```
+Default `aspect_ratio="9:16"` (stories/reels; override `16:9` p/ horizontal).
+O vídeo aparece no card como **pôster (1º frame) + ▶**; clique abre e toca.
+Vídeo ad-hoc já pronto (gerado solto, baixado) → `gl.attach_video(marca, mês,
+dia, <mp4>)`. Pré-condição: `.env` com `GEMINI_API_KEY` (igual `generate-video`).
+
 ## Relação com as outras skills
 
 - **`analyze-briefing`** Passo 5 emite o dict `brief` (boundary object) que
@@ -373,6 +398,13 @@ auditável, conta a história da peça.
   `batch_mockups(only_empty=True)` real.
 - "muda o estilo do dia X pra #N e regenera o mockup" → `set_post(ref=
   {"kind":"style","id":N})` + `mockup_for_post`.
+- "gera o vídeo do dia X" / "faz um story em vídeo pro dia X" → **dry-run
+  primeiro** (`video_for_post(..., dry_run=True)`) → enriqueça com **movimento**
+  → **confirme custo/tempo** → real (`prompt_override=...`). Usa o mockup do dia
+  como frame-âncora se houver. NÃO use a `generate-video` standalone pra isso —
+  o `video_for_post` é que anexa ao dia sozinho.
+- "põe esse vídeo (que já tenho) no dia X" → `attach_video(marca, mês, dia,
+  <mp4>)`.
 
 ## Regras importantes
 
@@ -385,10 +417,16 @@ auditável, conta a história da peça.
 - **Legenda (copy)** vai no campo `copy` via `set_post(copy=...)` — nunca no
   `subject`/`notes`. Texto com acento é escrito **in-process** (a `set_post`
   recusa mojibake de console/`python -c` cp1252).
-- **Imagem ad-hoc no grid** (criada na `image-generation`, print, download) →
-  `attach_mockup(marca, mês, dia, <caminho>)`, **nunca** `set_post(mockup=...)`
-  com caminho cru (era o que fazia a imagem sumir do painel / duplicar em
-  `grids/grids/...`).
+- **Arte/vídeo PARA um dia do grid** → use sempre o caminho **grid-nativo** que
+  gera-e-anexa atômico: `mockup_for_post` (imagem) ou `video_for_post` (vídeo).
+  Esse caminho **insere no dia sozinho** — é o que evita o bug de "gerou mas não
+  entrou no grid".
+- **Mídia ad-hoc** (criada solta na `image-generation`/`generate-video`, print,
+  download) que vai pro grid → anexar é passo **obrigatório**:
+  `attach_mockup(marca, mês, dia, <imagem>)` ou `attach_video(marca, mês, dia,
+  <mp4>)`. **Nunca** `set_post(mockup=/video=)` com caminho cru (sumia/duplicava
+  `grids/grids/...`), e **nunca** reportar "pronto" deixando a mídia só em
+  `outputs/` quando o usuário a queria no grid.
 - Sempre reporte o caminho do painel (`insideout-painel.html`) ao abrir/atualizar.
 - Não exponha caminhos de arquivo a menos que o usuário peça — fale em
   "marca/mês" e datas.

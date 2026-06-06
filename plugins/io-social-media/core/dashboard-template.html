@@ -652,6 +652,21 @@
       border: 1px solid var(--border);
     }
 
+    /* Vídeo no card: 1º frame como pôster + selo ▶; clique abre no lightbox. */
+    .day-video { position: relative; cursor: pointer; line-height: 0; }
+    .day-video__play {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(20, 46, 46, 0.55);
+      color: var(--on-accent);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      pointer-events: none;
+    }
+
     /* ===== Compartilhado: empty-state / lightbox / hover / toast ===== */
     .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
 
@@ -840,6 +855,7 @@
   <div class="lightbox" id="lightbox">
     <span class="lightbox-close">&times;</span>
     <img src="" alt="Visualização ampliada" id="lightbox-img">
+    <video id="lightbox-video" controls playsinline style="display: none; max-width: 90%; max-height: 90%; border-radius: 8px;"></video>
   </div>
 
   <!-- Hover Preview (singleton) -->
@@ -899,20 +915,39 @@
     const toast = document.getElementById('toast');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxVideo = document.getElementById('lightbox-video');
     const lightboxClose = document.querySelector('.lightbox-close');
     const hoverPreview = document.getElementById('hover-preview');
     const hoverPreviewImg = document.getElementById('hover-preview-img');
 
     function openLightbox(src) {
+      lightboxVideo.pause();
+      lightboxVideo.style.display = 'none';
+      lightboxImg.style.display = '';
       lightboxImg.src = src;
       lightbox.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
+    function openVideoLightbox(src) {
+      lightboxImg.style.display = 'none';
+      lightboxImg.src = '';
+      lightboxVideo.src = src;
+      lightboxVideo.style.display = '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      const p = lightboxVideo.play();
+      if (p && p.catch) p.catch(() => {});  // autoplay pode ser bloqueado; controles ficam
+    }
     function closeLightbox() {
       lightbox.classList.remove('active');
       document.body.style.overflow = '';
+      lightboxVideo.pause();
+      lightboxVideo.removeAttribute('src');
+      lightboxVideo.load();
+      lightboxImg.src = '';
     }
     lightbox.addEventListener('click', closeLightbox);
+    lightboxVideo.addEventListener('click', (e) => e.stopPropagation());  // usar controles sem fechar
     lightboxClose.addEventListener('click', closeLightbox);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
@@ -1219,11 +1254,23 @@
       if (d.subject) cell.append(el('div', { class: 'day-subject', text: d.subject }));
       if (d.product) cell.append(el('div', { class: 'day-product', text: d.product }));
       if (d.channel) cell.append(el('div', { class: 'day-channel', text: d.channel }));
-      if (d.mockup)
+      if (d.video) {
+        // vídeo: 1º frame como pôster + selo ▶; clique abre e toca no lightbox
+        const vwrap = el('div', { class: 'day-video' });
+        const vid = el('video', {
+          class: 'day-mockup', src: d.video + '#t=0.1', preload: 'metadata',
+          muted: '', playsinline: '',
+          onerror: function () { vwrap.remove(); }
+        });
+        vwrap.append(vid, el('div', { class: 'day-video__play', text: '▶' }));
+        vwrap.addEventListener('click', function (e) { e.stopPropagation(); openVideoLightbox(d.video); });
+        cell.append(vwrap);
+      } else if (d.mockup) {
         cell.append(el('img', {
           class: 'day-mockup', src: d.mockup, alt: d.subject || 'mockup',
           onerror: function () { this.remove(); }
         }));
+      }
       const snip = letteringSnippet(d.lettering);
       if (snip) cell.append(el('div', { class: 'day-lettering', text: snip }));
       if (d.copy)

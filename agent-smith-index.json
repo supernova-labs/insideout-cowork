@@ -79,7 +79,7 @@
       {
         "name": "generate-grid",
         "path": "plugins/io-social-media/skills/generate-grid/SKILL.md",
-        "description": "Grid editorial mensal por marca — geração do andaime mecânico a partir do briefing (boundary com analyze-briefing) + loop de julgamento guiado por rules/<marca>.md + mockup por post via Gemini 3 Pro Image (3 modos: ref+product / product_only / ref_only, com sidecar JSON de auditoria), ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
+        "description": "Grid editorial mensal por marca — geração do andaime mecânico a partir do briefing (boundary com analyze-briefing) + loop de julgamento guiado por rules/<marca>.md + mockup por post via Gemini 3 Pro Image (3 modos: ref+product / product_only / ref_only, com sidecar JSON de auditoria) + vídeo por post via Veo (video_for_post/attach_video, frame-âncora = mockup do dia), ingestão de planilha histórica (2026), edição conversacional de posts, regras/calendário editáveis e grid HTML; dados por arquivo na pasta de trabalho",
         "supportingFiles": [
           "plugins/io-social-media/core/grid_library.py",
           "plugins/io-social-media/core/_libcommon.py",
@@ -89,7 +89,8 @@
           "plugins/io-social-media/core/rules-seed/clinique.md",
           "plugins/io-social-media/core/calendar-seed/2026.md",
           "plugins/io-social-media/core/get_grid.py",
-          "plugins/io-social-media/core/image_gen.py"
+          "plugins/io-social-media/core/image_gen.py",
+          "plugins/io-social-media/core/video_gen.py"
         ],
         "allowedTools": ["Bash", "Read", "Write"],
         "tags": ["generate-grid", "editorial-calendar", "social-media", "image-generation"]
@@ -282,6 +283,16 @@
       "type": "references"
     },
     {
+      "from": "skills/generate-grid",
+      "to": "plugins/io-social-media/core/video_gen.py",
+      "type": "uses"
+    },
+    {
+      "from": "skills/generate-grid",
+      "to": "skills/generate-video",
+      "type": "references"
+    },
+    {
       "from": "plugins/io-social-media/core/dashboard.py",
       "to": "plugins/io-social-media/core/style_library.py",
       "type": "uses"
@@ -322,7 +333,7 @@
     {
       "name": "io-social-media",
       "path": "plugins/io-social-media",
-      "version": "0.13.2",
+      "version": "0.14.0",
       "componentCounts": {
         "skills": 8,
         "agents": 0,

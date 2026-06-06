@@ -63,7 +63,7 @@ INGEST_YEAR = 2026
 # Campos de um "dia" do grid que as operações de post podem mover/editar
 # (data e dow são identidade do slot, não conteúdo).
 _POST_FIELDS = ("channel", "approach", "product", "subject", "ref",
-                "lettering", "copy", "mockup", "rationale", "notes")
+                "lettering", "copy", "mockup", "video", "rationale", "notes")
 
 # Cadência mínima codificada (defaults; a skill pode sobrescrever via kwargs,
 # mas o core NÃO parseia número do rules.md — frágil; D4 do plano Fase 2).
@@ -326,6 +326,7 @@ def _empty_day(date_iso: str) -> dict:
         "lettering": {},
         "copy": "",
         "mockup": None,
+        "video": None,
         "rationale": "",
         "notes": "",
     }
@@ -1553,13 +1554,15 @@ def _save_mockup(lib_dir: Path, month: str, date_iso: str,
 
 
 def _write_mockup_sidecar(lib_dir: Path, month: str, date_iso: str,
-                           payload: dict) -> str:
-    """Sidecar JSON `<lib_dir>/mockups/<month>/<date>.json` com brief +
-    metadados de geração. Versionável, conta a história da peça."""
+                           payload: dict, *, stem: str | None = None) -> str:
+    """Sidecar JSON `<lib_dir>/mockups/<month>/<stem|date>.json` com brief +
+    metadados de geração. Versionável, conta a história da peça. `stem` separa
+    o sidecar de vídeo (`<date>.video.json`) do de imagem (`<date>.json`) quando
+    o mesmo dia tem os dois."""
     _, _, mock_dir, _, _ = _subdirs(lib_dir)
     target_dir = mock_dir / month
     target_dir.mkdir(parents=True, exist_ok=True)
-    dest = target_dir / f"{date_iso}.json"
+    dest = target_dir / f"{stem or date_iso}.json"
     lc.atomic_write(dest, json.dumps(payload, ensure_ascii=False,
                                        indent=2) + "\n")
     return str(dest.resolve())
@@ -1710,6 +1713,166 @@ def attach_mockup(brand: str, month, date: str, image_path: str, *,
     set_post(brand, month_norm, date, mockup=rel_path, lib_dir=lib_dir)
     return {"brand": slugify(brand), "month": month_norm, "date": date,
             "mockup": rel_path, "absolute_path": str(dest.resolve())}
+
+
+# --------------------------------------------------------------------------- #
+# vídeo por post (Veo) — espelha o mockup; vídeo vive junto em mockups/<mês>/
+# --------------------------------------------------------------------------- #
+def _save_video(lib_dir: Path, month: str, date_iso: str,
+                 src_mp4: str) -> tuple[str, str]:
+    """Move o MP4 gerado pra `<lib_dir>/mockups/<month>/<date>.mp4`. Devolve
+    (rel_pra_painel, absolute). Vídeo vive junto dos mockups de imagem."""
+    import shutil as _shutil
+    _, _, mock_dir, _, _ = _subdirs(lib_dir)
+    target_dir = mock_dir / month
+    target_dir.mkdir(parents=True, exist_ok=True)
+    dest = target_dir / f"{date_iso}.mp4"
+    if dest.exists():
+        dest.unlink()
+    _shutil.move(src_mp4, dest)
+    return f"mockups/{month}/{date_iso}.mp4", str(dest.resolve())
+
+
+def _build_video_prompt(post: dict, brand_slug: str, lib_dir: Path) -> str:
+    """Prompt-base de vídeo a partir do post + brief da marca (voz/posicionamento).
+    Determinístico, não chama LLM; o agente enriquece com movimento de câmera/ação
+    via prompt_override (dry-run-first)."""
+    subject = (post.get("subject") or "").strip()
+    product = (post.get("product") or "").strip()
+    approach = (post.get("approach") or "").strip()
+    voice = positioning = ""
+    bname = brand_slug
+    try:
+        import product_library as pc
+        pcdir = _sibling_lib(lib_dir, pc.LIB_DIRNAME)
+        if product:
+            prod = pc.get_product_resolved(product, lib_dir=pcdir)
+            b = prod.get("_brand_brief") or {}
+            subject = subject or f"{prod.get('name', '')}: {prod.get('description', '')}".strip(": ")
+        else:
+            b = pc.get_brand(brand_slug, lib_dir=pcdir)
+        voice, positioning = b.get("voice", ""), b.get("positioning", "")
+        bname = b.get("name") or brand_slug
+    except Exception:
+        pass  # catálogo ausente/produto não cadastrado — segue com o que o post tem
+    alvo = subject or product or "a marca"
+    parts = [f'Vídeo curto de social media para "{alvo}" da marca "{bname}".']
+    if approach:
+        parts.append(f"Abordagem: {approach}.")
+    if voice:
+        parts.append(f"Tom da marca: {voice}")
+    if positioning:
+        parts.append(f"Posicionamento: {positioning}")
+    parts.append(
+        "Movimento sutil e elegante (câmera e/ou produto), ritmo calmo e "
+        "coerente com a marca. Qualquer texto/UI em português do Brasil. "
+        "[ENRIQUEÇA antes de gerar: movimento de câmera, ação na cena e mood.]")
+    return " ".join(parts)
+
+
+def attach_video(brand: str, month, date: str, video_path: str, *,
+                 lib_dir: Path | None = None) -> dict:
+    """Anexa um vídeo JÁ EXISTENTE (criado na `generate-video`, baixado) a um
+    post — COPIANDO pro caminho canônico `mockups/<mês>/<dia>.mp4` e gravando o
+    relativo via `set_post(video=...)`. É o caminho abençoado pra "põe esse
+    vídeo no dia X"; nunca setar `video=` com caminho cru à mão. Overwrite
+    intencional (histórico no git do workspace)."""
+    import shutil as _shutil
+    lib_dir = _ensure_ready(lib_dir)
+    month_norm = _norm_month(month)
+    grid = get_grid(brand, month_norm, lib_dir=lib_dir)
+    _find_day(grid, date)
+    src = Path(video_path)
+    if not src.is_file():
+        raise GridError(
+            f"Vídeo não encontrado: {video_path!r}. Gere o vídeo antes de anexá-lo.")
+    _, _, mock_dir, _, _ = _subdirs(lib_dir)
+    target_dir = mock_dir / month_norm
+    target_dir.mkdir(parents=True, exist_ok=True)
+    dest = target_dir / f"{date}.mp4"
+    if dest.exists():
+        dest.unlink()
+    _shutil.copy2(src, dest)
+    rel = f"mockups/{month_norm}/{date}.mp4"
+    set_post(brand, month_norm, date, video=rel, lib_dir=lib_dir)
+    return {"brand": slugify(brand), "month": month_norm, "date": date,
+            "video": rel, "absolute_path": str(dest.resolve())}
+
+
+def video_for_post(
+    brand: str,
+    month,
+    date: str,
+    *,
+    aspect_ratio: str | None = None,
+    resolution: str = "720p",
+    duration_seconds: int = 8,
+    prompt_override: str | None = None,
+    use_mockup_anchor: bool = True,
+    dry_run: bool = False,
+    lib_dir: Path | None = None,
+) -> dict:
+    """Gera (ou pré-visualiza com dry_run=True) o vídeo de UM post e o anexa ao
+    grid. Caminho **grid-nativo** (gera-e-anexa atômico) — espelha
+    `mockup_for_post`. Usa o `mockup` (imagem) do próprio post como **frame-âncora**
+    (image-to-video) quando existir, pra consistência de cena. O agente enriquece
+    o prompt com movimento entre o dry_run e a chamada real (`prompt_override`).
+
+    Vídeo é caro e lento — **dry-run-first é obrigatório** (a SKILL confirma custo
+    com o usuário). Default `aspect_ratio='9:16'` (stories/reels). Retorna
+    {post, brief, cost_note, video, absolute_path, dry_run}.
+    """
+    lib_dir = _ensure_ready(lib_dir)
+    month_norm = _norm_month(month)
+    grid = get_grid(brand, month_norm, lib_dir=lib_dir)
+    post = _find_day(grid, date)
+
+    ar = aspect_ratio or "9:16"
+    base_prompt = _build_video_prompt(post, grid["brand"], lib_dir)
+
+    anchor_abs = None
+    mk = (post.get("mockup") or "").strip()
+    if use_mockup_anchor and mk:
+        cand = lib_dir / mk  # mockup é relativo a grids/
+        if cand.is_file():
+            anchor_abs = str(cand.resolve())
+
+    brief = {"prompt": base_prompt, "aspect_ratio": ar, "resolution": resolution,
+             "duration_seconds": duration_seconds, "anchor_image": anchor_abs}
+    cost_note = (f"Vídeo Veo ~{duration_seconds}s em {resolution} — caro e lento "
+                 f"(~1-3 min por clipe). Confirme antes de gerar.")
+    base_return = {
+        "post": {"brand": brand, "month": month_norm, "date": date,
+                  "channel": post.get("channel"), "subject": post.get("subject"),
+                  "product": post.get("product")},
+        "brief": brief, "cost_note": cost_note,
+        "video": None, "absolute_path": None, "dry_run": dry_run,
+    }
+    if dry_run:
+        return base_return
+
+    import video_gen
+    final_prompt = prompt_override or base_prompt
+    src = video_gen.generate_video(
+        final_prompt, image=anchor_abs, aspect_ratio=ar,
+        resolution=resolution, duration_seconds=duration_seconds)
+    if not src:
+        raise GridError(
+            "video_gen.generate_video não retornou caminho. Verifique "
+            "GEMINI_API_KEY (.env na cwd), o modelo Veo, quota e filtro de "
+            "conteúdo.")
+    rel, abs_ = _save_video(lib_dir, month_norm, date, src)
+    sidecar = {
+        "brief": brief, "kind": "video", "aspect_ratio": ar,
+        "resolution": resolution, "duration_seconds": duration_seconds,
+        "anchor_image": anchor_abs, "generated_at": lc.now(),
+        "model": getattr(video_gen, "DEFAULT_VIDEO_MODEL", "veo"),
+        "prompt_was_overridden": prompt_override is not None,
+    }
+    _write_mockup_sidecar(lib_dir, month_norm, date, sidecar, stem=f"{date}.video")
+    set_post(brand, month_norm, date, video=rel, lib_dir=lib_dir)
+    base_return.update({"video": rel, "absolute_path": abs_, "dry_run": False})
+    return base_return
 
 
 def batch_mockups(

@@ -12,7 +12,7 @@ Gera imagens de alta qualidade com Gemini 3 Pro para peças de social media e PR
 
 > **Tom com o usuário (sempre):** quem opera não é técnico. Leia e aplique `${CLAUDE_PLUGIN_ROOT}/skills/voz-usuario.md` — fale de marca, post, data e referência; **nunca** de implementação (HTML, JSON, caminho, "renderizar", encoding). Resolva erros nos bastidores e relate só o essencial.
 
-> **Pôr uma imagem no grid:** depois de gerar/ajustar uma imagem aqui, para colocá-la num dia do grid use **`grid_library.attach_mockup(marca, mês, dia, <caminho da imagem>)`** — ele cuida de guardar a imagem no lugar certo e fazer ela aparecer no painel em qualquer máquina. **Nunca** grave o mockup com um caminho cru à mão (`set_post(mockup=...)`): foi o que fazia a imagem sumir do grid.
+> **Pôr uma imagem no grid:** se a arte é **para um dia do grid**, prefira gerar pela própria `generate-grid` (`mockup_for_post`), que gera **e anexa** numa tacada. Se a imagem já foi gerada/ajustada aqui (ad-hoc), anexá-la ao dia é passo **obrigatório**: **`grid_library.attach_mockup(marca, mês, dia, <caminho da imagem>)`** — ele guarda no lugar certo e faz aparecer no painel em qualquer máquina. **Nunca** grave o mockup com caminho cru (`set_post(mockup=...)`) — sumia do grid — e **nunca** reporte "pronto" deixando a imagem só em `outputs/` quando o usuário a queria no grid.
 
 ## Princípio central: sempre enriqueça o prompt
 
