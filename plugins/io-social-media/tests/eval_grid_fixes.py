@@ -108,6 +108,30 @@ def main():
     check(_mockup_of(payload, DAY2) == f"grids/mockups/{MONTH}/{DAY2}.png",
           "A3 fallback (prefixo cego) p/ arquivo ainda inexistente")
 
+    # --- Vídeo no grid (0.14.0): campo video + attach_video + resolução ---
+    DAY3 = "2026-07-12"
+    check(gl._empty_day("2026-07-20").get("video") is None,
+          "vídeo: _empty_day tem campo video (None)")
+    vmp4 = os.path.join(ws, "ad.mp4")
+    with open(vmp4, "wb") as f:
+        f.write(b"\x00\x00\x00\x18ftypmp42" + b"0" * 64)
+    rv = gl.attach_video(BRAND, MONTH, DAY3, vmp4)
+    check(rv["video"] == f"mockups/{MONTH}/{DAY3}.mp4" and os.path.isfile(rv["absolute_path"]),
+          "vídeo: attach_video grava rel canônico + copia o arquivo")
+    sdir, pdir, gdir = dash._ensure_all()
+    payload = dash.build_payload(active_tab="grid", style_dir=sdir, product_dir=pdir, grid_dir=gdir)
+
+    def _video_of(p, date):
+        for g in p["grids"]:
+            if g["brand"] == BRAND and g["month"] == MONTH:
+                for w in g["weeks"]:
+                    for d in w["days"]:
+                        if d["date"] == date:
+                            return d.get("video")
+        return None
+    check(_video_of(payload, DAY3) == f"grids/mockups/{MONTH}/{DAY3}.mp4",
+          "vídeo: painel resolve o video p/ grids/mockups/...mp4")
+
     os.chdir(tempfile.gettempdir())
     import shutil
     shutil.rmtree(ws, ignore_errors=True)

@@ -75,9 +75,12 @@ costure na edição).
 - **`image-generation`** — gere primeiro a **imagem-âncora** lá (capa/cena do
   vídeo) e passe o caminho em `image=` aqui. É o caminho recomendado pra
   consistência.
-- **`generate-grid`** — o grid hoje guarda **mockup de imagem** por post. Vídeo
-  ainda **não** é anexado ao grid (fast-follow); por ora entregue o `.mp4` e diga
-  ao usuário onde ele está.
+- **`generate-grid`** — para colocar um vídeo num **dia do grid**, o caminho é a
+  própria `generate-grid`: `video_for_post(marca, mês, dia, ...)` gera **e anexa**
+  o vídeo ao dia (usa o mockup do dia como frame-âncora). Se o vídeo já foi gerado
+  solto aqui, anexe com `attach_video(marca, mês, dia, <mp4>)`. **Quando o vídeo é
+  pra um dia do grid, anexar é obrigatório** — nunca reporte "pronto" deixando o
+  `.mp4` só em `outputs/`.
 
 ## Lógica de decisão
 
