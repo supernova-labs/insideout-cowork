@@ -390,6 +390,7 @@
     .brand-brief {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      align-items: start;
       gap: 0.75rem 1.5rem;
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -413,6 +414,10 @@
     .brief-value { color: var(--text-secondary); }
     .brief-value ul { margin: 0.2rem 0 0 1.1rem; }
     .brief-value li { margin: 0.1rem 0; }
+
+    /* Campos de prosa longa (posicionamento, identidade visual, guardrails)
+       ocupam a linha inteira — não esticam as células curtas ao lado. */
+    .brief-field--wide { grid-column: 1 / -1; }
 
     .products {
       display: grid;
@@ -1070,8 +1075,8 @@
     const productsBody = document.getElementById('products-body');
     const productsEmpty = document.getElementById('products-empty');
 
-    function briefField(label, valueNode) {
-      return el('div', { class: 'brief-field' }, [
+    function briefField(label, valueNode, wide) {
+      return el('div', { class: 'brief-field' + (wide ? ' brief-field--wide' : '') }, [
         el('span', { class: 'brief-label', text: label }),
         valueNode
       ]);
@@ -1080,23 +1085,25 @@
     function brandBrief(b) {
       if (!b) return null;
       const fields = [];
+      // Campos curtos primeiro (em colunas), depois a prosa longa em largura
+      // total (wide=true) — assim o texto do guide não estica as células curtas.
       if (b.voice)
         fields.push(briefField('Tom de voz', el('span', { class: 'brief-value', text: b.voice })));
+      if (b.audience)
+        fields.push(briefField('Público-alvo', el('span', { class: 'brief-value', text: b.audience })));
+      if (b.paletteHints)
+        fields.push(briefField('Paleta', el('span', { class: 'brief-value', text: b.paletteHints })));
       if (b.keyMessages && b.keyMessages.length) {
         const ul = el('ul');
         for (const m of b.keyMessages) ul.append(el('li', { text: m }));
         fields.push(briefField('Mensagens-chave', el('span', { class: 'brief-value' }, ul)));
       }
-      if (b.audience)
-        fields.push(briefField('Público-alvo', el('span', { class: 'brief-value', text: b.audience })));
       if (b.positioning)
-        fields.push(briefField('Posicionamento', el('span', { class: 'brief-value', text: b.positioning })));
-      if (b.paletteHints)
-        fields.push(briefField('Paleta', el('span', { class: 'brief-value', text: b.paletteHints })));
+        fields.push(briefField('Posicionamento', el('span', { class: 'brief-value', text: b.positioning }), true));
       if (b.brandGuide)
-        fields.push(briefField('Identidade visual', el('span', { class: 'brief-value', text: b.brandGuide })));
+        fields.push(briefField('Identidade visual', el('span', { class: 'brief-value', text: b.brandGuide }), true));
       if (b.guardrails)
-        fields.push(briefField('Guardrails', el('span', { class: 'brief-value', text: b.guardrails })));
+        fields.push(briefField('Guardrails', el('span', { class: 'brief-value', text: b.guardrails }), true));
       if (!fields.length) return null;
       return el('div', { class: 'brand-brief' }, fields);
     }
