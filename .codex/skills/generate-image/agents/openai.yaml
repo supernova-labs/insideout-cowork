@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerar Imagem"
+  short_description: "Crie imagens de posts alinhadas à marca"
+  default_prompt: "Use $generate-image para criar o mockup visual deste post."

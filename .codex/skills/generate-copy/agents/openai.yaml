@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerar Copy"
+  short_description: "Crie legendas e lettering para posts"
+  default_prompt: "Use $generate-copy para criar a legenda e o lettering deste post."

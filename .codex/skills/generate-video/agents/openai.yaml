@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerar Vídeo"
+  short_description: "Anime peças e crie vídeos com Higgsfield"
+  default_prompt: "Use $generate-video para criar um vídeo curto deste post."
