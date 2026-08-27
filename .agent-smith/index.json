@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "2.0",
+  "topology": "plugin",
+  "targets": ["codex"],
+  "canonicalPaths": {
+    "skills": "skills",
+    "index": ".agent-smith/index.json"
+  },
+  "lastUpdated": "2026-08-27T00:00:00Z",
+  "components": [
+    {
+      "id": "skill:analyze-briefing",
+      "type": "skill",
+      "name": "analyze-briefing",
+      "canonicalPath": "skills/analyze-briefing/SKILL.md",
+      "description": "Analisa briefings mensais, escopo e lacunas da InsideOut."
+    },
+    {
+      "id": "skill:generate-grid",
+      "type": "skill",
+      "name": "generate-grid",
+      "canonicalPath": "skills/generate-grid/SKILL.md",
+      "description": "Gera e revisa grids editoriais mensais no Airtable."
+    },
+    {
+      "id": "skill:generate-copy",
+      "type": "skill",
+      "name": "generate-copy",
+      "canonicalPath": "skills/generate-copy/SKILL.md",
+      "description": "Cria e revisa legendas, hooks e lettering para posts."
+    },
+    {
+      "id": "skill:generate-image",
+      "type": "skill",
+      "name": "generate-image",
+      "canonicalPath": "skills/generate-image/SKILL.md",
+      "description": "Gera e registra mockups de posts com trilha de auditoria."
+    },
+    {
+      "id": "skill:generate-video",
+      "type": "skill",
+      "name": "generate-video",
+      "canonicalPath": "skills/generate-video/SKILL.md",
+      "description": "Gera e registra vídeos curtos de posts."
+    }
+  ],
+  "adapters": [
+    {
+      "componentId": "skill:analyze-briefing",
+      "harness": "codex",
+      "status": "shared",
+      "path": "skills/analyze-briefing/SKILL.md",
+      "sourcePath": "skills/analyze-briefing"
+    },
+    {
+      "componentId": "skill:generate-grid",
+      "harness": "codex",
+      "status": "shared",
+      "path": "skills/generate-grid/SKILL.md",
+      "sourcePath": "skills/generate-grid"
+    },
+    {
+      "componentId": "skill:generate-copy",
+      "harness": "codex",
+      "status": "shared",
+      "path": "skills/generate-copy/SKILL.md",
+      "sourcePath": "skills/generate-copy"
+    },
+    {
+      "componentId": "skill:generate-image",
+      "harness": "codex",
+      "status": "shared",
+      "path": "skills/generate-image/SKILL.md",
+      "sourcePath": "skills/generate-image"
+    },
+    {
+      "componentId": "skill:generate-video",
+      "harness": "codex",
+      "status": "shared",
+      "path": "skills/generate-video/SKILL.md",
+      "sourcePath": "skills/generate-video"
+    }
+  ],
+  "gaps": [],
+  "marketplaces": []
+}
