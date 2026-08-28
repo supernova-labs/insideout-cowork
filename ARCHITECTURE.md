@@ -152,6 +152,22 @@ contextos externos obtidos durante a execução.
 
 **Origem:** subtarefa de tendências e gate de contrato de dados, 2026-08-27.
 
+### Autorização de fonte tem escopo explícito
+
+Toda fonte externa é classificada como permanente para uma marca e rede,
+temporária para uma execução ou candidata ainda não aprovada. Fontes candidatas
+podem ser apresentadas para avaliação, mas não influenciam o resultado antes da
+confirmação humana. Autorização editorial e disponibilidade técnica são
+verificadas separadamente.
+
+**Por quê:** impede que uma descoberta ocasional vire referência permanente,
+preserva o controle de marca e não confunde permissão de uso com acesso ativo.
+
+**Escopo:** tendências, referências externas, Social Listening e demais fontes
+incorporadas durante a execução.
+
+**Origem:** subtarefa de tendências e gate de contrato de dados, 2026-08-27.
+
 ### Pacote distribuído permanece declarativo e enxuto
 
 O plugin distribui skills, referências e manifesto. Código de aplicação, dados
@@ -203,7 +219,7 @@ O gate atual está em
 
 As decisões ainda não incorporadas como princípios são:
 
-1. fontes autorizadas e regra inicial de frescor das tendências;
+1. regra inicial de frescor das tendências;
 2. natureza e forma de compartilhamento do snapshot HTML;
 3. escopo e critérios de sucesso do piloto com Carol.
 
