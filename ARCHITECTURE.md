@@ -136,6 +136,22 @@ cliente.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
+### Contexto efêmero só persiste após curadoria
+
+Informações externas e temporárias podem ser pesquisadas ao vivo e informar
+rascunhos quando acompanhadas de fonte, data e evidência. Elas só se tornam
+estado operacional compartilhado quando forem aprovadas ou efetivamente
+utilizadas, sempre com validade explícita; conteúdo vencido nunca é reutilizado
+silenciosamente.
+
+**Por quê:** combina descoberta e frescor com rastreabilidade, sem acumular
+ruído ou transformar tendências passageiras em conhecimento permanente.
+
+**Escopo:** tendências, Social Listening, referências efêmeras e outros
+contextos externos obtidos durante a execução.
+
+**Origem:** subtarefa de tendências e gate de contrato de dados, 2026-08-27.
+
 ### Pacote distribuído permanece declarativo e enxuto
 
 O plugin distribui skills, referências e manifesto. Código de aplicação, dados
@@ -187,7 +203,7 @@ O gate atual está em
 
 As decisões ainda não incorporadas como princípios são:
 
-1. fontes, frescor e persistência de tendências;
+1. fontes autorizadas e regra inicial de frescor das tendências;
 2. natureza e forma de compartilhamento do snapshot HTML;
 3. escopo e critérios de sucesso do piloto com Carol.
 
