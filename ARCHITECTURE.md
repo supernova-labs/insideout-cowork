@@ -168,6 +168,22 @@ incorporadas durante a execução.
 
 **Origem:** subtarefa de tendências e gate de contrato de dados, 2026-08-27.
 
+### Validade é explícita e contextual
+
+Todo contexto efêmero recebe data de captura e data-limite conforme sua
+natureza. A validade representa o período máximo de reutilização, não uma
+garantia de atualidade: a fonte e a evidência ainda precisam ser verificáveis
+no momento do uso. Quando não houver base suficiente para estimar a validade,
+o contexto vale somente para a execução atual.
+
+**Por quê:** evita tanto o descarte prematuro de referências úteis quanto o
+reaproveitamento automático de informações que já perderam relevância.
+
+**Escopo:** tendências, eventos, sazonalidade, Social Listening e demais
+informações sensíveis ao tempo.
+
+**Origem:** subtarefa de tendências e gate de contrato de dados, 2026-08-27.
+
 ### Pacote distribuído permanece declarativo e enxuto
 
 O plugin distribui skills, referências e manifesto. Código de aplicação, dados
@@ -219,9 +235,8 @@ O gate atual está em
 
 As decisões ainda não incorporadas como princípios são:
 
-1. regra inicial de frescor das tendências;
-2. natureza e forma de compartilhamento do snapshot HTML;
-3. escopo e critérios de sucesso do piloto com Carol.
+1. natureza e forma de compartilhamento do snapshot HTML;
+2. escopo e critérios de sucesso do piloto com Carol.
 
 ## Registro de decisões
 
