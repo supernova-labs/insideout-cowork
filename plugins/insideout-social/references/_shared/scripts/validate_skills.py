@@ -7,7 +7,8 @@ import re
 from pathlib import Path
 
 
-ROOT = Path(__file__).parent.parent.parent
+SHARED_ROOT = Path(__file__).parent.parent
+ROOT = SHARED_ROOT.parent.parent / "skills"
 PLUGIN_MANIFEST = ROOT.parent / ".codex-plugin" / "plugin.json"
 SKILLS = {
     "analyze-briefing": ROOT / "analyze-briefing",
@@ -17,10 +18,10 @@ SKILLS = {
     "generate-video": ROOT / "generate-video",
 }
 REQUIRED_SHARED = (
-    ROOT / "_shared" / "voz-usuario.md",
-    ROOT / "_shared" / "about-insideout.md",
-    ROOT / "_shared" / "airtable-contract.md",
-    ROOT / "_shared" / "evals" / "resposta-sem-ids.md",
+    SHARED_ROOT / "voz-usuario.md",
+    SHARED_ROOT / "about-insideout.md",
+    SHARED_ROOT / "airtable-contract.md",
+    SHARED_ROOT / "evals" / "resposta-sem-ids.md",
 )
 FORBIDDEN = (
     "${CLAUDE_PLUGIN_ROOT}",

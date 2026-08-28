@@ -1,7 +1,20 @@
 # InsideOut Social
 
-Plugin Codex da InsideOut para transformar briefings em direção estratégica,
+Plugin oficial da InsideOut para transformar briefings em direção estratégica,
 grids editoriais, copy, imagens e vídeos de social media.
+
+## Instalação para o time
+
+No terminal, execute uma vez para adicionar o catálogo da InsideOut e instalar
+o plugin:
+
+```powershell
+codex plugin marketplace add supernova-labs/insideout-cowork --ref main
+codex plugin add insideout-social@insideout
+```
+
+Depois, abra uma nova tarefa no Codex e peça o trabalho normalmente. Por
+exemplo: “Analise este briefing da marca e destaque lacunas e escopo.”
 
 ## O que ele faz
 
@@ -15,25 +28,28 @@ grids editoriais, copy, imagens e vídeos de social media.
 
 ## Pré-requisitos
 
-- Codex com este plugin instalado.
+- Codex instalado.
 - Acesso individual à base **InsideOut Social** no Airtable para os fluxos que
   leem ou atualizam dados operacionais.
 - Acesso ao recurso criativo indicado pela skill quando houver geração de
-  imagem ou vídeo. Esses fluxos podem envolver custo e sempre pedem a
-  aprovação prevista no processo.
+  imagem ou vídeo. Esses fluxos podem envolver custo e seguem as aprovações
+  previstas no processo.
 
 As skills trabalham em linguagem de marca, produto, post e mês. Elas não
 substituem aprovação humana nem completam informações ausentes por hipótese.
 
 ## Para quem mantém
 
-As skills em `skills/` são a fonte canônica do plugin. O manifesto Codex fica
-em `.codex-plugin/` e o índice de arquitetura em `.agent-smith/`.
+O catálogo Codex fica em `.agents/plugins/marketplace.json`. O pacote
+ distribuído está em `plugins/insideout-social/`: as skills em `skills/`, as
+ referências comuns em `references/_shared/`, o manifesto em `.codex-plugin/`
+ e o inventário de arquitetura na raiz, em
+`.agent-smith/index.json`.
 
 Antes de compartilhar uma nova versão, valide a estrutura:
 
 ```powershell
-python skills/_shared/scripts/validate_skills.py
+python plugins/insideout-social/references/_shared/scripts/validate_skills.py
 ```
 
 E revise os evals da skill alterada. Evals que escrevem no Airtable exigem

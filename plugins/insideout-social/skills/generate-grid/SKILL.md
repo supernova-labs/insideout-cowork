@@ -10,8 +10,8 @@ Airtable.
 
 ## Preparar
 
-1. Leia `../_shared/voz-usuario.md`,
-   `../_shared/about-insideout.md` e `../_shared/airtable-contract.md`.
+1. Leia `../../references/_shared/voz-usuario.md`,
+   `../../references/_shared/about-insideout.md` e `../../references/_shared/airtable-contract.md`.
 2. Leia `references/planning-method.md`.
 3. Leia integralmente `references/rules/<slug-da-marca>.md` quando existir.
 4. Leia `references/calendar/<ano>.md` para o mês solicitado.

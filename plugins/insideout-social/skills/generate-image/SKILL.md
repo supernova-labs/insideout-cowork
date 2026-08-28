@@ -13,9 +13,9 @@ guarda o julgamento de composição.
 
 Ler antes de operar:
 
-- `../_shared/voz-usuario.md`;
-- `../_shared/about-insideout.md`;
-- `../_shared/airtable-contract.md`;
+- `../../references/_shared/voz-usuario.md`;
+- `../../references/_shared/about-insideout.md`;
+- `../../references/_shared/airtable-contract.md`;
 - `references/prompt-composition.md`.
 
 Usar o conector oficial do Airtable para dados e a ferramenta nativa

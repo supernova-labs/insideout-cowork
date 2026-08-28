@@ -13,9 +13,9 @@ da peça; esta skill guarda o julgamento de movimento, continuidade e custo.
 
 Ler antes de operar:
 
-- `../_shared/voz-usuario.md`;
-- `../_shared/about-insideout.md`;
-- `../_shared/airtable-contract.md`;
+- `../../references/_shared/voz-usuario.md`;
+- `../../references/_shared/about-insideout.md`;
+- `../../references/_shared/airtable-contract.md`;
 - `references/video-prompting.md`.
 
 Usar o conector oficial do Airtable para dados e o conector instalado do

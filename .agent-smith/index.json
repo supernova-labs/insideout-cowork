@@ -1,86 +1,104 @@
 {
   "schemaVersion": "2.0",
-  "topology": "plugin",
+  "topology": "marketplace",
   "targets": ["codex"],
   "canonicalPaths": {
-    "skills": "skills",
-    "index": ".agent-smith/index.json"
+    "index": ".agent-smith/index.json",
+    "skills": "plugins/insideout-social/skills"
   },
   "lastUpdated": "2026-08-27T00:00:00Z",
   "components": [
     {
-      "id": "skill:analyze-briefing",
+      "id": "skill:insideout-social:analyze-briefing",
       "type": "skill",
       "name": "analyze-briefing",
-      "canonicalPath": "skills/analyze-briefing/SKILL.md",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/analyze-briefing/SKILL.md",
       "description": "Analisa briefings mensais, escopo e lacunas da InsideOut."
     },
     {
-      "id": "skill:generate-grid",
+      "id": "skill:insideout-social:generate-grid",
       "type": "skill",
       "name": "generate-grid",
-      "canonicalPath": "skills/generate-grid/SKILL.md",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/generate-grid/SKILL.md",
       "description": "Gera e revisa grids editoriais mensais no Airtable."
     },
     {
-      "id": "skill:generate-copy",
+      "id": "skill:insideout-social:generate-copy",
       "type": "skill",
       "name": "generate-copy",
-      "canonicalPath": "skills/generate-copy/SKILL.md",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/generate-copy/SKILL.md",
       "description": "Cria e revisa legendas, hooks e lettering para posts."
     },
     {
-      "id": "skill:generate-image",
+      "id": "skill:insideout-social:generate-image",
       "type": "skill",
       "name": "generate-image",
-      "canonicalPath": "skills/generate-image/SKILL.md",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/generate-image/SKILL.md",
       "description": "Gera e registra mockups de posts com trilha de auditoria."
     },
     {
-      "id": "skill:generate-video",
+      "id": "skill:insideout-social:generate-video",
       "type": "skill",
       "name": "generate-video",
-      "canonicalPath": "skills/generate-video/SKILL.md",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/generate-video/SKILL.md",
       "description": "Gera e registra vídeos curtos de posts."
     }
   ],
   "adapters": [
     {
-      "componentId": "skill:analyze-briefing",
+      "componentId": "skill:insideout-social:analyze-briefing",
       "harness": "codex",
       "status": "shared",
-      "path": "skills/analyze-briefing/SKILL.md",
-      "sourcePath": "skills/analyze-briefing"
+      "path": "plugins/insideout-social/skills/analyze-briefing/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/analyze-briefing"
     },
     {
-      "componentId": "skill:generate-grid",
+      "componentId": "skill:insideout-social:generate-grid",
       "harness": "codex",
       "status": "shared",
-      "path": "skills/generate-grid/SKILL.md",
-      "sourcePath": "skills/generate-grid"
+      "path": "plugins/insideout-social/skills/generate-grid/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/generate-grid"
     },
     {
-      "componentId": "skill:generate-copy",
+      "componentId": "skill:insideout-social:generate-copy",
       "harness": "codex",
       "status": "shared",
-      "path": "skills/generate-copy/SKILL.md",
-      "sourcePath": "skills/generate-copy"
+      "path": "plugins/insideout-social/skills/generate-copy/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/generate-copy"
     },
     {
-      "componentId": "skill:generate-image",
+      "componentId": "skill:insideout-social:generate-image",
       "harness": "codex",
       "status": "shared",
-      "path": "skills/generate-image/SKILL.md",
-      "sourcePath": "skills/generate-image"
+      "path": "plugins/insideout-social/skills/generate-image/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/generate-image"
     },
     {
-      "componentId": "skill:generate-video",
+      "componentId": "skill:insideout-social:generate-video",
       "harness": "codex",
       "status": "shared",
-      "path": "skills/generate-video/SKILL.md",
-      "sourcePath": "skills/generate-video"
+      "path": "plugins/insideout-social/skills/generate-video/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/generate-video"
     }
   ],
   "gaps": [],
-  "marketplaces": []
+  "marketplaces": [
+    {
+      "harness": "codex",
+      "manifestPath": ".agents/plugins/marketplace.json",
+      "plugins": [
+        {
+          "name": "insideout-social",
+          "sourceType": "local",
+          "path": "plugins/insideout-social",
+          "managed": true
+        }
+      ]
+    }
+  ]
 }

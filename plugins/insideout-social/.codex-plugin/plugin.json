@@ -1,0 +1,22 @@
+{
+  "name": "insideout-social",
+  "version": "0.1.0",
+  "description": "Skills da InsideOut para briefing, planejamento editorial e produção de social media.",
+  "author": {
+    "name": "InsideOut"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "InsideOut Social",
+    "shortDescription": "Planeje e produza social media a partir de briefings.",
+    "longDescription": "Transforma briefings em análise, grid editorial, copy, imagens e vídeos, com Airtable como estado operacional.",
+    "developerName": "InsideOut",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Analise este briefing da marca e destaque lacunas e escopo.",
+      "Monte o primeiro take do grid editorial deste mês.",
+      "Crie a legenda e o lettering deste post."
+    ]
+  }
+}

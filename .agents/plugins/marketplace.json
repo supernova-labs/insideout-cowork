@@ -1,0 +1,20 @@
+{
+  "name": "insideout",
+  "interface": {
+    "displayName": "InsideOut"
+  },
+  "plugins": [
+    {
+      "name": "insideout-social",
+      "source": {
+        "source": "local",
+        "path": "./plugins/insideout-social"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

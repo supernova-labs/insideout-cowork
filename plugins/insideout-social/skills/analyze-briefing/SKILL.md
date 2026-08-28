@@ -10,12 +10,12 @@ alimentar o grid editorial.
 
 ## Preparar
 
-1. Leia `../_shared/voz-usuario.md` e `../_shared/about-insideout.md`.
+1. Leia `../../references/_shared/voz-usuario.md` e `../../references/_shared/about-insideout.md`.
 2. Leia `references/framework.md`.
 3. Identifique marca e, quando existir, leia
    `references/scopes/<slug-da-marca>.md`.
 4. Se houver pedido de leitura ou escrita no Airtable, leia
-   `../_shared/airtable-contract.md` e descubra a base e o schema atuais.
+   `../../references/_shared/airtable-contract.md` e descubra a base e o schema atuais.
 5. Trabalhe somente com o briefing fornecido ou com fontes que o usuário colocou
    explicitamente em escopo.
 

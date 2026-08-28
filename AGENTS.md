@@ -1,6 +1,6 @@
 # InsideOut Social
 
-Este repositório contém o plugin Codex oficial da InsideOut para análise de
+Este repositório publica o catálogo Codex oficial da InsideOut para análise de
 briefings e produção de social media. As skills guardam conhecimento,
 julgamento e fluxo; o Airtable guarda o estado operacional.
 
@@ -9,9 +9,9 @@ julgamento e fluxo; o Airtable guarda o estado operacional.
 Leia somente o contexto necessário, nesta ordem:
 
 1. este arquivo;
-2. o `SKILL.md` relevante em `skills/<skill>/`;
-3. os arquivos indicados pelo próprio `SKILL.md` em `references/` e
-   `skills/_shared/`;
+2. o `SKILL.md` relevante em `plugins/insideout-social/skills/<skill>/`;
+3. os arquivos indicados pelo próprio `SKILL.md` em `references/`, incluindo
+   `../../references/_shared/` quando aplicável;
 4. o eval correspondente em `evals/` quando houver mudança de comportamento;
 5. `README.md` para instalação, distribuição ou release.
 
@@ -22,11 +22,12 @@ e leia cada arquivo selecionado por inteiro.
 
 | Assunto | Fonte principal |
 |---|---|
-| Comportamento das skills | `skills/*/SKILL.md` |
-| Tom, contexto comum e contrato de dados | `skills/_shared/` |
+| Comportamento das skills | `plugins/insideout-social/skills/*/SKILL.md` |
+| Tom, contexto comum e contrato de dados | `plugins/insideout-social/references/_shared/` |
 | Regras de marca, calendário e composição | `references/` da skill responsável |
 | Estado operacional de marcas, produtos, referências, posts e peças | base viva **InsideOut Social** no Airtable |
-| Empacotamento Codex | `.codex-plugin/plugin.json` |
+| Catálogo Codex | `.agents/plugins/marketplace.json` |
+| Manifesto do plugin | `plugins/insideout-social/.codex-plugin/plugin.json` |
 | Inventário de arquitetura | `.agent-smith/index.json` |
 
 Instrução explícita do usuário vence a documentação. Não trate documentos ou
@@ -35,8 +36,10 @@ disponível: confirme-a na sessão quando ela for necessária.
 
 ## Arquitetura e fronteiras
 
-- `skills/` é a fonte canônica e única das cinco skills distribuídas.
-- `.codex-plugin/` contém somente o manifesto nativo de distribuição.
+- `plugins/insideout-social/skills/` é a fonte canônica e única das cinco
+  skills distribuídas.
+- `.agents/plugins/marketplace.json` expõe o catálogo `insideout` para o
+  Codex; o manifesto nativo fica junto ao pacote do plugin.
 - `.agent-smith/index.json` descreve os componentes distribuídos; o filesystem
   continua sendo a fonte de verdade.
 - Não adicione código, dados operacionais locais, credenciais, painéis ou
@@ -79,16 +82,17 @@ inicial.
   comportamento na skill, detalhe especializado em `references/` e cenário de
   regressão em `evals/`.
 - Se mudar o comportamento de uma skill, atualize ou adicione o eval que prova
-  o caso. Se mudar o contrato de distribuição, atualize o manifesto, o índice
-  e o `README.md`.
+  o caso. Se mudar o contrato de distribuição, atualize o catálogo, o
+  manifesto, o índice e o `README.md`.
 - Preserve frontmatter válido, nomes em kebab-case e `SKILL.md` com menos de
   500 linhas.
-- O repositório é co-acessado com o cliente: não faça push direto na `main`.
+- O repositório é co-acessado com o cliente: não faça push direto na `main` sem
+  confirmação explícita.
 
 ## Validação
 
 ```powershell
-python skills/_shared/scripts/validate_skills.py
+python plugins/insideout-social/references/_shared/scripts/validate_skills.py
 ```
 
 Os evals de comportamento vivem em cada pasta `evals/` e devem ser executados
