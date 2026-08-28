@@ -53,6 +53,21 @@ skills.
 
 **Origem:** gate de contrato de dados, 2026-08-27.
 
+### Artefatos compostos não duplicam suas fontes
+
+Uma apresentação pode reunir contexto e resultados de vários campos, mas cada
+informação permanece somente na fonte sob responsabilidade de sua skill. O
+artefato composto organiza essas fontes para seu público sem copiá-las para
+outro campo nem exigir sincronização manual.
+
+**Por quê:** preserva uma única fonte de verdade, mantém as responsabilidades
+das skills e permite regenerar um elemento sem desalinhar os demais.
+
+**Escopo:** briefings, prévias, snapshots e outras entregas que combinam campos
+ou resultados de múltiplas skills.
+
+**Origem:** gate de contrato de dados, 2026-08-27.
+
 ### Mudanças de contrato são aditivas e verificáveis
 
 Evoluções do modelo de dados devem preservar campos e fluxos existentes até que
