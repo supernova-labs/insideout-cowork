@@ -41,7 +41,8 @@ inicial adequado, encaminhar para `generate-image`.
 ## Resolver o pedido
 
 1. Se o vídeo pertencer ao grid, localizar exatamente um post por
-   `Marca + Data + Título`.
+   `Marca + Canal da marca + Data + Título`; para legado sem canal relacionado,
+   usar `Marca + Data + Título` e parar diante de duplicidade.
 2. Ler o post completo e os registros relacionados de marca, produto,
    referência e peças existentes.
 3. Conferir se o briefing ou escopo proíbe vídeo para aquele período. Se

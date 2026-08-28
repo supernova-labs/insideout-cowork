@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins/insideout-social/skills"
   },
-  "lastUpdated": "2026-08-27T00:00:00Z",
+  "lastUpdated": "2026-08-28T01:30:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -14,7 +14,7 @@
       "name": "analyze-briefing",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/analyze-briefing/SKILL.md",
-      "description": "Analisa briefings mensais, escopo e lacunas da InsideOut."
+      "description": "Analisa briefings, escopo, lacunas e canais da InsideOut."
     },
     {
       "id": "skill:insideout-social:generate-grid",
@@ -22,7 +22,7 @@
       "name": "generate-grid",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/generate-grid/SKILL.md",
-      "description": "Gera e revisa grids editoriais mensais no Airtable."
+      "description": "Compõe grids mensais multirrede e snapshots de revisão."
     },
     {
       "id": "skill:insideout-social:generate-copy",
@@ -30,7 +30,7 @@
       "name": "generate-copy",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/generate-copy/SKILL.md",
-      "description": "Cria e revisa legendas, hooks e lettering para posts."
+      "description": "Cria e revisa copy adaptada à rede e ao formato."
     },
     {
       "id": "skill:insideout-social:generate-image",
@@ -47,6 +47,14 @@
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/generate-video/SKILL.md",
       "description": "Gera e registra vídeos curtos de posts."
+    },
+    {
+      "id": "skill:insideout-social:skill-feedback",
+      "type": "skill",
+      "name": "skill-feedback",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
+      "description": "Registra bugs e melhorias do plugin com sanitização e confirmação."
     }
   ],
   "adapters": [
@@ -84,6 +92,13 @@
       "status": "shared",
       "path": "plugins/insideout-social/skills/generate-video/SKILL.md",
       "sourcePath": "plugins/insideout-social/skills/generate-video"
+    },
+    {
+      "componentId": "skill:insideout-social:skill-feedback",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/skill-feedback"
     }
   ],
   "gaps": [],

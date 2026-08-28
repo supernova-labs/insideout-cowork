@@ -6,7 +6,8 @@
 
 ## Resultado esperado
 
-- encontra o post e identifica o vídeo e a peça existentes;
+- pede marca e rede quando data e título não resolverem um único post;
+- encontra o post pela chave com `Canal da marca` e identifica o vídeo e a peça existentes;
 - não sobrescreve arquivo, anexo ou status silenciosamente;
 - pergunta se o usuário quer refinar, criar variante, substituir o vídeo atual
   ou reutilizar;

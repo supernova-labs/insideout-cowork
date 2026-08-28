@@ -36,7 +36,7 @@ disponível: confirme-a na sessão quando ela for necessária.
 
 ## Arquitetura e fronteiras
 
-- `plugins/insideout-social/skills/` é a fonte canônica e única das cinco
+- `plugins/insideout-social/skills/` é a fonte canônica e única das seis
   skills distribuídas.
 - `.agents/plugins/marketplace.json` expõe o catálogo `insideout` para o
   Codex; o manifesto nativo fica junto ao pacote do plugin.
@@ -47,15 +47,17 @@ disponível: confirme-a na sessão quando ela for necessária.
 
 | Skill | Responsabilidade | Escrita permitida após os gates da skill |
 |---|---|---|
-| `analyze-briefing` | entendimento, lacunas, escopo e ficha mensal | `Marcas` e `Produtos`, com confirmação |
-| `generate-grid` | primeiro take mensal e rationale | `Posts`, após auditar conflitos e aprovar o take |
+| `analyze-briefing` | entendimento, lacunas, escopo, canais e ficha mensal | `Marcas`, `Produtos` e `Canais da marca`, com confirmação |
+| `generate-grid` | primeiro take mensal, rationale, briefing de design, tendências e snapshot | seus campos em `Posts`, após auditar conflitos e aprovar o take; HTML fora do plugin |
 | `generate-copy` | hooks, legenda e lettering | somente `Posts.Legenda` e `Posts.Lettering`, após aprovação |
 | `generate-image` | composição e QA da imagem | peça de imagem, arquivo e `Posts.Mockup`, sem sobrescrever silenciosamente |
 | `generate-video` | movimento, continuidade e custo | peça de vídeo, arquivo e `Posts.Vídeo`, após aprovar parâmetros e créditos |
+| `skill-feedback` | bug ou melhoria sobre o plugin | issue no repositório de origem, somente após sanitização e confirmação |
 
-Uma skill não absorve a responsabilidade da seguinte: grid não escreve copy ou
-mídia; copy não altera status; imagem não cria texto; vídeo não cria frame
-inicial.
+Uma skill não absorve a responsabilidade da seguinte: grid orquestra copy, mas
+não escreve seus campos nem produz mídia; copy não altera status; imagem não
+cria texto; vídeo não cria frame inicial; feedback não corrige a instalação
+local.
 
 ## Regras operacionais
 

@@ -39,7 +39,8 @@ Não gerar vídeo. Encaminhar texto ausente ou inadequado para `generate-copy`.
 ## Resolver o pedido
 
 1. Se a imagem pertencer ao grid, localizar exatamente um post por
-   `Marca + Data + Título`.
+   `Marca + Canal da marca + Data + Título`; para legado sem canal relacionado,
+   usar `Marca + Data + Título` e parar diante de duplicidade.
 2. Ler o post completo e os registros relacionados de marca, produto,
    referência e peças existentes.
 3. Se o pedido for avulso, confirmar marca, finalidade e formato somente quando

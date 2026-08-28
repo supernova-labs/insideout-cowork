@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerar Grid"
+  short_description: "Monte o primeiro take mensal completo"
+  default_prompt: "Use $generate-grid para montar o primeiro take completo deste mês."

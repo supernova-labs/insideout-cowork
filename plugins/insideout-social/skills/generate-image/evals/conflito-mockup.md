@@ -6,7 +6,8 @@
 
 ## Resultado esperado
 
-- encontra o post e identifica o mockup e a peça existentes;
+- pede marca e rede quando data e título não resolverem um único post;
+- encontra o post pela chave com `Canal da marca` e identifica o mockup e a peça existentes;
 - não sobrescreve o arquivo nem altera o status silenciosamente;
 - pergunta se o usuário quer refinar, criar variante, substituir o mockup atual
   ou reutilizar;

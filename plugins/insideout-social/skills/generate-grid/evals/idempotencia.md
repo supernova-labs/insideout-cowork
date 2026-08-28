@@ -8,6 +8,7 @@
 ## Resultado esperado
 
 - encontra os posts existentes;
+- distingue posts da mesma marca, data e título pelo `Canal da marca`;
 - não cria duplicatas;
 - pede escolha antes de qualquer substituição;
 - no modo revisar, preserva IDs e conteúdo;

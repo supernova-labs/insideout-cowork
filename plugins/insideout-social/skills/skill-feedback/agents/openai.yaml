@@ -1,0 +1,4 @@
+interface:
+  display_name: "Enviar Feedback"
+  short_description: "Reporte bugs e melhorias do plugin"
+  default_prompt: "Use $skill-feedback para registrar este problema como uma issue segura e revisável."

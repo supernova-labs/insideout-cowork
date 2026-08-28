@@ -243,14 +243,19 @@ de publicações multicanal.
 
 **Origem:** gate de contrato de dados, 2026-08-27.
 
-## Decisões arquiteturais abertas
+## Decisões abertas
 
-O gate atual está em
-[`[Decisão] Fechar contrato de dados do fluxo de Grid`](https://link.akiflow.com/tasks/7939ec9a-e080-4e49-b349-b3ce5b105986).
+Não há decisão arquitetural aberta bloqueando a construção das capacidades do
+plugin. O próximo gate é empírico e está em
+[`[Decisão] Definir e validar o piloto com Carol`](https://link.akiflow.com/tasks/9bfc23fa-c8f6-42c4-9fde-0a773ac23553).
 
-As decisões ainda não incorporadas como princípios são:
+Esse gate não bloqueia a implementação. Antes do teste ponta a ponta e da
+liberação ao restante do time, ele deve definir:
 
-1. escopo e critérios de sucesso do piloto com Carol.
+1. marca, mês, redes e formatos do piloto;
+2. participantes e papéis de geração, revisão e aprovação;
+3. sequência do teste;
+4. critérios de sucesso e decisão de liberar, iterar ou interromper.
 
 ## Registro de decisões
 

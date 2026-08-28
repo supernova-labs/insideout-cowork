@@ -19,9 +19,10 @@ visível da opção. Relações são escritas como listas de IDs de registros.
 | Tabela | Responsabilidade | Chave natural |
 |---|---|---|
 | `Marcas` | voz, posicionamento, público e identidade | `Slug` |
+| `Canais da marca` | presença digital e diferenças editoriais por rede | `Marca + Rede` |
 | `Produtos` | catálogo e claims ligados à marca | `Marca + Slug` |
 | `Referências` | estilos curados e referências externas | `Slug`; para URL externa, reutilizar a mesma URL |
-| `Posts` | grid editorial e fluxo de aprovação | `Marca + Data + Título` |
+| `Posts` | grid editorial e fluxo de aprovação | com rede: `Marca + Canal da marca + Data + Título`; legado: `Marca + Data + Título` |
 | `Peças` | mídia e trilha de geração | `Post + Tipo + Nome`; sem post, `Marca + Tipo + Nome` |
 
 Quando uma chave natural encontrar mais de um registro, não escolha
@@ -44,6 +45,28 @@ silenciosamente: apresente a duplicidade e pare a escrita.
 
 Criação mínima: `Nome + Slug`. Atualizações só alteram campos explicitamente
 presentes no briefing e nunca apagam conteúdo existente com valores vazios.
+
+### Canais da marca
+
+- `Nome` — fórmula `Marca — Rede`; nunca escrever manualmente
+- `Marca` — obrigatório, relação com exatamente um registro de `Marcas`
+- `Rede` — obrigatório; seleção controlada
+- `Perfil/URL`
+- `Status` — `Ativo` ou `Inativo`
+- `Objetivo editorial`
+- `Orientações do canal` — somente diferenças em relação à marca
+- `Formatos habilitados` — `Feed`, `Story` e/ou `Reel`
+- `Posts` — relação reversa; não escrever diretamente
+
+Criação mínima: `Marca + Rede + Status`. Pesquise sempre por essa chave antes
+de criar. Um briefing pode propor canal, objetivo, formatos e orientações, mas
+`analyze-briefing` só materializa a configuração após mostrar os valores e
+receber confirmação explícita. Uma rede não cadastrada na seleção é decisão de
+configuração: apresente-a antes de solicitar a nova opção.
+
+Embora o Airtable transporte relações como listas, `Marca` deve conter
+exatamente um registro. Zero ou múltiplas marcas tornam a chave ambígua e
+bloqueiam a escrita.
 
 ### Produtos
 
@@ -83,6 +106,9 @@ existentes.
 - `Título` — obrigatório
 - `Data` — obrigatório, `AAAA-MM-DD`
 - `Marca` — obrigatório
+- `Canal da marca` — relação obrigatória para posts novos, com exatamente um
+  registro ativo e compatível com o formato; pode estar vazio em registros
+  legados durante a migração
 - `Canal` — `Feed`, `Story` ou `Reel`
 - `Abordagem` — `Produto`, `Data Oportunidade`, `Educacional`, `Editorial` ou `Spoiler`
 - `Produto` — relação opcional
@@ -92,6 +118,9 @@ existentes.
 - `Legenda` — vazio na Parte 1; na Parte 2 recebe somente a legenda aprovada de
   `generate-copy`
 - `Rationale` — obrigatório na geração do grid
+- `Briefing de design` — estrutura da peça, referências, direção visual por
+  tela, assets, elementos obrigatórios, movimento ou interação e observações de
+  produção; não duplica `Lettering`
 - `Notas`
 - `Mockup`, `Vídeo`, `Peças` — vazios na Parte 1; na Parte 2, `Mockup` recebe
   somente a imagem selecionada para o post e `Peças` permanece relação reversa
@@ -102,7 +131,8 @@ Se já houver posts para a mesma marca e mês, não regenerar ou sobrescrever se
 mostrar o conflito e obter uma escolha explícita: revisar existentes, preencher
 lacunas ou substituir.
 
-Na geração de copy, `Marca + Data + Título` deve resolver um único post.
+Na geração de copy, use a chave com `Canal da marca` quando a relação existir;
+para legado, `Marca + Data + Título` ainda deve resolver um único post.
 `Legenda` e `Lettering` são independentes: atualizar um não apaga o outro.
 Texto existente nunca é substituído ou concatenado sem escolha explícita. A
 skill de copy não altera título, data, relações, rationale, notas, status ou

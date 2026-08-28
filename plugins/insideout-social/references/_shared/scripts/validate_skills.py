@@ -16,12 +16,19 @@ SKILLS = {
     "generate-grid": ROOT / "generate-grid",
     "generate-image": ROOT / "generate-image",
     "generate-video": ROOT / "generate-video",
+    "skill-feedback": ROOT / "skill-feedback",
 }
 REQUIRED_SHARED = (
     SHARED_ROOT / "voz-usuario.md",
     SHARED_ROOT / "about-insideout.md",
     SHARED_ROOT / "airtable-contract.md",
     SHARED_ROOT / "evals" / "resposta-sem-ids.md",
+)
+REQUIRED_FEATURE_FILES = (
+    ROOT / "generate-grid" / "references" / "design-briefing.md",
+    ROOT / "generate-grid" / "references" / "trend-context.md",
+    ROOT / "generate-grid" / "references" / "html-snapshot.md",
+    ROOT / "skill-feedback" / "references" / "issue-contract.md",
 )
 FORBIDDEN = (
     "${CLAUDE_PLUGIN_ROOT}",
@@ -52,6 +59,10 @@ def main() -> int:
     for path in REQUIRED_SHARED:
         if not path.is_file():
             errors.append(f"arquivo compartilhado ausente: {path.relative_to(ROOT)}")
+
+    for path in REQUIRED_FEATURE_FILES:
+        if not path.is_file():
+            errors.append(f"arquivo de capacidade ausente: {path.relative_to(ROOT)}")
 
     for name, skill_dir in SKILLS.items():
         skill_file = skill_dir / "SKILL.md"

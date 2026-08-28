@@ -1,6 +1,6 @@
 ---
 name: analyze-briefing
-description: Analisa briefings mensais da InsideOut, valida completude e escopo contratado e, com confirmação, materializa marcas e produtos no Airtable. Use quando o usuário pedir para entender, revisar, avaliar ou transformar um briefing em direção estratégica para o mês.
+description: Analisa briefings mensais da InsideOut, valida completude e escopo contratado e, com confirmação, materializa marcas, produtos e canais no Airtable. Use quando o usuário pedir para entender, revisar, avaliar ou transformar um briefing em direção estratégica para o mês.
 ---
 
 # Analisar briefing InsideOut
@@ -30,6 +30,7 @@ Apresente:
 - serviços envolvidos;
 - objetivo do mês;
 - produtos-foco;
+- redes, formatos e diferenças editoriais explicitamente informados;
 - ações e datas principais.
 
 Separe claramente o que está explícito do que não veio. Aguarde o OK do usuário
@@ -69,8 +70,19 @@ Somente depois da análise e com confirmação explícita:
 - localize cada produto por `Marca + Slug`;
 - crie ou atualize apenas produtos citados explicitamente;
 - use `Status = Ativo` para produtos do briefing atual;
+- localize cada canal por `Marca + Rede`;
+- para canais explícitos, mostre antes da escrita rede, perfil, status, objetivo,
+  formatos e diferenças em relação à orientação geral da marca;
+- crie ou atualize `Canais da marca` somente após confirmação, com
+  `Status = Ativo` quando o briefing indicar uso atual;
+- trate `Marca` como relação única e pare diante de canal duplicado ou ligado a
+  mais de uma marca;
+- se a rede ainda não existir na seleção, apresente essa mudança de
+  configuração e aguarde aprovação específica;
 - releia os registros e confirme o resultado em linguagem de negócio.
 
+Não transforme ausência de canal em inativação e não copie a voz inteira da
+marca para `Orientações do canal`: registre somente diferenças explícitas.
 Não crie referências, posts ou peças nesta etapa.
 
 ### 5. Preparar a ficha para o grid
@@ -83,6 +95,7 @@ ficha com:
 - lançamentos com data, produto e importância;
 - produtos-foco;
 - campanhas globais e datas conhecidas;
+- canais ativos, objetivos editoriais e formatos habilitados;
 - direcionais editoriais;
 - lacunas que impedem decisões específicas.
 
@@ -96,11 +109,14 @@ silêncio.
 - Pedidos fora do contrato estão sinalizados sem serem recusados.
 - Dados salvos foram relidos.
 - Repetir a mesma materialização não cria duplicatas.
+- Cada canal materializado tem uma marca, uma rede e uma chave inequívoca.
+- Orientações de canal contêm apenas diferenças sustentadas pelo briefing.
 - O usuário recebe resultado e próximo passo sem detalhes técnicos.
 
 ## Limites
 
-- Não criar posts ou peças.
+- Não criar posts, referências ou peças.
 - Não gerar copy, imagem ou vídeo.
 - Não transformar inferência em atributo de marca ou claim de produto.
+- Não cadastrar rede, perfil, objetivo, formato ou orientação por plausibilidade.
 - Não sobrescrever conteúdo curado com campos vazios.
