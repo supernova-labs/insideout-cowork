@@ -94,6 +94,20 @@ substitui a decisão humana nem pode alegar sucesso sem evidência observável.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
+### Lotes preservam aprovação granular
+
+Entregas compostas podem ser apresentadas e aprovadas em lote, mas cada item
+permanece individualmente revisável. Itens aprovados podem avançar e ser
+persistidos; exceções permanecem em revisão sem bloquear o restante do lote.
+
+**Por quê:** combina eficiência operacional com controle editorial e evita que
+um problema pontual paralise toda a entrega.
+
+**Escopo:** fluxos recorrentes de planejamento e produção de conteúdo que
+processam múltiplos posts ou peças.
+
+**Origem:** gate de contrato de dados, 2026-08-27.
+
 ### Evidência explícita vence plausibilidade
 
 Briefings, claims, atributos de marca, referências e tendências só entram no
