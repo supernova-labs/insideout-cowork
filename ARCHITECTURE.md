@@ -197,6 +197,21 @@ estado local no produto oficial.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
+### Experiência validada precede infraestrutura
+
+Quando a principal incerteza é o valor ou o formato da experiência, o primeiro
+teste deve usar um artefato portátil e sem dependências permanentes.
+Hospedagem, autenticação, persistência e integração ao vivo só entram depois
+que o piloto comprovar o uso.
+
+**Por quê:** permite aprender rápido sem transformar uma hipótese de interface
+em aplicação permanente antes da hora.
+
+**Escopo:** snapshots, painéis, visualizações para clientes e outras
+superfícies derivadas dos dados operacionais.
+
+**Origem:** subtarefa do HTML e gate de contrato de dados, 2026-08-27.
+
 ### Rede social e formato são dimensões distintas
 
 Cada presença digital de uma marca é representada em `Canais da marca`, com
@@ -235,8 +250,7 @@ O gate atual está em
 
 As decisões ainda não incorporadas como princípios são:
 
-1. natureza e forma de compartilhamento do snapshot HTML;
-2. escopo e critérios de sucesso do piloto com Carol.
+1. escopo e critérios de sucesso do piloto com Carol.
 
 ## Registro de decisões
 
