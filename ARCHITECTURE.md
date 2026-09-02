@@ -136,16 +136,18 @@ cliente.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
-### Cobertura observável precede análise
+### Cobertura observável condiciona a análise
 
-Uma análise só pode ser produzida quando todo o conteúdo disponibilizado pelas
-fontes autorizadas tiver sido percorrido. Contadores opacos são usados para
-reconciliação, não como prova isolada de completude.
+A coleta tenta percorrer todo o conteúdo disponibilizado pelas fontes
+autorizadas. Contadores opacos são usados para reconciliação, não como prova
+isolada de completude. Quando o percurso não puder ser concluído, a análise pode
+prosseguir somente com a cobertura efetivamente observada e com as lacunas
+quantificadas de forma explícita.
 
 **Por quê:** plataformas podem incluir nos contadores comentários ocultos,
 removidos ou indisponíveis. A cobertura é comprovada pelo esgotamento da
-paginação e das respostas acessíveis; se esse percurso falhar, a análise é
-bloqueada em vez de apresentar conclusões parciais.
+paginação e das respostas acessíveis; quando isso não for possível, a condição
+de cobertura passa a limitar a interpretação e as conclusões permitidas.
 
 **Escopo:** Social Listening e demais análises que dependam de conteúdo
 dinâmico obtido em fontes externas.
@@ -297,6 +299,24 @@ causados pelas mecânicas próprias de cada plataforma.
 InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
+### Lacunas de coleta são explícitas, não silenciosas
+
+Uma falha de coleta não interrompe toda a execução. O processo continua com os
+dados disponíveis e registra, por fonte e publicação, o que foi coletado, o que
+ficou inacessível e o motivo conhecido. Toda análise e todo relatório resultante
+devem carregar esse estado de cobertura e não podem apresentar a base como
+completa quando houver lacunas.
+
+**Por quê:** interromper todo o processo por uma falha isolada torna a operação
+frágil, enquanto omitir a falha cria falsa confiança. A degradação explícita
+preserva utilidade sem esconder os limites da evidência.
+
+**Escopo:** coleta, análise automatizada e revisão editorial do InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02; revisa o gate
+de bloqueio total definido anteriormente na mesma sessão.
 
 ### Contexto efêmero só persiste após curadoria
 
