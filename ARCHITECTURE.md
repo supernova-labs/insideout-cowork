@@ -219,6 +219,21 @@ autenticadas usadas pelos plugins da InsideOut.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### O MVP é iniciado sob demanda
+
+Cada execução do InsideOut Mar Aberto começa por iniciativa do operador, que
+define o filtro e o período e realiza os logins solicitados. A partir dessas
+entradas, o fluxo coordena automaticamente as etapas até encontrar um gate
+editorial. Agendamento e execução recorrente ficam fora do MVP.
+
+**Por quê:** a automação por navegador depende de sessões autenticadas e de um
+recorte temporal consciente. A iniciação sob demanda preserva esse controle sem
+introduzir a fragilidade operacional de execuções não assistidas.
+
+**Escopo:** disparo e limites de automação do MVP do InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### O navegador autenticado é a camada de integração do MVP
 
 No MVP do InsideOut Mar Aberto, a exportação na Stilingue e a coleta no
