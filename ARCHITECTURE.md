@@ -220,6 +220,22 @@ ser detectadas por validação e cobertas por manutenção do fluxo.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### A exportação da Stilingue é o contrato de entrada do MVP
+
+Toda execução do MVP do InsideOut Mar Aberto começa por uma exportação válida
+da Stilingue, produzida pelo próprio fluxo ou fornecida pelo operador. O arquivo
+é validado antes da coleta de comentários. Planilhas genéricas, listas manuais
+de links e adaptadores para outras fontes ficam fora desse contrato inicial.
+
+**Por quê:** adotar um único formato de origem reduz ambiguidades de campos,
+mantém o recorte auditável e concentra a primeira implementação no processo já
+usado pela InsideOut, assumindo explicitamente a dependência da Stilingue.
+
+**Escopo:** entrada, validação inicial e delimitação de fontes do MVP do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Produtos separados não compartilham estado por pressuposição
 
 Cada plugin com operadores, permissões ou ciclos distintos usa seu próprio
