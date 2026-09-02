@@ -1,9 +1,10 @@
-# Arquitetura — InsideOut Social
+# Arquitetura — plugins InsideOut
 
 Este documento registra princípios e decisões arquiteturais reutilizáveis do
-plugin. O comportamento executável continua nos `SKILL.md`; o contrato
-operacional detalhado continua em `references/_shared/`; e o estado vivo
-continua no Airtable.
+catálogo. O comportamento executável continua nos `SKILL.md`; contratos
+operacionais detalhados continuam nas referências de cada produto; e o estado
+vivo permanece no armazenamento definido para cada plugin — Airtable no
+InsideOut Social e arquivos locais no InsideOut Mar Aberto.
 
 Não use este arquivo para duplicar instruções operacionais ou snapshots de
 schema. Decisões abertas aparecem ao final e só viram princípios depois de
@@ -11,7 +12,7 @@ aprovação explícita.
 
 ## Princípios confirmados
 
-### Conhecimento no plugin; estado no Airtable
+### No InsideOut Social, conhecimento fica no plugin e estado no Airtable
 
 O plugin guarda conhecimento, julgamento, fluxo e regras estáveis. O Airtable
 guarda marcas, produtos, referências, posts, peças e demais estados
@@ -20,7 +21,7 @@ operacionais que mudam durante o trabalho.
 **Por quê:** evita embutir dados vivos no pacote e permite que o time opere uma
 única base compartilhada.
 
-**Escopo:** todas as skills e toda evolução do modelo operacional.
+**Escopo:** skills e evolução do modelo operacional do InsideOut Social.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
@@ -693,8 +694,11 @@ de publicações multicanal.
 
 ## Decisões abertas
 
-Não há decisão arquitetural aberta bloqueando a construção das capacidades do
-plugin. O próximo gate é empírico e está em
+Não há decisão arquitetural aberta bloqueando a implementação do InsideOut Mar
+Aberto. Sua validação operacional acontece após a publicação do piloto, conforme
+o princípio registrado neste documento.
+
+Para o InsideOut Social, o próximo gate é empírico e está em
 [`[Decisão] Definir e validar o piloto com Carol`](https://link.akiflow.com/tasks/9bfc23fa-c8f6-42c4-9fde-0a773ac23553).
 
 Esse gate não bloqueia a implementação. Antes do teste ponta a ponta e da
