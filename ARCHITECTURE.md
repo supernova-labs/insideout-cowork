@@ -232,6 +232,22 @@ Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Evidências narrativas combinam representatividade e curadoria humana
+
+O pool de comentários usado em relatórios é proposto por seleção estratificada
+entre canais, temas e sentimentos, combinando exemplos recorrentes, marcantes
+e contrapontos. Uma pessoa aprova a seleção final antes da composição do
+relatório.
+
+**Por quê:** somente automatizar a seleção pode privilegiar comentários
+chamativos e distorcer a narrativa; somente selecionar manualmente reduz a
+repetibilidade e mantém esforço operacional elevado.
+
+**Escopo:** comentários, depoimentos e demais evidências narrativas escolhidas
+para entregáveis de Social Listening.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
