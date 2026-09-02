@@ -70,6 +70,22 @@ Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Cada produto leva seu próprio canal de feedback
+
+O plugin InsideOut Mar Aberto inclui uma skill própria para registrar bugs e
+melhorias descobertos no piloto. Essa capacidade é independente do
+`insideout-social`, sanitiza dados de clientes, credenciais e conteúdo pessoal e
+exige confirmação antes de publicar o relato no repositório de origem. Ela não
+constitui uma quinta etapa do fluxo analítico.
+
+**Por quê:** os operadores precisam relatar problemas sem instalar outro
+produto nem transportar contexto manualmente. Manter o feedback no próprio
+plugin preserva sua fronteira e torna a homologação pós-publicação rastreável.
+
+**Escopo:** feedback operacional e evolução do plugin InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Artefatos compostos não duplicam suas fontes
 
 Uma apresentação pode reunir contexto e resultados de vários campos, mas cada
