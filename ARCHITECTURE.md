@@ -352,6 +352,22 @@ Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### HTML é a fonte do relatório; PDF é a entrega congelada
+
+O relatório do InsideOut Mar Aberto é produzido como um artefato HTML local e
+portátil, adequado à revisão no navegador e à apresentação de textos, tabelas e
+gráficos. Depois do segundo gate editorial, o mesmo conteúdo é exportado para
+PDF como versão final de entrega. HTML e PDF não mantêm narrativas paralelas.
+
+**Por quê:** o HTML favorece geração automatizada, inspeção e portabilidade sem
+infraestrutura adicional. Derivar o PDF da mesma fonte evita divergências e
+oferece um formato estável para compartilhamento após a aprovação.
+
+**Escopo:** geração, revisão, versionamento e exportação dos relatórios do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Distribuição e amplificação são leituras distintas
 
 A leitura principal de sentimento atribui o mesmo peso a cada comentário
