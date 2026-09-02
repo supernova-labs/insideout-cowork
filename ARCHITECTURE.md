@@ -203,6 +203,23 @@ autenticadas usadas pelos plugins da InsideOut.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### O navegador autenticado é a camada de integração do MVP
+
+No MVP do InsideOut Mar Aberto, a exportação na Stilingue e a coleta no
+Instagram e no YouTube são realizadas por automação do navegador sobre a sessão
+autenticada do operador. O login é uma ação manual e privada; depois de
+confirmada a sessão necessária para a etapa, o fluxo prossegue automaticamente
+sem exigir chaves de API.
+
+**Por quê:** esse caminho reproduz o acesso já disponível para cada operador e
+evita tornar credenciais técnicas ou aprovações de API um pré-requisito do
+produto. Como contrapartida, mudanças nas interfaces das plataformas precisam
+ser detectadas por validação e cobertas por manutenção do fluxo.
+
+**Escopo:** integrações de coleta do MVP do InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Produtos separados não compartilham estado por pressuposição
 
 Cada plugin com operadores, permissões ou ciclos distintos usa seu próprio
