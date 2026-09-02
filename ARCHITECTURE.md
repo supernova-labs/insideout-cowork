@@ -302,6 +302,22 @@ para entregáveis de Social Listening.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### A evidência aprovada preserva a voz, não a identidade
+
+Comentários aprovados para o pool de evidências podem aparecer integralmente
+no relatório, preservando a redação original. A apresentação remove nome de
+usuário, perfil, foto, link individual e outros identificadores do autor. Essa
+permissão vale somente para o conjunto curado; o corpus completo continua
+sujeito ao descarte após o processamento.
+
+**Por quê:** o texto integral mantém o tom espontâneo e a força documental das
+manifestações selecionadas, enquanto a remoção dos identificadores reduz a
+exposição direta das pessoas citadas.
+
+**Escopo:** pool de evidências e relatórios do InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Sentimento é contextual e multidimensional
 
 Cada comentário é analisado separando relevância, alvo, sentimento, temas e
