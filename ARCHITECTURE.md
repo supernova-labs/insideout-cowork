@@ -136,6 +136,22 @@ cliente.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
+### Cobertura observável precede análise
+
+Uma análise só pode ser produzida quando todo o conteúdo disponibilizado pelas
+fontes autorizadas tiver sido percorrido. Contadores opacos são usados para
+reconciliação, não como prova isolada de completude.
+
+**Por quê:** plataformas podem incluir nos contadores comentários ocultos,
+removidos ou indisponíveis. A cobertura é comprovada pelo esgotamento da
+paginação e das respostas acessíveis; se esse percurso falhar, a análise é
+bloqueada em vez de apresentar conclusões parciais.
+
+**Escopo:** Social Listening e demais análises que dependam de conteúdo
+dinâmico obtido em fontes externas.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
