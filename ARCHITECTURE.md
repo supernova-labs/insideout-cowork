@@ -280,6 +280,24 @@ Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Distribuição e amplificação são leituras distintas
+
+A leitura principal de sentimento atribui o mesmo peso a cada comentário
+relevante. Em paralelo, uma leitura de amplificação considera sinais de
+engajamento, como curtidas e respostas, sempre dentro de cada plataforma. As
+duas leituras permanecem separadas: não formam um índice único e métricas brutas
+de Instagram e YouTube não são comparadas diretamente.
+
+**Por quê:** a distribuição com pesos iguais representa melhor o conjunto das
+opiniões observadas, enquanto a amplificação evidencia quais manifestações
+ganharam repercussão. Misturá-las ocultaria essa diferença e introduziria vieses
+causados pelas mecânicas próprias de cada plataforma.
+
+**Escopo:** agregações, visualizações e conclusões de sentimento produzidas pelo
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
