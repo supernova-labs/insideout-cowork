@@ -236,6 +236,22 @@ InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### A matriz de canais suportados é explícita
+
+O MVP do InsideOut Mar Aberto coleta e analisa publicações do Instagram e do
+YouTube. Ocorrências de outras redes presentes na exportação da Stilingue não
+interrompem a execução: são excluídas da análise, contabilizadas por canal e
+apresentadas como cobertura não suportada.
+
+**Por quê:** limitar os canais mantém a automação testável sem esconder partes
+do universo exportado. O registro explícito permite interpretar os resultados
+segundo o alcance real do produto.
+
+**Escopo:** roteamento, cobertura e análise por canal no MVP do InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Produtos separados não compartilham estado por pressuposição
 
 Cada plugin com operadores, permissões ou ciclos distintos usa seu próprio
