@@ -498,6 +498,24 @@ InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### A entrega final combina relatório e planilha analítica
+
+Cada execução concluída do InsideOut Mar Aberto entrega, junto do relatório
+HTML e de seu PDF aprovado, uma planilha `.xlsx` com todos os dados analíticos
+processados. Ela reúne cobertura, classificações por registro anonimizado,
+alvos, sentimentos, temas, confiança, sinais de engajamento e agregações. A
+planilha não reintroduz o corpus bruto nem identificadores pessoais; o texto
+integral permanece restrito ao pool de evidências aprovado.
+
+**Por quê:** o relatório oferece síntese e narrativa, enquanto a planilha torna
+os resultados derivados inspecionáveis, filtráveis e reutilizáveis pelo time
+sem contrariar a política de descarte dos comentários brutos.
+
+**Escopo:** produtos finais, exportação e revisão das execuções concluídas do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### O relatório tem identidade padrão e personalização opcional
 
 O InsideOut Mar Aberto inclui uma identidade visual padrão da InsideOut para o
