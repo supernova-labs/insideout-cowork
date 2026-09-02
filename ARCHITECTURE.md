@@ -248,6 +248,21 @@ para entregáveis de Social Listening.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Sentimento é contextual e multidimensional
+
+Cada comentário é analisado separando relevância, alvo, sentimento, temas e
+confiança. A polaridade admite positivo, negativo, neutro, misto e ambíguo;
+casos incertos não são forçados para uma classe conclusiva.
+
+**Por quê:** uma reação positiva à campanha ou ao influenciador não equivale
+necessariamente a sentimento positivo sobre o produto ou a marca. Separar as
+dimensões preserva o significado e torna a classificação revisável.
+
+**Escopo:** análise de sentimento de comentários e respostas no InsideOut Mar
+Aberto e em futuras capacidades de Social Listening.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
