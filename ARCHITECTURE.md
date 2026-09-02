@@ -184,6 +184,21 @@ autenticadas usadas pelos plugins da InsideOut.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Produtos separados não compartilham estado por pressuposição
+
+Cada plugin com operadores, permissões ou ciclos distintos usa seu próprio
+armazenamento operacional. Integrações entre produtos são opcionais,
+explícitas e não podem ser pré-requisito para executar a capacidade principal.
+
+**Por quê:** quem opera o InsideOut Mar Aberto pode não ter acesso à base do
+InsideOut Social. Vincular os dois produtos ampliaria permissões, criaria uma
+dependência desnecessária e impediria o uso por parte do time.
+
+**Escopo:** plugins e produtos da InsideOut que atendam grupos de operadores ou
+contratos de acesso diferentes.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
