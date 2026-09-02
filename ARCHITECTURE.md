@@ -466,6 +466,23 @@ InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### O relatório tem identidade padrão e personalização opcional
+
+O InsideOut Mar Aberto inclui uma identidade visual padrão da InsideOut para o
+relatório HTML. Quando o projeto fornecer logo, cores ou fontes do cliente,
+esses materiais locais podem personalizar a apresentação sem alterar o contrato
+do conteúdo. Na ausência deles, a geração usa o padrão e não é bloqueada.
+
+**Por quê:** um padrão garante consistência e funcionamento imediato para todos
+os operadores, enquanto a personalização opcional atende entregas específicas
+sem transformar ativos de cliente em dependência ou conteúdo distribuído pelo
+plugin.
+
+**Escopo:** composição visual dos relatórios HTML e PDFs derivados do InsideOut
+Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Distribuição e amplificação são leituras distintas
 
 A leitura principal de sentimento atribui o mesmo peso a cada comentário
