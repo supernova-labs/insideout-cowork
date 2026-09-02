@@ -168,6 +168,22 @@ ruído de busca, idioma, geografia ou ambiguidade de entidade.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Autenticação pertence ao operador e é validada por etapa
+
+Integrações autenticadas usam a sessão do navegador da pessoa que executa o
+fluxo. O acesso é verificado antes de cada etapa dependente e, quando
+indisponível, a execução pausa de forma retomável sem capturar ou persistir
+credenciais.
+
+**Por quê:** o preflight por etapa evita solicitar acessos desnecessários,
+impede o compartilhamento de contas e preserva o trabalho já concluído quando
+uma sessão expira.
+
+**Escopo:** Stilingue, Instagram, YouTube e demais fontes externas
+autenticadas usadas pelos plugins da InsideOut.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
