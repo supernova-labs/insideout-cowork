@@ -300,6 +300,24 @@ Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Relatórios avançam por dois gates editoriais
+
+O relatório do InsideOut Mar Aberto é construído em duas etapas de revisão
+humana. Primeiro, a pessoa responsável aprova as conclusões propostas, a
+estrutura narrativa e o pool de evidências; somente então o plugin produz o
+relatório completo. A versão produzida passa por uma segunda revisão antes de
+ser considerada final.
+
+**Por quê:** validar o raciocínio antes da redação evita propagar uma direção
+editorial inadequada para todo o documento. A revisão final assegura clareza,
+ênfase e adequação ao contexto sem transformar a classificação de sentimento
+em uma atividade manual.
+
+**Escopo:** construção, revisão e conclusão de relatórios do InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Distribuição e amplificação são leituras distintas
 
 A leitura principal de sentimento atribui o mesmo peso a cada comentário
