@@ -152,6 +152,22 @@ dinâmico obtido em fontes externas.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Relevância precede volume
+
+Uma ocorrência só participa da análise quando pertence ao mercado definido e
+trata o objeto monitorado como assunto central. Exclusões metodológicas
+permanecem auditáveis e não são confundidas com falhas de coleta.
+
+**Por quê:** volume bruto pode incluir outros mercados, homônimos, menções
+incidentais e conversas cujo sentimento não se refere ao objeto analisado.
+Preservar o motivo da exclusão mantém a cobertura verificável sem contaminar
+as conclusões.
+
+**Escopo:** Social Listening e demais análises de fontes externas sujeitas a
+ruído de busca, idioma, geografia ou ambiguidade de entidade.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
