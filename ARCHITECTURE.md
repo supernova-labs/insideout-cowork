@@ -483,6 +483,22 @@ Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### O relatório combina núcleo fixo e narrativa adaptativa
+
+Todo relatório do InsideOut Mar Aberto apresenta um núcleo comparável com
+escopo, cobertura, volume, sentimento, temas, amplificação e metodologia. A
+ordem e a composição das conclusões, da narrativa e das recomendações se
+adaptam aos achados da execução e passam pelos gates editoriais definidos.
+
+**Por quê:** o núcleo fixo torna períodos e projetos comparáveis e impede a
+omissão de limites metodológicos. A camada adaptativa concentra a atenção no
+que é material em cada análise, sem preencher seções irrelevantes por obrigação.
+
+**Escopo:** contrato editorial e composição dos relatórios do InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Distribuição e amplificação são leituras distintas
 
 A leitura principal de sentimento atribui o mesmo peso a cada comentário
