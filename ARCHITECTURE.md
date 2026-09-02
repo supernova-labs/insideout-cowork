@@ -215,6 +215,23 @@ coletados pelo InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Dados brutos expiram após cumprir sua função
+
+O corpus completo de comentários existe somente durante a coleta e o
+processamento. Depois da análise concluída, ele é descartado; permanecem as
+análises derivadas, a auditoria de cobertura e um pool anonimizado de
+comentários representativos ou marcantes para compor o relatório.
+
+**Por quê:** o produto precisa preservar conclusões verificáveis e evidências
+úteis para comunicação, não acumular indefinidamente todo o conteúdo coletado.
+Isso reduz armazenamento e exposição sem eliminar a base narrativa do
+relatório.
+
+**Escopo:** dados brutos coletados e artefatos persistidos pelo InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
