@@ -53,6 +53,23 @@ skills.
 
 **Origem:** gate de contrato de dados, 2026-08-27.
 
+### O Mar Aberto combina uma jornada principal com etapas retomáveis
+
+Uma skill principal conduz a execução completa do InsideOut Mar Aberto e
+coordena quatro skills especializadas: exportação da Stilingue, coleta de
+comentários, análise automatizada e construção do relatório. Cada etapa mantém
+responsabilidade, validação e checkpoint próprios, podendo ser retomada sem
+refazer etapas já concluídas.
+
+**Por quê:** a jornada principal simplifica a operação para diferentes pessoas,
+enquanto a separação por etapa permite testar, diagnosticar, retomar e evoluir
+cada capacidade sem criar um fluxo monolítico.
+
+**Escopo:** organização das skills e retomada de execuções do plugin InsideOut
+Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Artefatos compostos não duplicam suas fontes
 
 Uma apresentação pode reunir contexto e resultados de vários campos, mas cada
