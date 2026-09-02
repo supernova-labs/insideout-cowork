@@ -334,6 +334,23 @@ Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Execuções incompletas preservam o corpus até decisão do operador
+
+Quando uma execução é interrompida antes de concluir a análise, os comentários
+brutos já coletados permanecem na pasta local até que a execução seja retomada
+ou o operador solicite sua exclusão. Não há expiração automática para esse
+estado incompleto. Depois que a análise termina, aplica-se o descarte imediato
+do corpus completo.
+
+**Por quê:** a persistência do estado incompleto permite retomadas tardias sem
+repetir a coleta. Limitar a exceção às execuções ainda não processadas preserva
+a regra de não acumular comentários após sua função analítica.
+
+**Escopo:** retenção e limpeza de dados brutos em execuções interrompidas do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Evidências narrativas combinam representatividade e curadoria humana
 
 O pool de comentários usado em relatórios é proposto por seleção estratificada
