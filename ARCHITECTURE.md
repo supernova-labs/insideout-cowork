@@ -285,6 +285,22 @@ InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### O estado local usa formatos textuais estruturados
+
+Cada projeto e execução do InsideOut Mar Aberto possui uma pasta própria. JSON
+é usado para manifestos, checkpoints e resultados agregados; JSONL é usado para
+coleções de registros. Esses arquivos constituem o estado operacional canônico,
+enquanto HTML e PDF são artefatos de apresentação derivados.
+
+**Por quê:** formatos textuais estruturados são portáteis, inspecionáveis e
+adequados à retomada por etapa, sem exigir Excel, banco de dados ou serviço
+externo para interpretar uma execução.
+
+**Escopo:** contratos de persistência local e intercâmbio de execuções do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Dados pessoais são minimizados na origem
 
 Conteúdo público coletado para análise é anonimizado antes da persistência.
