@@ -199,6 +199,22 @@ contratos de acesso diferentes.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Dados pessoais são minimizados na origem
+
+Conteúdo público coletado para análise é anonimizado antes da persistência.
+Nomes de usuário, perfis, fotos e links individuais não são armazenados;
+identificadores irreversíveis podem existir apenas para deduplicação e para
+preservar a estrutura entre comentários e respostas.
+
+**Por quê:** a análise de sentimento depende do conteúdo e do contexto da
+conversa, não da identidade pessoal de quem comentou. Remover identificadores
+reduz exposição sem impedir a classificação ou a verificação de cobertura.
+
+**Escopo:** comentários, respostas e demais conteúdos produzidos por pessoas
+coletados pelo InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
