@@ -201,6 +201,24 @@ contratos de acesso diferentes.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### O estado operacional do Mar Aberto é local e portátil
+
+Cada execução do InsideOut Mar Aberto guarda checkpoints, análises, auditoria
+de cobertura e evidências selecionadas em arquivos locais fora do plugin. Os
+artefatos são organizados por projeto e execução, podem ser transferidos
+deliberadamente entre operadores e não dependem de Airtable ou de um backend
+compartilhado.
+
+**Por quê:** arquivos locais reduzem dependências de acesso e infraestrutura.
+A identificação por projeto e execução evita misturas acidentais, enquanto a
+portabilidade permite continuidade quando a equipe decidir compartilhar o
+trabalho.
+
+**Escopo:** persistência operacional, retomada e transferência de execuções do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Dados pessoais são minimizados na origem
 
 Conteúdo público coletado para análise é anonimizado antes da persistência.
