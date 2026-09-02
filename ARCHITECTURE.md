@@ -317,6 +317,23 @@ Aberto e em futuras capacidades de Social Listening.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### A consistência analítica vem da rubrica compartilhada
+
+O modelo ativo do Codex classifica os comentários segundo uma rubrica fixa e
+versionada pelo plugin. A arquitetura não fixa um modelo externo nem adiciona
+uma segunda passagem de autovalidação comentário a comentário. A consistência
+esperada está nas dimensões, definições e critérios aplicados, não na reprodução
+literal de cada classificação entre versões de modelo.
+
+**Por quê:** manter a rubrica como contrato reduz dependências técnicas e
+permite que o plugin acompanhe o ambiente Codex disponível para cada operador,
+preservando uma linguagem analítica comum.
+
+**Escopo:** classificação automatizada de sentimento e temas no InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Automação analítica e responsabilidade editorial são gates distintos
 
 A classificação de sentimento é executada integralmente de forma automática,
