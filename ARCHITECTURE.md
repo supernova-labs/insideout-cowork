@@ -714,7 +714,8 @@ de publicações multicanal.
 
 Não há decisão arquitetural aberta bloqueando a implementação do InsideOut Mar
 Aberto. Sua validação operacional acontece após a publicação do piloto, conforme
-o princípio registrado neste documento.
+o princípio registrado neste documento. Critérios de saída e testes de cada
+etapa estão em `DEVELOPMENT_PLAN_MAR_ABERTO.md`.
 
 Para o InsideOut Social, o próximo gate é empírico e está em
 [`[Decisão] Definir e validar o piloto com Carol`](https://link.akiflow.com/tasks/9bfc23fa-c8f6-42c4-9fde-0a773ac23553).
