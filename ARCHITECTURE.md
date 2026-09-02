@@ -596,6 +596,24 @@ estado local no produto oficial.
 
 **Origem:** `AGENTS.md`, 2026-08-27.
 
+### A publicação do piloto habilita a validação operacional
+
+O primeiro pacote do InsideOut Mar Aberto é publicado no marketplace da
+InsideOut depois das validações locais de estrutura, contrato e cenários que
+não dependem de sessões reais. Os testes operacionais ponta a ponta acontecem
+depois da publicação, conduzidos pela equipe da InsideOut por meio do plugin e
+com as credenciais de cada operador.
+
+**Por quê:** somente os futuros operadores conseguem validar o fluxo nas contas,
+permissões e condições reais de uso. A publicação inicial funciona como canal
+de distribuição do piloto, não como declaração de que a experiência já foi
+homologada em produção.
+
+**Escopo:** estratégia de publicação, piloto e homologação operacional do
+InsideOut Mar Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Experiência validada precede infraestrutura
 
 Quando a principal incerteza é o valor ou o formato da experiência, o primeiro
