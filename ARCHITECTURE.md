@@ -263,6 +263,23 @@ Aberto e em futuras capacidades de Social Listening.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
+### Automação analítica e responsabilidade editorial são gates distintos
+
+A classificação de sentimento é executada integralmente de forma automática,
+sem revisão humana comentário a comentário. A revisão humana acontece na
+construção do relatório, sobre a narrativa, as conclusões e o pool de
+evidências selecionado.
+
+**Por quê:** revisar cada classificação manteria o custo do processo manual,
+enquanto publicar uma narrativa sem revisão transferiria ao cliente erros de
+interpretação ou de ênfase. Separar os gates preserva escala e responsabilidade
+editorial.
+
+**Escopo:** análises automatizadas e relatórios produzidos pelo InsideOut Mar
+Aberto.
+
+**Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
+
 ### Contexto efêmero só persiste após curadoria
 
 Informações externas e temporárias podem ser pesquisadas ao vivo e informar
