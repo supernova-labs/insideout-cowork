@@ -1,0 +1,22 @@
+{
+  "contract_version": "1.0.0",
+  "run_id": "teste-codex-i20-2026-09",
+  "project": "Teste sintético i20",
+  "filter": "nova busca i20",
+  "period": {"start": "2026-08-30", "end": "2026-08-31", "timezone": "America/Sao_Paulo"},
+  "status": "completed",
+  "stage": "complete",
+  "paths": {
+    "input": "input/stilingue.csv",
+    "coverage": "coverage/records.jsonl",
+    "analysis": "analysis/records.jsonl",
+    "aggregates": "analysis/aggregates.json",
+    "evidence": "analysis/evidence-approved.jsonl",
+    "html": "deliverables/report.html",
+    "pdf": "deliverables/report.pdf",
+    "workbook": "deliverables/analytics.xlsx"
+  },
+  "counts": {"publications": 3, "observed_records": 8, "relevant_records": 7, "evidence": 4},
+  "gaps": ["YouTube com cobertura parcial: 5 de 7 comentários observados.", "TikTok contabilizado como canal não suportado no MVP."],
+  "updated_at": "2026-09-02T12:30:00-03:00"
+}

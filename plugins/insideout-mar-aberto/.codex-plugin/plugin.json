@@ -1,0 +1,22 @@
+{
+  "name": "insideout-mar-aberto",
+  "version": "0.1.0",
+  "description": "Skills da InsideOut para exportar publicações da Stilingue, coletar comentários, analisar sentimento e produzir relatórios de mar aberto.",
+  "author": {
+    "name": "InsideOut"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "InsideOut Mar Aberto",
+    "shortDescription": "Analise conversas sobre o Hyundai i20.",
+    "longDescription": "Conduz sob demanda a exportação da Stilingue, a coleta autenticada de comentários no Instagram e YouTube, a análise automatizada e a revisão de relatório HTML, PDF e planilha analítica.",
+    "developerName": "InsideOut",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write", "Interactive"],
+    "defaultPrompt": [
+      "Execute uma análise de mar aberto do i20.",
+      "Retome esta análise de mar aberto.",
+      "Registre um problema do Mar Aberto."
+    ]
+  }
+}

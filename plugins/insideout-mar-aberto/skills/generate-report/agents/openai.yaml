@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerar Relatório"
+  short_description: "Crie HTML, PDF e planilha analítica"
+  default_prompt: "Use $generate-report para revisar e gerar os produtos finais desta análise."

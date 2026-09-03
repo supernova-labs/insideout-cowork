@@ -4,9 +4,9 @@
   "targets": ["codex"],
   "canonicalPaths": {
     "index": ".agent-smith/index.json",
-    "skills": "plugins/insideout-social/skills"
+    "skills": "plugins"
   },
-  "lastUpdated": "2026-08-28T01:30:00Z",
+  "lastUpdated": "2026-09-02T12:00:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -55,6 +55,54 @@
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
       "description": "Registra bugs e melhorias do plugin com sanitização e confirmação."
+    },
+    {
+      "id": "skill:insideout-mar-aberto:run-mar-aberto",
+      "type": "skill",
+      "name": "run-mar-aberto",
+      "plugin": "insideout-mar-aberto",
+      "canonicalPath": "plugins/insideout-mar-aberto/skills/run-mar-aberto/SKILL.md",
+      "description": "Conduz ou retoma o fluxo completo de análise de mar aberto."
+    },
+    {
+      "id": "skill:insideout-mar-aberto:export-stilingue",
+      "type": "skill",
+      "name": "export-stilingue",
+      "plugin": "insideout-mar-aberto",
+      "canonicalPath": "plugins/insideout-mar-aberto/skills/export-stilingue/SKILL.md",
+      "description": "Exporta e valida a entrada oficial da Stilingue."
+    },
+    {
+      "id": "skill:insideout-mar-aberto:collect-comments",
+      "type": "skill",
+      "name": "collect-comments",
+      "plugin": "insideout-mar-aberto",
+      "canonicalPath": "plugins/insideout-mar-aberto/skills/collect-comments/SKILL.md",
+      "description": "Coleta comentários observáveis no Instagram e YouTube."
+    },
+    {
+      "id": "skill:insideout-mar-aberto:analyze-sentiment",
+      "type": "skill",
+      "name": "analyze-sentiment",
+      "plugin": "insideout-mar-aberto",
+      "canonicalPath": "plugins/insideout-mar-aberto/skills/analyze-sentiment/SKILL.md",
+      "description": "Analisa automaticamente relevância, sentimento, temas e amplificação."
+    },
+    {
+      "id": "skill:insideout-mar-aberto:generate-report",
+      "type": "skill",
+      "name": "generate-report",
+      "plugin": "insideout-mar-aberto",
+      "canonicalPath": "plugins/insideout-mar-aberto/skills/generate-report/SKILL.md",
+      "description": "Produz relatório HTML, PDF e planilha analítica revisados."
+    },
+    {
+      "id": "skill:insideout-mar-aberto:skill-feedback",
+      "type": "skill",
+      "name": "skill-feedback",
+      "plugin": "insideout-mar-aberto",
+      "canonicalPath": "plugins/insideout-mar-aberto/skills/skill-feedback/SKILL.md",
+      "description": "Registra feedback do Mar Aberto com sanitização e confirmação."
     }
   ],
   "adapters": [
@@ -99,6 +147,48 @@
       "status": "shared",
       "path": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
       "sourcePath": "plugins/insideout-social/skills/skill-feedback"
+    },
+    {
+      "componentId": "skill:insideout-mar-aberto:run-mar-aberto",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mar-aberto/skills/run-mar-aberto/SKILL.md",
+      "sourcePath": "plugins/insideout-mar-aberto/skills/run-mar-aberto"
+    },
+    {
+      "componentId": "skill:insideout-mar-aberto:export-stilingue",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mar-aberto/skills/export-stilingue/SKILL.md",
+      "sourcePath": "plugins/insideout-mar-aberto/skills/export-stilingue"
+    },
+    {
+      "componentId": "skill:insideout-mar-aberto:collect-comments",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mar-aberto/skills/collect-comments/SKILL.md",
+      "sourcePath": "plugins/insideout-mar-aberto/skills/collect-comments"
+    },
+    {
+      "componentId": "skill:insideout-mar-aberto:analyze-sentiment",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mar-aberto/skills/analyze-sentiment/SKILL.md",
+      "sourcePath": "plugins/insideout-mar-aberto/skills/analyze-sentiment"
+    },
+    {
+      "componentId": "skill:insideout-mar-aberto:generate-report",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mar-aberto/skills/generate-report/SKILL.md",
+      "sourcePath": "plugins/insideout-mar-aberto/skills/generate-report"
+    },
+    {
+      "componentId": "skill:insideout-mar-aberto:skill-feedback",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mar-aberto/skills/skill-feedback/SKILL.md",
+      "sourcePath": "plugins/insideout-mar-aberto/skills/skill-feedback"
     }
   ],
   "gaps": [],
@@ -111,6 +201,12 @@
           "name": "insideout-social",
           "sourceType": "local",
           "path": "plugins/insideout-social",
+          "managed": true
+        },
+        {
+          "name": "insideout-mar-aberto",
+          "sourceType": "local",
+          "path": "plugins/insideout-mar-aberto",
           "managed": true
         }
       ]

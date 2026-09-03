@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/evidence-record.schema.json",
+  "title": "InsideOut Mar Aberto evidence record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_id", "publication_id", "network", "verbatim_text", "sentiment", "themes", "selection_role", "approved"],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 8},
+    "publication_id": {"type": "string", "minLength": 1},
+    "network": {"enum": ["instagram", "youtube"]},
+    "verbatim_text": {"type": "string", "minLength": 1},
+    "sentiment": {"enum": ["positive", "negative", "neutral", "mixed", "ambiguous"]},
+    "themes": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "selection_role": {"enum": ["recurring", "striking", "counterpoint"]},
+    "approved": {"type": "boolean"}
+  }
+}

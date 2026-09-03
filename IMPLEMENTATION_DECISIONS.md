@@ -108,3 +108,56 @@ deixar um item artificial misturado ao backlog real dos mantenedores.
 
 **Impacto:** a auditoria registra o link e os dois estados observados; nenhum
 comentário, PR ou correção adicional é criado pelo harness.
+
+## D009 — Sentimento é persistido também por alvo
+
+**Decisão:** cada registro analítico mantém um sentimento-resumo para a
+distribuição principal e uma lista `target_sentiments` com sentimento e
+confiança para cada alvo identificado.
+
+**Racional:** um comentário pode elogiar a campanha ou a influenciadora sem
+expressar a mesma opinião sobre o i20. Um único rótulo no registro apagaria essa
+distinção e contrariaria a arquitetura aprovada.
+
+**Impacto:** o schema, a rubrica, a skill de análise e a aba `Análises` carregam
+as duas leituras; as agregações principais continuam contando uma unidade por
+registro relevante.
+
+## D010 — A prova vertical sintética não integra o pacote distribuído
+
+**Decisão:** HTML, PDF, planilha, capturas e estados usados na prova vertical
+ficam em `artifacts/`, que já é ignorado pelo Git. O plugin distribui contratos,
+fixtures sintéticas, skills e validadores, não um motor local permanente.
+
+**Racional:** a arquitetura do repositório proíbe incorporar backend, crawler,
+estado operacional ou motores de geração ao plugin.
+
+**Impacto:** a auditoria pode referenciar a prova local sem transformar seus
+artefatos em dependência do produto ou incluir dados de execução no pacote.
+
+## D011 — Evals de interação permanecem separados da homologação real
+
+**Decisão:** antes da publicação, fixtures e validadores comprovam contratos,
+privacidade, reconciliação e produtos. Os evals descrevem os cenários de
+interação; sua execução em tarefas novas, com sessões reais, pertence a M9 e é
+conduzida pela equipe da InsideOut.
+
+**Racional:** essa separação preserva a decisão de publicar o piloto antes dos
+testes operacionais e impede que uma simulação seja apresentada como evidência
+de acesso real à Stilingue, Instagram ou YouTube.
+
+**Impacto:** cada resultado operacional permanece `não executado — M9` até ser
+registrado pela equipe, mesmo quando o contrato correspondente passou no teste
+sintético.
+
+## D012 — Caminhos relativos também são confinados à execução
+
+**Decisão:** o manifesto rejeita caminhos absolutos e qualquer segmento `..`,
+mesmo quando o texto do caminho é tecnicamente relativo.
+
+**Racional:** portabilidade não pode permitir que uma execução leia ou escreva
+fora da pasta escolhida pelo operador. Um caminho como `analysis/../../arquivo`
+violaria a fronteira local sem parecer absoluto.
+
+**Impacto:** schema, contrato de estado e validador cobrem explicitamente path
+traversal; a fixture negativa prova a rejeição.

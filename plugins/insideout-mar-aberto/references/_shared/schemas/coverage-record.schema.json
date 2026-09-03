@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/coverage-record.schema.json",
+  "title": "InsideOut Mar Aberto coverage record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["publication_id", "network", "status", "observed_comments", "observed_replies"],
+  "properties": {
+    "publication_id": {"type": "string", "minLength": 1},
+    "network": {"type": "string", "minLength": 1},
+    "status": {"enum": ["complete", "partial", "unavailable", "unsupported"]},
+    "reported_comments": {"type": ["integer", "null"], "minimum": 0},
+    "observed_comments": {"type": "integer", "minimum": 0},
+    "observed_replies": {"type": "integer", "minimum": 0},
+    "failure_reason": {"type": ["string", "null"]},
+    "last_observed_at": {"type": "string", "format": "date-time"}
+  }
+}

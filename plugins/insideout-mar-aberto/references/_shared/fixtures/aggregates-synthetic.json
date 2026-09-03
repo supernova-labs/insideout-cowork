@@ -1,0 +1,13 @@
+{
+  "contract_version": "1.0.0",
+  "observed_records": 8,
+  "relevant_records": 7,
+  "excluded_records": 1,
+  "failed_records": 0,
+  "sentiment_distribution": {"positive": 4, "negative": 1, "neutral": 0, "mixed": 1, "ambiguous": 1},
+  "amplification_by_platform": {
+    "instagram": {"likes": 19, "replies": 1, "signal_total": 20},
+    "youtube": {"likes": 21, "replies": 2, "signal_total": 23}
+  },
+  "coverage": {"complete": 1, "partial": 1, "unavailable": 0, "unsupported": 1}
+}

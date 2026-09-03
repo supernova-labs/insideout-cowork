@@ -130,3 +130,108 @@ As cinco frentes e seus critérios de aceitação de construção estão conclu�
 A liberação para todo o time continua condicionada ao teste com Carol e à
 decisão de liberar, iterar ou interromper registrada no gate do piloto; esse
 gate é empírico e não altera a conclusão desta implementação.
+
+---
+
+# Auditoria de aceitação — InsideOut Mar Aberto
+
+Data da execução: 2026-09-02
+
+Versão candidata: `insideout-mar-aberto` 0.1.0
+
+Escopo: construção do piloto e testes locais sem contas ou dados reais. A
+publicação e a homologação operacional pela equipe da InsideOut permanecem como
+gates separados.
+
+## Resultado da construção
+
+- M0–M7: artefatos de construção concluídos, com contratos, seis skills, 21
+  evals, quatro schemas, fixtures sintéticas e prova vertical local.
+- M8-T1–T4: comprovados localmente; M8-T5 não executado porque commit, push e
+  publicação exigem autorização explícita.
+- M9-T1–T8: não executados, por decisão de produto; serão realizados pela
+  equipe da InsideOut depois da publicação do piloto.
+
+“Construído” não significa “homologado em sessão real”. Nenhum teste local foi
+usado como evidência de login, exportação ou coleta nas plataformas.
+
+## Evidência por milestone
+
+| Milestone | Estado da construção | Evidência local | Pendência deliberada |
+|---|---|---|---|
+| M0 — contratos | passou | schemas, matriz princípio–teste, CSV válida e inválida, comentário, resposta, duplicata, cobertura parcial e canal não suportado | nenhuma |
+| M1 — fundação | passou | manifesto 0.1.0, catálogo com dois plugins, seis skills e índice Agent Smith sem conflito | nenhuma |
+| M2 — Stilingue | passou no contrato sintético | entrada válida e inválida, recorte `nova busca i20`, instruções de refresh, janela vazia e retomada | login, status e download reais: M9-T2 |
+| M3 — coleta | passou no contrato sintético | Instagram e YouTube, grafo pai–resposta, deduplicação, anonimização, cobertura parcial e TikTok não suportado | paginação e retomada nas interfaces reais: M9-T3–T4 |
+| M4 — análise | passou no conjunto sintético | 8 observados = 7 relevantes + 1 excluído; sentimento por alvo; distribuição unitária; amplificação separada; corpus removido no concluído e preservado no interrompido | utilidade editorial no corpus real: M9-T5 |
+| M5 — produtos | passou na prova vertical | HTML, PDF e `.xlsx` reconciliados; sete abas; quatro evidências aprovadas; inspeção desktop, 360 px e três páginas A4 | dois gates conduzidos por operador real: M9-T5–T7 |
+| M6 — orquestração | passou no contrato e estado sintéticos | manifesto portátil, caminhos relativos, estados concluído/interrompido e três entregáveis presentes | invocação e retomada em tarefa nova: M9-T2–T6 |
+| M7 — feedback | passou no contrato | sanitização, duplicidade, cancelamento, fallback e releitura cobertos por três evals | publicação real de issue ou fallback: M9-T8 |
+| M8 — piloto | pronto para decisão | validadores e diff local aprovados; pacote sem estado de `artifacts/` | autorização, commit e referência publicada: M8-T5 |
+| M9 — homologação | não executado | protocolo operacional preenchível cobre as oito provas, seus aceites e a decisão final | execução integral pela InsideOut após publicação |
+
+## Validações executadas
+
+1. `validate_skills.py` do Mar Aberto: passou com seis skills, 21 evals,
+   70 critérios de teste únicos, quatro schemas, zero erro e zero aviso. O
+   validador executa também rejeição da exportação sem URL, normalização de
+   URLs repetidas, casos de cobertura zero/indisponível, reconciliação de
+   análise, invariantes de retomada e rejeição de caminhos que escapem da pasta
+   da execução.
+2. `validate_skills.py` do InsideOut Social: passou para as seis skills
+   existentes, comprovando regressão estrutural ausente.
+3. Agent Smith: passou para marketplace Codex, dois plugins locais, 12 skills
+   únicas e índice v2, sem erro, aviso, conflito ou ambiguidade.
+4. Validador oficial de plugin: passou para `insideout-mar-aberto`.
+5. Validador oficial de skill: as seis skills passaram individualmente.
+6. `git diff --check`: passou. A inspeção final do diff staged é registrada
+   junto do gate M8-T4.
+
+## Prova vertical dos produtos
+
+Foi montada uma execução local ignorada pelo Git com três publicações, oito
+registros observados, sete relevantes, uma exclusão, quatro evidências aprovadas
+e duas lacunas explícitas: YouTube parcial (5 de 7) e TikTok não suportado.
+
+- A planilha foi produzida com `@oai/artifact-tool`, reaberta e inspecionada;
+  contém `Resumo`, `Cobertura`, `Publicações`, `Análises`, `Agregações`,
+  `Evidências` e `Metodologia`, com tabelas filtráveis e cabeçalhos congelados.
+- Todas as sete abas foram renderizadas. A primeira renderização revelou uma
+  fórmula de relevância zerada e colunas comprimidas; ambas foram corrigidas e
+  a versão final foi renderizada novamente.
+- A aba `Análises` não contém texto bruto. O comentário integral aparece somente
+  em `Evidências`, para quatro registros aprovados e sem identidade.
+- O HTML contém oito seções, três tabelas e quatro evidências. Playwright
+  confirmou largura de página igual à viewport em 1440 px e 360 px e zero
+  chamada externa.
+- O PDF foi impresso a partir do mesmo HTML, possui três páginas A4, não contém
+  JavaScript e teve todas as páginas renderizadas e inspecionadas sem corte,
+  sobreposição ou página vazia. A extração de texto confirmou as seções e os
+  totais essenciais presentes no HTML e no PDF.
+- Poppler emitiu avisos de `FontBBox` para glifos Type 3; a renderização visual
+  e a extração textual permaneceram corretas, por isso o aviso é não bloqueante.
+- A execução concluída não contém `working/comments.jsonl`; a execução
+  interrompida de controle preserva esse corpus temporário.
+- A pasta concluída foi copiada para outro diretório e os oito caminhos do
+  manifesto (`input`, cobertura, análise, agregados, evidências e três
+  entregáveis) continuaram resolvendo com o mesmo `run_id`.
+
+Os artefatos dessa prova ficam em `artifacts/mar-aberto-e2e/` e não fazem parte
+do pacote distribuído.
+
+## Gate de publicação
+
+Próxima decisão: autorizar ou não a publicação do piloto 0.1.0. Até essa
+decisão, M8-T5 e todos os testes M9 permanecem `não executado`, sem alegação de
+homologação operacional.
+
+Na máquina atual, `codex plugin marketplace list` mostrou apenas o catálogo
+`personal`; o catálogo `insideout` ainda não foi adicionado nem o novo plugin
+instalado. Essa configuração foi preservada sem alteração e será parte de
+M9-T1 depois que existir uma referência publicada.
+
+O roteiro de homologação está em
+`docs/mar-aberto-pilot-test-protocol.md`. Ele registra os estados `passou`,
+`falhou` e `não executado`, exige evidência sanitizada por prova e termina com
+a decisão `liberar`, `iterar` ou `interromper`. O documento está preparado, mas
+nenhum campo operacional foi preenchido e nenhum M9 foi promovido a sucesso.

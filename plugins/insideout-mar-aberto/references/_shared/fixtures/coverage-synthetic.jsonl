@@ -1,0 +1,3 @@
+{"publication_id":"pub-ig-001","network":"instagram","status":"complete","reported_comments":3,"observed_comments":2,"observed_replies":1,"failure_reason":null,"last_observed_at":"2026-09-02T12:00:00-03:00"}
+{"publication_id":"pub-yt-001","network":"youtube","status":"partial","reported_comments":7,"observed_comments":5,"observed_replies":0,"failure_reason":"A interface informou mais comentários do que os itens acessíveis no fim da paginação.","last_observed_at":"2026-09-02T12:05:00-03:00"}
+{"publication_id":"pub-outra-001","network":"tiktok","status":"unsupported","reported_comments":2,"observed_comments":0,"observed_replies":0,"failure_reason":"Canal fora do MVP.","last_observed_at":"2026-09-02T12:05:00-03:00"}

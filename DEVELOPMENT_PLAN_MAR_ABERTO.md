@@ -1,6 +1,8 @@
 # Plano de desenvolvimento — InsideOut Mar Aberto
 
-Status: arquitetura aprovada; implementação ainda não iniciada.
+Status em 2026-09-02: arquitetura e construção do piloto concluídas; validações
+locais registradas em `ACCEPTANCE_AUDIT.md`; publicação (M8-T5) e homologação
+operacional pela InsideOut (M9) aguardam autorização e execução.
 
 Este plano transforma os princípios de `ARCHITECTURE.md` em etapas de
 construção verificáveis. Cada milestone entrega um artefato demonstrável, fecha
@@ -408,6 +410,11 @@ equipe da InsideOut execute os testes reais?
 
 **Artefato demonstrável:** matriz de resultados preenchida pelos operadores da
 InsideOut e decisão registrada de liberar, iterar ou interromper.
+
+O roteiro preenchível desta etapa está em
+[`docs/mar-aberto-pilot-test-protocol.md`](docs/mar-aberto-pilot-test-protocol.md).
+Quem publicar o piloto deve informar a referência exata usada na instalação;
+o roteiro não presume promoção à `main`.
 
 ### Critérios de aceite do piloto
 

@@ -1,15 +1,16 @@
-# InsideOut Social
+# Plugins InsideOut
 
 Este repositório publica o catálogo Codex oficial da InsideOut para análise de
-briefings e produção de social media. As skills guardam conhecimento,
-julgamento e fluxo; o Airtable guarda o estado operacional.
+briefings, produção de social media e análise de mar aberto. As skills guardam
+conhecimento, julgamento e fluxo; cada plugin usa o estado operacional definido
+em seu contrato.
 
 ## Antes de trabalhar
 
 Leia somente o contexto necessário, nesta ordem:
 
 1. este arquivo;
-2. o `SKILL.md` relevante em `plugins/insideout-social/skills/<skill>/`;
+2. o `SKILL.md` relevante em `plugins/<plugin>/skills/<skill>/`;
 3. os arquivos indicados pelo próprio `SKILL.md` em `references/`, incluindo
    `../../references/_shared/` quando aplicável;
 4. o eval correspondente em `evals/` quando houver mudança de comportamento;
@@ -23,9 +24,11 @@ e leia cada arquivo selecionado por inteiro.
 | Assunto | Fonte principal |
 |---|---|
 | Comportamento das skills | `plugins/insideout-social/skills/*/SKILL.md` |
+| Comportamento do Mar Aberto | `plugins/insideout-mar-aberto/skills/*/SKILL.md` |
 | Tom, contexto comum e contrato de dados | `plugins/insideout-social/references/_shared/` |
 | Regras de marca, calendário e composição | `references/` da skill responsável |
 | Estado operacional de marcas, produtos, referências, posts e peças | base viva **InsideOut Social** no Airtable |
+| Estado operacional do Mar Aberto | pasta local por projeto e execução, fora do plugin |
 | Catálogo Codex | `.agents/plugins/marketplace.json` |
 | Manifesto do plugin | `plugins/insideout-social/.codex-plugin/plugin.json` |
 | Inventário de arquitetura | `.agent-smith/index.json` |
@@ -36,8 +39,10 @@ disponível: confirme-a na sessão quando ela for necessária.
 
 ## Arquitetura e fronteiras
 
-- `plugins/insideout-social/skills/` é a fonte canônica e única das seis
-  skills distribuídas.
+- Cada plugin mantém uma única árvore canônica em `plugins/<plugin>/skills/`.
+- `insideout-social` contém seis skills de produção editorial;
+  `insideout-mar-aberto` contém a jornada principal, quatro etapas
+  especializadas e feedback próprio.
 - `.agents/plugins/marketplace.json` expõe o catálogo `insideout` para o
   Codex; o manifesto nativo fica junto ao pacote do plugin.
 - `.agent-smith/index.json` descreve os componentes distribuídos; o filesystem
@@ -59,6 +64,19 @@ não escreve seus campos nem produz mídia; copy não altera status; imagem não
 cria texto; vídeo não cria frame inicial; feedback não corrige a instalação
 local.
 
+| Skill do Mar Aberto | Responsabilidade | Saída própria |
+|---|---|---|
+| `run-mar-aberto` | coordenar etapas e retomada | manifesto e apresentação do estado |
+| `export-stilingue` | obter e validar a entrada oficial | planilha original e checkpoint de entrada |
+| `collect-comments` | percorrer Instagram e YouTube | corpus temporário anonimizado e cobertura |
+| `analyze-sentiment` | classificar e agregar automaticamente | análises, agregados e pool candidato |
+| `generate-report` | conduzir dois gates editoriais | HTML, PDF e planilha analítica |
+| `skill-feedback` | registrar bug ou melhoria | issue confirmada ou draft sanitizado |
+
+A orquestradora não refaz o trabalho das etapas. A análise não revisa o
+relatório; o relatório não altera classificações; a coleta não mantém identidade
+pessoal; feedback não corrige a instalação local.
+
 ## Regras operacionais
 
 - Comece separando fatos confirmados, inferências, lacunas e decisões abertas.
@@ -75,6 +93,8 @@ local.
   `Aprovada` ou consuma créditos sem a confirmação exigida pelo fluxo.
 - URLs temporárias e arquivos apenas no gerador não são persistência concluída.
 - Não adicione tokens, chaves, `.env` ou credenciais ao repositório.
+- No Mar Aberto, nunca versionar comentários reais, estado de execução ou
+  entregáveis de cliente. Evals usam somente fixtures sintéticas ou sanitizadas.
 
 ## Ao alterar o repositório
 
@@ -95,6 +115,7 @@ local.
 
 ```powershell
 python plugins/insideout-social/references/_shared/scripts/validate_skills.py
+python plugins/insideout-mar-aberto/references/_shared/scripts/validate_skills.py
 ```
 
 Os evals de comportamento vivem em cada pasta `evals/` e devem ser executados

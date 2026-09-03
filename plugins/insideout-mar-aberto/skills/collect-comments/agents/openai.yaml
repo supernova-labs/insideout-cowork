@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coletar Comentários"
+  short_description: "Percorra Instagram e YouTube"
+  default_prompt: "Use $collect-comments para coletar os comentários desta execução."

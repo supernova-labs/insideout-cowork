@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/run-manifest.schema.json",
+  "title": "InsideOut Mar Aberto run manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "run_id", "project", "filter", "period", "status", "stage", "paths"],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+    "project": {"type": "string", "minLength": 1},
+    "filter": {"type": "string", "minLength": 1},
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "timezone"],
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"},
+        "timezone": {"const": "America/Sao_Paulo"}
+      }
+    },
+    "status": {"enum": ["created", "in_progress", "awaiting_login", "awaiting_editorial_review", "completed", "failed"]},
+    "stage": {"enum": ["export", "collection", "analysis", "editorial_gate_1", "report", "editorial_gate_2", "complete"]},
+    "paths": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^(?![A-Za-z]:|/|\\\\|(?:.*[\\\\/])?\\.\\.(?:[\\\\/]|$)).+"}},
+    "counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "gaps": {"type": "array", "items": {"type": "string"}},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}

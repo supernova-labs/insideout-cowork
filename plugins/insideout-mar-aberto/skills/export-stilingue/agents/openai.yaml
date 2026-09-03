@@ -1,0 +1,4 @@
+interface:
+  display_name: "Exportar Stilingue"
+  short_description: "Prepare a entrada oficial da análise"
+  default_prompt: "Use $export-stilingue para exportar o filtro e período desta análise."

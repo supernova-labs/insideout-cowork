@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/analysis-record.schema.json",
+  "title": "InsideOut Mar Aberto analysis record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_id", "publication_id", "network", "relevant", "targets", "target_sentiments", "sentiment", "themes", "confidence", "engagement"],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 8},
+    "publication_id": {"type": "string", "minLength": 1},
+    "parent_id": {"type": ["string", "null"]},
+    "network": {"enum": ["instagram", "youtube"]},
+    "relevant": {"type": "boolean"},
+    "relevance_reason": {"type": ["string", "null"]},
+    "targets": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["i20", "hyundai", "campaign", "influencer", "purchase-price", "competitor", "other"]}
+    },
+    "target_sentiments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target", "sentiment", "confidence"],
+        "properties": {
+          "target": {"enum": ["i20", "hyundai", "campaign", "influencer", "purchase-price", "competitor", "other"]},
+          "sentiment": {"enum": ["positive", "negative", "neutral", "mixed", "ambiguous"]},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "sentiment": {"enum": ["positive", "negative", "neutral", "mixed", "ambiguous"]},
+    "themes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "engagement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["likes", "replies"],
+      "properties": {
+        "likes": {"type": ["integer", "null"], "minimum": 0},
+        "replies": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  }
+}

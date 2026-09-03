@@ -1,0 +1,24 @@
+{
+  "ordered_stages": [
+    "export",
+    "collection",
+    "analysis",
+    "editorial_gate_1",
+    "report",
+    "editorial_gate_2",
+    "complete"
+  ],
+  "resume_cases": [
+    {"last_valid_stage": "export", "next_stage": "collection", "repeated_stages": []},
+    {"last_valid_stage": "collection", "next_stage": "analysis", "repeated_stages": []},
+    {"last_valid_stage": "analysis", "next_stage": "editorial_gate_1", "repeated_stages": []},
+    {"last_valid_stage": "report", "next_stage": "editorial_gate_2", "repeated_stages": []},
+    {"last_valid_stage": "complete", "next_stage": null, "repeated_stages": []}
+  ],
+  "pause_cases": [
+    {"reason": "expired_instagram_session", "stage": "collection", "preserve": ["export", "collection_checkpoint", "working_corpus"]},
+    {"reason": "gate_1_rejected", "stage": "editorial_gate_1", "forbid": ["report", "editorial_gate_2", "complete"]},
+    {"reason": "gate_2_rejected", "stage": "editorial_gate_2", "forbid": ["complete"]},
+    {"reason": "invalid_input", "stage": "export", "forbid": ["collection", "analysis", "report"]}
+  ]
+}

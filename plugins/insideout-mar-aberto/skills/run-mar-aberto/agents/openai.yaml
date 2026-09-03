@@ -1,0 +1,4 @@
+interface:
+  display_name: "Executar Mar Aberto"
+  short_description: "Conduza a análise completa do i20"
+  default_prompt: "Use $run-mar-aberto para executar uma análise completa do i20."

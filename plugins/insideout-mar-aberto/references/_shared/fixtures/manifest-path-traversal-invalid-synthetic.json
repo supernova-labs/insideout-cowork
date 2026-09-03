@@ -1,0 +1,6 @@
+{
+  "paths": {
+    "analysis": "../fora-da-execucao.json",
+    "evidence": "analysis/../../fora-da-execucao.json"
+  }
+}

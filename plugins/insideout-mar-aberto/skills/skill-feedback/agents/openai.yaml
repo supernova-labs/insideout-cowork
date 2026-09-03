@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feedback do Mar Aberto"
+  short_description: "Registre bugs e melhorias com segurança"
+  default_prompt: "Use $skill-feedback para registrar este problema do Mar Aberto."
