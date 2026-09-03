@@ -147,8 +147,8 @@ gates separados.
 
 - M0–M7: artefatos de construção concluídos, com contratos, seis skills, 21
   evals, quatro schemas, fixtures sintéticas e prova vertical local.
-- M8-T1–T4: comprovados localmente; M8-T5 não executado porque commit, push e
-  publicação exigem autorização explícita.
+- M8-T1–T5: comprovados; o commit validado `3adfa7b` foi publicado na branch
+  `codex/add-insideout-marketplace` e promovido por fast-forward para `main`.
 - M9-T1–T8: não executados, por decisão de produto; serão realizados pela
   equipe da InsideOut depois da publicação do piloto.
 
@@ -167,7 +167,7 @@ usado como evidência de login, exportação ou coleta nas plataformas.
 | M5 — produtos | passou na prova vertical | HTML, PDF e `.xlsx` reconciliados; sete abas; quatro evidências aprovadas; inspeção desktop, 360 px e três páginas A4 | dois gates conduzidos por operador real: M9-T5–T7 |
 | M6 — orquestração | passou no contrato e estado sintéticos | manifesto portátil, caminhos relativos, estados concluído/interrompido e três entregáveis presentes | invocação e retomada em tarefa nova: M9-T2–T6 |
 | M7 — feedback | passou no contrato | sanitização, duplicidade, cancelamento, fallback e releitura cobertos por três evals | publicação real de issue ou fallback: M9-T8 |
-| M8 — piloto | pronto para decisão | validadores e diff local aprovados; pacote sem estado de `artifacts/` | autorização, commit e referência publicada: M8-T5 |
+| M8 — piloto | passou | validadores e diff aprovados; pacote sem estado de `artifacts/`; commit `3adfa7b` publicado na branch piloto e em `main` | nenhuma |
 | M9 — homologação | não executado | protocolo operacional preenchível cobre as oito provas, seus aceites e a decisão final | execução integral pela InsideOut após publicação |
 
 ## Validações executadas
@@ -219,16 +219,20 @@ e duas lacunas explícitas: YouTube parcial (5 de 7) e TikTok não suportado.
 Os artefatos dessa prova ficam em `artifacts/mar-aberto-e2e/` e não fazem parte
 do pacote distribuído.
 
-## Gate de publicação
+## Gate de publicação concluído
 
-Próxima decisão: autorizar ou não a publicação do piloto 0.1.0. Até essa
-decisão, M8-T5 e todos os testes M9 permanecem `não executado`, sem alegação de
-homologação operacional.
+O piloto 0.1.0 foi publicado em 2026-09-02. A branch
+`codex/add-insideout-marketplace` e a `main` remota apontaram para o commit
+validado `3adfa7b6a1b6842a0c80ccee4c76c5e48fa7bb08`; a promoção foi
+fast-forward a partir de `c4c61fa`, sem conflito ou reescrita de histórico.
+M8-T5 passa com essa evidência. Este registro documental é uma atualização
+imediatamente posterior e não altera os arquivos do plugin. Todos os testes M9
+permanecem `não executado`, sem alegação de homologação operacional.
 
 Na máquina atual, `codex plugin marketplace list` mostrou apenas o catálogo
 `personal`; o catálogo `insideout` ainda não foi adicionado nem o novo plugin
 instalado. Essa configuração foi preservada sem alteração e será parte de
-M9-T1 depois que existir uma referência publicada.
+M9-T1 ao instalar a referência publicada em `main`.
 
 O roteiro de homologação está em
 `docs/mar-aberto-pilot-test-protocol.md`. Ele registra os estados `passou`,

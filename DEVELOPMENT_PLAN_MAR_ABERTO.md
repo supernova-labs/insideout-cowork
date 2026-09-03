@@ -1,8 +1,8 @@
 # Plano de desenvolvimento — InsideOut Mar Aberto
 
-Status em 2026-09-02: arquitetura e construção do piloto concluídas; validações
-locais registradas em `ACCEPTANCE_AUDIT.md`; publicação (M8-T5) e homologação
-operacional pela InsideOut (M9) aguardam autorização e execução.
+Status em 2026-09-02: arquitetura, construção e publicação do piloto concluídas;
+validações e referência publicada registradas em `ACCEPTANCE_AUDIT.md`;
+homologação operacional pela InsideOut (M9) aguarda execução.
 
 Este plano transforma os princípios de `ARCHITECTURE.md` em etapas de
 construção verificáveis. Cada milestone entrega um artefato demonstrável, fecha
@@ -403,8 +403,9 @@ marketplace `insideout`.
 | M8-T4 | Revisão do diff preparado | Arquivos fora do escopo não estão staged; verificação do diff staged passa. |
 | M8-T5 | Publicação autorizada | Referência publicada corresponde exatamente ao commit validado. |
 
-**Ponto de decisão habilitado:** autorizar a publicação do piloto para que a
-equipe da InsideOut execute os testes reais?
+**Resultado do gate:** publicação autorizada e concluída; a equipe da InsideOut
+pode executar os testes reais de M9 a partir da referência registrada na
+auditoria.
 
 ## M9 — Homologação operacional pós-publicação
 
