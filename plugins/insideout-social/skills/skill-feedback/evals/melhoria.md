@@ -7,9 +7,9 @@
 
 ## Resultado esperado
 
-- classifica a proposta como `enhancement`;
-- coleta somente lacunas que alterem a utilidade do report;
-- pesquisa issues semelhantes antes de propor publicação;
-- entrega uma prévia factual com impacto e sugestão;
-- não edita generate-grid nem promete que a melhoria será implementada;
-- aguarda confirmação do payload final.
+- classifica a proposta como `Melhoria`;
+- coleta somente lacunas que alterem a utilidade do relato;
+- pesquisa feedback semelhante antes de propor a escrita;
+- entrega prévia factual com impacto e `Status = Novo`;
+- não edita generate-grid nem promete implementação;
+- aguarda confirmação dos campos finais.

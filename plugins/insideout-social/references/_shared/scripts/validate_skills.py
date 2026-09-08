@@ -30,7 +30,7 @@ REQUIRED_FEATURE_FILES = (
     ROOT / "generate-grid" / "references" / "design-briefing.md",
     ROOT / "generate-grid" / "references" / "trend-context.md",
     ROOT / "generate-grid" / "references" / "html-snapshot.md",
-    ROOT / "skill-feedback" / "references" / "issue-contract.md",
+    ROOT / "skill-feedback" / "references" / "feedback-contract.md",
 )
 FORBIDDEN = (
     "${CLAUDE_PLUGIN_ROOT}",

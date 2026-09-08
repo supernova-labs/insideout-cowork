@@ -59,7 +59,7 @@ disponível: confirme-a na sessão quando ela for necessária.
 | `generate-copy` | hooks, legenda e lettering | somente `Posts.Legenda` e `Posts.Lettering`, após aprovação |
 | `generate-image` | composição e QA da imagem | peça de imagem, arquivo e `Posts.Mockup`, sem sobrescrever silenciosamente |
 | `generate-video` | movimento, continuidade e custo | peça de vídeo, arquivo e `Posts.Vídeo`, após aprovar parâmetros e créditos |
-| `skill-feedback` | bug ou melhoria sobre o plugin | issue no repositório de origem, somente após sanitização e confirmação |
+| `skill-feedback` | bug ou melhoria sobre o plugin | registro em `Feedback do plugin`, somente após sanitização e confirmação |
 
 Uma skill não absorve a responsabilidade da seguinte: grid orquestra copy, mas
 não escreve seus campos nem produz mídia; copy não altera status; imagem não

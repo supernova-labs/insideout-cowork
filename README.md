@@ -27,7 +27,7 @@ peça o trabalho normalmente.
 | `generate-copy` | Produz legenda, hooks e lettering adaptados à rede e ao formato. |
 | `generate-image` | Gera e registra mockups com trilha de auditoria. |
 | `generate-video` | Produz e registra vídeos curtos a partir de direção visual aprovada. |
-| `skill-feedback` | Prepara e, após confirmação, publica bugs ou melhorias no repositório de origem. |
+| `skill-feedback` | Prepara e, após confirmação, registra bugs ou melhorias na caixa de entrada do Airtable. |
 
 ## InsideOut Mar Aberto
 
@@ -52,8 +52,9 @@ recebe nem armazena credenciais.
 - Acesso ao recurso criativo indicado pela skill quando houver geração de
   imagem ou vídeo. Esses fluxos podem envolver custo e seguem as aprovações
   previstas no processo.
-- Integração autenticada com GitHub para publicar feedback. Sem ela, a skill
-  entrega um draft completo e não alega publicação.
+- Para registrar feedback do Social, acesso de edição à base pelo Airtable. A
+  tabela pode permanecer oculta na interface; a skill não usa formulário nem
+  exige conta no GitHub.
 - Para o Mar Aberto, acesso individual à Stilingue, Instagram e YouTube pelo
   navegador do Codex. Os testes reais são feitos pela equipe da InsideOut após
   a publicação do piloto.

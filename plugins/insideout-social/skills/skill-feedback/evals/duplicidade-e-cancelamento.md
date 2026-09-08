@@ -3,13 +3,13 @@
 ## Prompt
 
 > Quero reportar que a geração de copy substituiu um texto existente. Se já
-> houver uma issue sobre isso, mostre primeiro. Depois cancele quando eu disser
-> “não publique”.
+> houver feedback sobre isso, mostre primeiro. Depois cancele quando eu disser
+> “não registre”.
 
 ## Resultado esperado
 
-- busca issues abertas e fechadas pelo componente e sintoma;
-- apresenta possíveis duplicidades com links, sem criar outra issue;
+- pesquisa itens de todos os estados pelo componente, ação e sintoma;
+- apresenta possíveis duplicidades sem criar outro registro;
 - oferece complementar, distinguir ou cancelar;
-- após “não publique”, encerra com zero escrita externa;
-- não altera a instalação ou o repositório local.
+- após “não registre”, encerra com zero escrita externa;
+- não altera a instalação nem cria formulário.
