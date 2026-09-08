@@ -14,15 +14,14 @@ persista somente os posts aprovados.
 1. Leia `../../references/_shared/voz-usuario.md`,
    `../../references/_shared/about-insideout.md` e `../../references/_shared/airtable-contract.md`.
 2. Leia `references/planning-method.md` e `references/design-briefing.md`.
-3. Leia integralmente `references/rules/<slug-da-marca>.md` quando existir.
-4. Leia `references/calendar/<ano>.md` para o mês solicitado.
-5. Leia `references/trend-context.md` quando houver pesquisa, fonte ou candidato
+3. Leia `references/calendar/<ano>.md` para o mês solicitado.
+4. Leia `references/trend-context.md` quando houver pesquisa, fonte ou candidato
    de tendência em escopo.
-6. Leia `references/html-snapshot.md` quando o pedido incluir visualização ou
+5. Leia `references/html-snapshot.md` quando o pedido incluir visualização ou
    quando o primeiro take aprovado precisar de snapshot para revisão.
-7. Descubra a base **InsideOut Social**, o schema atual e os registros de marca,
-   canais, produtos e referências necessários.
-8. Use a ficha aprovada de `analyze-briefing` ou confirme marca, mês, focos,
+6. Descubra a base **InsideOut Social**, o schema atual e os registros de marca,
+   canais, produtos, referências e diretrizes necessários.
+7. Use a ficha aprovada de `analyze-briefing` ou confirme marca, mês, focos,
    lançamentos e direcionais diretamente com o usuário.
 
 ## Executar
@@ -47,6 +46,9 @@ Antes de planejar, procure posts da mesma marca no mês e separe-os por rede.
   duplicidade na chave bloqueiam esse post até a configuração ser corrigida.
 - Localize produtos por `Marca + Slug`; reporte produtos ausentes antes de
   depender deles.
+- Resolva as versões ativas de `Diretrizes de grid` conforme
+  `references/planning-method.md`. Conflito entre versões ativas bloqueia o
+  planejamento; ausência de regra de marca não autoriza copiar outra marca.
 - Reutilize referências existentes.
 - Só crie referência quando o usuário fornecer ou aprovar nome, tipo e
   prompt/URL explícitos.
@@ -61,15 +63,13 @@ aprovados alteraram uma recomendação. Não persista tendências nesta versão.
 
 ### 4. Montar o primeiro take
 
-Aplique `references/planning-method.md` e as regras específicas da marca:
+Aplique o briefing aprovado e as diretrizes ativas na ordem definida por
+`references/planning-method.md`:
 
-- ancore lançamentos e datas relevantes;
-- organize trincas de feed quando fizer sentido;
-- concentre produtos-foco no início sem repetir mecanicamente;
-- use heroes e complementares como respiro;
-- varie Feed, Story e Reel;
-- evite intervalo maior que dois dias sem post, salvo direção explícita;
-- registre uma frase de rationale em todos os posts.
+- construa o panorama mensal antes de detalhar os posts;
+- respeite âncoras, intensidade, cadência, respiros e composição aprovados;
+- não transforme padrão histórico em obrigação;
+- registre uma frase de rationale em todos os posts;
 - adapte cada ideia a uma única rede; reaproveitamento entre redes gera posts
   distintos, com intenção, formato e contexto próprios;
 - escreva um `Briefing de design` estruturado para cada post, sem duplicar
@@ -139,6 +139,8 @@ Não exponha IDs ou detalhes do conector.
 - Todo post novo tem título, data, marca, canal da marca, formato, abordagem,
   rationale, briefing de design e status.
 - Produtos e referências apontam para os registros corretos.
+- As diretrizes aplicadas estavam ativas, pertenciam ao escopo correto e não
+  tinham versões concorrentes.
 - Lettering e legenda foram produzidos e persistidos por `generate-copy`.
 - Somente posts aprovados foram persistidos; exceções permanecem em revisão.
 - Tendências que influenciaram o take estão rastreáveis e dentro da validade.

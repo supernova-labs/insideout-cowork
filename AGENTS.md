@@ -26,7 +26,8 @@ e leia cada arquivo selecionado por inteiro.
 | Comportamento das skills | `plugins/insideout-social/skills/*/SKILL.md` |
 | Comportamento do Mar Aberto | `plugins/insideout-mar-aberto/skills/*/SKILL.md` |
 | Tom, contexto comum e contrato de dados | `plugins/insideout-social/references/_shared/` |
-| Regras de marca, calendário e composição | `references/` da skill responsável |
+| Método, racional por marca e padrões históricos aprovados | tabela viva `Diretrizes de grid` no Airtable |
+| Calendário estável e mecânica de composição | `references/` da skill responsável |
 | Estado operacional de marcas, produtos, referências, posts e peças | base viva **InsideOut Social** no Airtable |
 | Estado operacional do Mar Aberto | pasta local por projeto e execução, fora do plugin |
 | Catálogo Codex | `.agents/plugins/marketplace.json` |

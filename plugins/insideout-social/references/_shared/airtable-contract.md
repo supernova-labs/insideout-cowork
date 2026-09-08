@@ -21,9 +21,11 @@ visível da opção. Relações são escritas como listas de IDs de registros.
 | `Marcas` | voz, posicionamento, público e identidade | `Slug` |
 | `Canais da marca` | presença digital e diferenças editoriais por rede | `Marca + Rede` |
 | `Produtos` | catálogo e claims ligados à marca | `Marca + Slug` |
-| `Referências` | estilos curados e referências externas | `Slug`; para URL externa, reutilizar a mesma URL |
+| `Referências` | estilos curados, perfis-fonte e referências externas por marca e rede | `Slug`; para URL externa, reutilizar a mesma URL |
+| `Diretrizes de grid` | método compartilhado, racional por marca e padrões históricos aprovados | `Escopo + Marca + Tipo + Versão`; deve haver no máximo uma versão ativa por `Escopo + Marca + Tipo` |
 | `Posts` | grid editorial e fluxo de aprovação | com rede: `Marca + Canal da marca + Data + Título`; legado: `Marca + Data + Título` |
 | `Peças` | mídia e trilha de geração | `Post + Tipo + Nome`; sem post, `Marca + Tipo + Nome` |
+| `Feedback do plugin` | caixa de entrada de bugs e melhorias enviados pela skill | `Título + Skill + Tipo + Status` |
 
 Quando uma chave natural encontrar mais de um registro, não escolha
 silenciosamente: apresente a duplicidade e pare a escrita.
@@ -41,7 +43,8 @@ silenciosamente: apresente a duplicidade e pare a escrita.
 - `Brand Guide`
 - `Guardrails`
 - `Paleta`
-- `Produtos`, `Posts`, `Peças` — relações reversas; não escrever diretamente
+- `Produtos`, `Posts`, `Peças`, `Canais da marca`, `Diretrizes de grid` e
+  `Referências` — relações reversas; não escrever diretamente
 
 Criação mínima: `Nome + Slug`. Atualizações só alteram campos explicitamente
 presentes no briefing e nunca apagam conteúdo existente com valores vazios.
@@ -95,11 +98,57 @@ fonte.
 - `Prompt` — necessário para estilo curado
 - `URL` — necessário para referência externa
 - `Quando usar`
-- `Posts`, `Peças` — relações reversas
+- `Rede` — rede normalizada do perfil ou material, quando aplicável
+- `Marca` — relação com a marca para a qual a fonte foi aprovada
+- `Posts`, `Peças`, `Diretrizes de grid` — relações reversas
 
 Só crie uma referência quando o usuário fornecer ou aprovar material explícito.
 Não invente referência para preencher um post. Reutilize primeiro as referências
-existentes.
+existentes. Perfis usados para curadoria histórica precisam de `URL`, `Rede` e
+uma única `Marca`; a existência do perfil na tabela não torna cada publicação
+uma tendência atual.
+
+### Diretrizes de grid
+
+- `Nome` — nome humano e estável da diretriz
+- `Escopo` — `Geral` ou `Marca`
+- `Marca` — vazia para escopo geral; exatamente uma marca para escopo de marca
+- `Tipo` — `Método geral`, `Racional da marca` ou `Padrão histórico`
+- `Conteúdo` — regra aprovada em linguagem editorial
+- `Fontes` — referências usadas para produzir um padrão histórico
+- `Versão` — número inteiro crescente dentro do mesmo escopo, marca e tipo
+- `Status` — `Ativa`, `Arquivada` ou `Teste`
+
+Antes de gerar um grid, leia as diretrizes ativas. Resolva-as nesta ordem:
+
+1. briefing mensal e decisões explícitas do usuário;
+2. racional e padrão histórico ativos da marca;
+3. método geral ativo.
+
+Uma diretriz de marca não herda fatos de outra marca. Se houver mais de uma
+versão ativa para o mesmo `Escopo + Marca + Tipo`, pare e apresente o conflito.
+Mudanças editoriais são versionadas: após aprovação, crie a nova versão e
+arquive a anterior na mesma operação autorizada; nunca substitua o conteúdo
+ativo silenciosamente. Releia todas as versões alteradas.
+
+### Feedback do plugin
+
+- `Título` — resumo observável, sem nome de cliente ou dado confidencial
+- `Tipo` — `Bug` ou `Melhoria`
+- `Skill` — componente afetado
+- `Contexto`, `Esperado`, `Observado`, `Impacto` — relato sanitizado
+- `Status` — criar como `Novo`; manutenção posterior pode usar `Em triagem`,
+  `Encaminhado` ou `Resolvido`
+- `Link GitHub` — opcional, preenchido apenas se a equipe encaminhar o item
+- `Autor` — opcional, somente quando informado ou disponível com segurança
+
+O feedback é criado pela skill, não por formulário. A tabela pode ficar oculta
+na interface do Airtable sem restringir a edição das pessoas que usam o plugin.
+Antes de criar, pesquise itens abertos da mesma skill por ação e sintoma; diante
+de possível duplicidade, ofereça complementar o contexto, criar um item distinto
+ou cancelar. Mostre a prévia sanitizada e exija confirmação explícita. Se o
+Airtable estiver indisponível, entregue um rascunho copiável e não alegue
+registro concluído.
 
 ### Posts
 
