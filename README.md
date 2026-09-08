@@ -61,6 +61,9 @@ recebe nem armazena credenciais.
 
 As skills trabalham em linguagem de marca, produto, post e mês. Elas não
 substituem aprovação humana nem completam informações ausentes por hipótese.
+Os campos `Slug` são identificadores internos usados para encontrar registros
+sem duplicá-los; a Carol não precisa operá-los no dia a dia e eles permanecem
+ocultos nas visualizações principais de marcas e produtos.
 
 ## Para quem mantém
 

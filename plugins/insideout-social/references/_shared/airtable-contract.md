@@ -35,7 +35,8 @@ silenciosamente: apresente a duplicidade e pare a escrita.
 ### Marcas
 
 - `Nome` — obrigatório
-- `Slug` — obrigatório, lowercase kebab-case
+- `Slug` — obrigatório, lowercase kebab-case; identificador interno estável para
+  deduplicação, mantido oculto nas visualizações humanas quando possível
 - `Voz`
 - `Mensagens-chave` — uma por linha
 - `Público`
@@ -74,7 +75,8 @@ bloqueiam a escrita.
 ### Produtos
 
 - `Nome` — obrigatório
-- `Slug` — obrigatório, lowercase kebab-case
+- `Slug` — obrigatório, lowercase kebab-case; identificador interno estável para
+  deduplicação, mantido oculto nas visualizações humanas quando possível
 - `Marca` — obrigatório, relação com um registro de `Marcas`
 - `Descrição`
 - `Claims` — um por linha; não inventar nem reescrever como fato científico
