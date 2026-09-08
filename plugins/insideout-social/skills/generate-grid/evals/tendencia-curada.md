@@ -2,16 +2,19 @@
 
 ## Prompt
 
-> Considere uma tendência candidata do Instagram, capturada hoje e ligada ao
-> objetivo de descoberta da `[TESTE CODEX] Aurora Skin`. Mostre a evidência e
-> aguarde minha aprovação antes de usá-la. Não altere o schema nem persista a
-> tendência.
+> Na amostra sintética de hoje, a construção “eu acho chique...” aparece em
+> três perfis recentes do Instagram, incluindo uma referência aprovada da
+> `[TESTE CODEX] Aurora Skin`. Avalie se ela pode entrar no grid de descoberta,
+> mostre a proposta antes de usar e não altere o Airtable.
 
 ## Resultado esperado
 
-- registra fonte, rede, captura, evidência, relevância, validade e autorização;
+- consulta perfil de referência e evidência aberta recente;
+- registra mecanismo, rede, data, repetição observável, adequação, adaptação,
+  risco e validade na trilha interna;
 - candidato pendente não altera o primeiro take;
-- após aprovação, usa a tendência somente em post do canal compatível e cita a
-  influência concreta no rationale;
+- após aprovação, adapta a construção sem copiar frases de uma publicação e a
+  usa somente em post do canal compatível;
+- não exige que o grid ou snapshot exponha URLs por post;
 - fonte indisponível ou conteúdo vencido volta a lacuna ou candidato;
 - nenhum registro, referência ou campo é criado para a tendência.

@@ -15,8 +15,8 @@ persista somente os posts aprovados.
    `../../references/_shared/about-insideout.md` e `../../references/_shared/airtable-contract.md`.
 2. Leia `references/planning-method.md` e `references/design-briefing.md`.
 3. Leia `references/calendar/<ano>.md` para o mês solicitado.
-4. Leia `references/trend-context.md` quando houver pesquisa, fonte ou candidato
-   de tendência em escopo.
+4. Leia `references/trend-context.md` ao gerar um novo grid ou quando houver
+   pesquisa, fonte ou candidato de tendência em escopo.
 5. Leia `references/html-snapshot.md` quando o pedido incluir visualização ou
    quando o primeiro take aprovado precisar de snapshot para revisão.
 6. Descubra a base **InsideOut Social**, o schema atual e os registros de marca,
@@ -56,10 +56,14 @@ Antes de planejar, procure posts da mesma marca no mês e separe-os por rede.
 
 ### 3. Curar tendências quando aplicável
 
-Pesquise somente em fontes autorizadas para a execução. Apresente candidatos
-com fonte, rede, captura, evidência, relevância e validade. Candidato pendente
-ou vencido não influencia o plano; registre no rationale quais candidatos
-aprovados alteraram uma recomendação. Não persista tendências nesta versão.
+Com o contexto mínimo resolvido, consulte os perfis de referência cadastrados
+para a marca e a rede e faça busca recente na internet aberta. Procure fenômenos
+sociais em circulação, não padrões históricos ou boas práticas genéricas.
+Apresente poucas candidatas com mecanismo, atualidade, evidência de circulação,
+adaptação e risco. Candidata pendente, rejeitada, vencida ou sustentada por uma
+única ocorrência não influencia o plano. A trilha de fontes fica na execução;
+o grid não precisa atribuir cada post a uma fonte. Se nenhuma candidata for
+adequada, continue sem trend. Não persista tendências nesta versão.
 
 ### 4. Montar o primeiro take
 
@@ -144,6 +148,8 @@ Não exponha IDs ou detalhes do conector.
 - Lettering e legenda foram produzidos e persistidos por `generate-copy`.
 - Somente posts aprovados foram persistidos; exceções permanecem em revisão.
 - Tendências que influenciaram o take estão rastreáveis e dentro da validade.
+- A ausência de tendência adequada não bloqueou nem empobreceu artificialmente
+  o grid.
 - Repetir o mesmo fluxo não cria duplicatas.
 - O primeiro take está completo; não apresente somente um calendário vazio ou
   um conjunto de campos sem contexto visual.
@@ -156,5 +162,6 @@ Não exponha IDs ou detalhes do conector.
 - Não gerar imagem, vídeo ou peça real.
 - Não preencher referência por suposição.
 - Não permitir que tendência não aprovada ou vencida influencie o take.
+- Não chamar padrão histórico, boa prática ou publicação isolada de trend.
 - Não incluir aplicação, painel, hospedagem ou estado operacional no plugin.
 - Não apagar posts automaticamente.

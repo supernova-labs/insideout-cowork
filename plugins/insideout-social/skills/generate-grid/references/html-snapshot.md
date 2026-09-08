@@ -31,10 +31,11 @@ Para cada post, mostre em linguagem de negócio:
 - briefing de design organizado por tela;
 - lettering posicionado junto à tela correspondente;
 - legenda;
-- lacunas, fontes de tendência usadas e estado de revisão quando aplicáveis.
+- lacunas, oportunidade de momento aplicada e estado de revisão quando
+  aplicáveis.
 
 Não mostre IDs, schema, logs, prompt interno, registros não selecionados, URLs
-privadas ou campos operacionais desnecessários.
+privadas, trilha interna de fontes ou campos operacionais desnecessários.
 
 ## Implementação do arquivo
 

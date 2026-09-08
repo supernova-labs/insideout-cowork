@@ -1,53 +1,70 @@
-# Contexto de tendências
+# Pesquisa de trends sociais atuais
 
-Use tendências para melhorar uma decisão editorial observável, nunca para
-preencher o grid por novidade.
+Trend é um fenômeno social em circulação agora: meme, áudio, linguagem,
+challenge ou formato replicável. Padrão histórico de marca, boa prática de
+conteúdo e preferência visual recorrente não são trends.
 
-## Autorização da fonte
+## Contexto mínimo
 
-Classifique cada fonte:
+Faça a pesquisa quando estiverem resolvidos:
 
-- **permanente:** aprovada para uma marca e rede;
-- **temporária:** fornecida ou aprovada somente para a execução atual;
-- **candidata:** descoberta ainda não aprovada.
+- marca e mês do grid;
+- ao menos uma rede ativa;
+- objetivo ou foco editorial do mês;
+- restrições relevantes de voz, produto e canal.
 
-Fonte candidata pode ser mostrada, mas não altera o primeiro take. Acesso
-técnico e autorização editorial são verificações separadas.
+Se faltar contexto, peça somente o que muda a busca. A ausência de uma trend
+adequada não bloqueia o grid e nunca justifica preencher o plano por novidade.
 
-## Registro do candidato
+## Fontes complementares
 
-Antes de recomendar, registre na execução:
+Em cada geração, consulte:
+
+1. perfis de referência da marca no Airtable, locais ou globais, com rede e URL;
+2. internet aberta e sinais recentes da própria rede.
+
+Perfis de referência mostram como um fenômeno pode chegar à categoria ou à
+marca. A busca aberta mostra se ele realmente circula no presente. Uma fonte
+isolada não basta para declarar tendência. Se uma plataforma exigir login, a
+pessoa autentica no navegador; não peça nem armazene credenciais.
+
+## Evidência do candidato
+
+Registre na trilha interna da execução:
 
 ```text
-TENDÊNCIA CANDIDATA
-fonte: <URL ou origem verificável>
+TREND CANDIDATA
+nome: <rótulo descritivo>
 rede: <rede observada>
-capturada em: <AAAA-MM-DD>
-evidência: <comportamento observável, sem extrapolação>
-relevância: <conexão com marca, canal e objetivo>
-válida até: <AAAA-MM-DD ou “somente esta execução”>
-autorização: <permanente, temporária ou candidata>
+mecanismo: <meme, áudio, linguagem, challenge ou formato>
+observada em: <AAAA-MM-DD>
+evidência de circulação: <fontes recentes e repetição observável>
+adequação: <conexão com marca, objetivo, produto e canal>
+adaptação proposta: <como usar sem copiar>
+risco: <saturação, reputação, direitos, produção ou desalinhamento>
+validade: <data curta ou somente esta execução>
+decisão: <pendente, aprovada ou rejeitada>
 ```
 
-## Validade inicial
+Use URLs e datas na trilha interna para permitir revisão, mas não obrigue o grid
+ou o snapshot entregue ao cliente a expor qual fonte influenciou cada post.
 
-- meme, áudio, challenge ou trend acelerada: até 7 dias;
-- padrão visual, formato ou comportamento editorial: até 30 dias;
-- sazonal ou ligada a evento: até o período relevante;
-- evidência insuficiente: somente a execução atual.
+## Atualidade e elegibilidade
 
-A validade é um teto. Confirme que a fonte continua observável no momento do
-uso. Conteúdo vencido volta a candidato e exige nova verificação e aprovação.
+- Memes, áudios e linguagens aceleradas usam janela curta, normalmente até sete
+  dias, e são reverificados no momento do uso.
+- Uma trend ligada a evento vale somente enquanto a janela social estiver
+  aberta.
+- Conteúdo antigo, padrão visual durável ou observação sem repetição não recebe
+  o rótulo de trend.
 
-## Elegibilidade
+Uma candidata só influencia o primeiro take quando:
 
-Uma tendência só influencia o grid quando:
+1. há evidência recente de circulação, preferencialmente em mais de uma fonte;
+2. a rede corresponde ao canal proposto;
+3. existe conexão explícita com marca e objetivo;
+4. a adaptação é original e respeita guardrails;
+5. o usuário aprovou a sugestão.
 
-1. a fonte está autorizada;
-2. a evidência está observável e dentro da validade;
-3. a rede corresponde ao canal do post;
-4. existe conexão explícita com marca, objetivo ou produto;
-5. o usuário aprovou o uso no take.
-
-Registre no rationale a influência concreta. Nesta versão, não crie tabela,
-referência ou outro estado permanente para candidatos.
+Apresente poucas candidatas fortes, com adequação e risco. Se nenhuma passar,
+siga com o grid sem trend. Não persista tendências no Airtable nesta versão.
