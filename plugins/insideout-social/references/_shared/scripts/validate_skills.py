@@ -30,6 +30,7 @@ REQUIRED_FEATURE_FILES = (
     ROOT / "generate-grid" / "references" / "design-briefing.md",
     ROOT / "generate-grid" / "references" / "trend-context.md",
     ROOT / "generate-grid" / "references" / "html-snapshot.md",
+    ROOT / "generate-grid" / "references" / "site-access.md",
     ROOT / "skill-feedback" / "references" / "feedback-contract.md",
 )
 FORBIDDEN = (

@@ -19,6 +19,7 @@ persista somente os posts aprovados.
    pesquisa, fonte ou candidato de tendência em escopo.
 5. Leia `references/html-snapshot.md` quando o pedido incluir visualização ou
    quando o primeiro take aprovado precisar de snapshot para revisão.
+   Leia também `references/site-access.md` quando a visualização for publicada.
 6. Descubra a base **InsideOut Social**, o schema atual e os registros de marca,
    canais, produtos, referências e diretrizes necessários.
 7. Use a ficha aprovada de `analyze-briefing` ou confirme marca, mês, focos,
@@ -112,6 +113,11 @@ Depois de compor o take selecionado, gere o HTML conforme
 fonte de verdade: vive fora do pacote, não lê nem escreve no Airtable e não
 substitui as aprovações das skills.
 
+Quando o pedido incluir um link de revisão, publique o snapshot conforme
+`references/site-access.md`: valide e publique primeiro apenas para o
+proprietário. Adicionar visitantes externos por email é uma mudança de acesso
+separada, feita somente depois de mostrar a lista exata e receber confirmação.
+
 ### 8. Apresentar
 
 Informe:
@@ -122,7 +128,9 @@ Informe:
 - posts aprovados, em revisão e não persistidos;
 - lacunas ou conflitos;
 - caminho do snapshot, quando gerado, com marca, mês e versão em linguagem de
-  negócio.
+  negócio;
+- link e estado de acesso do Site, quando publicado, sem tratar convite como
+  parte automática da publicação.
 
 Não exponha IDs ou detalhes do conector.
 
@@ -153,6 +161,8 @@ Não exponha IDs ou detalhes do conector.
 - Repetir o mesmo fluxo não cria duplicatas.
 - O primeiro take está completo; não apresente somente um calendário vazio ou
   um conjunto de campos sem contexto visual.
+- Site publicado começa restrito ao proprietário; acesso externo contém somente
+  os emails confirmados.
 
 ## Limites
 
@@ -164,4 +174,6 @@ Não exponha IDs ou detalhes do conector.
 - Não permitir que tendência não aprovada ou vencida influencie o take.
 - Não chamar padrão histórico, boa prática ou publicação isolada de trend.
 - Não incluir aplicação, painel, hospedagem ou estado operacional no plugin.
+- Não publicar Site aberto à internet nem adicionar visitantes externos sem
+  confirmação específica da lista de emails.
 - Não apagar posts automaticamente.
