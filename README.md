@@ -22,6 +22,7 @@ peça o trabalho normalmente.
 | Skill | Resultado |
 |---|---|
 | `analyze-briefing` | Analisa briefing, lacunas e escopo; pode materializar marca, produtos e canais com confirmação. |
+| `curate-brand-pattern` | Analisa perfis de referência aprovados e versiona um padrão histórico da marca no Airtable. |
 | `generate-grid` | Compõe o primeiro take mensal com estrutura, rationale, briefing de design, copy e tendências curadas; pode gerar snapshot HTML. |
 | `generate-copy` | Produz legenda, hooks e lettering adaptados à rede e ao formato. |
 | `generate-image` | Gera e registra mockups com trilha de auditoria. |

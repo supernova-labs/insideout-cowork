@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-02T12:00:00Z",
+  "lastUpdated": "2026-09-08T19:50:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -23,6 +23,14 @@
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/generate-grid/SKILL.md",
       "description": "Compõe grids mensais multirrede e snapshots de revisão."
+    },
+    {
+      "id": "skill:insideout-social:curate-brand-pattern",
+      "type": "skill",
+      "name": "curate-brand-pattern",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/curate-brand-pattern/SKILL.md",
+      "description": "Cura padrões históricos de marca a partir de perfis aprovados."
     },
     {
       "id": "skill:insideout-social:generate-copy",
@@ -119,6 +127,13 @@
       "status": "shared",
       "path": "plugins/insideout-social/skills/generate-grid/SKILL.md",
       "sourcePath": "plugins/insideout-social/skills/generate-grid"
+    },
+    {
+      "componentId": "skill:insideout-social:curate-brand-pattern",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-social/skills/curate-brand-pattern/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/curate-brand-pattern"
     },
     {
       "componentId": "skill:insideout-social:generate-copy",

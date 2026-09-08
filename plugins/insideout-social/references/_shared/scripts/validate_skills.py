@@ -12,6 +12,7 @@ ROOT = SHARED_ROOT.parent.parent / "skills"
 PLUGIN_MANIFEST = ROOT.parent / ".codex-plugin" / "plugin.json"
 SKILLS = {
     "analyze-briefing": ROOT / "analyze-briefing",
+    "curate-brand-pattern": ROOT / "curate-brand-pattern",
     "generate-copy": ROOT / "generate-copy",
     "generate-grid": ROOT / "generate-grid",
     "generate-image": ROOT / "generate-image",
@@ -25,6 +26,7 @@ REQUIRED_SHARED = (
     SHARED_ROOT / "evals" / "resposta-sem-ids.md",
 )
 REQUIRED_FEATURE_FILES = (
+    ROOT / "curate-brand-pattern" / "references" / "pattern-contract.md",
     ROOT / "generate-grid" / "references" / "design-briefing.md",
     ROOT / "generate-grid" / "references" / "trend-context.md",
     ROOT / "generate-grid" / "references" / "html-snapshot.md",

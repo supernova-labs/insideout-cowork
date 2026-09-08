@@ -41,7 +41,7 @@ disponível: confirme-a na sessão quando ela for necessária.
 ## Arquitetura e fronteiras
 
 - Cada plugin mantém uma única árvore canônica em `plugins/<plugin>/skills/`.
-- `insideout-social` contém seis skills de produção editorial;
+- `insideout-social` contém sete skills de produção editorial;
   `insideout-mar-aberto` contém a jornada principal, quatro etapas
   especializadas e feedback próprio.
 - `.agents/plugins/marketplace.json` expõe o catálogo `insideout` para o
@@ -54,6 +54,7 @@ disponível: confirme-a na sessão quando ela for necessária.
 | Skill | Responsabilidade | Escrita permitida após os gates da skill |
 |---|---|---|
 | `analyze-briefing` | entendimento, lacunas, escopo, canais e ficha mensal | `Marcas`, `Produtos` e `Canais da marca`, com confirmação |
+| `curate-brand-pattern` | padrões históricos a partir de perfis aprovados | nova versão em `Diretrizes de grid` e referências explicitamente aprovadas |
 | `generate-grid` | primeiro take mensal, rationale, briefing de design, tendências e snapshot | seus campos em `Posts`, após auditar conflitos e aprovar o take; HTML fora do plugin |
 | `generate-copy` | hooks, legenda e lettering | somente `Posts.Legenda` e `Posts.Lettering`, após aprovação |
 | `generate-image` | composição e QA da imagem | peça de imagem, arquivo e `Posts.Mockup`, sem sobrescrever silenciosamente |

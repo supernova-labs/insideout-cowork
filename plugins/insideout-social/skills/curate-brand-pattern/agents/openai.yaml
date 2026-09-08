@@ -1,0 +1,4 @@
+interface:
+  display_name: "Curar padrão da marca"
+  short_description: "Aprenda com perfis históricos aprovados"
+  default_prompt: "Use $curate-brand-pattern para analisar os perfis aprovados desta marca e propor um padrão histórico revisável."
