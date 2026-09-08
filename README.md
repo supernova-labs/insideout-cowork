@@ -19,6 +19,8 @@ peça o trabalho normalmente.
 
 ## InsideOut Social
 
+Versão atual: 0.3.0.
+
 | Skill | Resultado |
 |---|---|
 | `analyze-briefing` | Analisa briefing, lacunas e escopo; pode materializar marca, produtos e canais com confirmação. |

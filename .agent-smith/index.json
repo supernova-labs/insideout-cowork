@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-08T19:50:00Z",
+  "lastUpdated": "2026-09-08T20:35:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -22,7 +22,7 @@
       "name": "generate-grid",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/generate-grid/SKILL.md",
-      "description": "Compõe grids mensais multirrede e snapshots de revisão."
+      "description": "Compõe grids multirrede, pesquisa trends atuais e publica snapshots privados."
     },
     {
       "id": "skill:insideout-social:curate-brand-pattern",
@@ -62,7 +62,7 @@
       "name": "skill-feedback",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
-      "description": "Registra bugs e melhorias do plugin com sanitização e confirmação."
+      "description": "Registra bugs e melhorias na caixa de entrada do Airtable."
     },
     {
       "id": "skill:insideout-mar-aberto:run-mar-aberto",

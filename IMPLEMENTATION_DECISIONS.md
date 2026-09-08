@@ -161,3 +161,66 @@ violaria a fronteira local sem parecer absoluto.
 
 **Impacto:** schema, contrato de estado e validador cobrem explicitamente path
 traversal; a fixture negativa prova a rejeição.
+
+## D013 — Diretrizes editoriais mutáveis vivem no Airtable
+
+**Decisão:** o método compartilhado e os racionais específicos de cada marca
+são versões ativas na tabela `Diretrizes de grid`. A skill resolve primeiro o
+método geral e depois a diretriz da marca, sem depender de arquivos locais.
+
+**Racional:** todas as pessoas que usam o plugin precisam receber o mesmo
+critério editorial, independentemente da instalação ou da versão de um arquivo
+na máquina.
+
+**Impacto:** alterações relevantes criam nova versão, preservam a anterior e
+exigem confirmação. O antigo arquivo local da Clinique deixou de ser fonte de
+verdade.
+
+## D014 — Padrão histórico e trend atual são fontes distintas
+
+**Decisão:** padrões de marca são curados sob demanda a partir de perfis
+aprovados e persistidos nas diretrizes; trends são sinais sociais atuais
+pesquisados durante a geração do mês e entram somente após validação humana.
+
+**Racional:** recorrência editorial de uma marca não prova que um meme, áudio
+ou formato esteja em circulação agora.
+
+**Impacto:** o grid pode combinar as duas fontes sem expor uma atribuição por
+post ao cliente, mantendo internamente evidência, data, rede, adequação e risco.
+
+## D015 — Feedback entra pelo plugin e fica no Airtable
+
+**Decisão:** `skill-feedback` registra bugs e melhorias na tabela
+`Feedback do plugin`, depois de sanitização, busca de duplicidade, prévia e
+confirmação. Não há formulário nem dependência de uma conta GitHub.
+
+**Racional:** a equipe InsideOut precisa de um canal comum acessível pela
+própria skill, sem credenciais adicionais.
+
+**Impacto:** a tabela pode permanecer oculta na navegação principal do
+Airtable, mas editável por qualquer pessoa com acesso à base e ao plugin. Se a
+integração estiver indisponível, a skill devolve um draft copiável.
+
+## D016 — Publicação e concessão de acesso ao Site são gates separados
+
+**Decisão:** o snapshot nasce privado para o proprietário. Em uma ação
+posterior e confirmada, o acesso muda para `custom` com a lista exata de
+e-mails autorizados; o link não é público e o Site não recebe upload.
+
+**Racional:** isso permite revisar o material antes de abrir o acesso e reduz
+o risco de expor estratégia de cliente.
+
+**Impacto:** publicar nunca equivale a convidar. A equipe pode compartilhar o
+link manualmente, embora a plataforma ainda possa enviar avisos próprios ao
+alterar permissões.
+
+## D017 — Slugs são chaves internas e ficam ocultos
+
+**Decisão:** `Slug` permanece como identificador estável de deduplicação, mas
+fica oculto nas visualizações operacionais de marcas e produtos.
+
+**Racional:** a equipe não precisa preencher nem interpretar esse campo no
+trabalho editorial cotidiano.
+
+**Impacto:** as skills continuam usando o valor para localizar registros sem
+poluir a interface principal do Airtable.

@@ -1,6 +1,6 @@
 ---
 name: generate-grid
-description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, tendências curadas e snapshot HTML. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar a validação visual de um mês.
+description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, trends sociais atuais e snapshot privado. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar a validação visual de um mês.
 ---
 
 # Gerar grid editorial InsideOut

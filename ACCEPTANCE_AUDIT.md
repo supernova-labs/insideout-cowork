@@ -239,3 +239,48 @@ O roteiro de homologação está em
 `falhou` e `não executado`, exige evidência sanitizada por prova e termina com
 a decisão `liberar`, `iterar` ou `interromper`. O documento está preparado, mas
 nenhum campo operacional foi preenchido e nenhum M9 foi promovido a sucesso.
+
+---
+
+# Auditoria de aceitação — Etapa 1 do InsideOut Social
+
+Data: 2026-09-08
+Versão candidata: 0.3.0
+
+## Escopo
+
+Esta etapa corrige o fluxo geral de social media. A adaptação específica da
+Hyundai e as integrações posteriores com Asana e Notion permanecem fora deste
+escopo.
+
+## Evidências de implementação
+
+| Marco | Critério de aceite | Evidência |
+|---|---|---|
+| Diretrizes vivas | Método geral e racional da Clinique existem uma única vez e são resolvidos pelo grid | passou — schema e registros relidos no Airtable |
+| Padrão histórico | Skill separada aceita somente perfis aprovados, distingue observação de inferência e versiona a diretriz após confirmação | passou — estrutura, referências e definições de eval validadas |
+| Trends sociais | Busca hypes atuais em perfis de referência e internet aberta; exige evidência, atualidade, adequação, risco e aprovação | passou — contrato e arquivos de regressão validados estruturalmente |
+| Feedback | A skill não exige GitHub, faz prévia, deduplicação, confirmação e releitura no Airtable | passou — schema vivo e fluxo estrutural validados |
+| Snapshot privado | Publicação começa privada; acesso `custom` por e-mails autorizados ocorre em gate separado | passou — contrato e cenário de regressão validados estruturalmente |
+| Interface operacional | Slugs e caixa de feedback não poluem as visualizações principais | passou — estado visual conferido no Airtable |
+| Limpeza | Registros marcados como teste não permanecem em posts ou peças | passou — 35 registros removidos e buscas repetidas retornaram zero |
+
+## Limites da prova
+
+- As sete skills sociais, o manifesto, o catálogo e o inventário do Agent Smith
+  foram verificados como um pacote Codex canônico.
+- O catálogo continua apontando para a mesma fonte local e não recebeu um campo
+  de versão inexistente em seu contrato; a versão é declarada no manifesto.
+- A varredura histórica real aguarda os perfis escolhidos pela Carol e uma
+  sessão autenticada no Instagram.
+- Nenhum Site de cliente foi publicado e nenhum convite foi enviado nesta
+  implementação.
+- Nenhum feedback sintético foi criado na caixa de entrada viva.
+- Os evals de interação continuam destinados à homologação em tarefas limpas;
+  esta auditoria não os apresenta como execuções reais com cliente.
+
+## Estado de entrega
+
+A Etapa 1 está implementada como candidata `0.3.0` na branch de trabalho. A
+promoção ou o push para `main` não faz parte desta entrega e depende de pedido
+explícito.
