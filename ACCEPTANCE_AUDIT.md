@@ -290,7 +290,7 @@ explícito.
 # Auditoria de aceitação — InsideOut Mar Aberto 0.2.0
 
 Data: 2026-09-09
-Estado: candidata local; publicação não autorizada nesta auditoria
+Estado: versão 0.2.0 publicada; homologação operacional pendente
 
 ## Resultado por gate
 
@@ -302,8 +302,8 @@ Estado: candidata local; publicação não autorizada nesta auditoria
 | G3 — análise por tipo de fonte | passou | 13 registros sintéticos reconciliam menções, comentários e respostas por rede, fonte, dia e amplificação. |
 | G4 — produtos alinhados | passou | prova vertical gerou HTML com onze seções, PDF derivado do mesmo HTML e planilha de oito abas; todos foram inspecionados. |
 | G5 — feedback sem GitHub | passou | contrato, fixture e quatro evals cobrem arquivo local sanitizado, fingerprint, duplicidade, ausência de execução, fallback copiável e rascunho opcional no Gmail. |
-| G6 — pacote candidato | em implementação | os testes locais estão verdes; falta materializar o commit exato que será promovido. |
-| G7 — publicação e homologação | pendente | depende de autorização explícita para commit, push e promoção, seguida de homologação da InsideOut em tarefa nova. |
+| G6 — pacote candidato | passou | commit funcional `6526606059dd4ab6dd59fb381eba2383e8e8c5a9` contém exatamente o conteúdo validado. |
+| G7 — publicação e homologação | em implementação | a versão foi publicada em `main`; o protocolo está pronto e a resposta à Carol aguarda autorização explícita de envio antes da homologação em tarefa nova. |
 
 ## Prova vertical sintética 0.2.0
 
@@ -347,4 +347,8 @@ Nenhuma identidade ou dado operacional real foi incluído.
   contrato, fixtures e evals, não por efeitos externos reais.
 - Os gates editoriais foram representados no contrato; a revisão real continua
   sendo responsabilidade da InsideOut na homologação pós-publicação.
-- Nenhum commit, push, merge ou envio de e-mail ocorreu nesta auditoria.
+- O commit funcional `6526606` foi publicado por fast-forward na branch
+  `codex/add-insideout-marketplace` e na `main` em 2026-09-09. A releitura
+  remota confirmou a mesma referência para o plugin 0.2.0.
+- A resposta à Carol foi preparada e relida no fio correto do Gmail, mas o
+  envio permanece pendente de confirmação explícita sobre o texto final.

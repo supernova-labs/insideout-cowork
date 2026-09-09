@@ -136,7 +136,7 @@ sem acesso a ferramentas de desenvolvimento?
 
 ## G6 — Pacote candidato validado
 
-**Tipo:** gate · **Estado:** em implementação
+**Tipo:** gate · **Estado:** passou
 
 **Artefato demonstrável:** commit candidato 0.2.0 com todos os validadores
 locais verdes e escopo auditado.
@@ -156,7 +156,7 @@ segredo entra no pacote.
 
 ## G7 — Publicação e nova homologação
 
-**Tipo:** gate · **Estado:** pendente
+**Tipo:** gate · **Estado:** em implementação
 
 **Artefato demonstrável:** versão 0.2.0 publicada a partir do commit aprovado e
 protocolo pós-publicação entregue à InsideOut.
