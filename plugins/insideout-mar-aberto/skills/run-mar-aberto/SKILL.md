@@ -1,6 +1,6 @@
 ---
 name: run-mar-aberto
-description: Conduz ou retoma o fluxo completo de Mar Aberto da InsideOut, da exportação Stilingue aos relatórios e planilha. Use quando a pessoa pedir uma análise de mar aberto, uma leitura do i20 ou a continuação de uma execução existente.
+description: Conduz ou retoma o fluxo completo de Mar Aberto da InsideOut, da exportação oficial da Stilingue aos relatórios e planilha. Use quando a pessoa pedir uma análise de mar aberto, uma leitura do i20 ou a continuação de uma execução existente.
 ---
 
 # Executar o InsideOut Mar Aberto
@@ -24,12 +24,14 @@ correção de contrato ou gates editoriais.
 
 Avance nesta ordem:
 
-1. `export-stilingue` obtém ou valida a planilha oficial e fecha o checkpoint de
-   entrada.
+1. `export-stilingue` valida a planilha oficial fornecida pelo operador ou,
+   quando solicitado, orienta sua obtenção e fecha o checkpoint de entrada.
 2. `collect-comments` percorre Instagram e YouTube, preserva o corpus temporário
    anonimizado e registra cobertura.
-3. `analyze-sentiment` produz os dados derivados e o pool de evidências e remove
-   o corpus bruto somente após validar o checkpoint.
+3. Somente com cobertura completa das publicações que exigem coleta,
+   `analyze-sentiment` processa separadamente menções, comentários e respostas,
+   produz os dados derivados e remove o corpus temporário depois de validar o
+   checkpoint.
 4. `generate-report` conduz os dois gates editoriais e produz HTML, planilha e
    PDF.
 
@@ -41,8 +43,10 @@ e hashes não mudaram, reutilize o checkpoint em vez de repetir a etapa.
 
 - Peça ao operador que faça login diretamente na plataforma quando a etapa
   detectar sessão ausente ou expirada. Nunca solicite credenciais na conversa.
-- Uma publicação com coleta parcial ou indisponível não bloqueia as demais;
-  carregue a lacuna até a análise e os produtos finais.
+- Uma publicação com coleta parcial ou indisponível não bloqueia as demais, mas
+  bloqueia a etapa de análise. Finalize as demais coletas, grave o diagnóstico
+  de cobertura e retome sem apresentar percentuais, temas, evidências ou
+  conclusões parciais.
 - Um arquivo inválido, checkpoint incoerente ou gate não aprovado impede apenas
   a promoção para a etapa dependente.
 - Preserve o corpus de execução incompleta. Exclusão manual exige confirmação e
@@ -56,7 +60,7 @@ Só marque a execução como concluída quando existirem e estiverem reconciliad
 - `deliverables/report.pdf` derivado do HTML aprovado;
 - `deliverables/analytics.xlsx` com todo o conjunto analítico;
 - cobertura e limitações da execução;
-- ausência do corpus bruto completo após análise bem-sucedida.
+- ausência dos corpora temporários completos após análise bem-sucedida.
 
 Apresente os caminhos dos três produtos, período, filtro, canais analisados e
 lacunas. Não alegue sucesso para arquivo ausente, gate pendente ou teste não
@@ -66,6 +70,7 @@ executado.
 
 - Não agendar execuções.
 - Não operar outras redes em modo exploratório.
+- Não produzir uma prévia analítica com cobertura bloqueada.
 - Não alterar classificações durante a revisão editorial sem retornar à etapa
   de análise e registrar uma nova versão.
 - Não publicar ou compartilhar os produtos finais fora da pasta local sem

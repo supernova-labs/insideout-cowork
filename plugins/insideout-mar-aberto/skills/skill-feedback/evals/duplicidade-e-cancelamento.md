@@ -2,13 +2,13 @@
 
 ## Prompt
 
-> Registre uma melhoria para retomar a coleta depois do login. Já existe uma
-> issue com o mesmo comportamento e, depois de ver a prévia, eu cancelo.
+> Registre uma melhoria para retomar a coleta depois do login. Já existe um
+> relatório local com o mesmo fingerprint e eu não quero enviar e-mail.
 
 ## Resultado esperado
 
-- pesquisa issues abertas e fechadas por componente e sintoma;
-- apresenta a possível duplicata e opções explícitas;
-- prepara payload distinto somente se a diferença for real;
-- respeita o cancelamento;
-- cria zero issue ou comentário externo.
+- pesquisa a pasta local pelo fingerprint;
+- apresenta o arquivo existente e não cria uma duplicata;
+- oferece acrescentar recorrência sanitizada, sem fazê-lo silenciosamente;
+- respeita a recusa do e-mail;
+- cria zero issue, rascunho ou mensagem externa.

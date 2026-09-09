@@ -224,3 +224,86 @@ trabalho editorial cotidiano.
 
 **Impacto:** as skills continuam usando o valor para localizar registros sem
 poluir a interface principal do Airtable.
+
+## D018 — A exportação manual oficial é o caminho padrão do Mar Aberto
+
+**Decisão:** o fluxo pede primeiro uma exportação oficial já baixada pelo
+operador. A automação da Stilingue no navegador integrado é opcional e acontece
+somente quando solicitada.
+
+**Racional:** o teste operacional mostrou que o download funciona no navegador
+da equipe e pode falhar no navegador integrado. O caminho manual reduz consumo
+sem mudar a fonte oficial.
+
+**Impacto:** `export-stilingue` valida o arquivo antes de qualquer navegação e
+continua rejeitando planilhas genéricas ou listas de links.
+
+## D019 — Cobertura incompleta bloqueia toda análise
+
+**Decisão:** uma publicação obrigatória `partial` ou `unavailable` encerra a
+etapa com `blocked_coverage`. Nenhum sentimento, percentual, tema, evidência ou
+relatório parcial é produzido.
+
+**Racional:** uma leitura parcial pode ser interpretada como conclusão mesmo
+quando acompanhada de ressalvas.
+
+**Impacto:** coleta continua nas demais publicações, preserva checkpoint e
+oferece retomada; análise e relatório exigem cobertura completa do escopo.
+
+## D020 — Menções, comentários e respostas são fontes distintas
+
+**Decisão:** `source_kind` acompanha todos os registros. Menções são analisadas
+em Instagram, YouTube, X/Twitter, Facebook e portais; comentários e respostas
+são coletados apenas em Instagram e YouTube.
+
+**Racional:** o relatório de referência usa recortes e denominadores distintos,
+e a exportação da Stilingue já fornece as menções oficiais.
+
+**Impacto:** schemas, agregações, séries diárias, evidências, relatório e
+planilha separam as três fontes.
+
+## D021 — O relatório replica a arquitetura de informação, não os pixels
+
+**Decisão:** a versão 0.2.0 reproduz visão geral, recortes por canal,
+distribuições de sentimento, volumes, séries diárias, termos e evidências do
+modelo a partir do slide 8, mantendo a identidade visual própria do plugin.
+
+**Racional:** o valor está na estrutura analítica e na reconciliação; copiar a
+composição visual pixel a pixel criaria rigidez sem melhorar a prova.
+
+**Impacto:** HTML e PDF ganham gráficos mínimos e a planilha passa a incluir a
+aba `Séries diárias`.
+
+## D022 — O feedback do Mar Aberto é local e não exige GitHub
+
+**Decisão:** `skill-feedback` cria um Markdown sanitizado por fricção na pasta
+local da execução ou em uma pasta escolhida pelo operador.
+
+**Racional:** quem opera o plugin pode não ter acesso ao repositório nem ao
+Airtable do InsideOut Social.
+
+**Impacto:** fingerprint local evita duplicidade; a skill não cria issues nem
+depende de credenciais de desenvolvimento.
+
+## D023 — O e-mail de feedback é um encaminhamento opcional
+
+**Decisão:** depois do arquivo local, a skill sugere o encaminhamento. Com Gmail
+nativo e aceite do operador, prepara somente um rascunho para destinatários
+confirmados; o envio exige autorização posterior explícita.
+
+**Racional:** e-mail facilita o handoff sem transformar uma integração externa
+em requisito do plugin.
+
+**Impacto:** sem Gmail, a skill entrega assunto e corpo copiáveis. Nenhum
+destinatário fica hardcoded.
+
+## D024 — Redução de uso não é tratada como correção de quota
+
+**Decisão:** o plugin reduz navegação e releitura por entrada manual,
+checkpoints e retomada, mas não alega controlar a cota do workspace.
+
+**Racional:** limites de uso pertencem à conta e ao ambiente do operador e não
+foram diagnosticados como defeito do plugin.
+
+**Impacto:** a homologação mede consumo e duração, mantendo a configuração de
+quota como dependência externa.

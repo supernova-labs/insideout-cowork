@@ -4,19 +4,17 @@
   "title": "InsideOut Mar Aberto analysis record",
   "type": "object",
   "additionalProperties": false,
-  "required": ["record_id", "publication_id", "network", "relevant", "targets", "target_sentiments", "sentiment", "themes", "confidence", "engagement"],
+  "required": ["record_id", "publication_id", "network", "source_kind", "published_at", "relevant", "targets", "target_sentiments", "sentiment", "themes", "confidence", "engagement"],
   "properties": {
     "record_id": {"type": "string", "minLength": 8},
     "publication_id": {"type": "string", "minLength": 1},
     "parent_id": {"type": ["string", "null"]},
-    "network": {"enum": ["instagram", "youtube"]},
+    "network": {"enum": ["instagram", "youtube", "x", "facebook", "portals"]},
+    "source_kind": {"enum": ["mention", "comment", "reply"]},
+    "published_at": {"type": "string", "format": "date-time"},
     "relevant": {"type": "boolean"},
     "relevance_reason": {"type": ["string", "null"]},
-    "targets": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {"enum": ["i20", "hyundai", "campaign", "influencer", "purchase-price", "competitor", "other"]}
-    },
+    "targets": {"type": "array", "uniqueItems": true, "items": {"enum": ["i20", "hyundai", "campaign", "influencer", "purchase-price", "competitor", "other"]}},
     "target_sentiments": {
       "type": "array",
       "items": {

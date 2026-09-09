@@ -40,12 +40,15 @@ REQUIRED_SHARED = (
     "schemas/coverage-record.schema.json",
     "schemas/analysis-record.schema.json",
     "schemas/evidence-record.schema.json",
+    "schemas/source-record.schema.json",
     "fixtures/stilingue-valid.csv",
     "fixtures/stilingue-invalid.csv",
     "fixtures/stilingue-duplicate-synthetic.csv",
     "fixtures/comments-synthetic.jsonl",
     "fixtures/comments-raw-with-duplicate-synthetic.jsonl",
+    "fixtures/mentions-synthetic.jsonl",
     "fixtures/coverage-synthetic.jsonl",
+    "fixtures/coverage-blocked-synthetic.jsonl",
     "fixtures/coverage-edge-cases-synthetic.jsonl",
     "fixtures/analysis-synthetic.jsonl",
     "fixtures/aggregates-synthetic.json",
@@ -53,6 +56,7 @@ REQUIRED_SHARED = (
     "fixtures/manifest-complete-synthetic.json",
     "fixtures/manifest-path-traversal-invalid-synthetic.json",
     "fixtures/orchestration-cases-synthetic.json",
+    "fixtures/feedback-sanitized-synthetic.md",
 )
 FORBIDDEN_TEXT = ("HB20", "insideout-listening", "${CLAUDE_PLUGIN_ROOT}")
 SECRET_PATTERN = re.compile(
@@ -67,8 +71,11 @@ STILINGUE_HEADERS = {
     "title",
 }
 ACCEPTANCE_TEST_COUNTS = {0: 6, 1: 6, 2: 5, 3: 8, 4: 9, 5: 10, 6: 8, 7: 5, 8: 5, 9: 8}
-SUPPORTED_NETWORKS = {"instagram", "youtube"}
-COVERAGE_STATUSES = {"complete", "partial", "unavailable", "unsupported"}
+RELEASE_GATE_TEST_COUNTS = {0: 2, 1: 4, 2: 5, 3: 5, 4: 6, 5: 6, 6: 4, 7: 3}
+ANALYSIS_NETWORKS = {"instagram", "youtube", "x", "facebook", "portals"}
+COMMENT_NETWORKS = {"instagram", "youtube"}
+SOURCE_KINDS = {"mention", "comment", "reply"}
+COVERAGE_STATUSES = {"complete", "partial", "unavailable", "not_required", "unsupported"}
 SENTIMENTS = {"positive", "negative", "neutral", "mixed", "ambiguous"}
 TARGETS = {"i20", "hyundai", "campaign", "influencer", "purchase-price", "competitor", "other"}
 
@@ -243,8 +250,8 @@ def main() -> int:
     elif isinstance(manifest, dict):
         if manifest.get("name") != "insideout-mar-aberto":
             errors.append("manifesto: name deve ser insideout-mar-aberto")
-        if manifest.get("version") != "0.1.0":
-            errors.append("manifesto: versão piloto deve ser 0.1.0")
+        if manifest.get("version") != "0.2.0":
+            errors.append("manifesto: versão candidata deve ser 0.2.0")
         if manifest.get("skills") != "./skills/":
             errors.append("manifesto: skills deve apontar para ./skills/")
 
@@ -275,8 +282,8 @@ def main() -> int:
                 "fixture Stilingue válida foi rejeitada: " + "; ".join(valid_failures)
             )
         networks = {row.get("network", "").lower() for row in rows}
-        if not {"instagram", "youtube", "tiktok"}.issubset(networks):
-            errors.append("fixture Stilingue não cobre suportados e não suportado")
+        if networks != {"instagram", "youtube", "x", "facebook", "portal", "tiktok"}:
+            errors.append("fixture Stilingue não cobre cinco canais analíticos e um não suportado")
 
         invalid_rows, invalid_headers = read_csv(
             SHARED_ROOT / "fixtures" / "stilingue-invalid.csv"
@@ -299,12 +306,29 @@ def main() -> int:
         if len(canonical_urls) != 3 or len(set(canonical_urls)) != 2:
             errors.append("normalização não deduplica três ocorrências em duas publicações")
 
+    mentions = validate_jsonl(
+        SHARED_ROOT / "fixtures" / "mentions-synthetic.jsonl", errors
+    )
+    forbidden_fields = {"username", "author", "profile", "photo", "author_url"}
+    mention_ids = [str(record.get("record_id", "")) for record in mentions]
+    if len(mention_ids) != len(set(mention_ids)):
+        errors.append("fixture de menções contém duplicatas")
+    if {str(record.get("network")) for record in mentions} != ANALYSIS_NETWORKS:
+        errors.append("fixture de menções não cobre exatamente os cinco canais analíticos")
+    for record in mentions:
+        leaked = forbidden_fields.intersection(record)
+        if leaked:
+            errors.append(f"fixture de menções contém identidade: {sorted(leaked)}")
+        if record.get("source_kind") != "mention" or record.get("parent_id") is not None:
+            errors.append("fixture de menções não preserva source_kind ou parent_id")
+        if not re.fullmatch(r"men_[a-f0-9]{16}", str(record.get("record_id", ""))):
+            errors.append("fixture de menções usa identificador não anonimizado")
+
     comments = SHARED_ROOT / "fixtures" / "comments-synthetic.jsonl"
     if comments.is_file():
         records = validate_jsonl(comments, errors)
         if not records or not any(record.get("parent_id") for record in records):
             errors.append("fixture de comentários precisa cobrir resposta aninhada")
-        forbidden_fields = {"username", "author", "profile", "photo", "author_url"}
         record_ids = [str(record.get("record_id", "")) for record in records]
         if len(record_ids) != len(set(record_ids)):
             errors.append("fixture canônica de comentários contém duplicatas")
@@ -314,6 +338,11 @@ def main() -> int:
                 errors.append(f"fixture de comentários contém identidade: {sorted(leaked)}")
             if not re.fullmatch(r"cmt_[a-f0-9]{16}", str(record.get("record_id", ""))):
                 errors.append("fixture de comentários usa identificador não anonimizado")
+            if record.get("network") not in COMMENT_NETWORKS:
+                errors.append("fixture de comentários contém rede fora da coleta")
+            expected_kind = "reply" if record.get("parent_id") else "comment"
+            if record.get("source_kind") != expected_kind:
+                errors.append("fixture de comentários não preserva source_kind")
 
         raw_duplicate = validate_jsonl(
             SHARED_ROOT / "fixtures" / "comments-raw-with-duplicate-synthetic.jsonl",
@@ -330,9 +359,11 @@ def main() -> int:
         coverage_required = {
             "publication_id",
             "network",
+            "collection_required",
             "status",
             "observed_comments",
             "observed_replies",
+            "exhaustion_evidence",
         }
         for item in coverage:
             label = f"cobertura {item.get('publication_id')}"
@@ -343,11 +374,22 @@ def main() -> int:
                 value = item.get(field)
                 if type(value) is not int or value < 0:
                     errors.append(f"{label}: {field} deve ser inteiro não negativo")
-            if item.get("status") != "complete" and not item.get("failure_reason"):
+            if item.get("status") in {"partial", "unavailable", "unsupported"} and not item.get("failure_reason"):
                 errors.append(f"{label}: cobertura não completa sem motivo")
+            if item.get("collection_required") is True:
+                if item.get("network") not in COMMENT_NETWORKS:
+                    errors.append(f"{label}: coleta obrigatória fora de Instagram/YouTube")
+                if item.get("status") == "complete" and not item.get("exhaustion_evidence"):
+                    errors.append(f"{label}: completa sem evidência de esgotamento")
+                platform_count = item.get("platform_reported_comments")
+                observed_total = int(item.get("observed_comments", 0)) + int(item.get("observed_replies", 0))
+                if item.get("status") == "complete" and isinstance(platform_count, int) and platform_count > observed_total:
+                    errors.append(f"{label}: completa apesar de contador visível maior")
+            elif item.get("status") not in {"not_required", "unsupported"}:
+                errors.append(f"{label}: canal sem coleta com estado incompatível")
         coverage_statuses = Counter(str(record.get("status")) for record in coverage)
-        if coverage_statuses != Counter({"complete": 1, "partial": 1, "unsupported": 1}):
-            errors.append("fixture de cobertura não diferencia completo, parcial e não suportado")
+        if coverage_statuses != Counter({"complete": 2, "not_required": 3, "unsupported": 1}):
+            errors.append("fixture de cobertura não diferencia coleta, menção e canal não suportado")
         observed = sum(
             int(record.get("observed_comments", 0))
             + int(record.get("observed_replies", 0))
@@ -355,6 +397,22 @@ def main() -> int:
         )
         if observed != len(records):
             errors.append("cobertura sintética não reconcilia com comentários observados")
+
+        blocked_coverage = validate_jsonl(
+            SHARED_ROOT / "fixtures" / "coverage-blocked-synthetic.jsonl", errors
+        )
+        if len(blocked_coverage) != 1:
+            errors.append("fixture de cobertura bloqueada deve conter um caso")
+        else:
+            blocked = blocked_coverage[0]
+            if (
+                blocked.get("status") != "partial"
+                or blocked.get("collection_required") is not True
+                or blocked.get("export_reported_comments") != 74
+                or blocked.get("platform_reported_comments") != 186
+                or blocked.get("observed_comments") != 42
+            ):
+                errors.append("fixture bloqueada não prova 74/186/42 e coleta parcial")
 
         edge_coverage = validate_jsonl(
             SHARED_ROOT / "fixtures" / "coverage-edge-cases-synthetic.jsonl", errors
@@ -386,14 +444,15 @@ def main() -> int:
         analyses = validate_jsonl(
             SHARED_ROOT / "fixtures" / "analysis-synthetic.jsonl", errors
         )
-        if {str(record.get("record_id")) for record in analyses} != set(record_ids):
-            errors.append("análises sintéticas não reconciliam com o corpus canônico")
+        source_ids = set(record_ids) | set(mention_ids)
+        if {str(record.get("record_id")) for record in analyses} != source_ids:
+            errors.append("análises sintéticas não reconciliam menções e comentários")
         analysis_forbidden = forbidden_fields | {"text", "verbatim_text", "comment"}
         sentiment_counts: Counter[str] = Counter()
-        amplification: dict[str, Counter[str]] = {
-            "instagram": Counter(),
-            "youtube": Counter(),
+        source_counts: dict[str, Counter[str]] = {
+            kind: Counter() for kind in SOURCE_KINDS
         }
+        amplification: dict[str, dict[str, Counter[str]]] = {}
         for record in analyses:
             label = f"análise {record.get('record_id')}"
             require_fields(
@@ -402,6 +461,8 @@ def main() -> int:
                     "record_id",
                     "publication_id",
                     "network",
+                    "source_kind",
+                    "published_at",
                     "relevant",
                     "targets",
                     "target_sentiments",
@@ -416,8 +477,10 @@ def main() -> int:
             leaked = analysis_forbidden.intersection(record)
             if leaked:
                 errors.append(f"análise sintética contém texto ou identidade: {sorted(leaked)}")
-            if record.get("network") not in SUPPORTED_NETWORKS:
+            if record.get("network") not in ANALYSIS_NETWORKS:
                 errors.append(f"{label}: rede não suportada entrou na análise")
+            if record.get("source_kind") not in SOURCE_KINDS:
+                errors.append(f"{label}: tipo de fonte inválido")
             if type(record.get("relevant")) is not bool:
                 errors.append(f"{label}: relevância deve ser booleana")
             if record.get("sentiment") not in SENTIMENTS:
@@ -455,11 +518,21 @@ def main() -> int:
                 errors.append(f"{label}: temas devem ser lista não vazia e sem duplicatas")
             if record.get("relevant") is True:
                 sentiment_counts[str(record.get("sentiment"))] += 1
+                source_kind = str(record.get("source_kind"))
+                source_counts[source_kind]["relevant"] += 1
+                source_counts[source_kind][str(record.get("sentiment"))] += 1
                 network = str(record.get("network"))
                 engagement = record.get("engagement", {})
-                if network in amplification and isinstance(engagement, dict):
-                    amplification[network]["likes"] += int(engagement.get("likes") or 0)
-                    amplification[network]["replies"] += int(engagement.get("replies") or 0)
+                if isinstance(engagement, dict):
+                    signals = amplification.setdefault(network, {}).setdefault(source_kind, Counter())
+                    signals["likes"] += int(engagement.get("likes") or 0)
+                    signals["replies"] += int(engagement.get("replies") or 0)
+            record_kind = str(record.get("source_kind"))
+            if record_kind in source_counts:
+                source_counts[record_kind]["observed"] += 1
+            if record.get("relevant") is False:
+                if record_kind in source_counts:
+                    source_counts[record_kind]["excluded"] += 1
 
         aggregates = validate_json(
             SHARED_ROOT / "fixtures" / "aggregates-synthetic.json", errors
@@ -474,19 +547,46 @@ def main() -> int:
                 errors.append("agregado de excluídos diverge das análises")
             if Counter(aggregates.get("sentiment_distribution", {})) != sentiment_counts:
                 errors.append("distribuição de sentimento diverge das análises")
-            for network, signals in amplification.items():
-                expected = aggregates.get("amplification_by_platform", {}).get(network, {})
-                if expected.get("likes") != signals["likes"]:
-                    errors.append(f"amplificação de curtidas diverge em {network}")
-                if expected.get("replies") != signals["replies"]:
-                    errors.append(f"amplificação de respostas diverge em {network}")
-                if expected.get("signal_total") != signals["likes"] + signals["replies"]:
-                    errors.append(f"total de amplificação diverge em {network}")
+            for kind, counts in source_counts.items():
+                expected = aggregates.get("records_by_source_kind", {}).get(kind, {})
+                if expected.get("observed") != counts["observed"]:
+                    errors.append(f"observados divergem para {kind}")
+                if expected.get("relevant") != counts["relevant"]:
+                    errors.append(f"relevantes divergem para {kind}")
+                if expected.get("excluded") != counts["excluded"]:
+                    errors.append(f"excluídos divergem para {kind}")
+                expected_sentiments = Counter(expected.get("sentiment_distribution", {}))
+                actual_sentiments = Counter({sentiment: counts[sentiment] for sentiment in SENTIMENTS})
+                if expected_sentiments != actual_sentiments:
+                    errors.append(f"sentimento por fonte diverge para {kind}")
+            expected_amplification = aggregates.get("amplification_by_platform_and_source", {})
+            for network, by_kind in amplification.items():
+                for kind, signals in by_kind.items():
+                    expected = expected_amplification.get(network, {}).get(kind, {})
+                    if expected.get("likes") != signals["likes"] or expected.get("replies") != signals["replies"]:
+                        errors.append(f"amplificação diverge em {network}/{kind}")
+                    if expected.get("signal_total") != signals["likes"] + signals["replies"]:
+                        errors.append(f"total de amplificação diverge em {network}/{kind}")
+            daily = aggregates.get("daily_sentiment", [])
+            if not isinstance(daily, list) or not daily:
+                errors.append("agregados não incluem séries diárias")
+            else:
+                daily_total = 0
+                for item in daily:
+                    counted = sum(int(item.get(sentiment, 0)) for sentiment in SENTIMENTS)
+                    if counted != item.get("total"):
+                        errors.append("série diária não reconcilia sentimento e total")
+                    daily_total += counted
+                if daily_total != sum(sentiment_counts.values()):
+                    errors.append("séries diárias não reconciliam registros relevantes")
 
         evidences = validate_jsonl(
             SHARED_ROOT / "fixtures" / "evidence-approved-synthetic.jsonl", errors
         )
-        comment_text = {str(record["record_id"]): record.get("text") for record in records}
+        source_text = {
+            str(record["record_id"]): record.get("text")
+            for record in [*mentions, *records]
+        }
         evidence_roles = {str(record.get("selection_role")) for record in evidences}
         if evidence_roles != {"recurring", "striking", "counterpoint"}:
             errors.append("pool de evidências não cobre os três papéis de seleção")
@@ -498,6 +598,7 @@ def main() -> int:
                     "record_id",
                     "publication_id",
                     "network",
+                    "source_kind",
                     "verbatim_text",
                     "sentiment",
                     "themes",
@@ -509,13 +610,15 @@ def main() -> int:
             )
             if evidence.get("approved") is not True:
                 errors.append("pool aprovado contém evidência sem aprovação")
-            if evidence.get("network") not in SUPPORTED_NETWORKS:
+            if evidence.get("network") not in ANALYSIS_NETWORKS:
                 errors.append(f"{label}: rede inválida")
+            if evidence.get("source_kind") not in SOURCE_KINDS:
+                errors.append(f"{label}: tipo de fonte inválido")
             if evidence.get("sentiment") not in SENTIMENTS:
                 errors.append(f"{label}: sentimento inválido")
             if evidence.get("selection_role") not in {"recurring", "striking", "counterpoint"}:
                 errors.append(f"{label}: papel de seleção inválido")
-            if comment_text.get(str(evidence.get("record_id"))) != evidence.get("verbatim_text"):
+            if source_text.get(str(evidence.get("record_id"))) != evidence.get("verbatim_text"):
                 errors.append("texto de evidência não coincide com o corpus sintético")
             if forbidden_fields.intersection(evidence):
                 errors.append("evidência sintética contém identidade")
@@ -530,7 +633,7 @@ def main() -> int:
                 "manifesto",
                 errors,
             )
-            if manifest.get("contract_version") != "1.0.0":
+            if manifest.get("contract_version") != "2.0.0":
                 errors.append("manifesto: versão de contrato divergente")
             if manifest.get("status") != "completed" or manifest.get("stage") != "complete":
                 errors.append("manifesto sintético final não está concluído")
@@ -554,6 +657,9 @@ def main() -> int:
             counts = manifest.get("counts", {})
             expected_counts = {
                 "publications": len(coverage),
+                "mentions": len(mentions),
+                "comments": sum(record.get("source_kind") == "comment" for record in records),
+                "replies": sum(record.get("source_kind") == "reply" for record in records),
                 "observed_records": len(analyses),
                 "relevant_records": sum(record.get("relevant") is True for record in analyses),
                 "evidence": len(evidences),
@@ -605,17 +711,56 @@ def main() -> int:
             }
             if pause_reasons != {
                 "expired_instagram_session",
+                "blocked_coverage",
                 "gate_1_rejected",
                 "gate_2_rejected",
                 "invalid_input",
             }:
-                errors.append("casos de pausa não cobrem sessão, gates e entrada inválida")
+                errors.append("casos de pausa não cobrem sessão, cobertura, gates e entrada inválida")
 
     css = SKILLS_ROOT / "generate-report" / "assets" / "insideout-report.css"
     if not css.is_file():
         errors.append("generate-report: tema CSS padrão ausente")
     elif re.search(r"(?i)(?:https?://|@import|url\s*\()", css.read_text(encoding="utf-8")):
         errors.append("tema CSS contém dependência externa")
+    else:
+        css_text = css.read_text(encoding="utf-8")
+        for selector in (".chart", ".chart-segment", ".terms"):
+            if selector not in css_text:
+                errors.append(f"generate-report: tema sem suporte visual {selector}")
+
+    feedback_contract = SKILLS_ROOT / "skill-feedback" / "references" / "feedback-contract.md"
+    legacy_issue_contract = SKILLS_ROOT / "skill-feedback" / "references" / "issue-contract.md"
+    if not feedback_contract.is_file():
+        errors.append("skill-feedback: contrato local ausente")
+    else:
+        feedback_text = feedback_contract.read_text(encoding="utf-8")
+        for token in ("feedback_version", "fingerprint", "status: local", "rascunho"):
+            if token not in feedback_text:
+                errors.append(f"skill-feedback: contrato local sem {token}")
+    if legacy_issue_contract.exists():
+        errors.append("skill-feedback: contrato legado de issue ainda distribuído")
+    feedback_skill_text = (SKILLS_ROOT / "skill-feedback" / "SKILL.md").read_text(encoding="utf-8")
+    if "não exigir conta no github" not in feedback_skill_text.lower() or "Markdown" not in feedback_skill_text:
+        errors.append("skill-feedback: fluxo local sem GitHub não está explícito")
+    feedback_fixture = SHARED_ROOT / "fixtures" / "feedback-sanitized-synthetic.md"
+    if feedback_fixture.is_file():
+        feedback_fixture_text = feedback_fixture.read_text(encoding="utf-8")
+        if not re.search(r"(?m)^fingerprint: [a-f0-9]{64}$", feedback_fixture_text):
+            errors.append("fixture de feedback não possui fingerprint SHA-256")
+        for heading in (
+            "## Etapa e caso de uso",
+            "## Comportamento esperado",
+            "## Comportamento observado",
+            "## Impacto",
+            "## Cobertura e retomada",
+            "## Sugestão",
+            "## Recorrências",
+        ):
+            if heading not in feedback_fixture_text:
+                errors.append(f"fixture de feedback sem seção {heading}")
+        if "status: local" not in feedback_fixture_text:
+            errors.append("fixture de feedback não está marcada como local")
 
     plan_path = REPO_ROOT / "DEVELOPMENT_PLAN_MAR_ABERTO.md"
     acceptance_test_count = 0
@@ -658,6 +803,29 @@ def main() -> int:
                 errors.append(f"protocolo M9 não define a decisão {decision}")
         if "<ref-publicada>" not in protocol_text:
             errors.append("protocolo M9 não exige uma referência publicada explícita")
+        for token in ("0.2.0", "blocked_coverage", "Séries diárias", "Markdown local"):
+            if token not in protocol_text:
+                errors.append(f"protocolo M9 não cobre {token}")
+
+    release_gates_path = REPO_ROOT / "RELEASE_GATES_MAR_ABERTO_0.2.0.md"
+    release_gate_test_count = 0
+    if not release_gates_path.is_file():
+        errors.append("gates de release 0.2.0 ausentes")
+    else:
+        release_text = release_gates_path.read_text(encoding="utf-8")
+        gate_ids = re.findall(r"(?m)^\|\s+(R02-G\d-T\d+)\s+\|", release_text)
+        expected_gate_ids = {
+            f"R02-G{gate}-T{number}"
+            for gate, count in RELEASE_GATE_TEST_COUNTS.items()
+            for number in range(1, count + 1)
+        }
+        release_gate_test_count = len(gate_ids)
+        if len(gate_ids) != len(set(gate_ids)):
+            errors.append("gates 0.2.0 contêm IDs duplicados")
+        if set(gate_ids) != expected_gate_ids:
+            missing = sorted(expected_gate_ids - set(gate_ids))
+            extra = sorted(set(gate_ids) - expected_gate_ids)
+            errors.append(f"matriz de gates 0.2.0 divergente; ausentes={missing}; extras={extra}")
 
     text_suffixes = {".md", ".json", ".jsonl", ".csv", ".yaml", ".yml", ".css"}
     inspected = [
@@ -680,6 +848,7 @@ def main() -> int:
         "skills": list(SKILLS),
         "evals": eval_count,
         "acceptance_tests": acceptance_test_count,
+        "release_gate_tests": release_gate_test_count,
         "schemas": len(list((SHARED_ROOT / "schemas").glob("*.json"))),
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))

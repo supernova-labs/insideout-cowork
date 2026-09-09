@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/source-record.schema.json",
+  "title": "InsideOut Mar Aberto temporary source record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_id", "publication_id", "parent_id", "network", "source_kind", "published_at", "text", "likes", "replies"],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 8},
+    "publication_id": {"type": "string", "minLength": 1},
+    "parent_id": {"type": ["string", "null"]},
+    "network": {"enum": ["instagram", "youtube", "x", "facebook", "portals"]},
+    "source_kind": {"enum": ["mention", "comment", "reply"]},
+    "published_at": {"type": "string", "format": "date-time"},
+    "text": {"type": "string", "minLength": 1},
+    "likes": {"type": ["integer", "null"], "minimum": 0},
+    "replies": {"type": ["integer", "null"], "minimum": 0}
+  }
+}

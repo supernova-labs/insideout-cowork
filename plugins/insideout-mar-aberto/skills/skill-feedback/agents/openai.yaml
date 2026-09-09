@@ -1,4 +1,4 @@
 interface:
   display_name: "Feedback do Mar Aberto"
-  short_description: "Registre bugs e melhorias com segurança"
+  short_description: "Registre uma fricção em Markdown local"
   default_prompt: "Use $skill-feedback para registrar este problema do Mar Aberto."

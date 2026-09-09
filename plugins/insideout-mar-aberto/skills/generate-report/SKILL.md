@@ -16,7 +16,9 @@ reconciliados: HTML, PDF e `.xlsx`.
 2. Leia `assets/insideout-report.css` para a identidade visual padrão.
 3. Valide o checkpoint de `analyze-sentiment`, as agregações, a cobertura e o
    pool de evidências candidatas.
-4. Quando houver ativos locais de cliente, verifique se foram fornecidos e se
+4. Recuse a geração se a análise estiver ausente ou se a execução estiver
+   `blocked_coverage`.
+5. Quando houver ativos locais de cliente, verifique se foram fornecidos e se
    podem ser usados; se não, aplique o padrão InsideOut sem bloquear.
 
 ## Gate 1 — direção editorial
@@ -37,9 +39,13 @@ Após o Gate 1:
 
 - gere `deliverables/report.html` com o núcleo fixo e narrativa adaptativa;
 - incorpore o CSS no próprio HTML e não faça chamadas externas;
-- mostre cobertura junto das conclusões afetadas;
+- apresente visão geral e recortes por canal, distinguindo menções, comentários
+  e respostas em totais, percentuais e rótulos;
+- inclua distribuição de sentimento, série diária empilhada a 100%, termos
+  recorrentes e evidências representativas para cada recorte material;
+- mostre cobertura antes das conclusões e junto de qualquer limitação;
 - inclua somente evidências aprovadas;
-- gere `deliverables/analytics.xlsx` com as sete abas e todos os dados
+- gere `deliverables/analytics.xlsx` com as oito abas e todos os dados
   analíticos definidos no contrato;
 - congele cabeçalhos, habilite filtros e use tipos reais de data, número e
   percentual;
@@ -73,3 +79,5 @@ específica.
 - Não inserir identidade de autores.
 - Não criar uma narrativa paralela no PDF.
 - Não alterar dados analíticos para melhorar a história.
+- Não combinar menções e comentários em um percentual sem decompor seus
+  denominadores.

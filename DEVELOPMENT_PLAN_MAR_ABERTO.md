@@ -1,8 +1,11 @@
 # Plano de desenvolvimento — InsideOut Mar Aberto
 
-Status em 2026-09-02: arquitetura, construção e publicação do piloto concluídas;
-validações e referência publicada registradas em `ACCEPTANCE_AUDIT.md`;
-homologação operacional pela InsideOut (M9) aguarda execução.
+Status em 2026-09-09: o piloto 0.1.0 foi testado pela InsideOut e a decisão foi
+`iterar`. A correção 0.2.0 está em implementação sob os gates de
+`RELEASE_GATES_MAR_ABERTO_0.2.0.md`. O restante deste documento preserva o plano
+e os resultados da construção do piloto original. Suas validações e referência
+publicada estão em `ACCEPTANCE_AUDIT.md`; a nova homologação operacional usa o
+protocolo atualizado para a versão 0.2.0.
 
 Este plano transforma os princípios de `ARCHITECTURE.md` em etapas de
 construção verificáveis. Cada milestone entrega um artefato demonstrável, fecha

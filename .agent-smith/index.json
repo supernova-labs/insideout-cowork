@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-08T20:35:00Z",
+  "lastUpdated": "2026-09-09T17:30:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -78,7 +78,7 @@
       "name": "export-stilingue",
       "plugin": "insideout-mar-aberto",
       "canonicalPath": "plugins/insideout-mar-aberto/skills/export-stilingue/SKILL.md",
-      "description": "Exporta e valida a entrada oficial da Stilingue."
+      "description": "Valida a exportação oficial da Stilingue, manual por padrão."
     },
     {
       "id": "skill:insideout-mar-aberto:collect-comments",
@@ -94,7 +94,7 @@
       "name": "analyze-sentiment",
       "plugin": "insideout-mar-aberto",
       "canonicalPath": "plugins/insideout-mar-aberto/skills/analyze-sentiment/SKILL.md",
-      "description": "Analisa automaticamente relevância, sentimento, temas e amplificação."
+      "description": "Analisa menções, comentários e respostas com cobertura completa."
     },
     {
       "id": "skill:insideout-mar-aberto:generate-report",
@@ -110,7 +110,7 @@
       "name": "skill-feedback",
       "plugin": "insideout-mar-aberto",
       "canonicalPath": "plugins/insideout-mar-aberto/skills/skill-feedback/SKILL.md",
-      "description": "Registra feedback do Mar Aberto com sanitização e confirmação."
+      "description": "Registra feedback sanitizado em Markdown local e oferece e-mail."
     }
   ],
   "adapters": [

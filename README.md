@@ -36,15 +36,17 @@ Versão atual: 0.3.0.
 | Skill | Resultado |
 |---|---|
 | `run-mar-aberto` | Conduz ou retoma a jornada completa sob demanda. |
-| `export-stilingue` | Exporta e valida o filtro e período oficiais da Stilingue. |
+| `export-stilingue` | Valida a exportação oficial fornecida pelo operador e orienta sua obtenção. |
 | `collect-comments` | Coleta comentários e respostas observáveis do Instagram e YouTube. |
-| `analyze-sentiment` | Analisa automaticamente relevância, alvo, sentimento, temas e amplificação. |
+| `analyze-sentiment` | Analisa menções, comentários e respostas com cobertura completa. |
 | `generate-report` | Conduz os gates editoriais e gera HTML, PDF e planilha analítica. |
-| `skill-feedback` | Registra bugs e melhorias do Mar Aberto sem expor dados da execução. |
+| `skill-feedback` | Registra fricções em Markdown local e oferece encaminhamento por e-mail. |
 
 O piloto usa o filtro do Hyundai i20 e arquivos locais por execução. A pessoa
-faz login diretamente na Stilingue e nas redes quando solicitado; o plugin não
-recebe nem armazena credenciais.
+fornece por padrão a exportação oficial baixada da Stilingue e faz login
+diretamente no Instagram e YouTube quando solicitado; o plugin não recebe nem
+armazena credenciais. Menções de Instagram, YouTube, X/Twitter, Facebook e
+portais são analisadas separadamente dos comentários.
 
 ## Pré-requisitos
 
@@ -57,9 +59,10 @@ recebe nem armazena credenciais.
 - Para registrar feedback do Social, acesso de edição à base pelo Airtable. A
   tabela pode permanecer oculta na interface; a skill não usa formulário nem
   exige conta no GitHub.
-- Para o Mar Aberto, acesso individual à Stilingue, Instagram e YouTube pelo
-  navegador do Codex. Os testes reais são feitos pela equipe da InsideOut após
-  a publicação do piloto.
+- Para o Mar Aberto, acesso à exportação oficial da Stilingue e acesso
+  individual a Instagram e YouTube pelo navegador do Codex. Feedback não exige
+  GitHub; Gmail é apenas um encaminhamento opcional. Os testes reais são feitos
+  pela equipe da InsideOut após a publicação.
 
 As skills trabalham em linguagem de marca, produto, post e mês. Elas não
 substituem aprovação humana nem completam informações ausentes por hipótese.
@@ -90,3 +93,6 @@ efetivamente comprovados ficam em `ACCEPTANCE_AUDIT.md`. Depois que existir uma
 referência publicada, a equipe da InsideOut deve usar o
 [`protocolo de homologação do piloto`](docs/mar-aberto-pilot-test-protocol.md),
 preenchendo resultados reais sem incluir dados do cliente.
+
+Os gates ativos da versão 0.2.0 estão em
+`RELEASE_GATES_MAR_ABERTO_0.2.0.md`.

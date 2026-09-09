@@ -13,9 +13,11 @@ qualquer segmento `..`; nenhum artefato pode escapar da pasta da execução.
 ├── input/
 │   └── stilingue.xlsx
 ├── working/
+│   ├── mentions.jsonl
 │   └── comments.jsonl
 ├── coverage/
-│   └── records.jsonl
+│   ├── records.jsonl
+│   └── diagnostic.json
 ├── analysis/
 │   ├── records.jsonl
 │   ├── aggregates.json
@@ -23,16 +25,24 @@ qualquer segmento `..`; nenhum artefato pode escapar da pasta da execução.
 ├── review/
 │   ├── editorial-gate-1.json
 │   └── editorial-gate-2.json
+├── feedback/
+│   └── <timestamp>-<slug>.md
 └── deliverables/
     ├── report.html
     ├── report.pdf
     └── analytics.xlsx
 ```
 
-Crie somente os diretórios necessários para a etapa atual. O arquivo
-`working/comments.jsonl` é temporário: remova-o depois que a análise e o pool de
-evidências forem persistidos com sucesso. Se a execução for interrompida antes
-disso, preserve-o até retomada ou exclusão manual confirmada.
+Crie somente os diretórios necessários para a etapa atual. Os arquivos
+`working/mentions.jsonl` e `working/comments.jsonl` são temporários: remova-os
+depois que a análise e o pool de evidências forem persistidos com sucesso. Se a
+execução for interrompida antes disso, preserve-os até retomada ou exclusão
+manual confirmada.
+
+Feedback não depende de uma execução. Quando ela não existir, use uma pasta
+escolhida pelo operador e crie
+`insideout-mar-aberto-feedback/<timestamp>-<slug>.md`. O arquivo continua local,
+portátil e fora do plugin.
 
 ## Checkpoints
 
@@ -47,6 +57,9 @@ conteúdo e só então substitui o arquivo canônico. Atualize `manifest.json` p
 - saídas produzidas e seus hashes;
 - contagens de reconciliação;
 - lacunas ou falhas conhecidas.
+
+O estado `blocked_coverage` mantém a etapa em `collection`, aponta para
+`coverage/diagnostic.json` e proíbe a criação de derivados analíticos.
 
 Uma retomada confia apenas em checkpoints cujos arquivos e hashes continuam
 válidos. Não repita uma etapa concluída quando suas entradas não mudaram.

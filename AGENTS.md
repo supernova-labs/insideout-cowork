@@ -69,11 +69,11 @@ local.
 | Skill do Mar Aberto | Responsabilidade | Saída própria |
 |---|---|---|
 | `run-mar-aberto` | coordenar etapas e retomada | manifesto e apresentação do estado |
-| `export-stilingue` | obter e validar a entrada oficial | planilha original e checkpoint de entrada |
+| `export-stilingue` | validar a entrada oficial, manual por padrão | planilha original, menções normalizadas e checkpoint de entrada |
 | `collect-comments` | percorrer Instagram e YouTube | corpus temporário anonimizado e cobertura |
-| `analyze-sentiment` | classificar e agregar automaticamente | análises, agregados e pool candidato |
+| `analyze-sentiment` | classificar fontes completas e agregar automaticamente | análises por tipo de fonte, agregados e pool candidato |
 | `generate-report` | conduzir dois gates editoriais | HTML, PDF e planilha analítica |
-| `skill-feedback` | registrar bug ou melhoria | issue confirmada ou draft sanitizado |
+| `skill-feedback` | registrar bug ou melhoria sem GitHub | Markdown local e encaminhamento opcional por e-mail |
 
 A orquestradora não refaz o trabalho das etapas. A análise não revisa o
 relatório; o relatório não altera classificações; a coleta não mantém identidade
@@ -97,6 +97,8 @@ pessoal; feedback não corrige a instalação local.
 - Não adicione tokens, chaves, `.env` ou credenciais ao repositório.
 - No Mar Aberto, nunca versionar comentários reais, estado de execução ou
   entregáveis de cliente. Evals usam somente fixtures sintéticas ou sanitizadas.
+- No Mar Aberto, cobertura parcial de publicação obrigatória bloqueia análise e
+  relatório; não gere leitura exploratória ou percentual parcial.
 
 ## Ao alterar o repositório
 

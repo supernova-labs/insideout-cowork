@@ -1,10 +1,10 @@
 # Rubrica de análise do Mar Aberto
 
-Versão do contrato: `1.0.0`.
+Versão do contrato: `2.0.0`.
 
-Analise cada comentário ou resposta separadamente. A rubrica é fixa; o modelo
-ativo do Codex executa a classificação sem uma segunda revisão automática e sem
-revisão humana item a item.
+Analise cada menção, comentário ou resposta separadamente e registre
+`source_kind`. A rubrica é fixa; o modelo ativo do Codex executa a classificação
+sem uma segunda revisão automática e sem revisão humana item a item.
 
 ## Relevância
 
@@ -48,14 +48,21 @@ quando a evidência for insuficiente.
 
 ## Agregações
 
-Na distribuição, cada registro relevante vale uma unidade, inclusive respostas.
-Não multiplique registros multitema no denominador de sentimento. Calcule a
-amplificação separadamente com curtidas e respostas disponíveis dentro de cada
-plataforma. Nunca some engajamento bruto de Instagram e YouTube num índice
-único.
+Na distribuição, cada registro relevante vale uma unidade. Menções,
+comentários e respostas possuem denominadores separados; não multiplique
+registros multitema. Calcule também séries diárias por rede e tipo de fonte e a
+amplificação separadamente com os sinais disponíveis. Nunca some engajamento
+bruto de plataformas ou tipos de fonte num índice único.
 
 ## Evidências candidatas
 
-Proponha um pool estratificado por plataforma, tema e sentimento. Inclua padrões
-recorrentes, manifestações marcantes e contrapontos; não selecione apenas por
-engajamento. Preserve texto integral somente nesse pool e sem identidade.
+Proponha um pool estratificado por plataforma, tipo de fonte, tema e sentimento.
+Inclua padrões recorrentes, manifestações marcantes e contrapontos; não
+selecione apenas por engajamento. Preserve texto integral somente nesse pool e
+sem identidade.
+
+## Gate de cobertura
+
+Esta rubrica não é aplicada enquanto qualquer publicação de Instagram ou
+YouTube com coleta obrigatória estiver `partial` ou `unavailable`. Nesse estado,
+somente o diagnóstico de cobertura pode ser apresentado.

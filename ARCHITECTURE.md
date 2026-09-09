@@ -76,12 +76,13 @@ Mar Aberto.
 O plugin InsideOut Mar Aberto inclui uma skill própria para registrar bugs e
 melhorias descobertos no piloto. Essa capacidade é independente do
 `insideout-social`, sanitiza dados de clientes, credenciais e conteúdo pessoal e
-exige confirmação antes de publicar o relato no repositório de origem. Ela não
+grava um relatório Markdown local, sem exigir acesso ao GitHub. Ela não
 constitui uma quinta etapa do fluxo analítico.
 
 **Por quê:** os operadores precisam relatar problemas sem instalar outro
-produto nem transportar contexto manualmente. Manter o feedback no próprio
-plugin preserva sua fronteira e torna a homologação pós-publicação rastreável.
+produto nem receber credenciais de desenvolvimento. O arquivo local preserva a
+rastreabilidade; o encaminhamento por e-mail é opcional e exige autorização
+separada.
 
 **Escopo:** feedback operacional e evolução do plugin InsideOut Mar Aberto.
 
@@ -174,14 +175,14 @@ cliente.
 
 A coleta tenta percorrer todo o conteúdo disponibilizado pelas fontes
 autorizadas. Contadores opacos são usados para reconciliação, não como prova
-isolada de completude. Quando o percurso não puder ser concluído, a análise pode
-prosseguir somente com a cobertura efetivamente observada e com as lacunas
-quantificadas de forma explícita.
+isolada de completude nem como teto. Quando uma publicação dentro do escopo não
+puder ser concluída, a execução preserva o diagnóstico e bloqueia integralmente
+a análise até a retomada.
 
 **Por quê:** plataformas podem incluir nos contadores comentários ocultos,
 removidos ou indisponíveis. A cobertura é comprovada pelo esgotamento da
 paginação e das respostas acessíveis; quando isso não for possível, a condição
-de cobertura passa a limitar a interpretação e as conclusões permitidas.
+de cobertura impede que uma leitura parcial seja confundida com resultado.
 
 **Escopo:** Social Listening e demais análises que dependam de conteúdo
 dinâmico obtido em fontes externas.
@@ -235,13 +236,13 @@ introduzir a fragilidade operacional de execuções não assistidas.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
-### O navegador autenticado é a camada de integração do MVP
+### O navegador autenticado é a camada de coleta do MVP
 
-No MVP do InsideOut Mar Aberto, a exportação na Stilingue e a coleta no
-Instagram e no YouTube são realizadas por automação do navegador sobre a sessão
-autenticada do operador. O login é uma ação manual e privada; depois de
-confirmada a sessão necessária para a etapa, o fluxo prossegue automaticamente
-sem exigir chaves de API.
+No MVP do InsideOut Mar Aberto, a coleta no Instagram e no YouTube é realizada
+pelo navegador sobre a sessão autenticada do operador. A exportação oficial da
+Stilingue é fornecida manualmente por padrão; a operação assistida no navegador
+é opcional. O login é uma ação manual e privada e o fluxo não exige chaves de
+API.
 
 **Por quê:** esse caminho reproduz o acesso já disponível para cada operador e
 evita tornar credenciais técnicas ou aprovações de API um pré-requisito do
@@ -252,12 +253,13 @@ ser detectadas por validação e cobertas por manutenção do fluxo.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
-### A exportação da Stilingue é o contrato de entrada do MVP
+### A exportação oficial fornecida pelo operador é a entrada prioritária
 
-Toda execução do MVP do InsideOut Mar Aberto começa por uma exportação válida
-da Stilingue, produzida pelo próprio fluxo ou fornecida pelo operador. O arquivo
-é validado antes da coleta de comentários. Planilhas genéricas, listas manuais
-de links e adaptadores para outras fontes ficam fora desse contrato inicial.
+Toda execução do InsideOut Mar Aberto começa por uma exportação válida da
+Stilingue, preferencialmente baixada no navegador em que o operador já trabalha
+e anexada à tarefa. O arquivo é validado antes da coleta de comentários.
+Planilhas genéricas, listas manuais de links e adaptadores para outras fontes
+ficam fora desse contrato.
 
 **Por quê:** adotar um único formato de origem reduz ambiguidades de campos,
 mantém o recorte auditável e concentra a primeira implementação no processo já
@@ -268,16 +270,17 @@ InsideOut Mar Aberto.
 
 **Origem:** sessão de design do InsideOut Mar Aberto, 2026-09-02.
 
-### A matriz de canais suportados é explícita
+### Menções e comentários têm matrizes explícitas e denominadores separados
 
-O MVP do InsideOut Mar Aberto coleta e analisa publicações do Instagram e do
-YouTube. Ocorrências de outras redes presentes na exportação da Stilingue não
-interrompem a execução: são excluídas da análise, contabilizadas por canal e
-apresentadas como cobertura não suportada.
+O InsideOut Mar Aberto analisa menções da exportação em Instagram, YouTube,
+X/Twitter, Facebook e portais. A coleta de comentários e respostas permanece em
+Instagram e YouTube. Tipo de fonte e rede acompanham cada registro e nunca são
+fundidos em um denominador único. Outras redes são contabilizadas como não
+suportadas.
 
-**Por quê:** limitar os canais mantém a automação testável sem esconder partes
-do universo exportado. O registro explícito permite interpretar os resultados
-segundo o alcance real do produto.
+**Por quê:** a exportação já contém a voz das publicações e portais, enquanto a
+navegação complementa comentários onde o processo foi validado. Separar os
+universos evita omissão de menções e percentuais enganosos.
 
 **Escopo:** roteamento, cobertura e análise por canal no MVP do InsideOut Mar
 Aberto.

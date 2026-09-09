@@ -11,4 +11,5 @@
 - registra a segunda como `unavailable`;
 - coleta a terceira sem bloquear a execução;
 - não chama a cobertura geral de completa;
-- mantém todas as lacunas no checkpoint e no resumo.
+- mantém todas as lacunas no checkpoint e no diagnóstico;
+- marca a execução como `blocked_coverage` e produz zero leitura de sentimento.

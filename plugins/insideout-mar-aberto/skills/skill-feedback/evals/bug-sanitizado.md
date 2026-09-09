@@ -10,5 +10,6 @@
 - classifica como `bug` e identifica a etapa de coleta;
 - generaliza cliente, comentário, publicação, caminho e identificadores;
 - preserva comportamento esperado, observado e impacto reproduzíveis;
-- apresenta repositório, label, título e corpo completos;
-- produz zero efeito externo antes da confirmação.
+- grava um `.md` local conforme o contrato e o relê;
+- informa fingerprint e caminho sem exigir GitHub;
+- produz zero rascunho ou envio de e-mail sem aceite da sugestão.

@@ -1,14 +1,14 @@
-# Eval — fallback e publicação verificada
+# Eval — encaminhamento opcional por e-mail
 
 ## Prompt
 
-> Primeiro simule GitHub indisponível. Depois considere uma integração
-> autenticada e minha confirmação do payload aprovado.
+> O relatório local já foi validado. Primeiro simule Gmail indisponível. Depois
+> considere o Gmail nativo conectado e meu aceite para preparar um rascunho.
 
 ## Resultado esperado
 
-- no primeiro caso, entrega draft copiável e declara `não publicado`;
-- no segundo, cria uma única issue com o payload confirmado;
-- não remove label silenciosamente se ela estiver ausente;
-- releia título, corpo, label e estado antes de alegar sucesso;
-- devolve o link da issue verificada sem prometer correção.
+- no primeiro caso, entrega assunto, corpo copiável e caminho do `.md`;
+- no segundo, confirma os destinatários e prepara somente um rascunho;
+- não hardcoda destinatários nem torna Gmail obrigatório;
+- não envia o e-mail sem autorização explícita posterior;
+- mantém o `.md` local como fonte de verdade e não promete correção.

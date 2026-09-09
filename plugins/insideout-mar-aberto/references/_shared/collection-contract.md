@@ -1,9 +1,11 @@
 # Contrato de coleta observável
 
-## Matriz de canais
+## Matriz de canais e fontes
 
-- Instagram e YouTube: suportados no MVP.
-- Qualquer outra rede: não coletar; registrar quantidade e nome na cobertura.
+- Instagram e YouTube: menções analisadas e comentários coletados.
+- X/Twitter, Facebook e portais: menções analisadas; coleta de comentários não
+  requerida nesta versão.
+- Qualquer outra rede: não analisar nem coletar; registrar quantidade e nome.
 
 Valide a sessão de uma rede somente quando a exportação contiver publicações
 dela. O login pertence ao operador e acontece diretamente no navegador. Não
@@ -19,13 +21,18 @@ comentários ou respostas e não houver controle de continuação disponível.
 Registre:
 
 - rede e publicação;
+- se a coleta é obrigatória;
+- contagem informada pela exportação, quando existir;
 - contagem informada pela plataforma, quando visível;
 - comentários e respostas observados;
-- estado `complete`, `partial`, `unavailable` ou `unsupported`;
+- estado `complete`, `partial`, `unavailable`, `not_required` ou `unsupported`;
+- evidência de esgotamento observável;
 - motivo e último ponto alcançado quando não estiver completo.
 
-Contadores podem incluir conteúdo oculto ou removido. Divergência entre contador
-e observado é uma lacuna a reportar, não autorização para inventar registros.
+O contador da exportação nunca limita a coleta. Contadores da plataforma podem
+incluir conteúdo oculto ou removido, mas uma contagem visível maior do que o
+total observado impede `complete` enquanto a diferença não for reconciliada.
+Não invente registros para fechar a diferença.
 
 ## Particularidades observadas
 
@@ -43,8 +50,13 @@ Comentários fixados continuam sendo comentários normais para deduplicação.
 ## Falha e retomada
 
 Uma publicação privada, removida, indisponível ou com falha de interface não
-interrompe as demais. Grave o checkpoint após cada publicação. Quando a sessão
-expirar, preserve o ponto atual, peça novo login e retome sem duplicar itens.
+interrompe as demais. Grave o checkpoint após cada publicação. Ao final, porém,
+qualquer publicação obrigatória `partial` ou `unavailable` bloqueia a análise e
+gera `coverage/diagnostic.json`. Nesse estado, não apresente nem antecipe
+sentimento, temas, percentuais, evidências ou conclusões.
+
+Quando a sessão expirar, preserve o ponto atual, peça novo login e retome sem
+duplicar itens.
 
 Antes de persistir, aplique `privacy-retention.md` e valide cada registro pelo
 schema correspondente.

@@ -9,8 +9,10 @@
 ## Resultado esperado
 
 - trata a fonte como fixture, não como teste de download real;
-- encontra três publicações e três URLs únicas;
-- roteia uma publicação para Instagram, uma para YouTube e uma como não
-  suportada;
+- encontra seis publicações e seis URLs únicas;
+- normaliza cinco menções analisáveis em Instagram, YouTube, X, Facebook e
+  portais;
+- roteia Instagram e YouTube para coleta de comentários, três canais como
+  `not_required` e TikTok como não suportado;
 - registra filtro, período e fuso sem corrigi-los por inferência;
 - produz um checkpoint de entrada coerente.

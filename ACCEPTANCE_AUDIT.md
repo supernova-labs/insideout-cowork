@@ -284,3 +284,67 @@ escopo.
 A Etapa 1 está implementada como candidata `0.3.0` na branch de trabalho. A
 promoção ou o push para `main` não faz parte desta entrega e depende de pedido
 explícito.
+
+---
+
+# Auditoria de aceitação — InsideOut Mar Aberto 0.2.0
+
+Data: 2026-09-09
+Estado: candidata local; publicação não autorizada nesta auditoria
+
+## Resultado por gate
+
+| Gate | Estado | Evidência atual |
+|---|---|---|
+| G0 — contrato aprovado | passou | D018–D024 e os princípios correspondentes registram as sete decisões aprovadas. |
+| G1 — entrada oficial eficiente | passou | a planilha oficial fornecida pelo operador é a entrada prioritária; navegador só entra por pedido explícito; fixtures cobrem cinco canais analíticos e um não suportado. |
+| G2 — cobertura completa e retomável | passou | o cenário 74/186/42 produz `blocked_coverage`, somente diagnóstico e zero derivado parcial. |
+| G3 — análise por tipo de fonte | passou | 13 registros sintéticos reconciliam menções, comentários e respostas por rede, fonte, dia e amplificação. |
+| G4 — produtos alinhados | passou | prova vertical gerou HTML com onze seções, PDF derivado do mesmo HTML e planilha de oito abas; todos foram inspecionados. |
+| G5 — feedback sem GitHub | passou | contrato, fixture e quatro evals cobrem arquivo local sanitizado, fingerprint, duplicidade, ausência de execução, fallback copiável e rascunho opcional no Gmail. |
+| G6 — pacote candidato | em implementação | os testes locais estão verdes; falta materializar o commit exato que será promovido. |
+| G7 — publicação e homologação | pendente | depende de autorização explícita para commit, push e promoção, seguida de homologação da InsideOut em tarefa nova. |
+
+## Prova vertical sintética 0.2.0
+
+A prova usa seis publicações sintéticas, cinco menções, sete comentários, uma
+resposta, 13 registros observados, 12 relevantes e cinco evidências aprovadas.
+Nenhuma identidade ou dado operacional real foi incluído.
+
+- `analytics.xlsx` contém `Resumo`, `Cobertura`, `Publicações`, `Análises`,
+  `Agregações`, `Séries diárias`, `Evidências` e `Metodologia`. Todas as abas
+  foram renderizadas e inspecionadas. Cabeçalhos, filtros, datas, percentuais,
+  congelamento e três gráficos nativos foram verificados.
+- A planilha foi reaberta depois da exportação. As oito abas e os totais do
+  resumo permaneceram íntegros; a busca de erros de fórmula retornou zero.
+- O HTML local e autossuficiente contém as onze seções do contrato, recortes de
+  Instagram, YouTube, X/Twitter, Facebook e portais, barras de distribuição,
+  série diária a 100%, volumes e termos recorrentes.
+- O PDF foi impresso a partir desse mesmo HTML. As cinco páginas foram
+  renderizadas e inspecionadas sem página vazia, corte, sobreposição ou rótulo
+  ilegível.
+- Os arquivos de prova ficam em
+  `artifacts/validation-mar-aberto-0.2.0/`, ignorados pelo Git e fora do pacote
+  distribuído.
+
+## Validações locais
+
+- Validador Mar Aberto: seis skills, 27 evals, 70 critérios históricos, 35
+  testes dos gates e cinco schemas, sem erro ou aviso.
+- Validador InsideOut Social: sete skills, sem erro ou aviso e sem diff
+  comportamental.
+- Agent Smith: marketplace Codex com dois plugins, 13 skills únicas e índice
+  v2, sem conflito, erro ou aviso.
+- Validação nativa dos cinco JSON Schemas: 40 registros e um manifesto válidos.
+- Identidade de distribuição: `insideout-mar-aberto` 0.2.0, árvore canônica
+  `./skills/`, catálogo e índice coerentes.
+
+## Limites da prova
+
+- A prova local é sintética. Ela não valida login, sessão, paginação ou
+  disponibilidade real de Stilingue, Instagram, YouTube ou Gmail.
+- O bloqueio de cobertura e o feedback por e-mail foram comprovados por
+  contrato, fixtures e evals, não por efeitos externos reais.
+- Os gates editoriais foram representados no contrato; a revisão real continua
+  sendo responsabilidade da InsideOut na homologação pós-publicação.
+- Nenhum commit, push, merge ou envio de e-mail ocorreu nesta auditoria.

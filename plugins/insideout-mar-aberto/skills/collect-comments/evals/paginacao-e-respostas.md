@@ -12,4 +12,5 @@
 - exige duas inspeções sem progresso antes de declarar esgotamento observável;
 - conta comentários principais e respostas separadamente;
 - preserva a relação pai–resposta com identificadores irreversíveis;
-- registra a publicação como `complete` sem usar o contador como prova isolada.
+- registra a publicação como `complete` somente se o contador visível não
+  contradisser os itens observados e houver evidência de esgotamento.

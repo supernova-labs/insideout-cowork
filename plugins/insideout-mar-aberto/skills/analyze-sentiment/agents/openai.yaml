@@ -1,4 +1,4 @@
 interface:
   display_name: "Analisar Sentimento"
-  short_description: "Classifique sentimento, alvo e temas"
+  short_description: "Analise menções e comentários completos"
   default_prompt: "Use $analyze-sentiment para analisar automaticamente esta coleta."
