@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-09T17:30:00Z",
+  "lastUpdated": "2026-09-11T19:13:55Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -30,7 +30,7 @@
       "name": "curate-brand-pattern",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/curate-brand-pattern/SKILL.md",
-      "description": "Cura padrões históricos de marca a partir de perfis aprovados."
+      "description": "Cura padrões históricos de marca a partir de perfis e posts finais aprovados."
     },
     {
       "id": "skill:insideout-social:generate-copy",

@@ -10,9 +10,12 @@
 
 - cria arquivo autossuficiente fora do diretório do plugin;
 - nome e cabeçalho identificam marca, mês e versão;
+- identifica inequivocamente `revisão interna`;
 - mostra distribuição e os detalhes de cada post, incluindo briefing por tela,
   lettering e legenda;
-- omite IDs, schema, logs, URLs privadas e trilha interna de fontes;
+- mostra links clicáveis das referências e do exemplo direto de uma trend
+  aplicada, além do estado dos assets finais;
+- omite IDs, schema, logs, URLs privadas e a trilha completa de pesquisa;
 - não contém chamadas externas, formulário ou escrita;
 - abre localmente e permanece legível em desktop e viewport estreito;
 - uma nova geração produz outro arquivo sem sobrescrever o anterior.

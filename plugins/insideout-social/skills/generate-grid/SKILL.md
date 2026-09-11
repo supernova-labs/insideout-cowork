@@ -60,11 +60,14 @@ Antes de planejar, procure posts da mesma marca no mês e separe-os por rede.
 Com o contexto mínimo resolvido, consulte os perfis de referência cadastrados
 para a marca e a rede e faça busca recente na internet aberta. Procure fenômenos
 sociais em circulação, não padrões históricos ou boas práticas genéricas.
-Apresente poucas candidatas com mecanismo, atualidade, evidência de circulação,
-adaptação e risco. Candidata pendente, rejeitada, vencida ou sustentada por uma
-única ocorrência não influencia o plano. A trilha de fontes fica na execução;
-o grid não precisa atribuir cada post a uma fonte. Se nenhuma candidata for
-adequada, continue sem trend. Não persista tendências nesta versão.
+Apresente poucas candidatas com mecanismo, atualidade, links diretos para os
+posts ou vídeos observados, evidência de circulação, adaptação e risco.
+Candidata pendente, rejeitada, vencida, sem exemplo direto verificável ou
+sustentada por uma única ocorrência não influencia o plano. A trilha completa
+de fontes fica na execução; quando uma trend aprovada orientar um post, inclua
+no briefing e na revisão interna ao menos o link direto que permite ao time
+entender o mecanismo. Se nenhuma candidata for adequada, continue sem trend.
+Não crie um cadastro permanente de tendências nesta versão.
 
 ### 4. Montar o primeiro take
 
@@ -78,7 +81,8 @@ Aplique o briefing aprovado e as diretrizes ativas na ordem definida por
 - adapte cada ideia a uma única rede; reaproveitamento entre redes gera posts
   distintos, com intenção, formato e contexto próprios;
 - escreva um `Briefing de design` estruturado para cada post, sem duplicar
-  `Lettering`;
+  `Lettering`; um post só está pronto para a designer quando toda referência
+  citada tem URL clicável, caso contrário marque a lacuna;
 - passe o contexto estruturado de cada post para `generate-copy` produzir
   `Lettering` e `Legenda` ainda sem persistência.
 
@@ -156,6 +160,10 @@ Não exponha IDs ou detalhes do conector.
 - Lettering e legenda foram produzidos e persistidos por `generate-copy`.
 - Somente posts aprovados foram persistidos; exceções permanecem em revisão.
 - Tendências que influenciaram o take estão rastreáveis e dentro da validade.
+- Toda trend aplicada mostra na revisão interna ao menos um link direto para o
+  post ou vídeo que exemplifica o mecanismo.
+- Todo post pronto para a designer tem URL para cada referência citada; ausência
+  explícita mantém o post em revisão.
 - A ausência de tendência adequada não bloqueou nem empobreceu artificialmente
   o grid.
 - Repetir o mesmo fluxo não cria duplicatas.
@@ -172,6 +180,8 @@ Não exponha IDs ou detalhes do conector.
 - Não gerar imagem, vídeo ou peça real.
 - Não preencher referência por suposição.
 - Não permitir que tendência não aprovada ou vencida influencie o take.
+- Não usar trend sem exemplo direto verificável nem esconder do time interno o
+  link necessário para compreendê-la.
 - Não chamar padrão histórico, boa prática ou publicação isolada de trend.
 - Não incluir aplicação, painel, hospedagem ou estado operacional no plugin.
 - Não publicar Site aberto à internet nem adicionar visitantes externos sem

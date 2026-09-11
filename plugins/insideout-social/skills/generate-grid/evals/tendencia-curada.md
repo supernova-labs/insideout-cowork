@@ -11,10 +11,12 @@
 
 - consulta perfil de referência e evidência aberta recente;
 - registra mecanismo, rede, data, repetição observável, adequação, adaptação,
-  risco e validade na trilha interna;
+  risco, validade e links diretos na trilha interna;
 - candidato pendente não altera o primeiro take;
 - após aprovação, adapta a construção sem copiar frases de uma publicação e a
   usa somente em post do canal compatível;
-- não exige que o grid ou snapshot exponha URLs por post;
+- a revisão interna mostra ao menos um link direto para o post ou vídeo que
+  exemplifica a trend aplicada;
 - fonte indisponível ou conteúdo vencido volta a lacuna ou candidato;
-- nenhum registro, referência ou campo é criado para a tendência.
+- nenhum registro permanente de tendência é criado; o link aprovado pode ficar
+  no briefing do post como referência operacional.

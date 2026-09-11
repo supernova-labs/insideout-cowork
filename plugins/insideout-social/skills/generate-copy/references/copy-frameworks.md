@@ -110,6 +110,7 @@ prevalecem sobre qualquer fórmula.
 - [ ] Tamanho adequado ao canal
 - [ ] Nenhum claim ou fato inventado
 - [ ] Voz e guardrails respeitados
+- [ ] Hashtags ausentes ou sustentadas por briefing, marca ou padrão histórico
 
 ### Lettering
 
@@ -119,3 +120,15 @@ prevalecem sobre qualquer fórmula.
 - [ ] Dois níveis no máximo
 - [ ] Posição sugerida registrada
 - [ ] Complementa a legenda
+
+## 7. Uso do histórico
+
+Use o `Padrão histórico` ativo como síntese, não como banco de frases. Ele pode
+orientar ritmo, extensão, estrutura de hooks, CTAs, emojis e hashtags quando a
+curadoria registrar cobertura e recorrência suficientes.
+
+- Não copie uma legenda, frase ou sequência de hashtags de post anterior.
+- Não trate frequência isolada como regra da marca.
+- Preserve a grafia das hashtags aprovadas e coloque-as depois do CTA.
+- Se a curadoria declarar a amostra insuficiente, mantenha o campo sem hashtags
+  e apresente a lacuna.

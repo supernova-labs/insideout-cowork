@@ -1,6 +1,6 @@
 ---
 name: curate-brand-pattern
-description: Cura padrões históricos de conteúdo a partir de perfis de referência aprovados, separa evidências de hipóteses e, com confirmação, versiona a síntese no Airtable. Use quando o usuário pedir para aprender com o histórico de uma marca, atualizar seu padrão editorial ou analisar perfis de referência.
+description: Cura padrões históricos de conteúdo a partir de perfis de referência e posts finais aprovados, separa evidências de hipóteses e, com confirmação, versiona a síntese no Airtable. Use quando o usuário pedir para aprender com o histórico de uma marca, atualizar seu padrão editorial ou analisar fontes aprovadas.
 ---
 
 # Curar padrão histórico de marca
@@ -17,7 +17,7 @@ moda passageira como identidade permanente.
 2. Leia `references/pattern-contract.md`.
 3. Confirme a marca e a rede. Se faltarem, pare antes da coleta.
 4. Descubra a base **InsideOut Social**, o schema atual, a marca, as
-   `Referências` e as `Diretrizes de grid` relacionadas.
+   `Referências`, os `Posts` e as `Diretrizes de grid` relacionadas.
 5. Use somente perfis com URL, rede e marca inequívocas. URLs novas podem ser
    propostas, mas só entram em `Referências` após mostrar os campos e receber
    confirmação.
@@ -29,6 +29,9 @@ moda passageira como identidade permanente.
 - Prefira um recorte comparável: até os últimos seis meses ou de 50 a 100
   publicações relevantes por marca, reduzindo-o quando a plataforma limitar o
   acesso.
+- Posts internos só entram quando têm legenda final e um estado que os distingue
+  de rascunhos. Se o schema não permitir essa distinção, peça ao time uma seleção
+  inequívoca antes de usá-los.
 - Registre perfil, rede, período observado, quantidade vista e lacunas.
 - Não prometa cobertura total. Se a plataforma exigir login, abra a sessão para
   que a pessoa autentique; nunca peça, guarde ou transcreva credenciais.
@@ -43,6 +46,7 @@ Para cada fonte, registre sinais recorrentes de:
 - temas, editorias e papéis do produto;
 - cadência e alternância entre formatos;
 - estrutura de linguagem, hooks e CTAs;
+- uso recorrente, grafia e posição de hashtags;
 - diferenças entre redes;
 - exceções e mudanças ao longo do período.
 
@@ -59,6 +63,10 @@ Apresente:
 4. recomendações de uso e de não uso;
 5. fontes, data da análise e limites;
 6. texto exato proposto para o `Padrão histórico`.
+
+Quando a amostra incluir posts finais da própria marca, acrescente uma seção de
+linguagem com hooks, extensão, ritmo, emojis, CTAs e hashtags. Registre apenas
+padrões agregados e lacunas; não inclua frases copiadas no texto da diretriz.
 
 Não misture tendências sociais atuais nessa síntese. Elas pertencem à pesquisa
 ao vivo da geração do grid.
@@ -88,6 +96,9 @@ locais.
 - Observações, inferências e lacunas não foram misturadas.
 - Nenhum texto ou layout foi copiado literalmente.
 - A síntese não classifica padrão histórico como tendência atual.
+- Posts internos usados tinham legenda final e elegibilidade inequívoca.
+- Hashtags recomendadas apareceram de forma recorrente e preservam a grafia
+  observada.
 - Nenhuma escrita ocorreu antes da aprovação.
 - A nova versão e a anterior arquivada foram relidas.
 - Repetir a mesma execução não cria referência ou diretriz duplicada.

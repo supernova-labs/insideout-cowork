@@ -4,12 +4,18 @@
 
 - uma marca existente no Airtable;
 - ao menos uma rede;
-- perfis de referência aprovados, vinculados à marca e à rede;
+- perfis de referência aprovados, vinculados à marca e à rede, e/ou posts finais
+  da própria marca selecionados de forma inequívoca;
 - recorte temporal ou volume máximo.
 
 Quando a pessoa fornecer uma URL ainda não cadastrada, proponha uma
 `Referência externa` com nome, slug, URL, rede, marca e `Quando usar`. A criação
 continua sujeita à confirmação e à chave natural do contrato compartilhado.
+
+Posts internos elegíveis precisam ter legenda final e estado que os diferencie
+de rascunhos. Se o Airtable não oferecer esse sinal, a pessoa responsável deve
+indicar o conjunto; data antiga ou campo preenchido, isoladamente, não prova
+aprovação.
 
 ## Evidência suficiente
 
@@ -30,7 +36,8 @@ O conteúdo proposto para `Diretrizes de grid` deve conter:
 1. data e período analisado;
 2. perfis e redes cobertos;
 3. volume observado e limitações;
-4. recorrências de composição, temas, cadência, formatos, linguagem e CTA;
+4. recorrências de composição, temas, cadência, formatos, linguagem, CTA,
+   emojis e hashtags;
 5. diferenças por rede;
 6. recomendações e antirregras;
 7. hipóteses e lacunas ainda abertas.

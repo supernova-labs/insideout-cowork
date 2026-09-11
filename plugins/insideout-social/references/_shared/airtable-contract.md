@@ -133,6 +133,10 @@ Mudanças editoriais são versionadas: após aprovação, crie a nova versão e
 arquive a anterior na mesma operação autorizada; nunca substitua o conteúdo
 ativo silenciosamente. Releia todas as versões alteradas.
 
+Quando o padrão histórico usar posts finais da própria marca, `Conteúdo`
+registra cobertura e recorrências agregadas de linguagem, CTA, emojis e
+hashtags. Não copie legendas nem trate posts sem aprovação inequívoca como fonte.
+
 ### Feedback do plugin
 
 - `Título` — resumo observável, sem nome de cliente ou dado confidencial
@@ -171,7 +175,9 @@ registro concluído.
 - `Rationale` — obrigatório na geração do grid
 - `Briefing de design` — estrutura da peça, referências, direção visual por
   tela, assets, elementos obrigatórios, movimento ou interação e observações de
-  produção; não duplica `Lettering`
+  produção; não duplica `Lettering`. Toda referência citada inclui URL. Quando
+  uma trend aprovada orientar o post, o link direto do exemplo permanece aqui
+  como referência operacional, sem criar um cadastro permanente de trends
 - `Notas`
 - `Mockup`, `Vídeo`, `Peças` — vazios na Parte 1; na Parte 2, `Mockup` recebe
   somente a imagem selecionada para o post e `Peças` permanece relação reversa

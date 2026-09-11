@@ -23,6 +23,9 @@ inventar claims e sem escrever no Airtable antes da aprovação.
 6. Leia ou receba o post, a marca, o canal da marca e os produtos vinculados.
    Use a referência visual apenas como contexto de composição; não extraia dela
    claims ou fatos do produto.
+7. Leia o `Racional da marca` e o `Padrão histórico` ativos. Use somente a
+   síntese aprovada de linguagem, CTA e hashtags; não recupere frases antigas
+   para imitação literal durante a geração.
 
 Se a chave localizar mais de um post, apresente a duplicidade e não escolha
 silenciosamente.
@@ -60,11 +63,15 @@ Entregue:
 2. um hook recomendado;
 3. a legenda completa no formato Hook → Valor → CTA;
 4. contagem aproximada de caracteres;
-5. uma nota curta sobre fatos ou restrições que orientaram o texto.
+5. hashtags ao final, somente quando sustentadas pelo briefing, pela marca ou
+   pelo padrão histórico ativo;
+6. uma nota curta sobre fatos ou restrições que orientaram o texto.
 
 O hook fica na primeira linha, sem emoji. O CTA fica em linha própria e pede uma
 ação específica. Não inclua hashtags por hábito: use apenas quando vierem da
-marca, do briefing ou do usuário.
+marca, do briefing, do usuário ou de recorrência documentada no padrão histórico
+ativo. Preserve grafia e capitalização aprovadas e não complete uma lista com
+hashtags genéricas.
 
 ### Lettering
 
@@ -123,6 +130,8 @@ conector.
 - A voz e os guardrails da marca foram respeitados.
 - O hook cabe no corte inicial do canal e não começa com emoji.
 - A legenda contém valor e CTA específico em linha isolada.
+- Hashtags, quando presentes, têm origem explícita e ficam ao final da legenda.
+- O texto usa padrões agregados do histórico sem copiar frases anteriores.
 - O lettering tem no máximo dois níveis e menos de 20 palavras.
 - Lettering e legenda se complementam.
 - Rede e formato foram resolvidos separadamente e a copy está adaptada aos dois.

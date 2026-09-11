@@ -45,7 +45,8 @@ Use esta estrutura e omita blocos vazios:
 ```text
 BRIEFING DE DESIGN
 estrutura: <peça única, carrossel com N telas ou sequência>
-referência geral: <nome/URL aprovada ou “sem referência definida”>
+referência geral: <nome + URL aprovada ou “sem referência definida”>
+referência da trend: <nome + URL direta do post/vídeo aprovado, quando aplicável>
 
 tela 1 — <função da tela>
 direção visual: <composição, enquadramento, hierarquia e mood>
@@ -65,6 +66,10 @@ observações de produção: <acabamento, continuidade, recorte ou lacuna>
 - Descreva a função e a direção de cada tela, não apenas o tema.
 - Diferencie asset obrigatório de sugestão visual.
 - Use somente referências colocadas em escopo.
+- Quando citar uma referência, mostre uma URL clicável. Nome sem URL não deixa a
+  peça pronta para a designer.
+- Quando uma trend aprovada orientar a execução, use o link direto do post ou
+  vídeo que demonstra o mecanismo, não apenas uma matéria que o descreve.
 - Marque uma ausência como lacuna; não invente foto, logo, textura ou cena.
 - Em vídeo, descreva movimento ou continuidade, mas não gere frame nem mídia.
 - Não inclua marcadores como `Post pronto`, `Aguardando briefing` ou
