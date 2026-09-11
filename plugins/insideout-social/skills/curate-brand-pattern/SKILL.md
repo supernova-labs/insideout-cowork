@@ -29,9 +29,12 @@ moda passageira como identidade permanente.
 - Prefira um recorte comparável: até os últimos seis meses ou de 50 a 100
   publicações relevantes por marca, reduzindo-o quando a plataforma limitar o
   acesso.
-- Posts internos só entram quando têm legenda final e um estado que os distingue
-  de rascunhos. Se o schema não permitir essa distinção, peça ao time uma seleção
-  inequívoca antes de usá-los.
+- Posts internos só entram quando têm legenda final e `Status = Aprovado` ou
+  `Publicado`, depois de confirmar essas opções no schema atual. Qualquer outro
+  status é inelegível. A marca e a rede do post precisam coincidir com o recorte;
+  em amostra multirrede, segmente as conclusões por rede. Se o schema não
+  oferecer um sinal positivo equivalente, peça ao time uma seleção inequívoca
+  antes de usá-los.
 - Registre perfil, rede, período observado, quantidade vista e lacunas.
 - Não prometa cobertura total. Se a plataforma exigir login, abra a sessão para
   que a pessoa autentique; nunca peça, guarde ou transcreva credenciais.
@@ -91,7 +94,10 @@ locais.
 
 ## Validar
 
-- Toda fonte tinha autorização, URL, rede e uma única marca.
+- Todo perfil externo tinha autorização, URL, rede e uma única marca.
+- Todo post interno tinha legenda final, marca, rede compatível e status positivo
+  de aprovação; em amostra multirrede, as conclusões foram segmentadas. Sua
+  cobertura foi registrada no conteúdo sem fabricar uma `Referência`.
 - A cobertura real está explícita.
 - Observações, inferências e lacunas não foram misturadas.
 - Nenhum texto ou layout foi copiado literalmente.

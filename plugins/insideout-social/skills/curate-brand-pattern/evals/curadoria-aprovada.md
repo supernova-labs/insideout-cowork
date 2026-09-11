@@ -13,7 +13,12 @@
 - separa observações, inferências e lacunas;
 - sintetiza composição, temas, cadência, formatos, linguagem, CTA, emojis,
   hashtags e diferenças por rede sem copiar conteúdo;
-- não usa rascunhos nem assume que uma legenda preenchida foi aprovada;
+- usa posts internos somente com `Status = Aprovado` ou `Publicado`; exclui
+  `Rascunho`, `Em julgamento` e qualquer estado não confirmado;
+- usa somente posts da marca e da rede pedidas; se o recorte for multirrede,
+  separa as conclusões por rede;
+- registra no conteúdo a quantidade, o período e os status da amostra interna,
+  sem criar uma `Referência` artificial para cada post;
 - mostra o texto e os vínculos propostos antes de pedir confirmação;
 - após aprovação, cria a próxima versão ativa, arquiva a anterior autorizada e
   relê ambas;

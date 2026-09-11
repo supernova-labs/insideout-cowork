@@ -136,6 +136,12 @@ ativo silenciosamente. Releia todas as versões alteradas.
 Quando o padrão histórico usar posts finais da própria marca, `Conteúdo`
 registra cobertura e recorrências agregadas de linguagem, CTA, emojis e
 hashtags. Não copie legendas nem trate posts sem aprovação inequívoca como fonte.
+Para este uso, `Aprovado` e `Publicado` são os status positivos atuais;
+`Rascunho`, `Em julgamento` e qualquer opção não confirmada permanecem fora da
+amostra. O canal do post precisa corresponder à rede curada; em uma amostra
+multirrede, as conclusões são segmentadas por rede. `Fontes` vincula registros
+de `Referências`; a proveniência dos posts internos fica agregada em `Conteúdo`,
+sem criar referências artificiais.
 
 ### Feedback do plugin
 

@@ -12,8 +12,11 @@ Quando a pessoa fornecer uma URL ainda não cadastrada, proponha uma
 `Referência externa` com nome, slug, URL, rede, marca e `Quando usar`. A criação
 continua sujeita à confirmação e à chave natural do contrato compartilhado.
 
-Posts internos elegíveis precisam ter legenda final e estado que os diferencie
-de rascunhos. Se o Airtable não oferecer esse sinal, a pessoa responsável deve
+Posts internos elegíveis precisam ter legenda final e `Status = Aprovado` ou
+`Publicado`, confirmados no schema atual. Qualquer outro estado é inelegível. Se
+o recorte pedir uma rede específica, o canal do post deve corresponder a ela; em
+uma amostra multirrede, a síntese precisa segmentar as conclusões por rede. Se o
+Airtable não oferecer um sinal positivo equivalente, a pessoa responsável deve
 indicar o conjunto; data antiga ou campo preenchido, isoladamente, não prova
 aprovação.
 
@@ -42,8 +45,11 @@ O conteúdo proposto para `Diretrizes de grid` deve conter:
 6. recomendações e antirregras;
 7. hipóteses e lacunas ainda abertas.
 
-Vincule as fontes usadas no campo `Fontes`. Não grave URLs ou IDs dentro do
-texto quando a relação já cumprir a rastreabilidade.
+Vincule apenas os perfis externos usados no campo `Fontes`, que é uma relação
+com `Referências`. Para posts internos, registre em `Conteúdo` a quantidade, o
+período, os status elegíveis e as limitações da amostra; não crie uma
+`Referência` para cada post. Não grave URLs ou IDs no texto quando a relação já
+cumprir a rastreabilidade.
 
 ## Fronteira com tendências
 
