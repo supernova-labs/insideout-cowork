@@ -113,6 +113,13 @@ def main() -> int:
                 errors.append("manifesto Codex: version ausente")
             if manifest.get("skills") != "./skills/":
                 errors.append("manifesto Codex: skills deve apontar para ./skills/")
+            default_prompts = manifest.get("interface", {}).get("defaultPrompt", [])
+            if not isinstance(default_prompts, list):
+                errors.append("manifesto Codex: interface.defaultPrompt deve ser uma lista")
+            elif len(default_prompts) > 3:
+                errors.append(
+                    "manifesto Codex: interface.defaultPrompt aceita no máximo 3 itens"
+                )
 
     result = {
         "ok": not errors,

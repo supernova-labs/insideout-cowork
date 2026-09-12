@@ -1,6 +1,6 @@
 {
   "name": "insideout-social",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Skills da InsideOut para briefing, padrões de marca, planejamento multirrede, produção e feedback de social media.",
   "author": {
     "name": "InsideOut"
@@ -16,9 +16,7 @@
     "defaultPrompt": [
       "Analise este briefing da marca e destaque lacunas e escopo.",
       "Atualize o padrão histórico desta marca usando os perfis de referência aprovados.",
-      "Monte o primeiro take completo e multirrede deste mês.",
-      "Gere um snapshot HTML do grid para revisão.",
-      "Registre este problema do plugin como feedback para os mantenedores."
+      "Monte o primeiro take completo e multirrede deste mês e gere um snapshot para revisão."
     ]
   }
 }
