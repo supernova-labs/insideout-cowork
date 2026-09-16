@@ -1,6 +1,6 @@
 {
   "name": "insideout-mar-aberto",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Skills da InsideOut para validar exportações da Stilingue, analisar menções e comentários completos e produzir relatórios de mar aberto.",
   "author": {
     "name": "InsideOut"

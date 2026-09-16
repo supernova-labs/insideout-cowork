@@ -29,10 +29,22 @@ Registre:
 - evidência de esgotamento observável;
 - motivo e último ponto alcançado quando não estiver completo.
 
-O contador da exportação nunca limita a coleta. Contadores da plataforma podem
-incluir conteúdo oculto ou removido, mas uma contagem visível maior do que o
-total observado impede `complete` enquanto a diferença não for reconciliada.
-Não invente registros para fechar a diferença.
+O contador da exportação nunca limita a coleta e não deve ser tratado como o
+contador visível da plataforma. Uma divergência entre a Stilingue e os itens
+observados é registrada como limitação de auditoria, mas não impede `complete`
+quando o esgotamento observável foi comprovado. Contadores visíveis da
+plataforma podem incluir conteúdo oculto ou removido; se forem maiores que o
+total observado, impedem `complete` enquanto a diferença não for reconciliada.
+Não invente registros para fechar nenhuma diferença.
+
+## Fila completa em recortes longos
+
+Monte a fila a partir de todas as URLs canônicas obrigatórias e registre um
+checkpoint ao terminar cada publicação. Antes de promover a coleta, reconcilie
+a fila com `coverage/records.jsonl`: toda publicação obrigatória precisa ter um
+estado explícito. Se a execução for interrompida por duração ou limite da
+sessão, ela permanece retomável a partir da próxima publicação pendente; não
+reduza o recorte, não use amostra e não apresente cobertura completa.
 
 ## Particularidades observadas
 

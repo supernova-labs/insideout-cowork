@@ -21,6 +21,10 @@ demais publicações, mas impede a promoção para análise até ser resolvida.
    registros produzidos nesta etapa.
 4. Verifique login apenas para as redes suportadas presentes na exportação. O
    operador entra diretamente na plataforma.
+5. Transforme a lista canônica em uma fila de publicações. Uma coleta só pode
+   encerrar quando toda publicação obrigatória tiver um checkpoint de cobertura;
+   em períodos longos, preserve o ponto da fila e retome as pendentes em vez de
+   reduzir o escopo ou concluir por amostragem.
 
 ## Coletar por publicação
 
@@ -37,8 +41,11 @@ Para cada URL de Instagram ou YouTube:
 
 Conte comentários principais e respostas separadamente. Preserve separadamente
 o contador da exportação e o contador visível na plataforma. O primeiro nunca
-limita a coleta. Se a plataforma mostrar mais itens do que os observados, a
-publicação não pode ser marcada como `complete` sem reconciliação verificável.
+limita a coleta nem é copiado como contador da plataforma. Se a plataforma
+mostrar mais itens do que os observados, a publicação não pode ser marcada como
+`complete` sem reconciliação verificável. Uma divergência apenas do contador da
+Stilingue é uma limitação auditável, não uma falha de cobertura, quando o
+esgotamento observável foi comprovado.
 
 ## Tratar exceções
 
@@ -61,6 +68,11 @@ redes somente de menções, redes não suportadas e lacunas. Se qualquer publica
 com coleta obrigatória estiver `partial` ou `unavailable`, grave
 `coverage/diagnostic.json`, marque a execução como `blocked_coverage` e indique
 o ponto de retomada. Não apresente nenhuma leitura de sentimento.
+
+Antes de encerrar, reconcilie a fila canônica com os checkpoints: cada URL
+obrigatória precisa estar `complete`, `partial` ou `unavailable`; ausência de
+checkpoint nunca equivale a cobertura concluída. Um recorte longo pode exigir
+retomadas, mas não permite analisar apenas os primeiros lotes acessíveis.
 
 ## Limites
 

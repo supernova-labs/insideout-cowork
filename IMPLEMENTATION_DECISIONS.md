@@ -307,3 +307,20 @@ foram diagnosticados como defeito do plugin.
 
 **Impacto:** a homologação mede consumo e duração, mantendo a configuração de
 quota como dependência externa.
+
+## D025 — Contagem da Stilingue é auditoria, não gate de cobertura
+
+**Decisão:** a divergência isolada entre o contador informado pela Stilingue e
+os comentários acessíveis não bloqueia uma publicação cuja coleta tenha
+evidência de esgotamento observável. O contador da Stilingue permanece
+registrado como limitação e nunca é tratado como contador visível da plataforma.
+
+**Racional:** a homologação operacional confirmou que a Stilingue pode informar
+quantidades que não correspondem aos comentários acessíveis na publicação. Usar
+esse número como critério de completude tornaria o gate inalcançável sem elevar
+a qualidade da leitura.
+
+**Impacto:** `collect-comments` reconcilia a fila canônica por checkpoints e
+continua bloqueando somente falhas reais de coleta (`partial` ou
+`unavailable`). Recortes longos são retomados até que toda publicação
+obrigatória tenha estado explícito; nenhuma amostra é promovida para análise.

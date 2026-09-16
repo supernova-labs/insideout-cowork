@@ -33,6 +33,8 @@ Versão atual: 0.3.2.
 
 ## InsideOut Mar Aberto
 
+Versão candidata: 0.2.1.
+
 | Skill | Resultado |
 |---|---|
 | `run-mar-aberto` | Conduz ou retoma a jornada completa sob demanda. |
@@ -94,5 +96,5 @@ referência publicada, a equipe da InsideOut deve usar o
 [`protocolo de homologação do piloto`](docs/mar-aberto-pilot-test-protocol.md),
 preenchendo resultados reais sem incluir dados do cliente.
 
-Os gates ativos da versão 0.2.0 estão em
-`RELEASE_GATES_MAR_ABERTO_0.2.0.md`.
+Os gates ativos da versão 0.2.1 estão em
+`RELEASE_GATES_MAR_ABERTO_0.2.1.md`.

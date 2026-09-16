@@ -71,7 +71,7 @@ STILINGUE_HEADERS = {
     "title",
 }
 ACCEPTANCE_TEST_COUNTS = {0: 6, 1: 6, 2: 5, 3: 8, 4: 9, 5: 10, 6: 8, 7: 5, 8: 5, 9: 8}
-RELEASE_GATE_TEST_COUNTS = {0: 2, 1: 4, 2: 5, 3: 5, 4: 6, 5: 6, 6: 4, 7: 3}
+RELEASE_GATE_TEST_COUNTS = {0: 1, 1: 3, 2: 3, 3: 2}
 ANALYSIS_NETWORKS = {"instagram", "youtube", "x", "facebook", "portals"}
 COMMENT_NETWORKS = {"instagram", "youtube"}
 SOURCE_KINDS = {"mention", "comment", "reply"}
@@ -250,8 +250,8 @@ def main() -> int:
     elif isinstance(manifest, dict):
         if manifest.get("name") != "insideout-mar-aberto":
             errors.append("manifesto: name deve ser insideout-mar-aberto")
-        if manifest.get("version") != "0.2.0":
-            errors.append("manifesto: versão candidata deve ser 0.2.0")
+        if manifest.get("version") != "0.2.1":
+            errors.append("manifesto: versão candidata deve ser 0.2.1")
         if manifest.get("skills") != "./skills/":
             errors.append("manifesto: skills deve apontar para ./skills/")
 
@@ -434,6 +434,25 @@ def main() -> int:
             for field in ("observed_comments", "observed_replies")
         ):
             errors.append("caso sem comentários não fecha como cobertura completa com zero")
+        stilingue_divergence_case = next(
+            (
+                item
+                for item in edge_coverage
+                if item.get("publication_id") == "pub-stilingue-divergence-001"
+            ),
+            None,
+        )
+        if (
+            not stilingue_divergence_case
+            or stilingue_divergence_case.get("status") != "complete"
+            or stilingue_divergence_case.get("export_reported_comments") != 186
+            or stilingue_divergence_case.get("platform_reported_comments") is not None
+            or stilingue_divergence_case.get("observed_comments") != 0
+            or not stilingue_divergence_case.get("exhaustion_evidence")
+        ):
+            errors.append(
+                "divergência da Stilingue sem contador visível não fecha como cobertura observável"
+            )
         if (
             not unavailable_case
             or unavailable_case.get("status") != "unavailable"
@@ -803,29 +822,29 @@ def main() -> int:
                 errors.append(f"protocolo M9 não define a decisão {decision}")
         if "<ref-publicada>" not in protocol_text:
             errors.append("protocolo M9 não exige uma referência publicada explícita")
-        for token in ("0.2.0", "blocked_coverage", "Séries diárias", "Markdown local"):
+        for token in ("0.2.1", "blocked_coverage", "Séries diárias", "Markdown local"):
             if token not in protocol_text:
                 errors.append(f"protocolo M9 não cobre {token}")
 
-    release_gates_path = REPO_ROOT / "RELEASE_GATES_MAR_ABERTO_0.2.0.md"
+    release_gates_path = REPO_ROOT / "RELEASE_GATES_MAR_ABERTO_0.2.1.md"
     release_gate_test_count = 0
     if not release_gates_path.is_file():
-        errors.append("gates de release 0.2.0 ausentes")
+        errors.append("gates de release 0.2.1 ausentes")
     else:
         release_text = release_gates_path.read_text(encoding="utf-8")
-        gate_ids = re.findall(r"(?m)^\|\s+(R02-G\d-T\d+)\s+\|", release_text)
+        gate_ids = re.findall(r"(?m)^\|\s+(R021-G\d-T\d+)\s+\|", release_text)
         expected_gate_ids = {
-            f"R02-G{gate}-T{number}"
+            f"R021-G{gate}-T{number}"
             for gate, count in RELEASE_GATE_TEST_COUNTS.items()
             for number in range(1, count + 1)
         }
         release_gate_test_count = len(gate_ids)
         if len(gate_ids) != len(set(gate_ids)):
-            errors.append("gates 0.2.0 contêm IDs duplicados")
+            errors.append("gates 0.2.1 contêm IDs duplicados")
         if set(gate_ids) != expected_gate_ids:
             missing = sorted(expected_gate_ids - set(gate_ids))
             extra = sorted(set(gate_ids) - expected_gate_ids)
-            errors.append(f"matriz de gates 0.2.0 divergente; ausentes={missing}; extras={extra}")
+            errors.append(f"matriz de gates 0.2.1 divergente; ausentes={missing}; extras={extra}")
 
     text_suffixes = {".md", ".json", ".jsonl", ".csv", ".yaml", ".yml", ".css"}
     inspected = [

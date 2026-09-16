@@ -1,4 +1,4 @@
-# Protocolo de homologação — InsideOut Mar Aberto 0.2.0
+# Protocolo de homologação — InsideOut Mar Aberto 0.2.1
 
 Use este roteiro somente depois que a pessoa responsável pela publicação
 informar uma referência exata e instalável do piloto. O protocolo comprova o
@@ -95,13 +95,17 @@ sanitizada: ___
    de cobertura.
 4. Compare separadamente o contador da exportação, o contador visível na
    plataforma e os itens observados.
-5. Verifique que X/Twitter, Facebook e portais ficam `not_required` para
+5. Quando apenas o contador da Stilingue divergir, registre a limitação e a
+   evidência de esgotamento observável; não transforme essa divergência isolada
+   em `blocked_coverage`.
+6. Verifique que X/Twitter, Facebook e portais ficam `not_required` para
    comentários e que uma publicação obrigatória incompleta gera
    `blocked_coverage`.
 
-**Aceite:** Instagram e YouTube têm cobertura completa e auditável; falhas
-isoladas não interrompem as demais coletas, mas bloqueiam integralmente análise
-e relatório até a retomada.
+**Aceite:** Instagram e YouTube têm cobertura completa e auditável; divergência
+isolada do contador da Stilingue é registrada sem bloquear uma publicação com
+esgotamento observável. Falhas reais de coleta não interrompem as demais
+publicações, mas bloqueiam integralmente análise e relatório até a retomada.
 
 **Registro:** estado: ___ · Instagram observado: ___ · YouTube observado: ___ ·
 falhas/lacunas sanitizadas: ___ · duração: ___
@@ -114,9 +118,11 @@ falhas/lacunas sanitizadas: ___ · duração: ___
    checkpoint.
 2. Retome a mesma execução usando sua identidade e pasta originais.
 3. Compare contagens e identificadores antes e depois da retomada.
+4. Em um período longo, confirme que todas as publicações da fila canônica têm
+   checkpoint antes de liberar a análise.
 
 **Aceite:** a execução retoma do checkpoint, não reinicia publicações concluídas
-e não duplica comentários ou respostas.
+nem duplica comentários ou respostas, e não reduz a fila em períodos longos.
 
 **Registro:** estado: ___ · etapa interrompida: ___ · contagem antes/depois: ___
 · duplicatas: ___ · observação sanitizada: ___

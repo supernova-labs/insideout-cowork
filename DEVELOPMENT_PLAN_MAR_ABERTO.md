@@ -204,7 +204,7 @@ grafo de respostas e auditoria de cobertura por publicação.
 | ID | Cenário | Evidência esperada |
 |---|---|---|
 | M3-T1 | Paginação com respostas aninhadas | Todos os itens da fixture são percorridos uma vez e o grafo pai–resposta é preservado. |
-| M3-T2 | Publicação sem comentários | Cobertura concluída com zero observado, sem tratar zero como erro. |
+| M3-T2 | Publicação sem comentários | Cobertura concluída com zero observado e evidência de esgotamento, mesmo quando o contador da Stilingue divergir. |
 | M3-T3 | Publicação privada, removida ou indisponível | Estado e motivo registrados; a próxima publicação continua. |
 | M3-T4 | Sessão expirada no meio da coleta | Checkpoint preservado, solicitação de novo login e retomada sem duplicatas. |
 | M3-T5 | Falha após coleta parcial | Quantidade coletada e lacuna permanecem explícitas em cobertura. |
