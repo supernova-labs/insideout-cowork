@@ -17,6 +17,11 @@ geração inequívoco.
 
 ## Conteúdo
 
+Siga também `review-presentation.md` para a identidade da apresentação, a
+hierarquia semanal e a estrutura dos cards. Essa referência vale para a casca
+de revisão; os briefs das peças preservam a identidade visual da marca ou
+campanha.
+
 Mostre no cabeçalho:
 
 - marca e mês;
@@ -35,6 +40,10 @@ Para cada post, mostre em linguagem de negócio:
 - legenda;
 - lacunas, oportunidade de momento aplicada, estado dos assets finais e estado
   de revisão quando aplicáveis.
+
+Organize os posts cronologicamente em blocos semanais. Use elementos nativos
+expansíveis para que direção criativa, texto da arte e legenda sejam fáceis de
+consultar sem tornar o mês difícil de escanear.
 
 Não mostre IDs, schema, logs, prompt interno, registros não selecionados, URLs
 privadas, a trilha completa de pesquisa ou campos operacionais desnecessários.

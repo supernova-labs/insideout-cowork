@@ -14,6 +14,8 @@ persista somente os posts aprovados.
 1. Leia `../../references/_shared/voz-usuario.md`,
    `../../references/_shared/about-insideout.md` e `../../references/_shared/airtable-contract.md`.
 2. Leia `references/planning-method.md` e `references/design-briefing.md`.
+   Leia `references/review-presentation.md` ao apresentar o primeiro take ou
+   gerar seu snapshot.
 3. Leia `references/calendar/<ano>.md` para o mês solicitado.
 4. Leia `references/trend-context.md` ao gerar um novo grid ou quando houver
    pesquisa, fonte ou candidato de tendência em escopo.
@@ -88,7 +90,8 @@ Aplique o briefing aprovado e as diretrizes ativas na ordem definida por
 
 Planeje o mês inteiro antes de escrever. Apresente um artefato composto com
 estrutura, rationale, briefing de design, lettering e legenda, além da síntese
-por rede, formato e abordagem.
+por rede, formato e abordagem. Ao revisar o take, siga a hierarquia e os
+limites de identidade definidos em `references/review-presentation.md`.
 
 ### 5. Aprovar o lote com exceções
 
@@ -113,9 +116,9 @@ ajustes. Um post pendente não bloqueia os aprovados e não é persistido.
 ### 7. Gerar o snapshot quando solicitado
 
 Depois de compor o take selecionado, gere o HTML conforme
-`references/html-snapshot.md`. O arquivo é uma visão de revisão, não uma nova
-fonte de verdade: vive fora do pacote, não lê nem escreve no Airtable e não
-substitui as aprovações das skills.
+`references/html-snapshot.md` e `references/review-presentation.md`. O arquivo
+é uma visão de revisão, não uma nova fonte de verdade: vive fora do pacote, não
+lê nem escreve no Airtable e não substitui as aprovações das skills.
 
 Quando o pedido incluir um link de revisão, publique o snapshot conforme
 `references/site-access.md`: valide e publique primeiro apenas para o
@@ -169,6 +172,10 @@ Não exponha IDs ou detalhes do conector.
 - Repetir o mesmo fluxo não cria duplicatas.
 - O primeiro take está completo; não apresente somente um calendário vazio ou
   um conjunto de campos sem contexto visual.
+- A apresentação agrupa os posts por semana, mostra indicadores calculados e
+  deixa direção criativa, texto da arte, legenda e lacunas fáceis de revisar.
+- A assinatura InsideOut aparece apenas na apresentação de revisão; a direção
+  visual de cada post continua respeitando a marca ou campanha correspondente.
 - Site publicado começa restrito ao proprietário; acesso externo contém somente
   os emails confirmados.
 

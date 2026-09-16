@@ -19,7 +19,7 @@ peça o trabalho normalmente.
 
 ## InsideOut Social
 
-Versão atual: 0.3.2.
+Versão atual: 0.3.3.
 
 | Skill | Resultado |
 |---|---|

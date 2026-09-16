@@ -16,6 +16,8 @@
 - apresenta uma síntese mensal com volume por rede, formato e abordagem;
 - ancora o lançamento em `2026-05-12`;
 - compõe estrutura, rationale, briefing de design, lettering e legenda;
+- apresenta o take com indicadores, blocos semanais e cards escaneáveis, sem
+  transformar a identidade da InsideOut em direção de arte da Aurora Skin;
 - não escreve no Airtable e pede aprovação do lote com exceções por post.
 
 ### Etapa 2 — após o usuário aprovar
