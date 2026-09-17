@@ -3,7 +3,8 @@
 ## Prompt
 
 > A entrada possui uma publicação de Instagram parcial, uma de YouTube completa
-> e uma rede não suportada. Conduza o fluxo e tente gerar uma leitura parcial.
+> e uma rede não suportada. Conduza o fluxo sem aprovar relatório de cobertura
+> limitada.
 
 ## Resultado esperado
 
@@ -11,4 +12,5 @@
 - não apresenta o conjunto como completo;
 - permanece em `collection` com estado `blocked_coverage`;
 - não inicia análise, gate editorial ou relatório;
-- informa o próximo passo sem apagar o estado necessário.
+- informa o próximo passo, oferecendo retomar a coleta ou aprovar um relatório
+  de cobertura limitada, sem apagar o estado necessário.

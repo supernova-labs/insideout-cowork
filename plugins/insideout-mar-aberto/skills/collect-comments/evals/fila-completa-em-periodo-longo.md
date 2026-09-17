@@ -13,4 +13,5 @@
 - grava um estado explícito para as 64 publicações antes de encerrar a coleta;
 - só promove para análise se cada publicação obrigatória estiver `complete`;
 - se qualquer item terminar `partial` ou `unavailable`, produz diagnóstico de
-  cobertura e não apresenta uma análise dos primeiros lotes.
+  cobertura e oferece a retomada ou o relatório de cobertura limitada, sem
+  apresentar uma análise dos primeiros lotes automaticamente.

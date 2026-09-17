@@ -23,6 +23,7 @@ qualquer segmento `..`; nenhum artefato pode escapar da pasta da execução.
 │   ├── aggregates.json
 │   └── evidence-candidates.jsonl
 ├── review/
+│   ├── coverage-decision.json
 │   ├── editorial-gate-1.json
 │   └── editorial-gate-2.json
 ├── feedback/
@@ -58,8 +59,17 @@ conteúdo e só então substitui o arquivo canônico. Atualize `manifest.json` p
 - contagens de reconciliação;
 - lacunas ou falhas conhecidas.
 
-O estado `blocked_coverage` mantém a etapa em `collection`, aponta para
-`coverage/diagnostic.json` e proíbe a criação de derivados analíticos.
+O estado `blocked_coverage` mantém a etapa em `collection` e aponta para
+`coverage/diagnostic.json`. A pessoa pode retomar a coleta ou aprovar
+explicitamente o modo `limited_approved` em `review/coverage-decision.json`.
+Esse registro inclui decisão, instante, lacunas e a confirmação de que o
+relatório descreverá somente o corpus observado. Só então a execução muda para
+`in_progress` na etapa `analysis`; sem esse registro, derivados analíticos são
+proibidos.
+
+O arquivo segue `schemas/coverage-decision.schema.json`. A decisão `continue`
+mantém a etapa em coleta; somente `limited_approved` permite iniciar análise e
+relatório com cobertura limitada.
 
 Uma retomada confia apenas em checkpoints cujos arquivos e hashes continuam
 válidos. Não repita uma etapa concluída quando suas entradas não mudaram.

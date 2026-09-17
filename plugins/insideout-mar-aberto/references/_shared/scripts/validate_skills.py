@@ -37,6 +37,7 @@ REQUIRED_SHARED = (
     "acceptance-map.md",
     "evals/README.md",
     "schemas/run-manifest.schema.json",
+    "schemas/coverage-decision.schema.json",
     "schemas/coverage-record.schema.json",
     "schemas/analysis-record.schema.json",
     "schemas/evidence-record.schema.json",
@@ -50,6 +51,7 @@ REQUIRED_SHARED = (
     "fixtures/coverage-synthetic.jsonl",
     "fixtures/coverage-blocked-synthetic.jsonl",
     "fixtures/coverage-edge-cases-synthetic.jsonl",
+    "fixtures/coverage-decision-limited-synthetic.json",
     "fixtures/analysis-synthetic.jsonl",
     "fixtures/aggregates-synthetic.json",
     "fixtures/evidence-approved-synthetic.jsonl",
@@ -71,7 +73,7 @@ STILINGUE_HEADERS = {
     "title",
 }
 ACCEPTANCE_TEST_COUNTS = {0: 6, 1: 6, 2: 5, 3: 8, 4: 9, 5: 10, 6: 8, 7: 5, 8: 5, 9: 8}
-RELEASE_GATE_TEST_COUNTS = {0: 1, 1: 3, 2: 3, 3: 2}
+RELEASE_GATE_TEST_COUNTS = {0: 1, 1: 4, 2: 3, 3: 2}
 ANALYSIS_NETWORKS = {"instagram", "youtube", "x", "facebook", "portals"}
 COMMENT_NETWORKS = {"instagram", "youtube"}
 SOURCE_KINDS = {"mention", "comment", "reply"}
@@ -250,8 +252,8 @@ def main() -> int:
     elif isinstance(manifest, dict):
         if manifest.get("name") != "insideout-mar-aberto":
             errors.append("manifesto: name deve ser insideout-mar-aberto")
-        if manifest.get("version") != "0.2.1":
-            errors.append("manifesto: versão candidata deve ser 0.2.1")
+        if manifest.get("version") != "0.2.2":
+            errors.append("manifesto: versão candidata deve ser 0.2.2")
         if manifest.get("skills") != "./skills/":
             errors.append("manifesto: skills deve apontar para ./skills/")
 
@@ -697,6 +699,18 @@ def main() -> int:
             ):
                 errors.append("fixture de path traversal não é rejeitada integralmente")
 
+        coverage_decision = validate_json(
+            SHARED_ROOT / "fixtures" / "coverage-decision-limited-synthetic.json",
+            errors,
+        )
+        if (
+            not isinstance(coverage_decision, dict)
+            or coverage_decision.get("decision") != "limited_approved"
+            or not coverage_decision.get("approved_at")
+            or not coverage_decision.get("gaps")
+        ):
+            errors.append("fixture de decisão limitada não registra aprovação e lacunas")
+
         orchestration = validate_json(
             SHARED_ROOT / "fixtures" / "orchestration-cases-synthetic.json", errors
         )
@@ -736,6 +750,15 @@ def main() -> int:
                 "invalid_input",
             }:
                 errors.append("casos de pausa não cobrem sessão, cobertura, gates e entrada inválida")
+            limited_case = orchestration.get("coverage_limited_case", {})
+            if limited_case != {
+                "prior_status": "blocked_coverage",
+                "status": "in_progress",
+                "stage": "analysis",
+                "coverage_mode": "limited_approved",
+                "requires": "recorded_user_confirmation",
+            }:
+                errors.append("caso de cobertura limitada não exige aprovação antes da análise")
 
     css = SKILLS_ROOT / "generate-report" / "assets" / "insideout-report.css"
     if not css.is_file():
@@ -822,29 +845,29 @@ def main() -> int:
                 errors.append(f"protocolo M9 não define a decisão {decision}")
         if "<ref-publicada>" not in protocol_text:
             errors.append("protocolo M9 não exige uma referência publicada explícita")
-        for token in ("0.2.1", "blocked_coverage", "Séries diárias", "Markdown local"):
+        for token in ("0.2.2", "blocked_coverage", "Séries diárias", "Markdown local"):
             if token not in protocol_text:
                 errors.append(f"protocolo M9 não cobre {token}")
 
-    release_gates_path = REPO_ROOT / "RELEASE_GATES_MAR_ABERTO_0.2.1.md"
+    release_gates_path = REPO_ROOT / "RELEASE_GATES_MAR_ABERTO_0.2.2.md"
     release_gate_test_count = 0
     if not release_gates_path.is_file():
-        errors.append("gates de release 0.2.1 ausentes")
+        errors.append("gates de release 0.2.2 ausentes")
     else:
         release_text = release_gates_path.read_text(encoding="utf-8")
-        gate_ids = re.findall(r"(?m)^\|\s+(R021-G\d-T\d+)\s+\|", release_text)
+        gate_ids = re.findall(r"(?m)^\|\s+(R022-G\d-T\d+)\s+\|", release_text)
         expected_gate_ids = {
-            f"R021-G{gate}-T{number}"
+            f"R022-G{gate}-T{number}"
             for gate, count in RELEASE_GATE_TEST_COUNTS.items()
             for number in range(1, count + 1)
         }
         release_gate_test_count = len(gate_ids)
         if len(gate_ids) != len(set(gate_ids)):
-            errors.append("gates 0.2.1 contêm IDs duplicados")
+            errors.append("gates 0.2.2 contêm IDs duplicados")
         if set(gate_ids) != expected_gate_ids:
             missing = sorted(expected_gate_ids - set(gate_ids))
             extra = sorted(set(gate_ids) - expected_gate_ids)
-            errors.append(f"matriz de gates 0.2.1 divergente; ausentes={missing}; extras={extra}")
+            errors.append(f"matriz de gates 0.2.2 divergente; ausentes={missing}; extras={extra}")
 
     text_suffixes = {".md", ".json", ".jsonl", ".csv", ".yaml", ".yml", ".css"}
     inspected = [

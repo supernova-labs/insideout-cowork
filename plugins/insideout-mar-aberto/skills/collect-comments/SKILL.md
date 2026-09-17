@@ -7,7 +7,8 @@ description: Coleta comentários e respostas observáveis de publicações do In
 
 Percorra todas as publicações suportadas e produza um corpus temporário
 anonimizado com cobertura verificável. Uma falha isolada não interrompe as
-demais publicações, mas impede a promoção para análise até ser resolvida.
+demais publicações, mas pausa a promoção automática para análise até haver
+retomada ou aprovação explícita de cobertura limitada.
 
 ## Preparar
 
@@ -39,6 +40,13 @@ Para cada URL de Instagram ou YouTube:
 6. deduplique o item dentro da publicação;
 7. grave o checkpoint da publicação antes de seguir.
 
+Enquanto houver painel rolável, controle de carregar mais ou respostas
+expansíveis, continue no contêiner de comentários. Tempo decorrido, recorte
+longo ou uma contagem externa divergente não são motivo para encerrar a
+publicação como `partial`: preserve o ponto como retomável se a sessão precisar
+ser interrompida. Use `partial` somente depois de uma falha observável de
+continuação e registre a tentativa e o último ponto alcançado.
+
 Conte comentários principais e respostas separadamente. Preserve separadamente
 o contador da exportação e o contador visível na plataforma. O primeiro nunca
 limita a coleta nem é copiado como contador da plataforma. Se a plataforma
@@ -67,7 +75,9 @@ e atualize o manifesto. Informe publicações por estado, comentários, resposta
 redes somente de menções, redes não suportadas e lacunas. Se qualquer publicação
 com coleta obrigatória estiver `partial` ou `unavailable`, grave
 `coverage/diagnostic.json`, marque a execução como `blocked_coverage` e indique
-o ponto de retomada. Não apresente nenhuma leitura de sentimento.
+o ponto de retomada. A etapa seguinte oferece ao operador continuar a coleta ou
+aprovar um relatório de cobertura limitada; esta skill não decide nem produz a
+leitura de sentimento.
 
 Antes de encerrar, reconcilie a fila canônica com os checkpoints: cada URL
 obrigatória precisa estar `complete`, `partial` ou `unavailable`; ausência de

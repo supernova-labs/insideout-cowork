@@ -33,14 +33,14 @@ Versão atual: 0.3.3.
 
 ## InsideOut Mar Aberto
 
-Versão candidata: 0.2.1.
+Versão candidata: 0.2.2.
 
 | Skill | Resultado |
 |---|---|
 | `run-mar-aberto` | Conduz ou retoma a jornada completa sob demanda. |
 | `export-stilingue` | Valida a exportação oficial fornecida pelo operador e orienta sua obtenção. |
 | `collect-comments` | Coleta comentários e respostas observáveis do Instagram e YouTube. |
-| `analyze-sentiment` | Analisa menções, comentários e respostas com cobertura completa. |
+| `analyze-sentiment` | Analisa menções, comentários e respostas; cobertura limitada exige confirmação explícita. |
 | `generate-report` | Conduz os gates editoriais e gera HTML, PDF e planilha analítica. |
 | `skill-feedback` | Registra fricções em Markdown local e oferece encaminhamento por e-mail. |
 
@@ -96,5 +96,5 @@ referência publicada, a equipe da InsideOut deve usar o
 [`protocolo de homologação do piloto`](docs/mar-aberto-pilot-test-protocol.md),
 preenchendo resultados reais sem incluir dados do cliente.
 
-Os gates ativos da versão 0.2.1 estão em
-`RELEASE_GATES_MAR_ABERTO_0.2.1.md`.
+Os gates ativos da versão 0.2.2 estão em
+`RELEASE_GATES_MAR_ABERTO_0.2.2.md`.

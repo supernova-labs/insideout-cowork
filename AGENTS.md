@@ -97,8 +97,11 @@ pessoal; feedback não corrige a instalação local.
 - Não adicione tokens, chaves, `.env` ou credenciais ao repositório.
 - No Mar Aberto, nunca versionar comentários reais, estado de execução ou
   entregáveis de cliente. Evals usam somente fixtures sintéticas ou sanitizadas.
-- No Mar Aberto, cobertura parcial de publicação obrigatória bloqueia análise e
-  relatório; não gere leitura exploratória ou percentual parcial.
+- No Mar Aberto, cobertura parcial de publicação obrigatória pausa a promoção
+  automática. A pessoa pode retomar a coleta ou aprovar explicitamente um
+  relatório de cobertura limitada; nesse modo, análises, percentuais e
+  conclusões descrevem somente o corpus observado e a lacuna aparece em todos
+  os produtos.
 
 ## Ao alterar o repositório
 

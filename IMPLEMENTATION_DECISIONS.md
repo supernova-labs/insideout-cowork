@@ -238,7 +238,7 @@ sem mudar a fonte oficial.
 **Impacto:** `export-stilingue` valida o arquivo antes de qualquer navegação e
 continua rejeitando planilhas genéricas ou listas de links.
 
-## D019 — Cobertura incompleta bloqueia toda análise
+## D019 — Cobertura incompleta bloqueava toda análise (substituída por D026)
 
 **Decisão:** uma publicação obrigatória `partial` ou `unavailable` encerra a
 etapa com `blocked_coverage`. Nenhum sentimento, percentual, tema, evidência ou
@@ -247,8 +247,9 @@ relatório parcial é produzido.
 **Racional:** uma leitura parcial pode ser interpretada como conclusão mesmo
 quando acompanhada de ressalvas.
 
-**Impacto:** coleta continua nas demais publicações, preserva checkpoint e
-oferece retomada; análise e relatório exigem cobertura completa do escopo.
+**Impacto histórico:** a coleta continuava nas demais publicações e preservava
+checkpoint. A partir da D026, uma decisão explícita pode promover um relatório
+de cobertura limitada, sem representar a lacuna como cobertura completa.
 
 ## D020 — Menções, comentários e respostas são fontes distintas
 
@@ -321,6 +322,23 @@ esse número como critério de completude tornaria o gate inalcançável sem ele
 a qualidade da leitura.
 
 **Impacto:** `collect-comments` reconcilia a fila canônica por checkpoints e
-continua bloqueando somente falhas reais de coleta (`partial` ou
+pausa a promoção automática diante de falhas reais de coleta (`partial` ou
 `unavailable`). Recortes longos são retomados até que toda publicação
-obrigatória tenha estado explícito; nenhuma amostra é promovida para análise.
+obrigatória tenha estado explícito; nenhuma amostra é promovida automaticamente
+para análise.
+
+## D026 — Cobertura limitada é uma decisão editorial explícita
+
+**Decisão:** diante de uma publicação obrigatória `partial` ou `unavailable`,
+o fluxo oferece retomar a coleta ou gerar um relatório de cobertura limitada.
+O segundo caminho só avança após confirmação registrada e descreve somente o
+corpus observado; ele não converte lacuna em cobertura completa.
+
+**Racional:** a equipe precisa de uma saída útil quando a interface não permite
+coletar tudo, sem normalizar encerramentos prematuros nem esconder o impacto da
+lacuna na interpretação.
+
+**Impacto:** a coleta continua exigindo esgotamento observável e checkpoint por
+publicação. A análise e o relatório aceitam `limited_approved` apenas após a
+decisão em `review/coverage-decision.json`; títulos, denominadores, narrativa e
+planilha tornam a fronteira explícita.

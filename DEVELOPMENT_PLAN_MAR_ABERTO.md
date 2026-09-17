@@ -194,7 +194,8 @@ grafo de respostas e auditoria de cobertura por publicação.
 - Cada publicação registra contagem informada quando disponível, contagem
   observada, respostas, estado de cobertura, falha e canal.
 - Falhas isoladas não interrompem a execução; seus dados não são apresentados
-  como cobertura completa.
+  como cobertura completa, e a pessoa pode escolher retomada ou relatório de
+  cobertura limitada.
 - Retomada reaproveita checkpoints, não duplica comentários e não reinicia
   publicações já concluídas.
 - Canais fora de Instagram e YouTube são contabilizados, mas não coletados.

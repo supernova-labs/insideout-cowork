@@ -12,4 +12,6 @@
 - coleta a terceira sem bloquear a execução;
 - não chama a cobertura geral de completa;
 - mantém todas as lacunas no checkpoint e no diagnóstico;
-- marca a execução como `blocked_coverage` e produz zero leitura de sentimento.
+- marca a execução como `blocked_coverage` e oferece retomada ou relatório de
+  cobertura limitada; sem a confirmação para o segundo modo, produz zero leitura
+  de sentimento.

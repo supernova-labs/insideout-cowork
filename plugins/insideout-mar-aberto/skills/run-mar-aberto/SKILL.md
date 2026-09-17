@@ -13,6 +13,8 @@ correção de contrato ou gates editoriais.
 
 1. Leia `../../references/_shared/about-mar-aberto.md` e
    `../../references/_shared/local-state.md`.
+   Leia também `../../references/_shared/schemas/coverage-decision.schema.json`
+   antes de registrar a opção de cobertura limitada.
 2. Para uma execução nova, confirme projeto, filtro, data inicial, data final e
    pasta local. Use `nova busca i20` como proposta do piloto, nunca como escolha
    silenciosa.
@@ -28,10 +30,12 @@ Avance nesta ordem:
    quando solicitado, orienta sua obtenção e fecha o checkpoint de entrada.
 2. `collect-comments` percorre Instagram e YouTube, preserva o corpus temporário
    anonimizado e registra cobertura.
-3. Somente com cobertura completa das publicações que exigem coleta,
-   `analyze-sentiment` processa separadamente menções, comentários e respostas,
-   produz os dados derivados e remove o corpus temporário depois de validar o
-   checkpoint.
+3. Com cobertura completa, `analyze-sentiment` processa separadamente menções,
+   comentários e respostas, produz os dados derivados e remove o corpus
+   temporário depois de validar o checkpoint. Se a coleta terminar com lacunas
+   reais, apresente a escolha entre retomar a coleta e gerar um relatório de
+   cobertura limitada. Só a segunda escolha, confirmada e registrada, permite
+   analisar o corpus observado.
 4. `generate-report` conduz os dois gates editoriais e produz HTML, planilha e
    PDF.
 
@@ -43,10 +47,12 @@ e hashes não mudaram, reutilize o checkpoint em vez de repetir a etapa.
 
 - Peça ao operador que faça login diretamente na plataforma quando a etapa
   detectar sessão ausente ou expirada. Nunca solicite credenciais na conversa.
-- Uma publicação com coleta parcial ou indisponível não bloqueia as demais, mas
-  bloqueia a etapa de análise. Finalize as demais coletas, grave o diagnóstico
-  de cobertura e retome sem apresentar percentuais, temas, evidências ou
-  conclusões parciais.
+- Uma publicação com coleta parcial ou indisponível não bloqueia as demais.
+  Finalize as demais coletas, grave o diagnóstico e apresente a escolha entre
+  continuar ou aprovar o relatório de cobertura limitada. Sem aprovação, a
+  etapa permanece bloqueada e não apresenta percentuais, temas, evidências ou
+  conclusões; com aprovação, rotule toda leitura como referente ao corpus
+  observado, nunca ao universo completo.
 - Um arquivo inválido, checkpoint incoerente ou gate não aprovado impede apenas
   a promoção para a etapa dependente.
 - Preserve o corpus de execução incompleta. Exclusão manual exige confirmação e
@@ -70,7 +76,8 @@ executado.
 
 - Não agendar execuções.
 - Não operar outras redes em modo exploratório.
-- Não produzir uma prévia analítica com cobertura bloqueada.
+- Não promover análise ou relatório de cobertura limitada sem a confirmação
+  explícita registrada para essa execução.
 - Não alterar classificações durante a revisão editorial sem retornar à etapa
   de análise e registrar uma nova versão.
 - Não publicar ou compartilhar os produtos finais fora da pasta local sem

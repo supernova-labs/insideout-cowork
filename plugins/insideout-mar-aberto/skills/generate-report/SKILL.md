@@ -17,7 +17,8 @@ reconciliados: HTML, PDF e `.xlsx`.
 3. Valide o checkpoint de `analyze-sentiment`, as agregações, a cobertura e o
    pool de evidências candidatas.
 4. Recuse a geração se a análise estiver ausente ou se a execução estiver
-   `blocked_coverage`.
+   `blocked_coverage` sem uma confirmação registrada de relatório de cobertura
+   limitada.
 5. Quando houver ativos locais de cliente, verifique se foram fornecidos e se
    podem ser usados; se não, aplique o padrão InsideOut sem bloquear.
 
@@ -44,6 +45,9 @@ Após o Gate 1:
 - inclua distribuição de sentimento, série diária empilhada a 100%, termos
   recorrentes e evidências representativas para cada recorte material;
 - mostre cobertura antes das conclusões e junto de qualquer limitação;
+- no modo de cobertura limitada, identifique no título, no resumo e em cada
+  recorte material que os achados descrevem o corpus observado, não o universo
+  completo de comentários;
 - inclua somente evidências aprovadas;
 - gere `deliverables/analytics.xlsx` com as oito abas e todos os dados
   analíticos definidos no contrato;
@@ -81,3 +85,5 @@ específica.
 - Não alterar dados analíticos para melhorar a história.
 - Não combinar menções e comentários em um percentual sem decompor seus
   denominadores.
+- Não tratar um relatório de cobertura limitada como equivalente a uma coleta
+  completa.

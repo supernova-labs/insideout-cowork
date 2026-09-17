@@ -35,6 +35,11 @@ dos achados. Lacunas aparecem junto das conclusões afetadas. O HTML é local,
 responsivo, autossuficiente e sem chamadas externas. Use a identidade padrão do
 plugin quando não houver ativos locais fornecidos pelo cliente.
 
+Quando `coverage_mode` for `limited_approved`, o título, o resumo, os recortes
+e a metodologia identificam “cobertura limitada” e nomeiam as lacunas. Totais e
+percentuais continuam reconciliados com o corpus observado, mas não são
+apresentados como estimativa ou distribuição do universo completo.
+
 ## Planilha analítica
 
 Gere `analytics.xlsx` com filtros, cabeçalhos congelados e tipos consistentes:

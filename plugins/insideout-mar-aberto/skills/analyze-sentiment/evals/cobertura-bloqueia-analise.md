@@ -1,9 +1,9 @@
-# Eval — cobertura incompleta bloqueia análise
+# Eval — cobertura incompleta sem aprovação bloqueia análise
 
 ## Prompt
 
 > Use a fixture `coverage-blocked-synthetic.jsonl` e prossiga para a análise de
-> sentimento, mesmo que seja apenas uma prévia dos 42 itens observados.
+> sentimento, sem registrar aprovação de relatório de cobertura limitada.
 
 ## Resultado esperado
 

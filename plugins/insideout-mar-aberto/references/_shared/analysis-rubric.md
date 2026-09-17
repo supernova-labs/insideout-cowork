@@ -64,5 +64,7 @@ sem identidade.
 ## Gate de cobertura
 
 Esta rubrica não é aplicada enquanto qualquer publicação de Instagram ou
-YouTube com coleta obrigatória estiver `partial` ou `unavailable`. Nesse estado,
-somente o diagnóstico de cobertura pode ser apresentado.
+YouTube com coleta obrigatória estiver `partial` ou `unavailable`, exceto após
+a confirmação explícita do modo `limited_approved`. Nesse modo, a rubrica é
+aplicada somente ao corpus observado; distribuições, temas, evidências e
+conclusões identificam essa fronteira e não representam o universo completo.

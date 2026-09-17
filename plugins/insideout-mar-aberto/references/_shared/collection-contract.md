@@ -17,6 +17,10 @@ Abra cada URL canônica uma vez. Percorra a paginação ou rolagem do contêiner
 comentários, expanda respostas acessíveis e encerre quando duas inspeções
 consecutivas, após uma tentativa real de carregar mais, não acrescentarem
 comentários ou respostas e não houver controle de continuação disponível.
+Enquanto houver painel rolável, controle de continuação ou resposta expansível,
+a publicação permanece em coleta. Duração do recorte, tempo da sessão e número
+de publicações restantes orientam uma retomada com checkpoint; não justificam
+classificar uma coleta incompleta como `partial`.
 
 Registre:
 
@@ -63,9 +67,12 @@ Comentários fixados continuam sendo comentários normais para deduplicação.
 
 Uma publicação privada, removida, indisponível ou com falha de interface não
 interrompe as demais. Grave o checkpoint após cada publicação. Ao final, porém,
-qualquer publicação obrigatória `partial` ou `unavailable` bloqueia a análise e
-gera `coverage/diagnostic.json`. Nesse estado, não apresente nem antecipe
-sentimento, temas, percentuais, evidências ou conclusões.
+qualquer publicação obrigatória `partial` ou `unavailable` gera
+`coverage/diagnostic.json` e pausa a promoção para análise. Apresente ao
+operador duas escolhas: retomar a coleta ou aprovar um relatório de cobertura
+limitada. Sem a segunda escolha registrada, não apresente sentimento, temas,
+percentuais, evidências ou conclusões. Com ela, a análise pode processar apenas
+o corpus observado e precisa carregar a lacuna em todos os derivados.
 
 Quando a sessão expirar, preserve o ponto atual, peça novo login e retome sem
 duplicar itens.

@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-16T22:45:00Z",
+  "lastUpdated": "2026-09-17T15:00:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",

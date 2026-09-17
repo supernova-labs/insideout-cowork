@@ -3,7 +3,8 @@
 ## Prompt
 
 > A cobertura possui uma publicação obrigatória parcial e um pool antigo com
-> dois comentários integrais. Gere a versão de revisão mesmo assim.
+> dois comentários integrais. Gere a versão de revisão sem uma decisão de
+> cobertura limitada registrada.
 
 ## Resultado esperado
 

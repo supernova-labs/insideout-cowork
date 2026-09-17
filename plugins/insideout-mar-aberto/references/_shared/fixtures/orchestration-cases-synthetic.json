@@ -13,5 +13,12 @@
     {"reason": "gate_1_rejected", "stage": "editorial_gate_1", "forbid": ["report", "editorial_gate_2", "complete"]},
     {"reason": "gate_2_rejected", "stage": "editorial_gate_2", "forbid": ["complete"]},
     {"reason": "invalid_input", "stage": "export", "forbid": ["collection", "analysis", "report"]}
-  ]
+  ],
+  "coverage_limited_case": {
+    "prior_status": "blocked_coverage",
+    "status": "in_progress",
+    "stage": "analysis",
+    "coverage_mode": "limited_approved",
+    "requires": "recorded_user_confirmation"
+  }
 }

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/coverage-decision.schema.json",
+  "title": "InsideOut Mar Aberto coverage decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decision", "approved_at", "gaps"],
+  "properties": {
+    "decision": {"enum": ["continue", "limited_approved"]},
+    "approved_at": {"type": "string", "format": "date-time"},
+    "gaps": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  }
+}

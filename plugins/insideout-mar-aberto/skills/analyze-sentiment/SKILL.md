@@ -16,9 +16,11 @@ auditáveis. A classificação é integralmente automática; revisão humana per
    `../../references/_shared/local-state.md`.
 2. Valide o manifesto, `working/mentions.jsonl`, `working/comments.jsonl` e a
    cobertura produzida por `collect-comments`.
-3. Interrompa antes de classificar se alguma publicação com coleta obrigatória
-   estiver `partial` ou `unavailable`. Preserve os corpora e devolva somente o
-   diagnóstico de cobertura, sem percentuais, temas ou evidências parciais.
+3. Se alguma publicação com coleta obrigatória estiver `partial` ou
+   `unavailable`, interrompa e devolva o diagnóstico de cobertura, exceto se o
+   manifesto registrar a confirmação de relatório de cobertura limitada. Nesse
+   modo, classifique somente o corpus observado e mantenha a limitação em todos
+   os derivados.
 4. Leia `../../references/_shared/schemas/analysis-record.schema.json` e
    `../../references/_shared/schemas/evidence-record.schema.json`.
 5. Preserve no checkpoint a versão da rubrica e a identidade do modelo ativo
@@ -53,6 +55,10 @@ Calcule sempre com `source_kind` explícito:
 - amplificação separada por rede e tipo de fonte a partir dos sinais disponíveis;
 - cobertura e limitações que condicionam cada leitura.
 
+No modo de cobertura limitada, cada agregado e percentual deve identificar o
+corpus observado como denominador e não pode ser apresentado como distribuição
+do universo completo de comentários.
+
 Não combine menções e comentários no mesmo denominador nem produza índice único
 de engajamento entre plataformas.
 
@@ -79,7 +85,8 @@ somente os registros ainda não concluídos.
 ## Limites
 
 - Não revisar classificações com uma segunda passagem automática.
-- Não analisar parcialmente uma execução bloqueada por cobertura.
+- Não analisar uma execução bloqueada por cobertura sem a confirmação explícita
+  de relatório de cobertura limitada.
 - Não mudar a rubrica silenciosamente durante uma execução.
 - Não construir a narrativa ou aprovar evidências.
 - Não descartar o corpus antes da validação completa dos derivados.

@@ -1,4 +1,4 @@
-# Protocolo de homologação — InsideOut Mar Aberto 0.2.1
+# Protocolo de homologação — InsideOut Mar Aberto 0.2.2
 
 Use este roteiro somente depois que a pessoa responsável pela publicação
 informar uma referência exata e instalável do piloto. O protocolo comprova o
@@ -100,12 +100,14 @@ sanitizada: ___
    em `blocked_coverage`.
 6. Verifique que X/Twitter, Facebook e portais ficam `not_required` para
    comentários e que uma publicação obrigatória incompleta gera
-   `blocked_coverage`.
+   `blocked_coverage` com a escolha entre retomar ou aprovar relatório de
+   cobertura limitada.
 
 **Aceite:** Instagram e YouTube têm cobertura completa e auditável; divergência
 isolada do contador da Stilingue é registrada sem bloquear uma publicação com
 esgotamento observável. Falhas reais de coleta não interrompem as demais
-publicações, mas bloqueiam integralmente análise e relatório até a retomada.
+publicações; a análise permanece bloqueada até a retomada ou a aprovação
+explícita de relatório de cobertura limitada.
 
 **Registro:** estado: ___ · Instagram observado: ___ · YouTube observado: ___ ·
 falhas/lacunas sanitizadas: ___ · duração: ___
@@ -131,15 +133,17 @@ nem duplica comentários ou respostas, e não reduz a fila em períodos longos.
 
 **Como executar**
 
-1. Confirme que todas as publicações obrigatórias estão `complete` e então deixe
-   a análise terminar automaticamente, sem revisar itens um a um.
+1. Com todas as publicações obrigatórias `complete`, deixe a análise terminar
+   automaticamente. Se houver lacunas reais, confirme que o fluxo pede a
+   decisão entre retomar e relatório de cobertura limitada antes de analisar.
 2. Avalie as conclusões propostas, a estrutura narrativa e o pool de evidências.
 3. Registre aprovação ou alterações solicitadas antes de autorizar o relatório.
 
 **Aceite:** menções, comentários e respostas têm denominadores separados;
 sentimentos mistos e ambíguos permanecem visíveis; o pool inclui padrões,
-manifestações marcantes e contrapontos. Com cobertura bloqueada, nenhuma prévia
-analítica deve aparecer.
+manifestações marcantes e contrapontos. Sem decisão de cobertura limitada,
+nenhuma prévia analítica deve aparecer; com decisão, toda leitura se identifica
+como corpus observado.
 
 **Registro:** estado: ___ · decisão do gate: ___ · alterações solicitadas
 sanitizadas: ___

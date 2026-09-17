@@ -22,6 +22,7 @@
     },
     "status": {"enum": ["created", "in_progress", "awaiting_login", "blocked_coverage", "awaiting_editorial_review", "completed", "failed"]},
     "stage": {"enum": ["export", "collection", "analysis", "editorial_gate_1", "report", "editorial_gate_2", "complete"]},
+    "coverage_mode": {"enum": ["complete", "limited_approved"]},
     "paths": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^(?![A-Za-z]:|/|\\\\|(?:.*[\\\\/])?\\.\\.(?:[\\\\/]|$)).+"}},
     "counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
     "gaps": {"type": "array", "items": {"type": "string"}},
