@@ -17,12 +17,14 @@ SKILLS = {
     "generate-grid": ROOT / "generate-grid",
     "generate-image": ROOT / "generate-image",
     "generate-video": ROOT / "generate-video",
+    "review-grid-feedback": ROOT / "review-grid-feedback",
     "skill-feedback": ROOT / "skill-feedback",
 }
 REQUIRED_SHARED = (
     SHARED_ROOT / "voz-usuario.md",
     SHARED_ROOT / "about-insideout.md",
     SHARED_ROOT / "airtable-contract.md",
+    SHARED_ROOT / "client-feedback-package.md",
     SHARED_ROOT / "evals" / "resposta-sem-ids.md",
 )
 REQUIRED_FEATURE_FILES = (
@@ -33,6 +35,45 @@ REQUIRED_FEATURE_FILES = (
     ROOT / "generate-grid" / "references" / "site-access.md",
     ROOT / "skill-feedback" / "references" / "feedback-contract.md",
 )
+FEEDBACK_ACCEPTANCE = {
+    SHARED_ROOT / "client-feedback-package.md": (
+        "insideout-grid-feedback",
+        '"schemaVersion": "1.0"',
+        "postFingerprint",
+        "JSON UTF-8 canônico",
+        "localStorage",
+        "fetch",
+        "CSV não é a",
+    ),
+    ROOT / "generate-grid" / "SKILL.md": (
+        "revisão para cliente com feedback",
+        "review-grid-feedback",
+        "não cria backend",
+    ),
+    ROOT / "generate-grid" / "references" / "html-snapshot.md": (
+        "Adicionar feedback",
+        "Exportar feedback",
+        "Exportar CSV",
+        "mockup aprovado",
+        "overlay modal nativo",
+        "formulário remoto",
+    ),
+    ROOT / "generate-grid" / "references" / "site-access.md": (
+        "comentários somente no\n  navegador",
+    ),
+    ROOT / "generate-grid" / "evals" / "resumo-cliente-com-mockups.md": (
+        "não oferece upload, edição ou comentários",
+    ),
+    ROOT / "review-grid-feedback" / "SKILL.md": (
+        "Não importar CSV",
+        "Deduplicate por `commentId`",
+        "HTML/manifesto",
+        "generate-grid",
+        "generate-copy",
+        "generate-image",
+        "esta skill não\nescreve `Posts`",
+    ),
+}
 FORBIDDEN = (
     "${CLAUDE_PLUGIN_ROOT}",
     "grid_library",
@@ -66,6 +107,17 @@ def main() -> int:
     for path in REQUIRED_FEATURE_FILES:
         if not path.is_file():
             errors.append(f"arquivo de capacidade ausente: {path.relative_to(ROOT)}")
+
+    for path, expected_terms in FEEDBACK_ACCEPTANCE.items():
+        if not path.is_file():
+            errors.append(f"arquivo de aceite ausente: {path.relative_to(ROOT)}")
+            continue
+        content = path.read_text(encoding="utf-8")
+        for expected in expected_terms:
+            if expected not in content:
+                errors.append(
+                    f"{path.relative_to(ROOT)}: critério de feedback ausente: {expected}"
+                )
 
     for name, skill_dir in SKILLS.items():
         skill_file = skill_dir / "SKILL.md"

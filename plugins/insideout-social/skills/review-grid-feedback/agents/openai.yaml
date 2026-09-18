@@ -1,0 +1,4 @@
+interface:
+  display_name: "Revisar Feedback do Grid"
+  short_description: "Consolide retornos de cliente por post"
+  default_prompt: "Use $review-grid-feedback para validar o arquivo de feedback do cliente e propor os ajustes por post."

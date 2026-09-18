@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-17T15:00:00Z",
+  "lastUpdated": "2026-09-18T18:00:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -63,6 +63,14 @@
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
       "description": "Registra bugs e melhorias na caixa de entrada do Airtable."
+    },
+    {
+      "id": "skill:insideout-social:review-grid-feedback",
+      "type": "skill",
+      "name": "review-grid-feedback",
+      "plugin": "insideout-social",
+      "canonicalPath": "plugins/insideout-social/skills/review-grid-feedback/SKILL.md",
+      "description": "Valida feedback exportado de clientes e encaminha ajustes por post."
     },
     {
       "id": "skill:insideout-mar-aberto:run-mar-aberto",
@@ -162,6 +170,13 @@
       "status": "shared",
       "path": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
       "sourcePath": "plugins/insideout-social/skills/skill-feedback"
+    },
+    {
+      "componentId": "skill:insideout-social:review-grid-feedback",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-social/skills/review-grid-feedback/SKILL.md",
+      "sourcePath": "plugins/insideout-social/skills/review-grid-feedback"
     },
     {
       "componentId": "skill:insideout-mar-aberto:run-mar-aberto",

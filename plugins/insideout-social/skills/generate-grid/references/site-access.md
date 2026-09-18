@@ -35,6 +35,8 @@ método de autenticação que Sites não ofereça na sessão.
 
 - nenhuma publicação aberta à internet;
 - nenhum email adicionado por inferência, agenda ou domínio da empresa;
-- nenhum formulário, upload, comentário persistente ou escrita no snapshot;
+- nenhum formulário remoto, upload, comentário persistente no Site ou escrita
+  no snapshot; a revisão de cliente pode guardar comentários somente no
+  navegador e exportá-los como arquivo local;
 - nenhuma mudança de acesso junto com a primeira publicação;
 - nenhuma alegação de acesso validado sem reler a política do Site.

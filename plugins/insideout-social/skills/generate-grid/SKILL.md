@@ -1,6 +1,6 @@
 ---
 name: generate-grid
-description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, trends sociais atuais e saídas estáticas para revisão ou cliente. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar a validação visual de um mês.
+description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, trends sociais atuais e saídas estáticas para revisão ou cliente. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar uma validação visual de mês, inclusive uma revisão de cliente com feedback local exportável.
 ---
 
 # Gerar grid editorial InsideOut
@@ -21,6 +21,8 @@ persista somente os posts aprovados.
    pesquisa, fonte ou candidato de tendência em escopo.
 5. Leia `references/html-snapshot.md` quando o pedido incluir visualização ou
    quando o primeiro take aprovado precisar de snapshot para revisão.
+   Leia `../../references/_shared/client-feedback-package.md` quando a entrega
+   for uma revisão para cliente com feedback exportável.
    Leia também `references/site-access.md` quando a visualização for publicada.
 6. Descubra a base **InsideOut Social**, o schema atual e os registros de marca,
    canais, produtos, referências e diretrizes necessários.
@@ -116,13 +118,16 @@ ajustes. Um post pendente não bloqueia os aprovados e não é persistido.
 ### 7. Gerar a saída estática quando solicitada
 
 Depois de compor o take selecionado, gere a saída pedida conforme
-`references/html-snapshot.md`. Há dois formatos: o snapshot de revisão interna
-do primeiro take, que segue também `references/review-presentation.md`, e o
-resumo para cliente. Para o segundo, antes de gerar, confirme que cada mockup
-selecionado corresponde a uma `Peça` vinculada e com status `Aprovada`; exclua
-o post sem essa comprovação e informe o motivo ao time. Ambos vivem fora do
-pacote, não leem nem escrevem no Airtable e não substituem as aprovações das
-skills.
+`references/html-snapshot.md`. Há três formatos: snapshot de revisão interna do
+primeiro take, resumo estático para cliente e revisão para cliente com feedback
+local exportável. Os dois formatos de cliente exigem, antes da geração, que
+cada mockup selecionado corresponda a uma `Peça` vinculada e com status
+`Aprovada`; exclua o post sem essa comprovação e informe o motivo ao time. A
+revisão com feedback segue também
+`../../references/_shared/client-feedback-package.md` e é encaminhada de volta
+por arquivo para `review-grid-feedback`; ela não cria backend nem altera posts.
+Todas as saídas vivem fora do pacote, não leem nem escrevem no Airtable e não
+substituem as aprovações das skills.
 
 Quando o pedido incluir um link, publique a saída conforme
 `references/site-access.md`: valide e publique primeiro apenas para o
@@ -184,6 +189,9 @@ Não exponha IDs ou detalhes do conector.
   os emails confirmados.
 - No resumo para cliente, todo post incluído tem mockup vinculado a uma `Peça`
   aprovada; conteúdo e estado de revisão interna não aparecem.
+- Na revisão de cliente com feedback, comentários ficam somente no navegador
+  até a exportação; JSON canônico e CSV complementar contêm manifesto e chaves
+  públicas, nunca IDs ou dados internos.
 
 ## Limites
 
@@ -196,7 +204,8 @@ Não exponha IDs ou detalhes do conector.
 - Não usar trend sem exemplo direto verificável nem esconder do time interno o
   link necessário para compreendê-la.
 - Não chamar padrão histórico, boa prática ou publicação isolada de trend.
-- Não incluir aplicação, painel, hospedagem ou estado operacional no plugin.
+- Não incluir backend, painel, hospedagem ou estado operacional no plugin; a
+  interação local da revisão de cliente é uma saída HTML descartável.
 - Não publicar Site aberto à internet nem adicionar visitantes externos sem
   confirmação específica da lista de emails.
 - Não apagar posts automaticamente.

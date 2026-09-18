@@ -79,12 +79,55 @@ revisão e URLs privadas. Um post sem mockup aprovado verificável fica fora da
 entrega, com o motivo relatado ao time antes da geração. Nunca use placeholder
 como se fosse arte final.
 
+## Revisão para cliente com feedback
+
+Gere este terceiro formato somente quando o pedido pedir explicitamente coleta
+de feedback post a post. Ele parte das mesmas regras de elegibilidade e do
+mesmo conteúdo seguro do resumo para cliente, mas permite interação local no
+navegador. Use este nome:
+
+```text
+insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-feedback-<versao>.html
+```
+
+No cabeçalho, inclua marca, mês, versão, quantidade de posts e um aviso claro:
+os comentários ficam naquele navegador, o cliente deve exportar o JSON e
+encaminhá-lo ao time, e trocar de dispositivo ou limpar dados pode perder o
+histórico local. Não inclua qualquer dado interno adicional para viabilizar o
+feedback.
+
+Em cada card cronológico elegível, mostre somente data, rede/formato, título,
+foco de conteúdo e mockup aprovado. Acrescente **Adicionar feedback**, lista
+resumida de comentários do próprio post e ações locais de editar ou remover.
+Abra o formulário em um overlay modal nativo, associado ao post selecionado;
+não deixe campos ou formulário expandidos nos cards. O overlay mostra o tipo
+fixo **Ajuste**, mensagem e revisor opcional. Mensagem é obrigatória. Ao abrir,
+mova o foco para o título ou o primeiro campo; ao salvar ou cancelar, feche o
+overlay e devolva o foco ao botão do card. Use rótulos visíveis, foco acessível
+e botões utilizáveis em tela estreita.
+
+Incorpore um manifesto público com marca, mês, versão, fingerprint do grid e,
+em cada post, `postKey` e `postFingerprint` determinísticos. Derive a chave de
+data, canal e título normalizados; não exponha IDs, URLs privadas ou campos
+operacionais. Siga integralmente
+`../../references/_shared/client-feedback-package.md` para o formato do
+manifesto, `localStorage`, JSON canônico, CSV complementar e restrições de
+segurança.
+
+O botão **Exportar feedback** baixa o JSON canônico localmente e
+**Exportar CSV** baixa a cópia complementar. Não ofereça envio, upload ou
+sincronização. Desabilite ou explique a exportação quando ainda não houver
+comentários. Ofereça limpar comentários somente com confirmação explícita.
+
 ## Implementação do arquivo
 
 - HTML sem dependências externas obrigatórias;
 - CSS embutido e responsivo;
-- JavaScript embutido opcional apenas para navegação ou filtros locais;
-- nenhuma chamada de rede, formulário, persistência, upload ou escrita;
+- JavaScript embutido opcional para navegação, filtros ou interação local da
+  revisão de cliente com feedback;
+- nenhuma chamada de rede, formulário remoto, upload, escrita remota ou
+  persistência fora do navegador; `localStorage` e downloads locais são
+  permitidos apenas no formato de feedback;
 - estrutura semântica, contraste legível, foco visível e conteúdo utilizável sem
   JavaScript;
 - indique lacunas com texto, não apenas cor;
@@ -102,4 +145,6 @@ Antes de entregar:
    revisão interna;
 6. no resumo para cliente, confira que cada imagem vem do mockup aprovado do
    post correto e que o calendário preserva todas as datas entregues;
-7. informe que uma nova revisão gera outro arquivo, sem sobrescrever o anterior.
+7. na revisão com feedback, crie, edite, remova, recarregue e exporte ao menos
+   um comentário; confira JSON, cabeçalho CSV, escaping e ausência de rede;
+8. informe que uma nova revisão gera outro arquivo, sem sobrescrever o anterior.
