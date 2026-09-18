@@ -63,9 +63,10 @@ Avance nesta ordem:
    relatório. Se houver lacunas reais de coleta, conclua as demais publicações;
    um pedido explícito da pessoa para analisar ou gerar o relatório permite
    prosseguir com o corpus observado, com a limitação registrada em todos os
-   derivados.
-4. `generate-report` conduz os dois gates editoriais e produz HTML, planilha e
-   PDF.
+   derivados. Depois do checkpoint de análise validado, essa skill encadeia
+   `generate-report` sem novo pedido.
+4. `generate-report` abre o primeiro gate editorial e, após as aprovações
+   exigidas, produz HTML, planilha e PDF.
 
 Cada etapa consome somente saídas validadas da anterior. Atualize o manifesto
 depois que a etapa responsável gravar e verificar seus artefatos. Se as entradas

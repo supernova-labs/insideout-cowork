@@ -84,6 +84,16 @@ cobertura. Somente depois de todos os artefatos e hashes serem válidos:
 Se a etapa for interrompida antes do checkpoint, preserve o corpus e retome
 somente os registros ainda não concluídos.
 
+## Encadear o relatório
+
+Depois de validar o checkpoint de análise, encadeie `generate-report` na mesma
+execução, sem exigir um novo pedido da pessoa. A chamada deve consumir somente
+os derivados já validados, a cobertura e o pool de evidências candidatas.
+
+Esse encadeamento abre o Gate 1 editorial: apresente as conclusões, a estrutura
+e as evidências para decisão humana. Não aprove o gate, não gere HTML, planilha
+ou PDF e não altere classificações automaticamente.
+
 ## Limites
 
 - Não revisar classificações com uma segunda passagem automática.
