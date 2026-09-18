@@ -17,11 +17,12 @@ auditável das conversas sobre o Hyundai i20 no mercado brasileiro.
 - estado local e portátil, sem Airtable ou backend.
 
 Outras redes aparecem somente na auditoria de cobertura. Menções, comentários e
-respostas permanecem dimensões separadas; uma cobertura incompleta pausa a
-promoção automática e oferece ao operador a retomada ou um relatório de
-cobertura limitada aprovado explicitamente. O plugin não agenda execuções, não
-mantém crawler, não usa APIs próprias e não envia relatórios ou feedback sem os
-gates definidos.
+respostas permanecem dimensões separadas; uma cobertura realmente incompleta
+pausa a promoção automática e permite ao operador retomar ou pedir
+explicitamente um relatório do corpus observado. Divergência entre os totais da
+Stilingue e o corpus observável é registrada, mas não interrompe a análise. O
+plugin não agenda execuções, não mantém crawler, não usa APIs próprias e não
+envia relatórios ou feedback sem os gates definidos.
 
 ## Linguagem com o time
 

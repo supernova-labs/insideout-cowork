@@ -16,11 +16,12 @@ auditáveis. A classificação é integralmente automática; revisão humana per
    `../../references/_shared/local-state.md`.
 2. Valide o manifesto, `working/mentions.jsonl`, `working/comments.jsonl` e a
    cobertura produzida por `collect-comments`.
-3. Se alguma publicação com coleta obrigatória estiver `partial` ou
-   `unavailable`, interrompa e devolva o diagnóstico de cobertura, exceto se o
-   manifesto registrar a confirmação de relatório de cobertura limitada. Nesse
-   modo, classifique somente o corpus observado e mantenha a limitação em todos
-   os derivados.
+3. Se todas as publicações com coleta obrigatória estiverem `complete`, inicie a
+   análise automaticamente. Divergência exclusiva entre a Stilingue e o corpus
+   observado não é lacuna de coleta e não impede essa promoção. Se alguma
+   publicação estiver `partial` ou `unavailable`, prossiga somente mediante
+   pedido explícito registrado para analisar o corpus observado; nesse modo,
+   mantenha a limitação em todos os derivados.
 4. Leia `../../references/_shared/schemas/analysis-record.schema.json` e
    `../../references/_shared/schemas/evidence-record.schema.json`.
 5. Preserve no checkpoint a versão da rubrica e a identidade do modelo ativo
@@ -55,9 +56,10 @@ Calcule sempre com `source_kind` explícito:
 - amplificação separada por rede e tipo de fonte a partir dos sinais disponíveis;
 - cobertura e limitações que condicionam cada leitura.
 
-No modo de cobertura limitada, cada agregado e percentual deve identificar o
-corpus observado como denominador e não pode ser apresentado como distribuição
-do universo completo de comentários.
+Quando houver lacuna real de coleta, cada agregado e percentual deve identificar
+o corpus observado como denominador e não pode ser apresentado como distribuição
+do universo completo de comentários. Uma divergência apenas da Stilingue é
+registrada na auditoria, sem trocar esse denominador pelo total da exportação.
 
 Não combine menções e comentários no mesmo denominador nem produza índice único
 de engajamento entre plataformas.
@@ -85,8 +87,8 @@ somente os registros ainda não concluídos.
 ## Limites
 
 - Não revisar classificações com uma segunda passagem automática.
-- Não analisar uma execução bloqueada por cobertura sem a confirmação explícita
-  de relatório de cobertura limitada.
+- Não analisar uma execução com lacuna real de cobertura sem pedido explícito
+  registrado para usar o corpus observado.
 - Não mudar a rubrica silenciosamente durante uma execução.
 - Não construir a narrativa ou aprovar evidências.
 - Não descartar o corpus antes da validação completa dos derivados.

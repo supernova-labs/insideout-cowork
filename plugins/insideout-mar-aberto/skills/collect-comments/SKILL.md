@@ -8,7 +8,7 @@ description: Coleta comentários e respostas observáveis de publicações do In
 Percorra todas as publicações suportadas e produza um corpus temporário
 anonimizado com cobertura verificável. Uma falha isolada não interrompe as
 demais publicações, mas pausa a promoção automática para análise até haver
-retomada ou aprovação explícita de cobertura limitada.
+retomada ou pedido explícito para analisar o corpus observado.
 
 ## Preparar
 
@@ -107,12 +107,13 @@ coletado.
 
 Produza `working/comments.jsonl` e `coverage/records.jsonl`, valide as contagens
 e atualize o manifesto. Informe publicações por estado, comentários, respostas,
-redes somente de menções, redes não suportadas e lacunas. Se qualquer publicação
-com coleta obrigatória estiver `partial` ou `unavailable`, grave
-`coverage/diagnostic.json`, marque a execução como `blocked_coverage` e indique
-o ponto de retomada. A etapa seguinte oferece ao operador continuar a coleta ou
-aprovar um relatório de cobertura limitada; esta skill não decide nem produz a
-leitura de sentimento.
+redes somente de menções, redes não suportadas e lacunas. Quando as publicações
+obrigatórias estiverem `complete`, a próxima etapa pode analisar o corpus mesmo
+que suas contagens divirjam da Stilingue. Se qualquer publicação obrigatória
+estiver `partial` ou `unavailable`, grave `coverage/diagnostic.json`, marque a
+execução como `blocked_coverage` e indique o ponto de retomada. A etapa seguinte
+pode prosseguir com o corpus observado mediante pedido explícito da pessoa;
+esta skill não decide nem produz a leitura de sentimento.
 
 Antes de encerrar, reconcilie a fila canônica com os checkpoints: cada URL
 obrigatória precisa estar `complete`, `partial` ou `unavailable`; ausência de

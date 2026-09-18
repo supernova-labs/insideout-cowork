@@ -60,12 +60,16 @@ conteúdo e só então substitui o arquivo canônico. Atualize `manifest.json` p
 - lacunas ou falhas conhecidas.
 
 O estado `blocked_coverage` mantém a etapa em `collection` e aponta para
-`coverage/diagnostic.json`. A pessoa pode retomar a coleta ou aprovar
-explicitamente o modo `limited_approved` em `review/coverage-decision.json`.
-Esse registro inclui decisão, instante, lacunas e a confirmação de que o
-relatório descreverá somente o corpus observado. Só então a execução muda para
-`in_progress` na etapa `analysis`; sem esse registro, derivados analíticos são
-proibidos.
+`coverage/diagnostic.json`. A pessoa pode retomar a coleta ou pedir
+explicitamente análise e relatório do corpus observado, registrando o modo
+`limited_approved` em `review/coverage-decision.json`. Esse registro inclui
+decisão, instante, lacunas e a confirmação de que o relatório descreverá
+somente o corpus observado. Só então a execução muda para `in_progress` na
+etapa `analysis`; sem esse registro, derivados analíticos são proibidos.
+
+Divergência entre a Stilingue e os itens observados, quando a coleta chegou ao
+esgotamento observável, não é `blocked_coverage`, não exige
+`limited_approved` e não impede análise ou relatório.
 
 O arquivo segue `schemas/coverage-decision.schema.json`. A decisão `continue`
 mantém a etapa em coleta; somente `limited_approved` permite iniciar análise e

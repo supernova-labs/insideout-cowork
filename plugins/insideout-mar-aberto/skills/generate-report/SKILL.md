@@ -16,9 +16,10 @@ reconciliados: HTML, PDF e `.xlsx`.
 2. Leia `assets/insideout-report.css` para a identidade visual padrão.
 3. Valide o checkpoint de `analyze-sentiment`, as agregações, a cobertura e o
    pool de evidências candidatas.
-4. Recuse a geração se a análise estiver ausente ou se a execução estiver
-   `blocked_coverage` sem uma confirmação registrada de relatório de cobertura
-   limitada.
+4. Recuse a geração somente se a análise estiver ausente ou se houver lacuna
+   real de coleta sem pedido explícito registrado para usar o corpus observado.
+   Divergência exclusiva entre a Stilingue e o corpus observado não bloqueia o
+   relatório nem o classifica como cobertura limitada.
 5. Quando houver ativos locais de cliente, verifique se foram fornecidos e se
    podem ser usados; se não, aplique o padrão InsideOut sem bloquear.
 

@@ -68,11 +68,12 @@ Comentários fixados continuam sendo comentários normais para deduplicação.
 Uma publicação privada, removida, indisponível ou com falha de interface não
 interrompe as demais. Grave o checkpoint após cada publicação. Ao final, porém,
 qualquer publicação obrigatória `partial` ou `unavailable` gera
-`coverage/diagnostic.json` e pausa a promoção para análise. Apresente ao
-operador duas escolhas: retomar a coleta ou aprovar um relatório de cobertura
-limitada. Sem a segunda escolha registrada, não apresente sentimento, temas,
-percentuais, evidências ou conclusões. Com ela, a análise pode processar apenas
-o corpus observado e precisa carregar a lacuna em todos os derivados.
+`coverage/diagnostic.json` e pausa a promoção automática para análise. A pessoa
+pode retomar a coleta ou pedir explicitamente análise e relatório do corpus
+observado. Sem esse pedido, não apresente sentimento, temas, percentuais,
+evidências ou conclusões. Com ele, a análise pode processar apenas o corpus
+observado e precisa carregar a lacuna real em todos os derivados. Divergência
+apenas entre a Stilingue e o corpus observável não gera essa pausa.
 
 Quando a sessão expirar, preserve o ponto atual, peça novo login e retome sem
 duplicar itens.
