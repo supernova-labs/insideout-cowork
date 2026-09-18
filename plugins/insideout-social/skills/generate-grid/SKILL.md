@@ -1,6 +1,6 @@
 ---
 name: generate-grid
-description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, trends sociais atuais e snapshot privado. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar a validação visual de um mês.
+description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, trends sociais atuais e saídas estáticas para revisão ou cliente. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar a validação visual de um mês.
 ---
 
 # Gerar grid editorial InsideOut
@@ -15,7 +15,7 @@ persista somente os posts aprovados.
    `../../references/_shared/about-insideout.md` e `../../references/_shared/airtable-contract.md`.
 2. Leia `references/planning-method.md` e `references/design-briefing.md`.
    Leia `references/review-presentation.md` ao apresentar o primeiro take ou
-   gerar seu snapshot.
+   gerar o snapshot de revisão interna; não o aplique ao resumo para cliente.
 3. Leia `references/calendar/<ano>.md` para o mês solicitado.
 4. Leia `references/trend-context.md` ao gerar um novo grid ou quando houver
    pesquisa, fonte ou candidato de tendência em escopo.
@@ -113,14 +113,18 @@ ajustes. Um post pendente não bloqueia os aprovados e não é persistido.
   para legado sem rede, use a chave anterior e pare diante de duplicidade.
 - Releia cada lote e verifique campos e relações.
 
-### 7. Gerar o snapshot quando solicitado
+### 7. Gerar a saída estática quando solicitada
 
-Depois de compor o take selecionado, gere o HTML conforme
-`references/html-snapshot.md` e `references/review-presentation.md`. O arquivo
-é uma visão de revisão, não uma nova fonte de verdade: vive fora do pacote, não
-lê nem escreve no Airtable e não substitui as aprovações das skills.
+Depois de compor o take selecionado, gere a saída pedida conforme
+`references/html-snapshot.md`. Há dois formatos: o snapshot de revisão interna
+do primeiro take, que segue também `references/review-presentation.md`, e o
+resumo para cliente. Para o segundo, antes de gerar, confirme que cada mockup
+selecionado corresponde a uma `Peça` vinculada e com status `Aprovada`; exclua
+o post sem essa comprovação e informe o motivo ao time. Ambos vivem fora do
+pacote, não leem nem escrevem no Airtable e não substituem as aprovações das
+skills.
 
-Quando o pedido incluir um link de revisão, publique o snapshot conforme
+Quando o pedido incluir um link, publique a saída conforme
 `references/site-access.md`: valide e publique primeiro apenas para o
 proprietário. Adicionar visitantes externos por email é uma mudança de acesso
 separada, feita somente depois de mostrar a lista exata e receber confirmação.
@@ -134,8 +138,8 @@ Informe:
 - produtos-foco e datas-âncora;
 - posts aprovados, em revisão e não persistidos;
 - lacunas ou conflitos;
-- caminho do snapshot, quando gerado, com marca, mês e versão em linguagem de
-  negócio;
+- caminho da saída estática, quando gerada, com marca, mês, versão e público em
+  linguagem de negócio;
 - link e estado de acesso do Site, quando publicado, sem tratar convite como
   parte automática da publicação.
 
@@ -178,6 +182,8 @@ Não exponha IDs ou detalhes do conector.
   visual de cada post continua respeitando a marca ou campanha correspondente.
 - Site publicado começa restrito ao proprietário; acesso externo contém somente
   os emails confirmados.
+- No resumo para cliente, todo post incluído tem mockup vinculado a uma `Peça`
+  aprovada; conteúdo e estado de revisão interna não aparecem.
 
 ## Limites
 

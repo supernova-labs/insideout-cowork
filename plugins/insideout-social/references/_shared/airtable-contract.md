@@ -187,6 +187,8 @@ registro concluído.
 - `Notas`
 - `Mockup`, `Vídeo`, `Peças` — vazios na Parte 1; na Parte 2, `Mockup` recebe
   somente a imagem selecionada para o post e `Peças` permanece relação reversa
+- para um resumo estático de cliente, `Mockup` só é considerado aprovado quando
+  corresponde ao arquivo de uma `Peça` vinculada com `Status = Aprovada`
 - `Status` — criar como `Rascunho`
 - `Mês`, `Semana` — fórmulas; nunca escrever
 

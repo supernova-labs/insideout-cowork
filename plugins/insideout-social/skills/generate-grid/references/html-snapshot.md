@@ -1,21 +1,28 @@
-# Snapshot HTML do grid
+# Saídas HTML do grid
 
-Gere uma visão portátil para revisão do primeiro take. O arquivo não é painel,
-aplicação nem fonte operacional.
+Gere uma visão portátil para revisão do primeiro take ou um resumo de
+calendário para cliente. O arquivo não é painel, aplicação nem fonte
+operacional.
 
 ## Local e nome
 
 Salve fora do diretório do plugin, em local escolhido pelo usuário ou numa
-pasta de artefatos do workspace. Use:
+pasta de artefatos do workspace. Para revisão interna, use:
 
 ```text
 insideout-grid-<slug-da-marca>-<AAAA-MM>-<versao>.html
 ```
 
+Para o resumo para cliente, use:
+
+```text
+insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-<versao>.html
+```
+
 Não sobrescreva arquivo existente; incremente a versão ou use momento de
 geração inequívoco.
 
-## Conteúdo
+## Snapshot de revisão interna
 
 Siga também `review-presentation.md` para a identidade da apresentação, a
 hierarquia semanal e a estrutura dos cards. Essa referência vale para a casca
@@ -49,15 +56,28 @@ Não mostre IDs, schema, logs, prompt interno, registros não selecionados, URLs
 privadas, a trilha completa de pesquisa ou campos operacionais desnecessários.
 Links editoriais aprovados e exemplos públicos de trends não são URLs privadas.
 
-## Fronteira da visualização para cliente
+## Resumo para cliente
 
-O snapshot desta etapa é interno e pode mostrar rationale, briefing de produção,
+O snapshot de revisão é interno e pode mostrar rationale, briefing de produção,
 lacunas e referências. Não o apresente como entrega final ao cliente.
 
-Uma futura visão para cliente deve ser gerada a partir dos mesmos posts depois
-que a designer preencher os mockups no Airtable. Ela não recebe upload, edição
-ou comentários dentro do Site. O conteúdo visível ao cliente ainda depende de
-uma decisão editorial específica; até lá, não derive automaticamente essa visão.
+Quando o pedido incluir uma entrega para cliente, gere um segundo HTML a partir
+dos mesmos posts. Não aplique a este formato as regras do snapshot de revisão
+interna nem `review-presentation.md`.
+
+Antes de montar o resumo, releia `Posts.Mockup` e as `Peças` vinculadas de cada
+post. Um post é elegível somente quando o mockup selecionado corresponde ao
+arquivo de uma `Peça` vinculada com status `Aprovada`. Preserve no resumo
+cronológico apenas os posts elegíveis, com data, rede/formato, título, foco de
+conteúdo e a imagem aprovada. O resumo não recebe upload, edição ou comentários
+dentro do Site.
+
+No cabeçalho, mostre somente marca, mês, versão e quantidade de posts entregues.
+O resumo para cliente omite rationale, briefing de produção, lettering, legenda,
+referências, links de trend, lacunas internas, dados operacionais, estado de
+revisão e URLs privadas. Um post sem mockup aprovado verificável fica fora da
+entrega, com o motivo relatado ao time antes da geração. Nunca use placeholder
+como se fosse arte final.
 
 ## Implementação do arquivo
 
@@ -78,5 +98,8 @@ Antes de entregar:
 2. revise desktop e viewport estreito;
 3. confira ausência de requisições externas e de dados internos;
 4. compare contagem e conteúdo com o take selecionado;
-5. confira que referências e trends aplicadas abrem os links esperados;
-6. informe que uma nova revisão gera outro snapshot.
+5. confira que referências e trends aplicadas abrem os links esperados na
+   revisão interna;
+6. no resumo para cliente, confira que cada imagem vem do mockup aprovado do
+   post correto e que o calendário preserva todas as datas entregues;
+7. informe que uma nova revisão gera outro arquivo, sem sobrescrever o anterior.
