@@ -55,6 +55,41 @@ mostrar mais itens do que os observados, a publicação não pode ser marcada co
 Stilingue é uma limitação auditável, não uma falha de cobertura, quando o
 esgotamento observável foi comprovado.
 
+## Leitura por plataforma
+
+### Instagram
+
+- Acione o painel de comentários e releia a interface antes de concluir que ele
+  não abriu: em Reels o painel pode surgir com atraso.
+- Role o painel lateral de comentários, não a página do Reel. A chegada ao fim
+  do painel só vale como evidência depois de uma nova tentativa de rolagem sem
+  novos itens.
+- Expanda cada controle de respostas, como `Ver todas as N respostas`, e grave
+  a relação entre comentário principal e resposta.
+- Reconcilie o contador visível usando itens efetivamente expostos. Ele pode
+  incluir respostas aninhadas e, quando a interface os indicar, comentários de
+  outra superfície Meta, como Facebook. Registre essa composição na evidência;
+  não presuma que o contador representa apenas comentários principais.
+
+### YouTube
+
+- Mantenha a publicação original estável durante a coleta. Pause o vídeo ou
+  confirme que ele não está prestes a terminar; não use `End` com o player em
+  foco, pois a reprodução automática pode navegar para outro vídeo.
+- Role progressivamente da descrição e de painéis intermediários, como
+  `Perguntas`, até a seção de comentários. Ver apenas o título `Comentários`
+  ou cartões de carregamento não confirma que os itens foram obtidos: continue
+  a rolagem e releia até surgirem cartões de comentário.
+- Depois que o primeiro lote aparecer, continue a rolagem da página para pedir
+  lotes adicionais. Expanda todos os botões `N resposta(s)` acessíveis e conte
+  comentários principais e respostas separadamente.
+- Se a seção permanecer apenas com cartões de carregamento, tente uma
+  rolagem real que mantenha a área visível e reobserve. Só registre `partial`
+  após uma falha observável de continuação, nunca por ver somente o cabeçalho.
+- Trate o total mostrado pelo YouTube como sinal de reconciliação, não como
+  definição de qual tipo de item ele conta. Preserve toda diferença que reste
+  após o esgotamento observável.
+
 ## Tratar exceções
 
 - `complete`: percurso observável esgotado.
