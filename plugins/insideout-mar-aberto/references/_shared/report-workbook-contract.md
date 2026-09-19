@@ -14,6 +14,58 @@ Depois do Gate 1, gere HTML e planilha. Apresente-os para revisão. O PDF é
 gerado somente após aprovação do conteúdo completo e deve derivar do mesmo HTML.
 Uma alteração editorial não modifica classificações analíticas silenciosamente.
 
+## Arquitetura editorial do relatório
+
+O relatório deve tornar a análise legível como uma história de conversa, e não
+apenas como uma sequência de tabelas. A referência editorial do Mar Aberto usa
+uma progressão de panorama para explicação: visão geral, recortes materiais,
+conteúdos que concentram a conversa e evidências. Adapte a ordem à
+materialidade, sem copiar uma composição visual de cliente e sem ocultar
+limitações de cobertura.
+
+Cada página ou seção material deve ter um título claro, período e fonte dos
+dados. Use o padrão visual InsideOut do asset da skill: hierarquia tipográfica,
+régua de destaque, cores de sentimento consistentes e espaço suficiente para
+a leitura. Dados têm precedência sobre decoração.
+
+### Abertura e panorama
+
+Abra com escopo, período, cobertura e uma tese curta, sempre qualificada pelo
+corpus observado quando necessário. O panorama deve combinar:
+
+- distribuição de sentimento, com total e denominador identificados;
+- volume separado de menções, comentários e respostas;
+- termos recorrentes em mapa ou lista visual ponderada, sem sugerir relações
+  semânticas que os agregados não provam;
+- leitura de positivo, neutro e negativo, distinguindo fatos dos achados
+  interpretativos;
+- fonte, período e limitações perto dos números a que se aplicam.
+
+### Recortes por canal e tipo de fonte
+
+Para cada canal material, apresente a distribuição de sentimento, volumes e
+termos próprios. Quando posts, comentários e respostas tiverem composição
+distinta, mostre-os separadamente e explique a diferença sem misturar seus
+denominadores. Recortes pouco materiais podem permanecer em uma síntese
+comparativa, mas não podem desaparecer quando mudarem a conclusão geral.
+
+Inclua a série diária empilhada a 100% quando houver mais de um dia e mantenha
+os rótulos de cobertura ao lado de qualquer recorte afetado. Use gráficos para
+comparação e texto para explicar o que puxou o resultado.
+
+### Conteúdos e evidências em destaque
+
+Quando a amplificação estiver concentrada, destaque as publicações que mais
+contribuíram para volume ou sinal, usando identificadores de publicação,
+plataforma, métricas agregadas e o mecanismo observado. Não apresente nome,
+perfil, foto ou link individual de pessoa. Relacione esse destaque à tese do
+canal, sem atribuir causalidade além do que os dados permitem.
+
+Apresente evidências aprovadas em cartões de citação separados por sentimento
+ou papel analítico. Cada cartão mostra texto anonimizado, sentimento, canal e
+temas. Evidências ilustram um achado; não substituem distribuição nem são
+tratadas como amostra estatística.
+
 ## Núcleo fixo do HTML
 
 O relatório sempre inclui:

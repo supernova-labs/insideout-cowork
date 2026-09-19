@@ -23,6 +23,12 @@ reconciliados: HTML, PDF e `.xlsx`.
 5. Quando houver ativos locais de cliente, verifique se foram fornecidos e se
    podem ser usados; se não, aplique o padrão InsideOut sem bloquear.
 
+Leia a arquitetura editorial em
+`../../references/_shared/report-workbook-contract.md`. Antes do Gate 1,
+organize uma pauta visual baseada nos agregados: panorama, recortes materiais,
+publicações que concentram o sinal e evidências. A pauta deve explicar por que
+cada seção existe e quais números a sustentam.
+
 ## Gate 1 — direção editorial
 
 Apresente para aprovação:
@@ -43,8 +49,18 @@ Após o Gate 1:
 - incorpore o CSS no próprio HTML e não faça chamadas externas;
 - apresente visão geral e recortes por canal, distinguindo menções, comentários
   e respostas em totais, percentuais e rótulos;
-- inclua distribuição de sentimento, série diária empilhada a 100%, termos
-  recorrentes e evidências representativas para cada recorte material;
+- construa o panorama como uma unidade visual de sentimetria, volumes, termos
+  recorrentes e leitura de positivo, neutro e negativo; identifique fonte,
+  período e denominador perto dos dados;
+- para cada recorte material, combine distribuição de sentimento, volumes,
+  termos próprios e explicação do que sustenta o resultado; se posts,
+  comentários e respostas divergirem, mostre a composição de cada tipo sem
+  misturar denominadores;
+- destaque publicações que concentram volume ou sinal usando identificadores
+  de publicação e métricas agregadas, nunca identidade de pessoa;
+- apresente evidências aprovadas em cartões de citação com sentimento, canal e
+  temas, distinguindo ilustração de evidência estatística;
+- inclua série diária empilhada a 100% quando houver mais de um dia;
 - mostre cobertura antes das conclusões e junto de qualquer limitação;
 - no modo de cobertura limitada, identifique no título, no resumo e em cada
   recorte material que os achados descrevem o corpus observado, não o universo
@@ -54,7 +70,9 @@ Após o Gate 1:
   analíticos definidos no contrato;
 - congele cabeçalhos, habilite filtros e use tipos reais de data, número e
   percentual;
-- valide visualmente o HTML em largura de desktop e tela estreita;
+- valide visualmente o HTML em largura de desktop, tela estreita e impressão:
+  a leitura deve preservar hierarquia, gráficos legíveis, fonte e período,
+  separação entre panorama e recortes, e evidências sem cortes ou órfãs;
 - abra e releia a planilha para provar abas, células e reconciliação.
 
 Compare todas as contagens e percentuais com os JSON/JSONL canônicos. O texto
