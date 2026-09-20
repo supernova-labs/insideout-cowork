@@ -6,6 +6,7 @@ artifacts/
 .playwright-mcp/
 page-*.jpeg
 page-*.png
+mar-aberto/
 
 # Estado local de ferramentas não pertence ao plugin.
 .claude/
