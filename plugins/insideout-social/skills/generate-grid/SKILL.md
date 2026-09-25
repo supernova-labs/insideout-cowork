@@ -23,6 +23,8 @@ persista somente os posts aprovados.
    quando o primeiro take aprovado precisar de snapshot para revisão.
    Leia `../../references/_shared/client-feedback-package.md` quando a entrega
    for uma revisão para cliente com feedback exportável.
+   Leia `references/client-presentation.md` quando a visualização for para
+   cliente.
    Leia também `references/site-access.md` quando a visualização for publicada.
 6. Descubra a base **InsideOut Social**, o schema atual e os registros de marca,
    canais, produtos, referências e diretrizes necessários.
@@ -59,19 +61,20 @@ Antes de planejar, procure posts da mesma marca no mês e separe-os por rede.
   prompt/URL explícitos.
 - Um post pode ficar sem referência na Parte 1; não invente uma para completar.
 
-### 3. Curar tendências quando aplicável
+### 3. Pesquisar tendências antes do primeiro take
 
-Com o contexto mínimo resolvido, consulte os perfis de referência cadastrados
+Com marca, mês, rede e foco resolvidos, pesquise tendências automaticamente;
+não espere um pedido adicional. Consulte os perfis de referência cadastrados
 para a marca e a rede e faça busca recente na internet aberta. Procure fenômenos
 sociais em circulação, não padrões históricos ou boas práticas genéricas.
 Apresente poucas candidatas com mecanismo, atualidade, links diretos para os
-posts ou vídeos observados, evidência de circulação, adaptação e risco.
-Candidata pendente, rejeitada, vencida, sem exemplo direto verificável ou
-sustentada por uma única ocorrência não influencia o plano. A trilha completa
-de fontes fica na execução; quando uma trend aprovada orientar um post, inclua
-no briefing e na revisão interna ao menos o link direto que permite ao time
-entender o mecanismo. Se nenhuma candidata for adequada, continue sem trend.
-Não crie um cadastro permanente de tendências nesta versão.
+posts ou vídeos observados, evidência de circulação, adaptação e risco, ou
+declare que nenhuma candidata passou nos critérios. Candidata pendente,
+rejeitada, vencida, sem exemplo direto verificável ou sustentada por uma única
+ocorrência não influencia o plano. A trilha completa de fontes fica na execução;
+quando uma trend aprovada orientar um post, inclua no briefing e na revisão
+interna ao menos o link direto que permite ao time entender o mecanismo. Não
+crie um cadastro permanente de tendências nesta versão.
 
 ### 4. Montar o primeiro take
 
@@ -118,16 +121,20 @@ ajustes. Um post pendente não bloqueia os aprovados e não é persistido.
 ### 7. Gerar a saída estática quando solicitada
 
 Depois de compor o take selecionado, gere a saída pedida conforme
-`references/html-snapshot.md`. Há três formatos: snapshot de revisão interna do
-primeiro take, resumo estático para cliente e revisão para cliente com feedback
-local exportável. Os dois formatos de cliente exigem, antes da geração, que
-cada mockup selecionado corresponda a uma `Peça` vinculada e com status
-`Aprovada`; exclua o post sem essa comprovação e informe o motivo ao time. A
-revisão com feedback segue também
-`../../references/_shared/client-feedback-package.md` e é encaminhada de volta
-por arquivo para `review-grid-feedback`; ela não cria backend nem altera posts.
-Todas as saídas vivem fora do pacote, não leem nem escrevem no Airtable e não
-substituem as aprovações das skills.
+`references/html-snapshot.md`. Há quatro formatos: snapshot de revisão interna
+do primeiro take, planejamento para cliente sem mockups, resumo final para
+cliente com mockups e revisão para cliente com feedback local exportável. Um
+pedido de HTML para cliente sem mockups, de planejamento ou de feedback usa o
+formato de planejamento e não bloqueia por falta de peça aprovada. O resumo
+final exige que cada mockup selecionado corresponda a uma `Peça` vinculada e com
+status `Aprovada`; exclua apenas desse formato o post sem essa comprovação e
+informe o motivo ao time. A revisão com feedback parte do planejamento ou do
+resumo final conforme os assets disponíveis e o pedido. Siga também
+`references/client-presentation.md` e, para feedback,
+`../../references/_shared/client-feedback-package.md`; o retorno é encaminhado
+por arquivo para `review-grid-feedback`, não cria backend nem altera posts
+automaticamente. Todas as saídas vivem fora do pacote, não leem nem escrevem no
+Airtable e não substituem as aprovações das skills.
 
 Quando o pedido incluir um link, publique a saída conforme
 `references/site-access.md`: valide e publique primeiro apenas para o
@@ -178,17 +185,23 @@ Não exponha IDs ou detalhes do conector.
   explícita mantém o post em revisão.
 - A ausência de tendência adequada não bloqueou nem empobreceu artificialmente
   o grid.
+- A proposta inicial mostra o resultado da pesquisa de trends, com candidatas
+  rastreáveis ou a declaração de que nenhuma era elegível.
 - Repetir o mesmo fluxo não cria duplicatas.
 - O primeiro take está completo; não apresente somente um calendário vazio ou
   um conjunto de campos sem contexto visual.
 - A apresentação agrupa os posts por semana, mostra indicadores calculados e
   deixa direção criativa, texto da arte, legenda e lacunas fáceis de revisar.
-- A assinatura InsideOut aparece apenas na apresentação de revisão; a direção
-  visual de cada post continua respeitando a marca ou campanha correspondente.
+- Toda apresentação HTML usa a assinatura InsideOut definida em
+  `references/client-presentation.md` ou `references/review-presentation.md`;
+  a direção visual de cada post continua respeitando a marca ou campanha
+  correspondente.
 - Site publicado começa restrito ao proprietário; acesso externo contém somente
   os emails confirmados.
 - No resumo para cliente, todo post incluído tem mockup vinculado a uma `Peça`
   aprovada; conteúdo e estado de revisão interna não aparecem.
+- No planejamento para cliente, todos os posts selecionados permanecem no
+  calendário mesmo sem mockup, sem arte simulada ou dados internos.
 - Na revisão de cliente com feedback, comentários ficam somente no navegador
   até a exportação; JSON canônico e CSV complementar contêm manifesto e chaves
   públicas, nunca IDs ou dados internos.

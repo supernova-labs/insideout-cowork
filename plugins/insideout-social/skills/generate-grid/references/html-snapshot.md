@@ -13,7 +13,13 @@ pasta de artefatos do workspace. Para revisão interna, use:
 insideout-grid-<slug-da-marca>-<AAAA-MM>-<versao>.html
 ```
 
-Para o resumo para cliente, use:
+Para o planejamento para cliente, use:
+
+```text
+insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-planejamento-<versao>.html
+```
+
+Para o resumo final para cliente, use:
 
 ```text
 insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-<versao>.html
@@ -56,14 +62,34 @@ Não mostre IDs, schema, logs, prompt interno, registros não selecionados, URLs
 privadas, a trilha completa de pesquisa ou campos operacionais desnecessários.
 Links editoriais aprovados e exemplos públicos de trends não são URLs privadas.
 
-## Resumo para cliente
+## Planejamento para cliente
+
+Use este formato quando o pedido for uma visualização de planejamento, uma
+rodada de feedback ou uma entrega sem mockups. Leia também
+`client-presentation.md`.
+
+O planejamento não depende de `Posts.Mockup` ou `Peças` aprovadas. Preserve
+todos os posts selecionados na sequência cronológica e mostre somente data,
+rede/formato, título e foco de conteúdo. Não use imagem provisória,
+placeholder, rationale, briefing de produção, texto de arte, legenda,
+referências, links de trend, lacunas internas, status operacional ou URLs
+privadas.
+
+No cabeçalho, mostre marca, mês, versão, quantidade de posts e o estado
+`planejamento para cliente`. Use a assinatura visual da InsideOut descrita em
+`client-presentation.md`. Quando o pedido incluir feedback, use a variação
+`insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-planejamento-feedback-<versao>.html`
+e aplique integralmente a seção de revisão com feedback abaixo.
+
+## Resumo final para cliente
 
 O snapshot de revisão é interno e pode mostrar rationale, briefing de produção,
 lacunas e referências. Não o apresente como entrega final ao cliente.
 
-Quando o pedido incluir uma entrega para cliente, gere um segundo HTML a partir
-dos mesmos posts. Não aplique a este formato as regras do snapshot de revisão
-interna nem `review-presentation.md`.
+Quando o pedido incluir um resumo final para cliente, gere um segundo HTML a
+partir dos mesmos posts. Leia também `client-presentation.md`. Não aplique a
+este formato as regras do snapshot de revisão interna nem
+`review-presentation.md`.
 
 Antes de montar o resumo, releia `Posts.Mockup` e as `Peças` vinculadas de cada
 post. Um post é elegível somente quando o mockup selecionado corresponde ao
@@ -81,12 +107,13 @@ como se fosse arte final.
 
 ## Revisão para cliente com feedback
 
-Gere este terceiro formato somente quando o pedido pedir explicitamente coleta
-de feedback post a post. Ele parte das mesmas regras de elegibilidade e do
-mesmo conteúdo seguro do resumo para cliente, mas permite interação local no
-navegador. Use este nome:
+Gere este formato somente quando o pedido pedir explicitamente coleta de
+feedback post a post. Ele pode partir do planejamento para cliente, incluindo
+todos os posts selecionados mesmo sem mockup, ou do resumo final, com os posts
+elegíveis e suas imagens aprovadas. Use a variação de nome correspondente:
 
 ```text
+insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-planejamento-feedback-<versao>.html
 insideout-grid-<slug-da-marca>-<AAAA-MM>-cliente-feedback-<versao>.html
 ```
 
@@ -96,9 +123,10 @@ encaminhá-lo ao time, e trocar de dispositivo ou limpar dados pode perder o
 histórico local. Não inclua qualquer dado interno adicional para viabilizar o
 feedback.
 
-Em cada card cronológico elegível, mostre somente data, rede/formato, título,
-foco de conteúdo e mockup aprovado. Acrescente **Adicionar feedback**, lista
-resumida de comentários do próprio post e ações locais de editar ou remover.
+Em cada card cronológico, mostre somente os campos permitidos pelo formato de
+origem: data, rede/formato, título e foco de conteúdo; no resumo final, inclua
+também o mockup aprovado. Acrescente **Adicionar feedback**, lista resumida de
+comentários do próprio post e ações locais de editar ou remover.
 Abra o formulário em um overlay modal nativo, associado ao post selecionado;
 não deixe campos ou formulário expandidos nos cards. O overlay mostra o tipo
 fixo **Ajuste**, mensagem e revisor opcional. Mensagem é obrigatória. Ao abrir,
@@ -143,8 +171,12 @@ Antes de entregar:
 4. compare contagem e conteúdo com o take selecionado;
 5. confira que referências e trends aplicadas abrem os links esperados na
    revisão interna;
-6. no resumo para cliente, confira que cada imagem vem do mockup aprovado do
-   post correto e que o calendário preserva todas as datas entregues;
-7. na revisão com feedback, crie, edite, remova, recarregue e exporte ao menos
+6. no planejamento para cliente, confira que todos os posts selecionados foram
+   preservados sem imagem simulada; no resumo final, confira que cada imagem vem
+   do mockup aprovado do post correto e que o calendário preserva as datas
+   entregues;
+7. confira que o HTML para cliente usa a assinatura visual da InsideOut e não
+   depende de recursos externos;
+8. na revisão com feedback, crie, edite, remova, recarregue e exporte ao menos
    um comentário; confira JSON, cabeçalho CSV, escaping e ausência de rede;
-8. informe que uma nova revisão gera outro arquivo, sem sobrescrever o anterior.
+9. informe que uma nova revisão gera outro arquivo, sem sobrescrever o anterior.

@@ -19,13 +19,13 @@ peça o trabalho normalmente.
 
 ## InsideOut Social
 
-Versão atual: 0.4.0.
+Versão atual: 0.5.0.
 
 | Skill | Resultado |
 |---|---|
 | `analyze-briefing` | Analisa briefing, lacunas e escopo; pode materializar marca, produtos e canais com confirmação. |
 | `curate-brand-pattern` | Analisa perfis de referência aprovados e versiona um padrão histórico da marca no Airtable. |
-| `generate-grid` | Compõe o primeiro take mensal com estrutura, rationale, briefing de design, copy e trends sociais; pode gerar revisão privada ou revisão de cliente com feedback local exportável. |
+| `generate-grid` | Compõe o primeiro take mensal com estrutura, rationale, briefing de design, copy e trends sociais pesquisadas automaticamente; pode gerar revisão privada, planejamento de cliente sem mockups ou revisão de cliente com feedback local exportável. |
 | `generate-copy` | Produz legenda, hooks e lettering adaptados à rede e ao formato. |
 | `generate-image` | Gera e registra mockups com trilha de auditoria. |
 | `generate-video` | Produz e registra vídeos curtos a partir de direção visual aprovada. |

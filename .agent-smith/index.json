@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-18T22:20:00Z",
+  "lastUpdated": "2026-09-25T00:00:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -22,7 +22,7 @@
       "name": "generate-grid",
       "plugin": "insideout-social",
       "canonicalPath": "plugins/insideout-social/skills/generate-grid/SKILL.md",
-      "description": "Compõe grids multirrede, pesquisa trends atuais e publica snapshots privados."
+      "description": "Compõe grids multirrede, pesquisa trends atuais e gera revisões privadas ou planejamentos de cliente."
     },
     {
       "id": "skill:insideout-social:curate-brand-pattern",

@@ -15,6 +15,8 @@
 - audita posts existentes antes de escrever;
 - apresenta uma síntese mensal com volume por rede, formato e abordagem;
 - ancora o lançamento em `2026-05-12`;
+- pesquisa trends automaticamente e apresenta candidatas com fontes diretas ou
+  registra de forma explícita que nenhuma passou nos critérios;
 - compõe estrutura, rationale, briefing de design, lettering e legenda;
 - apresenta o take com indicadores, blocos semanais e cards escaneáveis, sem
   transformar a identidade da InsideOut em direção de arte da Aurora Skin;
