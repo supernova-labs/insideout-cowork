@@ -1,8 +1,8 @@
 {
-  "template_version": "0.4.0",
+  "template_version": "0.5.0",
   "report_template": {
     "path": "report-template.html",
-    "sha256": "b975ef80853a2277e59842cee0f14bc9c83c7ce915bbb67b8b32934bd2f7b523"
+    "sha256": "d6971c301f990bc371db9a63edf0dc0f3176e61a8a8a7e6cb60032a53834a631"
   },
   "analytics_template": {
     "path": "analytics-template.xlsx",

@@ -63,17 +63,41 @@ cada ciclo para provar progresso.
 Role até a seção de comentários, carregue lotes adicionais e expanda respostas.
 Comentários fixados continuam sendo comentários normais para deduplicação.
 
-## Falha e retomada
+## Diagnóstico legível e retomada
 
 Uma publicação privada, removida, indisponível ou com falha de interface não
-interrompe as demais. Grave o checkpoint após cada publicação. Ao final, porém,
-qualquer publicação obrigatória `partial` ou `unavailable` gera
-`coverage/diagnostic.json` e pausa a promoção automática para análise. A pessoa
-pode retomar a coleta ou pedir explicitamente análise e relatório do corpus
-observado. Sem esse pedido, não apresente sentimento, temas, percentuais,
-evidências ou conclusões. Com ele, a análise pode processar apenas o corpus
-observado e precisa carregar a lacuna real em todos os derivados. Divergência
-apenas entre a Stilingue e o corpus observável não gera essa pausa.
+interrompe as demais. Grave o checkpoint após cada publicação. Depois que toda
+publicação obrigatória tiver estado explícito, gere `coverage/diagnostic.json`
+e `coverage/diagnostic.md` a partir dos mesmos registros, mesmo sem lacunas.
+Reabra ambos, reconcilie totais e grave seus hashes no checkpoint.
+
+O JSON segue `schemas/coverage-diagnostic.schema.json`: status `complete` ou
+`observed_with_gaps`, contagens por estado, comentários e respostas observados,
+e lacunas com posição na fila, rede, os três contadores disponíveis, motivo e
+ponto de retomada. A soma de completas, parciais e indisponíveis deve igualar
+as publicações obrigatórias. Não copie o contador da Stilingue para o campo da
+plataforma.
+
+O Markdown fala com a equipe: total de publicações obrigatórias, completas,
+parciais e indisponíveis; comentários e respostas observados; uma linha por
+publicação com lacuna, identificada pela posição na fila e rede, com motivo em
+linguagem simples e ponto de retomada; efeito conhecido na leitura; e opções
+de retomar a coleta ou prosseguir com os itens observados. Não inclua ID,
+shortcode, URL, autor, comentário nem log cru nessa visão. Se não houver
+lacunas, diga isso sem prometer cobertura da internet inteira.
+
+Mostre separadamente, quando disponíveis, o total indicado pela Stilingue, o
+contador visível na plataforma e comentários + respostas observados. Explique
+somente causas comprovadas. Contadores podem ter composição ou momento
+distintos: não chame sua diferença de itens faltantes sem reconciliação.
+Diferença exclusiva com a Stilingue é ressalva de auditoria. Contador da
+plataforma maior que os itens observados e não reconciliado é lacuna de coleta.
+
+Estados `partial` e `unavailable` não impedem a análise dos itens observados
+depois de fechar a fila. Registre `coverage_mode: observed_with_gaps` e leve
+as lacunas à revisão das conclusões no Gate 1. Sem checkpoint para alguma
+publicação obrigatória, continue a coleta: esse caso não equivale a uma
+publicação parcial e não autoriza promover a análise.
 
 Quando a sessão expirar, preserve o ponto atual, peça novo login e retome sem
 duplicar itens.

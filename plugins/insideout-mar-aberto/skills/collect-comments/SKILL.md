@@ -7,8 +7,8 @@ description: Coleta comentários e respostas observáveis de publicações do In
 
 Percorra todas as publicações suportadas e produza um corpus temporário
 anonimizado com cobertura verificável. Uma falha isolada não interrompe as
-demais publicações, mas pausa a promoção automática para análise até haver
-retomada ou pedido explícito para analisar o corpus observado.
+demais publicações; depois de fechar a fila, a análise segue sobre os itens
+observados e as lacunas permanecem disponíveis para retomada e revisão.
 
 ## Preparar
 
@@ -17,8 +17,9 @@ retomada ou pedido explícito para analisar o corpus observado.
    `../../references/_shared/local-state.md`.
 2. Exija um checkpoint válido de `export-stilingue` e releia a lista canônica de
    publicações.
-3. Leia `../../references/_shared/schemas/source-record.schema.json` e
-   `../../references/_shared/schemas/coverage-record.schema.json` para os
+3. Leia `../../references/_shared/schemas/source-record.schema.json`,
+   `../../references/_shared/schemas/coverage-record.schema.json` e
+   `../../references/_shared/schemas/coverage-diagnostic.schema.json` para os
    registros produzidos nesta etapa.
 4. Verifique login apenas para as redes suportadas presentes na exportação. O
    operador entra diretamente na plataforma.
@@ -107,13 +108,18 @@ coletado.
 
 Produza `working/comments.jsonl` e `coverage/records.jsonl`, valide as contagens
 e atualize o manifesto. Informe publicações por estado, comentários, respostas,
-redes somente de menções, redes não suportadas e lacunas. Quando as publicações
-obrigatórias estiverem `complete`, a próxima etapa pode analisar o corpus mesmo
-que suas contagens divirjam da Stilingue. Se qualquer publicação obrigatória
-estiver `partial` ou `unavailable`, grave `coverage/diagnostic.json`, marque a
-execução como `blocked_coverage` e indique o ponto de retomada. A etapa seguinte
-pode prosseguir com o corpus observado mediante pedido explícito da pessoa;
-esta skill não decide nem produz a leitura de sentimento.
+redes somente de menções, redes não suportadas e lacunas. Após fechar toda a
+fila obrigatória, grave `coverage/diagnostic.json` e uma versão legível
+`coverage/diagnostic.md` conforme o contrato de coleta. Mostre na conversa o
+resumo e o caminho do Markdown. Preserve separadas as contagens da Stilingue,
+da plataforma e dos itens observados; não apresente a diferença como perda
+comprovada. Reabra ambos os diagnósticos e registre seus hashes.
+
+Passe à análise dos itens observados mesmo quando houver publicação `partial`
+ou `unavailable`; registre `coverage_mode: observed_with_gaps` e pontos de
+retomada. Uma divergência apenas da Stilingue também não bloqueia. Esta skill
+não classifica sentimento nem decide o alcance das conclusões; isso será
+avaliado depois da análise, no Gate 1.
 
 Antes de encerrar, reconcilie a fila canônica com os checkpoints: cada URL
 obrigatória precisa estar `complete`, `partial` ou `unavailable`; ausência de

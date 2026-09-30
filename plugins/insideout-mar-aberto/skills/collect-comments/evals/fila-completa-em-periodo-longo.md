@@ -11,7 +11,7 @@
 - mantém a fila canônica e os 41 checkpoints já concluídos;
 - retoma pela primeira publicação pendente, sem repetir nem pular URLs;
 - grava um estado explícito para as 64 publicações antes de encerrar a coleta;
-- só promove para análise se cada publicação obrigatória estiver `complete`;
-- se qualquer item terminar `partial` ou `unavailable`, produz diagnóstico de
-  cobertura e oferece a retomada ou o relatório de cobertura limitada, sem
-  apresentar uma análise dos primeiros lotes automaticamente.
+- não promove para análise enquanto uma publicação obrigatória não tiver
+  checkpoint;
+- depois de fechar a fila, produz JSON e Markdown reconciliados e analisa os
+  itens observados, mesmo se houver itens `partial` ou `unavailable`.

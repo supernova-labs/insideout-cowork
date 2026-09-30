@@ -42,8 +42,10 @@ REQUIRED_SHARED = (
     "schemas/run-manifest.schema.json",
     "schemas/run-manifest-v2.schema.json",
     "schemas/run-manifest-v3.schema.json",
+    "schemas/run-manifest-v4.schema.json",
     "schemas/coverage-decision.schema.json",
     "schemas/coverage-record.schema.json",
+    "schemas/coverage-diagnostic.schema.json",
     "schemas/analysis-record.schema.json",
     "schemas/evidence-record.schema.json",
     "schemas/source-record.schema.json",
@@ -55,12 +57,15 @@ REQUIRED_SHARED = (
     "fixtures/mentions-synthetic.jsonl",
     "fixtures/coverage-synthetic.jsonl",
     "fixtures/coverage-blocked-synthetic.jsonl",
+    "fixtures/coverage-diagnostic-synthetic.json",
+    "fixtures/coverage-diagnostic-synthetic.md",
     "fixtures/coverage-edge-cases-synthetic.jsonl",
     "fixtures/coverage-decision-limited-synthetic.json",
     "fixtures/analysis-synthetic.jsonl",
     "fixtures/aggregates-synthetic.json",
     "fixtures/evidence-approved-synthetic.jsonl",
     "fixtures/manifest-complete-synthetic.json",
+    "fixtures/manifest-complete-v4-synthetic.json",
     "fixtures/manifest-complete-v3-synthetic.json",
     "fixtures/manifest-path-traversal-invalid-synthetic.json",
     "fixtures/orchestration-cases-synthetic.json",
@@ -297,6 +302,33 @@ def main() -> int:
 
     for schema_path in sorted((SHARED_ROOT / "schemas").glob("*.json")):
         validate_json(schema_path, errors)
+    current_schema = validate_json(
+        SHARED_ROOT / "schemas" / "run-manifest.schema.json", errors)
+    previous_schema = validate_json(
+        SHARED_ROOT / "schemas" / "run-manifest-v4.schema.json", errors)
+    if isinstance(current_schema, dict) and isinstance(previous_schema, dict):
+        current = current_schema.get("properties", {})
+        previous = previous_schema.get("properties", {})
+        if (current.get("contract_version", {}).get("const") != "4.1.0"
+            or previous.get("contract_version", {}).get("const") != "4.0.0"
+            or current.get("coverage_mode", {}).get("enum")
+            != ["complete", "observed_with_gaps"]
+            or "blocked_coverage" in current.get("status", {}).get("enum", [])):
+            errors.append("schemas 4.1.0 e 4.0.0 não separam as políticas de cobertura")
+        paths = current.get("paths", {}).get("properties", {})
+        hashes = current.get("hashes", {}).get("properties", {})
+        for key, filename in (("coverage_diagnostic", "coverage/diagnostic.json"),
+                              ("coverage_summary", "coverage/diagnostic.md")):
+            if paths.get(key, {}).get("const") != filename or key not in hashes:
+                errors.append(f"manifesto 4.1.0 não registra {filename} e hash")
+    diagnostic_schema = validate_json(
+        SHARED_ROOT / "schemas" / "coverage-diagnostic.schema.json", errors)
+    if isinstance(diagnostic_schema, dict):
+        required = set(diagnostic_schema.get("required", []))
+        if not {"status", "required_publications", "complete", "partial",
+                "unavailable", "observed_comments", "observed_replies",
+                "gaps", "counter_note"}.issubset(required):
+            errors.append("schema do diagnóstico omite contagens ou diferenças")
 
     valid_csv = SHARED_ROOT / "fixtures" / "stilingue-valid.csv"
     if valid_csv.is_file():
@@ -423,13 +455,13 @@ def main() -> int:
         if observed != len(records):
             errors.append("cobertura sintética não reconcilia com comentários observados")
 
-        blocked_coverage = validate_jsonl(
+        partial_coverage = validate_jsonl(
             SHARED_ROOT / "fixtures" / "coverage-blocked-synthetic.jsonl", errors
         )
-        if len(blocked_coverage) != 1:
-            errors.append("fixture de cobertura bloqueada deve conter um caso")
+        blocked = partial_coverage[0] if len(partial_coverage) == 1 else {}
+        if len(partial_coverage) != 1:
+            errors.append("fixture de cobertura parcial deve conter um caso")
         else:
-            blocked = blocked_coverage[0]
             if (
                 blocked.get("status") != "partial"
                 or blocked.get("collection_required") is not True
@@ -437,7 +469,34 @@ def main() -> int:
                 or blocked.get("platform_reported_comments") != 186
                 or blocked.get("observed_comments") != 42
             ):
-                errors.append("fixture bloqueada não prova 74/186/42 e coleta parcial")
+                errors.append("fixture parcial não prova 74/186/42 e coleta parcial")
+
+        diagnostic = validate_json(
+            SHARED_ROOT / "fixtures" / "coverage-diagnostic-synthetic.json", errors
+        )
+        diagnostic_md = (SHARED_ROOT / "fixtures" /
+                         "coverage-diagnostic-synthetic.md").read_text(encoding="utf-8")
+        if isinstance(diagnostic, dict):
+            gap = (diagnostic.get("gaps") or [{}])[0]
+            if (diagnostic.get("status") != "observed_with_gaps"
+                or diagnostic.get("required_publications") != 1
+                or diagnostic.get("complete") != 0
+                or diagnostic.get("partial") != 1
+                or diagnostic.get("unavailable") != 0
+                or diagnostic.get("observed_comments") != 42
+                or diagnostic.get("observed_replies") != 0
+                or gap.get("publication_id") != blocked.get("publication_id")
+                or [gap.get("export_reported_comments"),
+                    gap.get("platform_reported_comments"),
+                    gap.get("observed_comments")] != [74, 186, 42]):
+                errors.append("diagnóstico estruturado não reconcilia com a coleta parcial")
+        for marker in ("1 publicação obrigatória", "0 completas", "1 parcial",
+                       "74", "186", "42", "não comprova", "Retomar a coleta",
+                       "análise dos itens observados"):
+            if marker not in diagnostic_md:
+                errors.append(f"diagnóstico legível sem {marker}")
+        if re.search(r"pub-ig-|https?://|shortcode|@", diagnostic_md, re.I):
+            errors.append("diagnóstico legível contém identificador ou URL")
 
         edge_coverage = validate_jsonl(
             SHARED_ROOT / "fixtures" / "coverage-edge-cases-synthetic.jsonl", errors
@@ -677,23 +736,29 @@ def main() -> int:
                 "manifesto",
                 errors,
             )
-            if manifest.get("contract_version") != "4.0.0":
+            if manifest.get("contract_version") != "4.1.0":
                 errors.append("manifesto: versão de contrato divergente")
             if set(manifest.get("hashes", {})) != {
-                "report_template", "analytics_template", "report", "analytics"
-            } or manifest.get("template_version") != "0.4.0":
-                errors.append("manifesto completo não registra templates e hashes")
-            if not {"report", "workbook", "report_template", "analytics_template"}.issubset(
+                "report_template", "analytics_template", "report", "analytics",
+                "coverage_diagnostic", "coverage_summary"
+            } or manifest.get("template_version") != "0.5.0":
+                errors.append("manifesto completo não registra templates e diagnósticos")
+            if manifest.get("coverage_mode") != "complete":
+                errors.append("manifesto completo não registra modo de cobertura")
+            if not {"report", "workbook", "report_template", "analytics_template",
+                    "coverage_diagnostic", "coverage_summary"}.issubset(
                 manifest.get("paths", {})
             ):
-                errors.append("manifesto completo não registra os dois entregáveis e templates")
+                errors.append("manifesto completo não registra entregáveis, templates e diagnósticos")
             elif any(manifest["paths"].get(key) != expected for key, expected in {
                 "report": "deliverables/report.html",
                 "workbook": "deliverables/analytics.xlsx",
                 "report_template": "templates/report-template.html",
                 "analytics_template": "templates/analytics-template.xlsx",
+                "coverage_diagnostic": "coverage/diagnostic.json",
+                "coverage_summary": "coverage/diagnostic.md",
             }.items()):
-                errors.append("manifesto completo não usa os caminhos do contrato 4.0.0")
+                errors.append("manifesto completo não usa os caminhos do contrato 4.1.0")
             if manifest.get("status") != "completed" or manifest.get("stage") != "complete":
                 errors.append("manifesto sintético final não está concluído")
             period = manifest.get("period", {})
@@ -725,6 +790,16 @@ def main() -> int:
             }
             if counts != expected_counts:
                 errors.append("manifesto completo não reconcilia suas contagens")
+
+        legacy_v4 = validate_json(
+            SHARED_ROOT / "fixtures" / "manifest-complete-v4-synthetic.json", errors
+        )
+        if isinstance(legacy_v4, dict):
+            if (legacy_v4.get("contract_version") != "4.0.0"
+                or legacy_v4.get("paths", {}).get("report") != "deliverables/report.html"
+                or legacy_v4.get("coverage_mode") is not None
+                or legacy_v4.get("template_version") != "0.4.0"):
+                errors.append("fixture legada 4.0.0 foi migrada para o contrato novo")
 
         legacy_v3 = validate_json(
             SHARED_ROOT / "fixtures" / "manifest-complete-v3-synthetic.json", errors
@@ -792,21 +867,27 @@ def main() -> int:
             }
             if pause_reasons != {
                 "expired_instagram_session",
-                "blocked_coverage",
+                "missing_collection_checkpoint",
                 "gate_1_rejected",
                 "missing_workbook",
                 "invalid_input",
             }:
-                errors.append("casos de pausa não cobrem sessão, cobertura, Gate 1 e planilha ausente")
-            limited_case = orchestration.get("coverage_limited_case", {})
-            if limited_case != {
-                "prior_status": "blocked_coverage",
+                errors.append("casos de pausa não cobrem sessão, checkpoint, Gate 1 e planilha ausente")
+            gaps_case = orchestration.get("coverage_gaps_case", {})
+            if gaps_case != {
+                "prior_status": "in_progress",
                 "status": "in_progress",
                 "stage": "analysis",
-                "coverage_mode": "limited_approved",
-                "requires": "recorded_user_confirmation",
+                "coverage_mode": "observed_with_gaps",
+                "requires": "all_required_checkpointed",
             }:
-                errors.append("caso de cobertura limitada não exige aprovação antes da análise")
+                errors.append("caso de lacuna não promove análise após fechar a fila")
+            if orchestration.get("material_claim_case") != {
+                "stage": "editorial_gate_1",
+                "requires": "resume_or_revise_claim",
+                "forbid": ["report", "complete"],
+            }:
+                errors.append("Gate 1 não trata conclusão materialmente afetada")
 
     assets = SKILLS_ROOT / "generate-report" / "assets"
     template_manifest = validate_json(assets / "template-manifest.json", errors)
@@ -833,8 +914,10 @@ def main() -> int:
         html_content = re.sub(r'(?is)<template id="inter-license".*?</template>',
                               '', html_text)
         for marker in ("<!doctype html>", 'lang="pt-BR"', "{{COVER_IMAGE_DATA_URI}}",
+                       "{{SCOPE_LABEL}}",
                        "{{SENTIMENT_DISTRIBUTIONS}}", "{{CHANNEL_THEME_MAP}}",
-                       "{{SERIES_PANELS}}", "{{COVERAGE_GAPS}}", "{{FOOTER}}",
+                       "{{SERIES_PANELS}}", "{{COVERAGE_GAPS}}",
+                       "{{COUNTER_COMPARISON}}", "{{FOOTER}}",
                        "class=\"sheet", ".theme-map{", "@media print",
                        'id="component-sentiment-row"', 'id="component-theme-map"',
                        'id="component-bar-chart"', 'id="component-evidence"'):
@@ -842,6 +925,8 @@ def main() -> int:
                 errors.append(f"generate-report: HTML modelo sem {marker}")
         if re.search(r"(?is)<script\b|https?://|<iframe\b|<form\b", html_content):
             errors.append("generate-report: HTML modelo contém script ou recurso externo")
+        if "{{COVERAGE_BADGE}}" in html_content:
+            errors.append("generate-report: selo geral de cobertura ainda se repete")
         if re.search(r"(?i)@[a-z0-9.-]+\.[a-z]{2,}|2026[-/]0[89][-/]\d{1,2}|"
                      r"22\.738\.981|9\.915\.988|303\.388|2\.139", html_content):
             errors.append("generate-report: HTML modelo contém dado histórico ou pessoal")

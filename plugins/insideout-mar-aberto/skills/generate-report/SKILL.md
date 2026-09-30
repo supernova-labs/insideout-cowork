@@ -20,9 +20,9 @@ navegador depois da entrega. O PDF não integra o checkpoint.
    Rejeite modelo ausente, ilegível ou com dado histórico, identidade pessoal,
    comentário, fórmula externa ou vínculo a período antigo. Registre hashes
    SHA-256 e a versão do plugin.
-3. Valide o checkpoint de análise, agregações, cobertura e evidências
-   candidatas. Lacuna real exige decisão explícita limited_approved;
-   divergência exclusiva da Stilingue não bloqueia.
+3. Valide o checkpoint de análise, agregações, os dois diagnósticos de cobertura
+   e evidências candidatas. Lacuna real não bloqueia a geração por si só;
+   divergência exclusiva da Stilingue é ressalva de auditoria.
 4. Prepare pauta de panorama, recortes materiais, publicações que concentram
    o sinal, evidências, cobertura, conclusões e metodologia.
 
@@ -30,8 +30,13 @@ navegador depois da entrega. O PDF não integra o checkpoint.
 
 Apresente conclusões propostas separando fatos, interpretações e limitações;
 estrutura narrativa; pool estratificado de evidências integrais anonimizadas; e
-lacunas de cobertura. Registre aprovações, exclusões e ajustes em
+lacunas de coleta. Para cada conclusão principal, diga se a lacuna pode mudar
+sua leitura. Quando puder, ofereça retomar a coleta ou reformular/omitir a
+afirmação; não exija uma aprovação geral de “cobertura limitada”. Registre
+aprovações, exclusões e ajustes em
 review/editorial-gate-1.json. Aguarde aprovação antes de gerar arquivos.
+Afirmações restritas aos registros observados podem seguir; generalizações,
+maiorias ou comparações sensíveis a itens inacessíveis precisam ser ajustadas.
 
 ## Produzir a partir dos templates
 
@@ -64,9 +69,13 @@ review/editorial-gate-1.json. Aguarde aprovação antes de gerar arquivos.
   alvo corretos e sustentar o assunto. Perguntas neutras e avaliações mistas
   têm seções próprias; elogio à pessoa ou campanha não comprova avaliação do
   veículo.
-- Em limited_approved, identifique “cobertura limitada” na capa, resumo,
-  recortes afetados, conclusões e metodologia. Todos os percentuais descrevem
-  apenas o corpus observado.
+- Use “recorte monitorado” na capa e “registros observados” nas bases dos
+  gráficos. Não repita um selo de “cobertura limitada” em todas as páginas.
+  Mostre estados e diferenças de contadores na página de cobertura e na
+  metodologia; preencha `{{COUNTER_COMPARISON}}` com a distinção entre Stilingue,
+  plataforma e itens observados. Anote lacunas junto às leituras que elas podem
+  mudar. Os percentuais sempre descrevem os registros relevantes observados, sem
+  projeção para itens não acessados ou para a internet inteira.
 - Preencha as oito abas do XLSX conforme o contrato, com datas, números e
   percentuais tipados, filtros e cabeçalhos congelados. Texto integral de
   comentários e respostas entra apenas em Evidências, quando aprovado e
@@ -109,6 +118,5 @@ PDF automaticamente e não publique nem envie arquivos sem autorização.
 
 ## Execuções anteriores
 
-Execuções iniciadas com contratos 2.0.0 e 3.0.0 mantêm seus checkpoints e
-arquivos, sem migração automática. Novas execuções de HTML e XLSX usam o
-contrato 4.0.0.
+Execuções iniciadas com contratos 2.0.0, 3.0.0 e 4.0.0 mantêm seus checkpoints
+e arquivos, sem migração automática. Novas execuções usam contrato 4.1.0.

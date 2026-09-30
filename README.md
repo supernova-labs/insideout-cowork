@@ -34,15 +34,15 @@ Versão atual: 0.5.0.
 
 ## InsideOut Mar Aberto
 
-Versão candidata: 0.4.0.
+Versão candidata: 0.5.0.
 
 | Skill | Resultado |
 |---|---|
 | `run-mar-aberto` | Conduz ou retoma a jornada completa sob demanda. |
 | `export-stilingue` | Valida a exportação oficial fornecida pelo operador e orienta sua obtenção. |
-| `collect-comments` | Coleta comentários e respostas observáveis do Instagram e YouTube. |
-| `analyze-sentiment` | Analisa menções, comentários e respostas; cobertura limitada exige confirmação explícita. |
-| `generate-report` | Aprova a direção editorial no Gate 1 e gera relatório HTML autocontido e planilha analítica a partir de templates limpos. |
+| `collect-comments` | Coleta comentários e respostas observáveis e entrega diagnóstico de cobertura legível. |
+| `analyze-sentiment` | Analisa menções, comentários e respostas observados, mesmo quando há lacunas registradas. |
+| `generate-report` | Revisa conclusões afetadas no Gate 1 e gera HTML e planilha a partir de templates limpos. |
 | `skill-feedback` | Registra fricções em Markdown local e oferece encaminhamento por e-mail. |
 
 O piloto usa o filtro do Hyundai i20 e arquivos locais por execução. A pessoa
@@ -99,6 +99,11 @@ preenchendo resultados reais sem incluir dados do cliente.
 
 Para novas execuções, a equipe revisa o HTML e exporta o PDF manualmente pelo
 navegador. O arquivo HTML funciona sem rede e mantém o conteúdo selecionável.
+O diagnóstico de cobertura combina JSON de auditoria e Markdown para a equipe;
+uma coleta parcial não paralisa a análise dos itens observados. Lacunas que
+podem mudar conclusões principais são decididas no Gate 1. O relatório mostra
+o recorte monitorado e as lacunas relevantes sem repetir um alerta geral em
+todas as páginas.
 O template incorpora a fonte Inter; sua licença está em
 `plugins/insideout-mar-aberto/skills/generate-report/assets/INTER-LICENSE.txt`.
 Execuções anteriores permanecem no contrato original, sem migração. Os gates

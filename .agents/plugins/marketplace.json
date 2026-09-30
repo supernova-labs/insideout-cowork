@@ -18,7 +18,7 @@
     },
     {
       "name": "insideout-mar-aberto",
-      "description": "Mar Aberto com relatório HTML autocontido e planilha analítica por templates.",
+      "description": "Mar Aberto com diagnóstico de cobertura legível, análise do observado, relatório HTML e planilha por templates.",
       "source": {
         "source": "local",
         "path": "./plugins/insideout-mar-aberto"

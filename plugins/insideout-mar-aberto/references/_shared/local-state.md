@@ -17,13 +17,13 @@ qualquer segmento `..`; nenhum artefato pode escapar da pasta da execução.
 │   └── comments.jsonl
 ├── coverage/
 │   ├── records.jsonl
-│   └── diagnostic.json
+│   ├── diagnostic.json
+│   └── diagnostic.md
 ├── analysis/
 │   ├── records.jsonl
 │   ├── aggregates.json
 │   └── evidence-candidates.jsonl
 ├── review/
-│   ├── coverage-decision.json
 │   └── editorial-gate-1.json
 ├── templates/
 │   ├── report-template.html
@@ -57,25 +57,22 @@ conteúdo e só então substitui o arquivo canônico. Atualize `manifest.json` p
 - instante de conclusão;
 - entradas consumidas e seus hashes;
 - saídas produzidas e seus hashes;
-- versão do plugin e hashes dos dois templates usados no relatório;
+- versão do plugin, hashes dos diagnósticos de cobertura e dos dois templates
+  usados no relatório;
 - contagens de reconciliação;
 - lacunas ou falhas conhecidas.
 
-O estado `blocked_coverage` mantém a etapa em `collection` e aponta para
-`coverage/diagnostic.json`. A pessoa pode retomar a coleta ou pedir
-explicitamente análise e relatório do corpus observado, registrando o modo
-`limited_approved` em `review/coverage-decision.json`. Esse registro inclui
-decisão, instante, lacunas e a confirmação de que o relatório descreverá
-somente o corpus observado. Só então a execução muda para `in_progress` na
-etapa `analysis`; sem esse registro, derivados analíticos são proibidos.
+Nas novas execuções, `coverage/diagnostic.json` e `coverage/diagnostic.md`
+acompanham toda coleta fechada. O manifesto registra ambos os caminhos e
+hashes. Com todas as publicações obrigatórias em estado explícito, a análise
+segue sobre o observado; `coverage_mode` vale `complete` ou
+`observed_with_gaps`. Falta de checkpoint mantém a etapa em `collection`.
+Lacunas materiais para uma conclusão são tratadas no Gate 1: retome a coleta
+ou reformule/omita a afirmação antes de aprovar o relatório. Divergência apenas
+da Stilingue é ressalva de auditoria e não impede promoção.
 
-Divergência entre a Stilingue e os itens observados, quando a coleta chegou ao
-esgotamento observável, não é `blocked_coverage`, não exige
-`limited_approved` e não impede análise ou relatório.
-
-O arquivo segue `schemas/coverage-decision.schema.json`. A decisão `continue`
-mantém a etapa em coleta; somente `limited_approved` permite iniciar análise e
-relatório com cobertura limitada.
+`review/coverage-decision.json` e o estado `blocked_coverage` pertencem aos
+contratos antigos; preserve-os nas execuções existentes, sem migração.
 
 Uma retomada confia apenas em checkpoints cujos arquivos e hashes continuam
 válidos. Não repita uma etapa concluída quando suas entradas não mudaram.
@@ -83,7 +80,7 @@ válidos. Não repita uma etapa concluída quando suas entradas não mudaram.
 O checkpoint final é gravado somente após reabrir, renderizar e reconciliar
 `report.html` e `analytics.xlsx`. Edição manual posterior não reescreve o
 checkpoint; o PDF exportado pela equipe fica fora dele. Preserve sem migração
-os manifests e artefatos de execuções antigas com contratos `2.0.0` e
-`3.0.0`. Novas execuções usam `4.0.0`.
+os manifests e artefatos de execuções antigas com contratos `2.0.0`,
+`3.0.0` e `4.0.0`. Novas execuções usam `4.1.0`.
 
 Leia os schemas em `schemas/` antes de criar ou validar os arquivos canônicos.

@@ -1,0 +1,25 @@
+{
+  "diagnostic_version": "1.0.0",
+  "status": "observed_with_gaps",
+  "required_publications": 1,
+  "complete": 0,
+  "partial": 1,
+  "unavailable": 0,
+  "observed_comments": 42,
+  "observed_replies": 0,
+  "gaps": [
+    {
+      "publication_id": "pub-ig-volume-001",
+      "position": 1,
+      "network": "instagram",
+      "status": "partial",
+      "export_reported_comments": 74,
+      "platform_reported_comments": 186,
+      "observed_comments": 42,
+      "observed_replies": 0,
+      "reason": "A paginação parou antes do fim observável.",
+      "resume_point": "Reabrir o painel de comentários e tentar carregar os itens seguintes."
+    }
+  ],
+  "counter_note": "Os contadores podem representar momentos ou tipos de item distintos; diferenças não provam quantos itens faltam."
+}

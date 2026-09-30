@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://insideout.local/schemas/mar-aberto/run-manifest.schema.json",
+  "$id": "https://insideout.local/schemas/mar-aberto/run-manifest-v4.schema.json",
   "title": "InsideOut Mar Aberto run manifest",
   "type": "object",
   "additionalProperties": false,
@@ -16,7 +16,7 @@
   ],
   "properties": {
     "contract_version": {
-      "const": "4.1.0"
+      "const": "4.0.0"
     },
     "run_id": {
       "type": "string",
@@ -57,6 +57,7 @@
         "created",
         "in_progress",
         "awaiting_login",
+        "blocked_coverage",
         "awaiting_editorial_review",
         "completed",
         "failed"
@@ -75,7 +76,7 @@
     "coverage_mode": {
       "enum": [
         "complete",
-        "observed_with_gaps"
+        "limited_approved"
       ]
     },
     "paths": {
@@ -96,12 +97,6 @@
         },
         "analytics_template": {
           "const": "templates/analytics-template.xlsx"
-        },
-        "coverage_diagnostic": {
-          "const": "coverage/diagnostic.json"
-        },
-        "coverage_summary": {
-          "const": "coverage/diagnostic.md"
         }
       }
     },
@@ -126,14 +121,6 @@
           "pattern": "^[a-f0-9]{64}$"
         },
         "analytics": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$"
-        },
-        "coverage_diagnostic": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$"
-        },
-        "coverage_summary": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$"
         }
@@ -169,8 +156,7 @@
       "then": {
         "required": [
           "template_version",
-          "hashes",
-          "coverage_mode"
+          "hashes"
         ],
         "properties": {
           "paths": {
@@ -178,9 +164,7 @@
               "report",
               "workbook",
               "report_template",
-              "analytics_template",
-              "coverage_diagnostic",
-              "coverage_summary"
+              "analytics_template"
             ]
           },
           "hashes": {
@@ -188,9 +172,7 @@
               "report",
               "analytics",
               "report_template",
-              "analytics_template",
-              "coverage_diagnostic",
-              "coverage_summary"
+              "analytics_template"
             ]
           }
         }

@@ -94,7 +94,7 @@
       "name": "collect-comments",
       "plugin": "insideout-mar-aberto",
       "canonicalPath": "plugins/insideout-mar-aberto/skills/collect-comments/SKILL.md",
-      "description": "Coleta comentários observáveis no Instagram e YouTube."
+      "description": "Coleta comentários observáveis e produz diagnóstico de cobertura legível."
     },
     {
       "id": "skill:insideout-mar-aberto:analyze-sentiment",
@@ -110,7 +110,7 @@
       "name": "generate-report",
       "plugin": "insideout-mar-aberto",
       "canonicalPath": "plugins/insideout-mar-aberto/skills/generate-report/SKILL.md",
-      "description": "Produz relatório HTML autocontido e planilha analítica a partir de templates revisados."
+      "description": "Produz HTML e planilha, com lacunas explicadas onde afetam conclusões."
     },
     {
       "id": "skill:insideout-mar-aberto:skill-feedback",

@@ -46,9 +46,11 @@ arquivo final.
   de fonte visíveis. Neutros e mistos recebem títulos próprios, fora de uma
   seção classificada como negativa. Não exponha autor, perfil, foto ou link
   individual de pessoa.
-- No modo de cobertura limitada, identifique a limitação na capa, resumo,
-  canal afetado, cobertura, conclusões e metodologia. Não projete itens que a
-  interface não revelou.
+- Use “recorte monitorado” na capa. Apresente os resultados como registros
+  observados, sem repetir alerta de cobertura em todos os cabeçalhos. A página
+  de cobertura mostra lacunas e diferenças entre Stilingue, plataforma e
+  observado. Explique uma lacuna junto ao achado que ela possa mudar. Não
+  projete itens que a interface não revelou.
 
 ## Responsividade e impressão
 

@@ -3,7 +3,7 @@
 Os evals versionados provam decisões observáveis com fixtures sintéticas. Rode
 cada cenário em uma tarefa nova e registre no `ACCEPTANCE_AUDIT.md`:
 
-1. versão do plugin e do contrato — `0.2.0` e `2.0.0` nesta rodada;
+1. versão do plugin e do contrato — `0.5.0` e `4.1.0` nas novas execuções;
 2. prompt do eval;
 3. artefatos produzidos ou preservados;
 4. contagens e hashes reconciliados;

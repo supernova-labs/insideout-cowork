@@ -61,10 +61,10 @@ Inclua padrões recorrentes, manifestações marcantes e contrapontos; não
 selecione apenas por engajamento. Preserve texto integral somente nesse pool e
 sem identidade.
 
-## Gate de cobertura
+## Escopo observado
 
-Esta rubrica não é aplicada enquanto qualquer publicação de Instagram ou
-YouTube com coleta obrigatória estiver `partial` ou `unavailable`, exceto após
-a confirmação explícita do modo `limited_approved`. Nesse modo, a rubrica é
-aplicada somente ao corpus observado; distribuições, temas, evidências e
-conclusões identificam essa fronteira e não representam o universo completo.
+Aplique a rubrica depois que toda publicação obrigatória tiver um checkpoint,
+inclusive `partial` ou `unavailable`. A classificação descreve apenas os
+registros observados. Leve lacunas reais à revisão editorial; uma diferença
+exclusiva da Stilingue permanece na auditoria. A rubrica não estima registros
+inacessíveis nem mede a opinião da internet inteira.

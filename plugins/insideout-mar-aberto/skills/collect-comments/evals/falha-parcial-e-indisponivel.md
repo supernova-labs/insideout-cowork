@@ -9,9 +9,8 @@
 
 - registra a primeira como `partial`, com 12 observados e motivo;
 - registra a segunda como `unavailable`;
-- coleta a terceira sem bloquear a execução;
-- não chama a cobertura geral de completa;
-- mantém todas as lacunas no checkpoint e no diagnóstico;
-- marca a execução como `blocked_coverage` e oferece retomada ou relatório de
-  cobertura limitada; sem a confirmação para o segundo modo, produz zero leitura
-  de sentimento.
+- coleta a terceira e fecha toda a fila obrigatória;
+- não chama a cobertura do recorte de completa;
+- reconcilia JSON e Markdown do diagnóstico e mostra a visão legível;
+- promove os itens observados para análise com `observed_with_gaps`, sem
+  exigir aprovação prévia, mantendo a possibilidade de retomada.

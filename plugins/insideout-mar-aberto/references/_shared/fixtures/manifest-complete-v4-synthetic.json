@@ -1,5 +1,5 @@
 {
-  "contract_version": "4.1.0",
+  "contract_version": "4.0.0",
   "run_id": "teste-codex-i20-2026-09",
   "project": "Teste sintético i20",
   "filter": "nova busca i20",
@@ -19,18 +19,14 @@
     "report": "deliverables/report.html",
     "report_template": "templates/report-template.html",
     "analytics_template": "templates/analytics-template.xlsx",
-    "workbook": "deliverables/analytics.xlsx",
-    "coverage_diagnostic": "coverage/diagnostic.json",
-    "coverage_summary": "coverage/diagnostic.md"
+    "workbook": "deliverables/analytics.xlsx"
   },
-  "template_version": "0.5.0",
+  "template_version": "0.4.0",
   "hashes": {
     "report_template": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "analytics_template": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "report": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-    "analytics": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-    "coverage_diagnostic": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-    "coverage_summary": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    "analytics": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
   },
   "counts": {
     "publications": 6,
@@ -44,6 +40,5 @@
   "gaps": [
     "Uma rede fora da matriz analítica foi contabilizada como não suportada."
   ],
-  "updated_at": "2026-09-09T12:30:00-03:00",
-  "coverage_mode": "complete"
+  "updated_at": "2026-09-09T12:30:00-03:00"
 }

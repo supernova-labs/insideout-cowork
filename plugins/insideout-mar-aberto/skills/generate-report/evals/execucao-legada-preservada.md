@@ -11,6 +11,6 @@
 - reabre a execução antiga usando o schema 3.0.0 e seus hashes originais;
 - não troca report.pptx por report.html, não altera seu checkpoint nem
   reescreve o manifesto antigo;
-- inicia a nova execução com contrato 4.0.0 e templates HTML/XLSX;
+- inicia a nova execução com contrato 4.1.0 e templates HTML/XLSX;
 - só conclui a nova execução quando HTML e XLSX passarem por abertura,
   reconciliação, revisão visual e registro de hashes.

@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://insideout.local/schemas/mar-aberto/coverage-diagnostic.schema.json",
+  "title": "InsideOut Mar Aberto coverage diagnostic 4.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "diagnostic_version",
+    "status",
+    "required_publications",
+    "complete",
+    "partial",
+    "unavailable",
+    "observed_comments",
+    "observed_replies",
+    "gaps",
+    "counter_note"
+  ],
+  "properties": {
+    "diagnostic_version": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "observed_with_gaps"
+      ]
+    },
+    "required_publications": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "complete": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "partial": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "unavailable": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "observed_comments": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "observed_replies": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "publication_id",
+          "position",
+          "network",
+          "status",
+          "export_reported_comments",
+          "platform_reported_comments",
+          "observed_comments",
+          "observed_replies",
+          "reason",
+          "resume_point"
+        ],
+        "properties": {
+          "publication_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "network": {
+            "enum": [
+              "instagram",
+              "youtube"
+            ]
+          },
+          "status": {
+            "enum": [
+              "partial",
+              "unavailable"
+            ]
+          },
+          "export_reported_comments": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "platform_reported_comments": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "observed_comments": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "observed_replies": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resume_point": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "counter_note": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "complete"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "partial": {
+            "const": 0
+          },
+          "unavailable": {
+            "const": 0
+          },
+          "gaps": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "observed_with_gaps"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "gaps": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

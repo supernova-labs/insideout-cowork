@@ -16,12 +16,11 @@ auditáveis. A classificação é integralmente automática; revisão humana per
    `../../references/_shared/local-state.md`.
 2. Valide o manifesto, `working/mentions.jsonl`, `working/comments.jsonl` e a
    cobertura produzida por `collect-comments`.
-3. Se todas as publicações com coleta obrigatória estiverem `complete`, inicie a
-   análise automaticamente. Divergência exclusiva entre a Stilingue e o corpus
-   observado não é lacuna de coleta e não impede essa promoção. Se alguma
-   publicação estiver `partial` ou `unavailable`, prossiga somente mediante
-   pedido explícito registrado para analisar o corpus observado; nesse modo,
-   mantenha a limitação em todos os derivados.
+3. Exija um checkpoint para cada publicação obrigatória e reconcilie os dois
+   diagnósticos de cobertura. Inicie a análise automaticamente sobre os itens
+   observados, mesmo se houver estado `partial` ou `unavailable`. Preserve essas
+   lacunas e `coverage_mode: observed_with_gaps` nos derivados. Diferença
+   exclusiva com a Stilingue não é lacuna de coleta.
 4. Leia `../../references/_shared/schemas/analysis-record.schema.json` e
    `../../references/_shared/schemas/evidence-record.schema.json`.
 5. Preserve no checkpoint a versão da rubrica e a identidade do modelo ativo
@@ -56,10 +55,12 @@ Calcule sempre com `source_kind` explícito:
 - amplificação separada por rede e tipo de fonte a partir dos sinais disponíveis;
 - cobertura e limitações que condicionam cada leitura.
 
-Quando houver lacuna real de coleta, cada agregado e percentual deve identificar
-o corpus observado como denominador e não pode ser apresentado como distribuição
-do universo completo de comentários. Uma divergência apenas da Stilingue é
-registrada na auditoria, sem trocar esse denominador pelo total da exportação.
+Cada agregado e percentual usa como denominador os registros relevantes
+observados do mesmo canal e tipo. Quando houver lacuna de coleta, preserve sua
+localização para a revisão editorial, sem transformar todos os achados em uma
+advertência geral. Não apresente o corpus como distribuição de todos os
+comentários possíveis. Diferença apenas da Stilingue fica na auditoria, sem
+trocar o denominador pelo total da exportação.
 
 Não combine menções e comentários no mesmo denominador nem produza índice único
 de engajamento entre plataformas.
@@ -97,8 +98,8 @@ ou planilha e não altere classificações automaticamente.
 ## Limites
 
 - Não revisar classificações com uma segunda passagem automática.
-- Não analisar uma execução com lacuna real de cobertura sem pedido explícito
-  registrado para usar o corpus observado.
+- Não analisar enquanto faltar checkpoint de publicação obrigatória ou enquanto
+  o diagnóstico legível não reconciliar com o estruturado.
 - Não mudar a rubrica silenciosamente durante uma execução.
 - Não construir a narrativa ou aprovar evidências.
 - Não descartar o corpus antes da validação completa dos derivados.

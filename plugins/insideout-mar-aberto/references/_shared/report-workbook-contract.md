@@ -2,9 +2,18 @@
 
 ## Decisão editorial
 
-O Gate 1 aprova conclusões propostas, narrativa, cobertura e pool de
-evidências. A geração começa depois da aprovação registrada. Não há Gate 2:
+O Gate 1 aprova conclusões propostas, narrativa, alcance de cada afirmação e
+pool de evidências. Se uma lacuna puder alterar uma conclusão principal, a
+equipe decide nesse gate entre retomar a coleta e reformular ou omitir a
+afirmação. A geração começa depois da aprovação registrada. Não há Gate 2:
 a equipe revisa o HTML e exporta o PDF manualmente pelo navegador.
+
+Uma afirmação sobre os registros observados, com denominador correto, pode
+seguir mesmo com lacuna. Trate como material uma afirmação que generaliza para
+itens não acessados, usa maioria ou comparação que a lacuna pode inverter,
+ou descreve um canal prometido sem registros utilizáveis. Nesses casos,
+explicite a dependência no Gate 1. Não crie um limiar numérico arbitrário a
+partir de contadores que talvez não meçam a mesma coisa.
 
 ## Templates distribuídos
 
@@ -52,10 +61,12 @@ elogio à pessoa ou campanha não ilustra avaliação do veículo.
 Temas de uma página de canal vêm apenas dos registros relevantes desse canal.
 
 Cobertura precede conclusões; lacunas aparecem junto das leituras afetadas.
-A metodologia registra fonte, rubrica, período, universos e limitações.
-No modo limited_approved, capa, resumo, recortes afetados, conclusões e
-metodologia identificam cobertura limitada. Percentuais descrevem apenas o
-corpus observado, sem estimar o universo completo de comentários.
+A metodologia registra fonte, rubrica, período, universos e limitações. A capa
+identifica o recorte monitorado sem selo geral de “cobertura limitada”. A
+página de cobertura mostra estados de coleta e separa contagem da Stilingue,
+contador da plataforma e itens observados, sem tratar a diferença como perda
+comprovada. Percentuais descrevem registros relevantes observados, sem estimar
+o universo completo de comentários ou da internet.
 
 Títulos, sínteses, rótulos, legendas e citações permanecem texto selecionável
 e editável no HTML. Cada gráfico identifica fonte, período, total e
@@ -126,4 +137,4 @@ Reabra ambos os arquivos e renderize todas as páginas do HTML em tela e
 impressão. A execução só termina com os dois entregáveis válidos e hashes
 SHA-256 registrados, junto da versão
 e hashes dos dois templates usados. O PDF exportado manualmente não integra
-esse checkpoint. Execuções de contratos 2.0.0 e 3.0.0 permanecem intactas.
+esse checkpoint. Execuções de contratos 2.0.0, 3.0.0 e 4.0.0 permanecem intactas.

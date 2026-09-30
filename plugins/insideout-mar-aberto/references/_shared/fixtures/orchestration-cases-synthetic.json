@@ -9,16 +9,17 @@
   ],
   "pause_cases": [
     {"reason": "expired_instagram_session", "stage": "collection", "preserve": ["export", "collection_checkpoint", "working_corpus"]},
-    {"reason": "blocked_coverage", "stage": "collection", "forbid": ["analysis", "editorial_gate_1", "report", "complete"]},
+    {"reason": "missing_collection_checkpoint", "stage": "collection", "forbid": ["analysis", "editorial_gate_1", "report", "complete"]},
     {"reason": "gate_1_rejected", "stage": "editorial_gate_1", "forbid": ["report", "complete"]},
     {"reason": "missing_workbook", "stage": "report", "forbid": ["complete"]},
     {"reason": "invalid_input", "stage": "export", "forbid": ["collection", "analysis", "report"]}
   ],
-  "coverage_limited_case": {
-    "prior_status": "blocked_coverage",
+  "coverage_gaps_case": {
+    "prior_status": "in_progress",
     "status": "in_progress",
     "stage": "analysis",
-    "coverage_mode": "limited_approved",
-    "requires": "recorded_user_confirmation"
-  }
+    "coverage_mode": "observed_with_gaps",
+    "requires": "all_required_checkpointed"
+  },
+  "material_claim_case": {"stage": "editorial_gate_1", "requires": "resume_or_revise_claim", "forbid": ["report", "complete"]}
 }
