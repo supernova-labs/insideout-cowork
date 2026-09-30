@@ -1,6 +1,6 @@
 {
   "name": "insideout-mar-aberto",
-  "version": "0.2.2+codex.20260918180730",
+  "version": "0.4.0",
   "description": "Skills da InsideOut para validar exportações da Stilingue, analisar menções e comentários completos e produzir relatórios de mar aberto.",
   "author": {
     "name": "InsideOut"
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "InsideOut Mar Aberto",
     "shortDescription": "Analise conversas sobre o Hyundai i20.",
-    "longDescription": "Conduz sob demanda a validação da exportação oficial da Stilingue, a coleta autenticada e completa de comentários no Instagram e YouTube, a análise de menções multicanal e a revisão de relatório HTML, PDF e planilha analítica.",
+    "longDescription": "Conduz sob demanda a validação da exportação oficial da Stilingue, a coleta autenticada de comentários no Instagram e YouTube, a análise de menções multicanal e a geração de relatório HTML autocontido e planilha analítica a partir de templates.",
     "developerName": "InsideOut",
     "category": "Productivity",
     "capabilities": ["Read", "Write", "Interactive"],

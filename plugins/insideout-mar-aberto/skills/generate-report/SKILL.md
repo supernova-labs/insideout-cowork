@@ -1,108 +1,114 @@
 ---
 name: generate-report
-description: Constrói e revisa o relatório HTML, o PDF e a planilha analítica do InsideOut Mar Aberto. Use quando a análise estiver concluída e a pessoa quiser revisar conclusões, evidências ou gerar os produtos finais.
+description: Gera relatório HTML autocontido e planilha analítica do InsideOut Mar Aberto a partir de templates limpos, após um gate editorial. Use quando a análise estiver concluída e a pessoa quiser obter os produtos finais.
 ---
 
-# Gerar relatório e planilha analítica
+# Gerar relatório HTML e planilha analítica
 
-Converta a análise automatizada em narrativa revisada e três produtos
-reconciliados: HTML, PDF e `.xlsx`.
+Entregue deliverables/report.html e deliverables/analytics.xlsx reconciliados
+com a análise validada. A equipe pode corrigir o HTML e exportar um PDF pelo
+navegador depois da entrega. O PDF não integra o checkpoint.
 
 ## Preparar
 
-1. Leia `../../references/_shared/report-workbook-contract.md`,
-   `../../references/_shared/privacy-retention.md` e
-   `../../references/_shared/local-state.md`.
-2. Leia `assets/insideout-report.css` para a identidade visual padrão.
-3. Valide o checkpoint de `analyze-sentiment`, as agregações, a cobertura e o
-   pool de evidências candidatas.
-4. Recuse a geração somente se a análise estiver ausente ou se houver lacuna
-   real de coleta sem pedido explícito registrado para usar o corpus observado.
-   Divergência exclusiva entre a Stilingue e o corpus observado não bloqueia o
-   relatório nem o classifica como cobertura limitada.
-5. Quando houver ativos locais de cliente, verifique se foram fornecidos e se
-   podem ser usados; se não, aplique o padrão InsideOut sem bloquear.
-
-Leia a arquitetura editorial em
-`../../references/_shared/report-workbook-contract.md`. Antes do Gate 1,
-organize uma pauta visual baseada nos agregados: panorama, recortes materiais,
-publicações que concentram o sinal e evidências. A pauta deve explicar por que
-cada seção existe e quais números a sustentam.
+1. Leia ../../references/_shared/report-workbook-contract.md,
+   ../../references/_shared/privacy-retention.md e
+   ../../references/_shared/local-state.md por inteiro. Leia também
+   references/html-layout.md para manter a estrutura visual.
+2. Abra assets/report-template.html e assets/analytics-template.xlsx.
+   Confira assets/template-manifest.json e seus hashes antes da cópia.
+   Rejeite modelo ausente, ilegível ou com dado histórico, identidade pessoal,
+   comentário, fórmula externa ou vínculo a período antigo. Registre hashes
+   SHA-256 e a versão do plugin.
+3. Valide o checkpoint de análise, agregações, cobertura e evidências
+   candidatas. Lacuna real exige decisão explícita limited_approved;
+   divergência exclusiva da Stilingue não bloqueia.
+4. Prepare pauta de panorama, recortes materiais, publicações que concentram
+   o sinal, evidências, cobertura, conclusões e metodologia.
 
 ## Gate 1 — direção editorial
 
-Apresente para aprovação:
+Apresente conclusões propostas separando fatos, interpretações e limitações;
+estrutura narrativa; pool estratificado de evidências integrais anonimizadas; e
+lacunas de cobertura. Registre aprovações, exclusões e ajustes em
+review/editorial-gate-1.json. Aguarde aprovação antes de gerar arquivos.
 
-- conclusões propostas, distinguindo fatos, interpretações e limitações;
-- estrutura narrativa sugerida;
-- pool estratificado de evidências com texto integral anonimizado;
-- lacunas de cobertura e seu impacto.
+## Produzir a partir dos templates
 
-Registre aprovações, exclusões e ajustes em
-`review/editorial-gate-1.json`. Não gere o relatório completo antes da decisão.
+- Copie os dois modelos para templates/ da execução. Trabalhe em arquivos
+  temporários e substitua os entregáveis canônicos apenas após validar ambos.
+- Preencha somente agregados canônicos e evidências aprovadas. Escape textos
+  externos como conteúdo HTML, inclusive citações, títulos e rótulos. Não
+  preserve números, textos, gráficos ou comentários históricos.
+- Use o HTML modelo para a hierarquia de capa, resumo, página vertical, régua
+  azul, destaques ciano, painéis claros, tipografia Inter, rodapé e marcas.
+  Mantenha navegação, leitura em tela e composição de impressão de 10 × 13
+  polegadas. Substitua a imagem da capa quando projeto ou produto diferir;
+  incorpore fontes e imagens autorizadas para que o arquivo funcione sem rede.
+- Monte páginas de panorama, canais com dados, séries, cobertura, conclusões,
+  metodologia e encerramento. Omita canal sem dados. Acrescente ou divida
+  páginas no mesmo estilo quando o conteúdo não couber com legibilidade; não
+  reduza a fonte para esconder cortes. O texto permanece selecionável e
+  editável no HTML.
+- Preserve os cinco sentimentos: positivo, neutro, negativo, misto e
+  indefinido. Separe menções, comentários e respostas em totais, percentuais,
+  barras e legendas. Exponha o denominador junto a cada gráfico.
+- Inclua séries empilhadas a 100% quando houver mais de um dia, temas
+  proporcionais sem relações inventadas e publicações de destaque sem
+  identidade pessoal. Evidências ilustram achados, não substituem contagens.
+- Para um único dia de menções, use distribuição por publicação rotulada como
+  tal. Séries de comentários e respostas usam published_at do registro;
+  nunca chame essa data de observação nem invente dias vazios.
+- Calcule temas por canal a partir dos registros relevantes daquele canal.
+  Uma citação precisa estar aprovada, ter sentimento, canal, tipo de fonte e
+  alvo corretos e sustentar o assunto. Perguntas neutras e avaliações mistas
+  têm seções próprias; elogio à pessoa ou campanha não comprova avaliação do
+  veículo.
+- Em limited_approved, identifique “cobertura limitada” na capa, resumo,
+  recortes afetados, conclusões e metodologia. Todos os percentuais descrevem
+  apenas o corpus observado.
+- Preencha as oito abas do XLSX conforme o contrato, com datas, números e
+  percentuais tipados, filtros e cabeçalhos congelados. Texto integral de
+  comentários e respostas entra apenas em Evidências, quando aprovado e
+  anonimizado. Amplie tabelas e formatação até a última linha preenchida.
+- Em Publicações, preencha por publicação rede, data, link público, ID,
+  métricas e cinco contagens de comentários observados. A soma das cinco
+  contagens é o total de comentários; respostas têm coluna e denominador
+  separados. Reproduza a matriz de sentimento por tipo de fonte no Resumo.
+- Em Séries diárias, preencha a série longa e replique os painéis do modelo
+  para cada rede com dados. Cada painel traz contagens, percentuais e gráfico
+  nativo empilhado a 100% para um tipo de fonte. Preserve cores, legenda e
+  eixo percentual; mantenha os cinco nomes de sentimento explícitos nas
+  séries, ajuste intervalos e remova gráficos vazios. Rejeite legenda que
+  apareça como “Série 1” a “Série 5” na renderização.
 
-## Produzir HTML e planilha
+## Validar e concluir
 
-Após o Gate 1:
+Reabra o HTML e o XLSX. Inspecione a estrutura do HTML, os dados visíveis e a
+ausência de recursos externos, scripts, conteúdo histórico e identidade
+pessoal. Renderize todas as páginas no navegador ou visualizador permitido,
+em tela e no modo de impressão; confira contraste, legibilidade, quebras,
+gráficos, legendas, citações, rodapé e sobreposições. Compare as páginas
+equivalentes à referência visual de 23/09 e ao protótipo HTML aprovado.
+Se a renderização estiver indisponível, registre a limitação e não declare a
+revisão visual como concluída.
 
-- gere `deliverables/report.html` com o núcleo fixo e narrativa adaptativa;
-- incorpore o CSS no próprio HTML e não faça chamadas externas;
-- apresente visão geral e recortes por canal, distinguindo menções, comentários
-  e respostas em totais, percentuais e rótulos;
-- construa o panorama como uma unidade visual de sentimetria, volumes, termos
-  recorrentes e leitura de positivo, neutro e negativo; identifique fonte,
-  período e denominador perto dos dados;
-- para cada recorte material, combine distribuição de sentimento, volumes,
-  termos próprios e explicação do que sustenta o resultado; se posts,
-  comentários e respostas divergirem, mostre a composição de cada tipo sem
-  misturar denominadores;
-- destaque publicações que concentram volume ou sinal usando identificadores
-  de publicação e métricas agregadas, nunca identidade de pessoa;
-- apresente evidências aprovadas em cartões de citação com sentimento, canal e
-  temas, distinguindo ilustração de evidência estatística;
-- inclua série diária empilhada a 100% quando houver mais de um dia;
-- mostre cobertura antes das conclusões e junto de qualquer limitação;
-- no modo de cobertura limitada, identifique no título, no resumo e em cada
-  recorte material que os achados descrevem o corpus observado, não o universo
-  completo de comentários;
-- inclua somente evidências aprovadas;
-- gere `deliverables/analytics.xlsx` com as oito abas e todos os dados
-  analíticos definidos no contrato;
-- congele cabeçalhos, habilite filtros e use tipos reais de data, número e
-  percentual;
-- valide visualmente o HTML em largura de desktop, tela estreita e impressão:
-  a leitura deve preservar hierarquia, gráficos legíveis, fonte e período,
-  separação entre panorama e recortes, e evidências sem cortes ou órfãs;
-- abra e releia a planilha para provar abas, células e reconciliação.
+Na planilha, reabra e renderize as oito abas; confira tipos, formatos, filtros
+até a última linha e ausência de vínculos antigos. Confirme gráficos
+empilhados a 100% com cinco séries e matrizes preenchidas. Reconcilie
+contagens e percentuais por rede, tipo de fonte, data e sentimento com os
+JSON/JSONL canônicos; confira cobertura, totais por publicação e evidências.
+Rejeite divergência, legenda ilegível, mapa sem proporção ou citação em classe
+incorreta. Abertura dos arquivos, sem revisão dos conteúdos, não basta.
 
-Compare todas as contagens e percentuais com os JSON/JSONL canônicos. O texto
-bruto não entra em `Análises`; somente `Evidências` contém comentários integrais
-aprovados e anonimizados.
+Só então registre hashes SHA-256 dos dois entregáveis e templates, versão do
+plugin e contagens no checkpoint; atualize o manifesto por último. Edição
+manual posterior cria versão fora do checkpoint validado. Entregue os dois
+caminhos, período, canais, cobertura e limitações. Não abra Gate 2, não gere
+PDF automaticamente e não publique nem envie arquivos sem autorização.
 
-## Gate 2 — versão completa
+## Execuções anteriores
 
-Apresente HTML e planilha com um resumo das verificações. Registre aprovação ou
-ajustes em `review/editorial-gate-2.json`. Ajustes narrativos regeneram o HTML e
-a planilha afetada, mas não mudam classificações silenciosamente.
-
-Depois da aprovação, exporte o mesmo HTML para
-`deliverables/report.pdf`. Renderize todas as páginas para inspeção e compare o
-conteúdo com o HTML aprovado. Se houver corte, sobreposição, página vazia ou
-divergência, corrija e gere novamente antes de concluir.
-
-## Entregar
-
-Informe caminhos de HTML, PDF e planilha, versão editorial, cobertura e
-limitações. Não publique, envie ou hospede os arquivos sem autorização
-específica.
-
-## Limites
-
-- Não aprovar automaticamente nenhum gate.
-- Não inserir identidade de autores.
-- Não criar uma narrativa paralela no PDF.
-- Não alterar dados analíticos para melhorar a história.
-- Não combinar menções e comentários em um percentual sem decompor seus
-  denominadores.
-- Não tratar um relatório de cobertura limitada como equivalente a uma coleta
-  completa.
+Execuções iniciadas com contratos 2.0.0 e 3.0.0 mantêm seus checkpoints e
+arquivos, sem migração automática. Novas execuções de HTML e XLSX usam o
+contrato 4.0.0.

@@ -72,7 +72,7 @@ local.
 | `export-stilingue` | validar a entrada oficial, manual por padrão | planilha original, menções normalizadas e checkpoint de entrada |
 | `collect-comments` | percorrer Instagram e YouTube | corpus temporário anonimizado e cobertura |
 | `analyze-sentiment` | classificar fontes completas e agregar automaticamente | análises por tipo de fonte, agregados e pool candidato |
-| `generate-report` | conduzir dois gates editoriais | HTML, PDF e planilha analítica |
+| `generate-report` | conduzir Gate 1 editorial e validar os templates | HTML autocontido e planilha analítica |
 | `skill-feedback` | registrar bug ou melhoria sem GitHub | Markdown local e encaminhamento opcional por e-mail |
 
 A orquestradora não refaz o trabalho das etapas. A análise não revisa o

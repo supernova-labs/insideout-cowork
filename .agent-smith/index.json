@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-25T00:00:00Z",
+  "lastUpdated": "2026-09-30T00:00:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -110,7 +110,7 @@
       "name": "generate-report",
       "plugin": "insideout-mar-aberto",
       "canonicalPath": "plugins/insideout-mar-aberto/skills/generate-report/SKILL.md",
-      "description": "Produz relatório HTML, PDF e planilha analítica revisados."
+      "description": "Produz relatório HTML autocontido e planilha analítica a partir de templates revisados."
     },
     {
       "id": "skill:insideout-mar-aberto:skill-feedback",

@@ -1,16 +1,14 @@
-# Eval — produtos com cobertura limitada aprovada
+# Eval — cobertura limitada aprovada
 
 ## Prompt
 
-> A análise de uma execução possui `coverage_mode: limited_approved`, uma
-> publicação inacessível e os dois gates editoriais aprovados. Gere os produtos
-> finais.
+> A análise possui `coverage_mode: limited_approved`, uma publicação
+> inacessível e o Gate 1 aprovado. Gere os dois produtos finais.
 
 ## Resultado esperado
 
-- gera HTML, planilha e PDF reconciliados com o corpus observado;
-- identifica cobertura limitada no título, no resumo, nos recortes afetados e
-  na metodologia;
+- gera HTML e XLSX reconciliados somente com o corpus observado;
+- identifica cobertura limitada no título, resumo, recortes afetados,
+  conclusões e metodologia;
 - mantém a publicação inacessível e seu impacto na aba `Cobertura`;
-- não apresenta percentuais como distribuição do universo completo;
-- contém zero nome, perfil, foto ou link individual de autor.
+- não apresenta percentuais como universo completo nem identidade pessoal.

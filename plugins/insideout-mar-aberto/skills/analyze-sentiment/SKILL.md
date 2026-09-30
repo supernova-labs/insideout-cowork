@@ -91,8 +91,8 @@ execução, sem exigir um novo pedido da pessoa. A chamada deve consumir somente
 os derivados já validados, a cobertura e o pool de evidências candidatas.
 
 Esse encadeamento abre o Gate 1 editorial: apresente as conclusões, a estrutura
-e as evidências para decisão humana. Não aprove o gate, não gere HTML, planilha
-ou PDF e não altere classificações automaticamente.
+e as evidências para decisão humana. Não aprove o gate, não gere apresentação
+ou planilha e não altere classificações automaticamente.
 
 ## Limites
 

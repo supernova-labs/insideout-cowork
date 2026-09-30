@@ -24,13 +24,14 @@ qualquer segmento `..`; nenhum artefato pode escapar da pasta da execução.
 │   └── evidence-candidates.jsonl
 ├── review/
 │   ├── coverage-decision.json
-│   ├── editorial-gate-1.json
-│   └── editorial-gate-2.json
+│   └── editorial-gate-1.json
+├── templates/
+│   ├── report-template.html
+│   └── analytics-template.xlsx
 ├── feedback/
 │   └── <timestamp>-<slug>.md
 └── deliverables/
     ├── report.html
-    ├── report.pdf
     └── analytics.xlsx
 ```
 
@@ -56,6 +57,7 @@ conteúdo e só então substitui o arquivo canônico. Atualize `manifest.json` p
 - instante de conclusão;
 - entradas consumidas e seus hashes;
 - saídas produzidas e seus hashes;
+- versão do plugin e hashes dos dois templates usados no relatório;
 - contagens de reconciliação;
 - lacunas ou falhas conhecidas.
 
@@ -77,5 +79,11 @@ relatório com cobertura limitada.
 
 Uma retomada confia apenas em checkpoints cujos arquivos e hashes continuam
 válidos. Não repita uma etapa concluída quando suas entradas não mudaram.
+
+O checkpoint final é gravado somente após reabrir, renderizar e reconciliar
+`report.html` e `analytics.xlsx`. Edição manual posterior não reescreve o
+checkpoint; o PDF exportado pela equipe fica fora dele. Preserve sem migração
+os manifests e artefatos de execuções antigas com contratos `2.0.0` e
+`3.0.0`. Novas execuções usam `4.0.0`.
 
 Leia os schemas em `schemas/` antes de criar ou validar os arquivos canônicos.

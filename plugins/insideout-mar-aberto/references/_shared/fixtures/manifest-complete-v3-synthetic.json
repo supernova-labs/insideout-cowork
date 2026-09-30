@@ -1,5 +1,5 @@
 {
-  "contract_version": "4.0.0",
+  "contract_version": "3.0.0",
   "run_id": "teste-codex-i20-2026-09",
   "project": "Teste sintético i20",
   "filter": "nova busca i20",
@@ -16,12 +16,12 @@
     "analysis": "analysis/records.jsonl",
     "aggregates": "analysis/aggregates.json",
     "evidence": "analysis/evidence-approved.jsonl",
-    "report": "deliverables/report.html",
-    "report_template": "templates/report-template.html",
+    "report": "deliverables/report.pptx",
+    "report_template": "templates/report-template.pptx",
     "analytics_template": "templates/analytics-template.xlsx",
     "workbook": "deliverables/analytics.xlsx"
   },
-  "template_version": "0.4.0",
+  "template_version": "0.3.0",
   "hashes": {
     "report_template": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "analytics_template": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",

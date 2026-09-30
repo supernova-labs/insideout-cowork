@@ -18,6 +18,7 @@
     },
     {
       "name": "insideout-mar-aberto",
+      "description": "Mar Aberto com relatório HTML autocontido e planilha analítica por templates.",
       "source": {
         "source": "local",
         "path": "./plugins/insideout-mar-aberto"

@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 from collections import Counter
 from datetime import date
 import json
 import re
+import zipfile
 from pathlib import Path
+from xml.etree import ElementTree
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 
@@ -37,6 +40,8 @@ REQUIRED_SHARED = (
     "acceptance-map.md",
     "evals/README.md",
     "schemas/run-manifest.schema.json",
+    "schemas/run-manifest-v2.schema.json",
+    "schemas/run-manifest-v3.schema.json",
     "schemas/coverage-decision.schema.json",
     "schemas/coverage-record.schema.json",
     "schemas/analysis-record.schema.json",
@@ -56,6 +61,7 @@ REQUIRED_SHARED = (
     "fixtures/aggregates-synthetic.json",
     "fixtures/evidence-approved-synthetic.jsonl",
     "fixtures/manifest-complete-synthetic.json",
+    "fixtures/manifest-complete-v3-synthetic.json",
     "fixtures/manifest-path-traversal-invalid-synthetic.json",
     "fixtures/orchestration-cases-synthetic.json",
     "fixtures/feedback-sanitized-synthetic.md",
@@ -186,6 +192,19 @@ def is_safe_relative_path(value: object) -> bool:
     return ".." not in re.split(r"[\\\\/]+", value)
 
 
+def contrast_ratio(foreground: str, background: str) -> float:
+    def luminance(rgb: str) -> float:
+        channels = [int(rgb[-6:][i:i + 2], 16) / 255 for i in (0, 2, 4)]
+        linear = [value / 12.92 if value <= 0.04045 else
+                  ((value + 0.055) / 1.055) ** 2.4 for value in channels]
+        return sum(value * weight for value, weight in
+                   zip(linear, (0.2126, 0.7152, 0.0722)))
+
+    light, dark = sorted((luminance(foreground), luminance(background)),
+                         reverse=True)
+    return (light + 0.05) / (dark + 0.05)
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -252,8 +271,12 @@ def main() -> int:
     elif isinstance(manifest, dict):
         if manifest.get("name") != "insideout-mar-aberto":
             errors.append("manifesto: name deve ser insideout-mar-aberto")
-        if manifest.get("version") != "0.2.2":
-            errors.append("manifesto: versão candidata deve ser 0.2.2")
+        version = str(manifest.get("version", ""))
+        version_match = re.fullmatch(r"(\d+\.\d+\.\d+)(?:\+codex\.[0-9]+)?", version)
+        readme_text = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        declared = re.search(r"Versão candidata:\s*(\d+\.\d+\.\d+)", readme_text)
+        if not version_match or not declared or version_match.group(1) != declared.group(1):
+            errors.append("manifesto: versão não coincide com a versão candidata do README")
         if manifest.get("skills") != "./skills/":
             errors.append("manifesto: skills deve apontar para ./skills/")
 
@@ -654,8 +677,23 @@ def main() -> int:
                 "manifesto",
                 errors,
             )
-            if manifest.get("contract_version") != "2.0.0":
+            if manifest.get("contract_version") != "4.0.0":
                 errors.append("manifesto: versão de contrato divergente")
+            if set(manifest.get("hashes", {})) != {
+                "report_template", "analytics_template", "report", "analytics"
+            } or manifest.get("template_version") != "0.4.0":
+                errors.append("manifesto completo não registra templates e hashes")
+            if not {"report", "workbook", "report_template", "analytics_template"}.issubset(
+                manifest.get("paths", {})
+            ):
+                errors.append("manifesto completo não registra os dois entregáveis e templates")
+            elif any(manifest["paths"].get(key) != expected for key, expected in {
+                "report": "deliverables/report.html",
+                "workbook": "deliverables/analytics.xlsx",
+                "report_template": "templates/report-template.html",
+                "analytics_template": "templates/analytics-template.xlsx",
+            }.items()):
+                errors.append("manifesto completo não usa os caminhos do contrato 4.0.0")
             if manifest.get("status") != "completed" or manifest.get("stage") != "complete":
                 errors.append("manifesto sintético final não está concluído")
             period = manifest.get("period", {})
@@ -687,6 +725,17 @@ def main() -> int:
             }
             if counts != expected_counts:
                 errors.append("manifesto completo não reconcilia suas contagens")
+
+        legacy_v3 = validate_json(
+            SHARED_ROOT / "fixtures" / "manifest-complete-v3-synthetic.json", errors
+        )
+        if isinstance(legacy_v3, dict):
+            if (legacy_v3.get("contract_version") != "3.0.0"
+                or legacy_v3.get("paths", {}).get("report") != "deliverables/report.pptx"
+                or legacy_v3.get("paths", {}).get("report_template")
+                != "templates/report-template.pptx"
+                or legacy_v3.get("template_version") != "0.3.0"):
+                errors.append("fixture legada 3.0.0 foi migrada para o contrato novo")
 
         invalid_paths = validate_json(
             SHARED_ROOT / "fixtures" / "manifest-path-traversal-invalid-synthetic.json",
@@ -722,7 +771,6 @@ def main() -> int:
                 "analysis",
                 "editorial_gate_1",
                 "report",
-                "editorial_gate_2",
                 "complete",
             ]
             if ordered != expected_order:
@@ -746,10 +794,10 @@ def main() -> int:
                 "expired_instagram_session",
                 "blocked_coverage",
                 "gate_1_rejected",
-                "gate_2_rejected",
+                "missing_workbook",
                 "invalid_input",
             }:
-                errors.append("casos de pausa não cobrem sessão, cobertura, gates e entrada inválida")
+                errors.append("casos de pausa não cobrem sessão, cobertura, Gate 1 e planilha ausente")
             limited_case = orchestration.get("coverage_limited_case", {})
             if limited_case != {
                 "prior_status": "blocked_coverage",
@@ -760,16 +808,193 @@ def main() -> int:
             }:
                 errors.append("caso de cobertura limitada não exige aprovação antes da análise")
 
-    css = SKILLS_ROOT / "generate-report" / "assets" / "insideout-report.css"
-    if not css.is_file():
-        errors.append("generate-report: tema CSS padrão ausente")
-    elif re.search(r"(?i)(?:https?://|@import|url\s*\()", css.read_text(encoding="utf-8")):
-        errors.append("tema CSS contém dependência externa")
+    assets = SKILLS_ROOT / "generate-report" / "assets"
+    template_manifest = validate_json(assets / "template-manifest.json", errors)
+    if isinstance(template_manifest, dict):
+        readme_version = re.search(
+            r"Versão candidata:\s*(\d+\.\d+\.\d+)",
+            (REPO_ROOT / "README.md").read_text(encoding="utf-8"),
+        )
+        plugin_version = readme_version.group(1) if readme_version else ""
+        if template_manifest.get("template_version") != plugin_version:
+            errors.append("generate-report: versão dos templates divergente")
+        for key, filename in (("report_template", "report-template.html"),
+                              ("analytics_template", "analytics-template.xlsx")):
+            entry = template_manifest.get(key, {})
+            path = assets / filename
+            if entry.get("path") != filename or (
+                path.is_file() and
+                entry.get("sha256") != hashlib.sha256(path.read_bytes()).hexdigest()
+            ):
+                errors.append(f"generate-report: hash do template divergente: {filename}")
+    html_template = assets / "report-template.html"
+    if html_template.is_file():
+        html_text = html_template.read_text(encoding="utf-8")
+        html_content = re.sub(r'(?is)<template id="inter-license".*?</template>',
+                              '', html_text)
+        for marker in ("<!doctype html>", 'lang="pt-BR"', "{{COVER_IMAGE_DATA_URI}}",
+                       "{{SENTIMENT_DISTRIBUTIONS}}", "{{CHANNEL_THEME_MAP}}",
+                       "{{SERIES_PANELS}}", "{{COVERAGE_GAPS}}", "{{FOOTER}}",
+                       "class=\"sheet", ".theme-map{", "@media print",
+                       'id="component-sentiment-row"', 'id="component-theme-map"',
+                       'id="component-bar-chart"', 'id="component-evidence"'):
+            if marker not in html_text:
+                errors.append(f"generate-report: HTML modelo sem {marker}")
+        if re.search(r"(?is)<script\b|https?://|<iframe\b|<form\b", html_content):
+            errors.append("generate-report: HTML modelo contém script ou recurso externo")
+        if re.search(r"(?i)@[a-z0-9.-]+\.[a-z]{2,}|2026[-/]0[89][-/]\d{1,2}|"
+                     r"22\.738\.981|9\.915\.988|303\.388|2\.139", html_content):
+            errors.append("generate-report: HTML modelo contém dado histórico ou pessoal")
+        if "{{" in re.sub(r"\{\{[A-Z_]+\}\}", "", html_content):
+            errors.append("generate-report: placeholders HTML incompletos")
+        if 'id="inter-license"' not in html_text:
+            errors.append("generate-report: licença da fonte incorporada ausente")
+        page_number_color = re.search(
+            r"\.page-number\{[^}]*color:#([0-9a-fA-F]{6})", html_content)
+        if not page_number_color or contrast_ratio(
+            page_number_color.group(1), "ffffff") < 4.5:
+            errors.append("generate-report: número de página com baixo contraste")
     else:
-        css_text = css.read_text(encoding="utf-8")
-        for selector in (".chart", ".chart-segment", ".terms"):
-            if selector not in css_text:
-                errors.append(f"generate-report: tema sem suporte visual {selector}")
+        errors.append("generate-report: template ausente: report-template.html")
+    for filename, required_parts in (
+        ("analytics-template.xlsx", ("xl/workbook.xml", "xl/worksheets/sheet8.xml")),
+    ):
+        path = assets / filename
+        if not path.is_file() or not zipfile.is_zipfile(path):
+            errors.append(f"generate-report: template ausente ou ilegível: {filename}")
+            continue
+        with zipfile.ZipFile(path) as archive:
+            names = set(archive.namelist())
+            if not set(required_parts).issubset(names):
+                errors.append(f"generate-report: template incompleto: {filename}")
+            if any("externalLinks" in name or "comments" in name.lower() or
+                   "vbaProject" in name for name in names):
+                errors.append(f"generate-report: template contém vínculo ou comentário: {filename}")
+            sheets = [name for name in names if re.fullmatch(r"xl/worksheets/sheet\d+\.xml", name)]
+            if len(sheets) != 8 or len([name for name in names if name.startswith("xl/tables/table")]) != 6:
+                errors.append("generate-report: XLSX não contém oito abas e filtros")
+            if "xl/styles.xml" in names:
+                styles_root = ElementTree.fromstring(archive.read("xl/styles.xml"))
+                local_name = lambda node: node.tag.rsplit("}", 1)[-1]
+                style_group = lambda label: next(
+                    (node for node in styles_root if local_name(node) == label), None)
+                fonts_group = style_group("fonts")
+                fills_group = style_group("fills")
+                cell_styles_group = style_group("cellXfs")
+                fonts = list(fonts_group) if fonts_group is not None else []
+                fills = list(fills_group) if fills_group is not None else []
+                cell_styles = list(cell_styles_group) if cell_styles_group is not None else []
+                low_contrast: list[str] = []
+                for sheet_name in sheets:
+                    sheet_root = ElementTree.fromstring(archive.read(sheet_name))
+                    for cell in sheet_root.iter():
+                        if local_name(cell) != "c" or not any(
+                            local_name(node) == "t" and (node.text or "").strip()
+                            for node in cell.iter()
+                        ):
+                            continue
+                        style_id = int(cell.attrib.get("s", "0"))
+                        if style_id >= len(cell_styles):
+                            continue
+                        style = cell_styles[style_id]
+                        font_id = int(style.attrib.get("fontId", "0"))
+                        fill_id = int(style.attrib.get("fillId", "0"))
+                        if font_id >= len(fonts) or fill_id >= len(fills):
+                            continue
+                        font_color = next((node.attrib.get("rgb") for node in fonts[font_id]
+                                           if local_name(node) == "color"), None)
+                        pattern = next((node for node in fills[fill_id]
+                                        if local_name(node) == "patternFill"), None)
+                        fill_color = next((node.attrib.get("rgb") for node in pattern
+                                           if local_name(node) == "fgColor"), None) if (
+                                               pattern is not None and
+                                               pattern.attrib.get("patternType") == "solid") else None
+                        if font_color and fill_color and contrast_ratio(
+                            font_color, fill_color) < 4.5:
+                            low_contrast.append(f"{sheet_name}:{cell.attrib.get('r', '?')}")
+                if low_contrast:
+                    errors.append("generate-report: XLSX contém texto com baixo contraste: " +
+                                  ", ".join(low_contrast[:8]) +
+                                  (f" (+{len(low_contrast) - 8})" if len(low_contrast) > 8 else ""))
+            for sheet_name in sheets:
+                sheet_xml = archive.read(sheet_name).decode("utf-8")
+                if not re.search(r"<(?:[a-zA-Z0-9]+:)?pane\s", sheet_xml):
+                    errors.append(f"generate-report: cabeçalho não congelado: {sheet_name}")
+                if re.search(r"<(?:[a-zA-Z0-9]+:)?f(?:\s|>)", sheet_xml):
+                    errors.append(f"generate-report: fórmula no template: {sheet_name}")
+            for sheet_name in ("xl/worksheets/sheet5.xml", "xl/worksheets/sheet6.xml"):
+                if sheet_name in names:
+                    legend = archive.read(sheet_name).decode("utf-8")
+                    if not all(label in legend for label in
+                               ("Positivo", "Neutro", "Negativo", "Misto", "Indefinido")):
+                        errors.append(f"generate-report: legenda incompleta: {sheet_name}")
+            if "xl/worksheets/sheet3.xml" in names:
+                publications = archive.read("xl/worksheets/sheet3.xml").decode("utf-8")
+                for label in ("Link da publicação", "Data", "ID da publicação",
+                              "Comentários positivos", "Comentários neutros",
+                              "Comentários negativos", "Comentários mistos",
+                              "Comentários indefinidos", "Total de comentários",
+                              "Total de respostas"):
+                    if label not in publications:
+                        errors.append(f"generate-report: base por publicação sem {label}")
+            if "xl/worksheets/sheet1.xml" in names:
+                summary = archive.read("xl/worksheets/sheet1.xml").decode("utf-8")
+                if "SENTIMENTO POR FONTE" not in summary:
+                    errors.append("generate-report: resumo sem sentimento por fonte")
+            if "xl/worksheets/sheet6.xml" in names:
+                daily = archive.read("xl/worksheets/sheet6.xml").decode("utf-8")
+                for label in ("MENÇÕES", "COMENTÁRIOS", "RESPOSTAS"):
+                    if label not in daily:
+                        errors.append(f"generate-report: painel diário sem {label}")
+            chart_paths = sorted(name for name in names if re.fullmatch(
+                r"xl/drawings/charts/chart\d+\.xml", name))
+            if len(chart_paths) != 3:
+                errors.append("generate-report: XLSX sem três gráficos modelo")
+            else:
+                expected_colors = {"38761D", "F1C232", "CC0000", "8E7CC3", "999999"}
+                for chart_path in chart_paths:
+                    try:
+                        chart_root = ElementTree.fromstring(archive.read(chart_path))
+                    except ElementTree.ParseError:
+                        errors.append(f"generate-report: gráfico inválido: {chart_path}")
+                        continue
+                    bar_chart = next((node for node in chart_root.iter()
+                                      if node.tag.rsplit("}", 1)[-1] == "barChart"), None)
+                    if bar_chart is None:
+                        errors.append(f"generate-report: gráfico não é de colunas: {chart_path}")
+                        continue
+                    properties = {node.tag.rsplit("}", 1)[-1]: node.attrib.get("val")
+                                  for node in bar_chart if node.tag.rsplit("}", 1)[-1]
+                                  in {"barDir", "grouping", "overlap"}}
+                    series = [node for node in bar_chart
+                              if node.tag.rsplit("}", 1)[-1] == "ser"]
+                    series_titles = [next((value.text for value in item.iter()
+                                           if value.tag.rsplit("}", 1)[-1] == "v"), None)
+                                     for item in series]
+                    colors = {node.attrib.get("val") for node in bar_chart.iter()
+                              if node.tag.rsplit("}", 1)[-1] == "srgbClr"}
+                    if (properties != {"barDir": "col", "grouping": "percentStacked",
+                                       "overlap": "100"} or len(series) != 5 or
+                            colors != expected_colors or series_titles !=
+                            ["Positivo", "Neutro", "Negativo", "Misto", "Indefinido"]):
+                        errors.append(f"generate-report: gráfico fora do modelo: {chart_path}")
+            workbook_xml = archive.read("xl/workbook.xml").decode("utf-8")
+            for label in ("Resumo", "Cobertura", "Publicações", "Análises",
+                          "Agregações", "Séries diárias", "Evidências", "Metodologia"):
+                if label not in workbook_xml:
+                    errors.append(f"generate-report: aba ausente no template: {label}")
+            for name in names:
+                if not name.endswith(".xml") or name.startswith("_rels/"):
+                    continue
+                try:
+                    root = ElementTree.fromstring(archive.read(name))
+                except ElementTree.ParseError:
+                    errors.append(f"generate-report: XML inválido em {filename}: {name}")
+                    continue
+                text = " ".join(node.text or "" for node in root.iter()
+                                if node.tag.rsplit("}", 1)[-1] in {"t", "v"})
+                if re.search(r"(?i)@[a-z0-9.-]+\.[a-z]{2,}|2026[-/]0[89][-/]\d{1,2}|https?://", text):
+                    errors.append(f"generate-report: conteúdo histórico ou pessoal em {filename}: {name}")
 
     feedback_contract = SKILLS_ROOT / "skill-feedback" / "references" / "feedback-contract.md"
     legacy_issue_contract = SKILLS_ROOT / "skill-feedback" / "references" / "issue-contract.md"

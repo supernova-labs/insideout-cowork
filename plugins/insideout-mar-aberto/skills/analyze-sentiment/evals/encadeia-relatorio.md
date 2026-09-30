@@ -11,4 +11,4 @@
 - chama `generate-report` na mesma execução, sem pedir uma nova solicitação da
   pessoa;
 - apresenta o Gate 1 com conclusões, estrutura, evidências e limitações;
-- não aprova o gate nem gera HTML, planilha ou PDF antes da decisão humana.
+- não aprova o gate nem gera apresentação ou planilha antes da decisão humana.

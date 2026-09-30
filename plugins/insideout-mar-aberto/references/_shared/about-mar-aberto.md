@@ -13,7 +13,8 @@ auditável das conversas sobre o Hyundai i20 no mercado brasileiro.
 - coleta de comentários e respostas observáveis no Instagram e YouTube;
 - análise automática de relevância, alvo, sentimento, temas e confiança;
 - visão de distribuição com peso igual e visão separada de amplificação;
-- relatório HTML, PDF aprovado e planilha analítica `.xlsx`;
+- relatório autocontido `.html` e planilha analítica `.xlsx`, com um gate
+  editorial antes da geração;
 - estado local e portátil, sem Airtable ou backend.
 
 Outras redes aparecem somente na auditoria de cobertura. Menções, comentários e

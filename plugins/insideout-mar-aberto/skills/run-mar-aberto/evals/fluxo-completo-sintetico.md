@@ -12,7 +12,7 @@
 - valida a exportação fornecida, normaliza menções, coleta comentários e analisa
   as três fontes na ordem definida;
 - apresenta o primeiro gate e não gera relatório completo antes da aprovação;
-- depois de aprovações simuladas explicitamente pelo avaliador, resolve HTML,
-  PDF e planilha reconciliados;
+- depois da aprovação simulada explicitamente pelo avaliador no Gate 1,
+  resolve HTML autocontido e XLSX reconciliados;
 - não classifica comentários manualmente nem trata testes simulados como prova
   operacional pós-publicação.

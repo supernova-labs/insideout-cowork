@@ -34,7 +34,7 @@ Versão atual: 0.5.0.
 
 ## InsideOut Mar Aberto
 
-Versão candidata: 0.2.2.
+Versão candidata: 0.4.0.
 
 | Skill | Resultado |
 |---|---|
@@ -42,7 +42,7 @@ Versão candidata: 0.2.2.
 | `export-stilingue` | Valida a exportação oficial fornecida pelo operador e orienta sua obtenção. |
 | `collect-comments` | Coleta comentários e respostas observáveis do Instagram e YouTube. |
 | `analyze-sentiment` | Analisa menções, comentários e respostas; cobertura limitada exige confirmação explícita. |
-| `generate-report` | Conduz os gates editoriais e gera HTML, PDF e planilha analítica. |
+| `generate-report` | Aprova a direção editorial no Gate 1 e gera relatório HTML autocontido e planilha analítica a partir de templates limpos. |
 | `skill-feedback` | Registra fricções em Markdown local e oferece encaminhamento por e-mail. |
 
 O piloto usa o filtro do Hyundai i20 e arquivos locais por execução. A pessoa
@@ -97,5 +97,10 @@ referência publicada, a equipe da InsideOut deve usar o
 [`protocolo de homologação do piloto`](docs/mar-aberto-pilot-test-protocol.md),
 preenchendo resultados reais sem incluir dados do cliente.
 
-Os gates ativos da versão 0.2.2 estão em
+Para novas execuções, a equipe revisa o HTML e exporta o PDF manualmente pelo
+navegador. O arquivo HTML funciona sem rede e mantém o conteúdo selecionável.
+O template incorpora a fonte Inter; sua licença está em
+`plugins/insideout-mar-aberto/skills/generate-report/assets/INTER-LICENSE.txt`.
+Execuções anteriores permanecem no contrato original, sem migração. Os gates
+históricos da versão 0.2.2 estão em
 `RELEASE_GATES_MAR_ABERTO_0.2.2.md`.

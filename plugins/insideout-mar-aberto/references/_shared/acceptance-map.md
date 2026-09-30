@@ -25,10 +25,10 @@ materializado. O enunciado canônico permanece em `ARCHITECTURE.md`.
 | Sentimento contextual e multidimensional | `analysis-rubric.md` | M4-T1–T4 |
 | Consistência pela rubrica | `analysis-rubric.md` | M4-T1–T4 |
 | Análise automática e revisão editorial | `analyze-sentiment`, `generate-report` | M4-T1–T9, M5-T1 |
-| Dois gates editoriais | `report-workbook-contract.md` | M5-T1, M5-T10 |
-| HTML canônico e PDF derivado | `report-workbook-contract.md` | M5-T4, M5-T6 |
+| Gate 1 editorial antes da geração | `report-workbook-contract.md` | Evals de `generate-report` |
+| HTML autocontido e XLSX reconciliados | `report-workbook-contract.md` | Evals de `generate-report` |
 | Planilha analítica final | `report-workbook-contract.md` | M5-T7–T9 |
-| Identidade padrão e opcional | `insideout-report.css` | M5-T4, M5-T5 |
+| Templates limpos e versionados | `generate-report/assets/` | Evals de `generate-report` |
 | Núcleo fixo, recortes e gráficos | `report-workbook-contract.md` | R02-G4-T1–T3 |
 | Distribuição separada de amplificação | `analysis-rubric.md` | M4-T6 |
 | Lacunas explícitas em relatório limitado | `collection-contract.md`, `generate-report` | R022-G1-T2, R022-G2-T1 |

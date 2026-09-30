@@ -10,6 +10,6 @@
 - registra a decisão e as lacunas em `review/coverage-decision.json` antes de
   promover a execução para análise;
 - processa somente os registros observados e preserva denominadores separados;
-- conduz os dois gates editoriais normalmente;
-- identifica HTML, planilha e PDF como relatório de cobertura limitada;
+- conduz o Gate 1 editorial antes de gerar os dois arquivos;
+- identifica apresentação e planilha como produtos de cobertura limitada;
 - não afirma que os resultados representam os comentários não acessados.

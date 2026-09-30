@@ -65,8 +65,8 @@ Avance nesta ordem:
    prosseguir com o corpus observado, com a limitação registrada em todos os
    derivados. Depois do checkpoint de análise validado, essa skill encadeia
    `generate-report` sem novo pedido.
-4. `generate-report` abre o primeiro gate editorial e, após as aprovações
-   exigidas, produz HTML, planilha e PDF.
+4. `generate-report` abre o Gate 1 editorial e, após aprovação registrada,
+   produz relatório HTML autocontido e planilha XLSX a partir dos templates.
 
 Cada etapa consome somente saídas validadas da anterior. Atualize o manifesto
 depois que a etapa responsável gravar e verificar seus artefatos. Se as entradas
@@ -91,15 +91,19 @@ e hashes não mudaram, reutilize o checkpoint em vez de repetir a etapa.
 
 Só marque a execução como concluída quando existirem e estiverem reconciliados:
 
-- `deliverables/report.html` aprovado;
-- `deliverables/report.pdf` derivado do HTML aprovado;
-- `deliverables/analytics.xlsx` com todo o conjunto analítico;
+- `deliverables/report.html` legível, renderizado e reconciliado;
+- `deliverables/analytics.xlsx` legível, com oito abas e conjunto analítico
+  reconciliado;
+- hashes dos dois entregáveis e versões e hashes dos templates no checkpoint;
 - cobertura e limitações da execução;
 - ausência dos corpora temporários completos após análise bem-sucedida.
 
-Apresente os caminhos dos três produtos, período, filtro, canais analisados e
+Apresente os caminhos dos dois produtos, período, filtro, canais analisados e
 lacunas. Não alegue sucesso para arquivo ausente, gate pendente ou teste não
 executado.
+
+Execuções antigas com contratos `2.0.0` e `3.0.0` são preservadas sem migração.
+O fluxo de HTML e XLSX usa contrato `4.0.0` somente em novas execuções.
 
 ## Limites
 
