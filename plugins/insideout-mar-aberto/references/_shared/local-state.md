@@ -28,8 +28,6 @@ qualquer segmento `..`; nenhum artefato pode escapar da pasta da execução.
 ├── templates/
 │   ├── report-template.html
 │   └── analytics-template.xlsx
-├── feedback/
-│   └── <timestamp>-<slug>.md
 └── deliverables/
     ├── report.html
     └── analytics.xlsx
@@ -41,10 +39,11 @@ depois que a análise e o pool de evidências forem persistidos com sucesso. Se 
 execução for interrompida antes disso, preserve-os até retomada ou exclusão
 manual confirmada.
 
-Feedback não depende de uma execução. Quando ela não existir, use uma pasta
-escolhida pelo operador e crie
-`insideout-mar-aberto-feedback/<timestamp>-<slug>.md`. O arquivo continua local,
-portátil e fora do plugin.
+As execuções antigas podem conter `feedback/<timestamp>-<slug>.md` ou uma pasta
+`insideout-mar-aberto-feedback/` escolhida pelo operador. Preserve esses
+arquivos locais sem migração automática. Novas fricções dos plugins são
+registradas pela skill `registrar-friccao` do InsideOut Governança, fora do
+estado da execução.
 
 ## Checkpoints
 

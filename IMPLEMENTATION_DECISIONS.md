@@ -342,3 +342,35 @@ lacuna na interpretação.
 publicação. A análise e o relatório aceitam `limited_approved` apenas após a
 decisão em `review/coverage-decision.json`; títulos, denominadores, narrativa e
 planilha tornam a fronteira explícita.
+
+## D027 — Fricções têm um registro canônico e uma caixa de governança
+
+**Decisão:** `insideout-governance:registrar-friccao` recebe novos bugs e
+melhorias de todos os plugins InsideOut na base **InsideOut Governança**,
+tabela `Fricções`. A skill sanitiza, pesquisa recorrências, apresenta a prévia
+e registra somente após confirmação. A falta de acesso produz um rascunho
+copiável marcado como não registrado.
+
+**Racional:** as duas skills `skill-feedback` tinham o mesmo nome e destinos
+distintos. Uma skill única de registro e uma caixa própria tornam a descoberta e a triagem
+coerentes entre produtos.
+
+**Impacto:** D015, D022 e D023 descrevem fluxos anteriores. A tabela antiga do
+Social e os arquivos locais do Mar Aberto permanecem como histórico, sem
+migração automática. O plugin de governança precisa ser instalado à parte e a
+equipe precisa ter acesso de edição à nova base.
+
+## D028 — Triagem de fricções é leitura com prioridade explicável
+
+**Decisão:** `insideout-governance:governanca` lê a caixa de governança,
+classifica impacto e recorrência por uma matriz explícita e entrega uma ficha
+padronizada com evidência, hipótese, fix sugerido e critério de aceite para cada
+caso. Impacto crítico recebe P1 mesmo na primeira ocorrência. A skill não
+altera registros nem aplica fixes.
+
+**Racional:** o registro canônico só cria a fila; a equipe precisa compará-la
+com critérios reproduzíveis sem confundir proposta com decisão ou execução.
+
+**Impacto:** casos antigos dos produtos continuam fora da leitura padrão até
+serem colocados em escopo. A base nova ainda precisa de casos reais para
+avaliar a qualidade das recomendações; evals usam cenários sintéticos.

@@ -1,7 +1,7 @@
 {
   "name": "insideout-social",
-  "version": "0.5.0",
-  "description": "Skills da InsideOut para briefing, padrões de marca, planejamento multirrede, produção e feedback de social media.",
+  "version": "0.6.0",
+  "description": "Skills da InsideOut para briefing, padrões de marca, planejamento multirrede e produção de social media.",
   "author": {
     "name": "InsideOut"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "InsideOut Social",
     "shortDescription": "Planeje e revise social media multirrede.",
-    "longDescription": "Transforma briefings em análise, padrões históricos, trends sociais, grid editorial completo, copy, snapshots privados, revisões de cliente com feedback exportável, imagens e vídeos, com Airtable como estado operacional e caixa de entrada de feedback.",
+    "longDescription": "Transforma briefings em análise, padrões históricos, trends sociais, grid editorial completo, copy, snapshots privados, revisões de cliente com feedback exportável, imagens e vídeos, com Airtable como estado operacional.",
     "developerName": "InsideOut",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

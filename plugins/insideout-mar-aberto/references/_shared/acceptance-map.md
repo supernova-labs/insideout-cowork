@@ -6,7 +6,7 @@ materializado. O enunciado canônico permanece em `ARCHITECTURE.md`.
 | Princípio | Contrato ou skill | Provas principais |
 |---|---|---|
 | Jornada principal com etapas retomáveis | `local-state.md`, `run-mar-aberto` | M6-T1–T8 |
-| Feedback local sem GitHub | `skill-feedback`, `feedback-contract.md` | R02-G5-T1–T6 |
+| Fricções dos plugins | `insideout-governance:registrar-friccao` | Evals da skill canônica; R02-G5-T1–T6 documenta o fluxo local legado |
 | Diagnóstico legível reconcilia contadores e lacunas | `collection-contract.md`, `local-state.md` | Evals de `collect-comments` |
 | Lacuna só exige decisão para conclusão materialmente afetada | `analysis-rubric.md`, `generate-report` | Evals de `generate-report` |
 | Relevância precede volume | `analysis-rubric.md` | M4-T3 |

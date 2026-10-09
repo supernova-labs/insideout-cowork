@@ -25,7 +25,6 @@ visível da opção. Relações são escritas como listas de IDs de registros.
 | `Diretrizes de grid` | método compartilhado, racional por marca e padrões históricos aprovados | `Escopo + Marca + Tipo + Versão`; deve haver no máximo uma versão ativa por `Escopo + Marca + Tipo` |
 | `Posts` | grid editorial e fluxo de aprovação | com rede: `Marca + Canal da marca + Data + Título`; legado: `Marca + Data + Título` |
 | `Peças` | mídia e trilha de geração | `Post + Tipo + Nome`; sem post, `Marca + Tipo + Nome` |
-| `Feedback do plugin` | caixa de entrada de bugs e melhorias enviados pela skill | `Título + Skill + Tipo + Status` |
 
 Quando uma chave natural encontrar mais de um registro, não escolha
 silenciosamente: apresente a duplicidade e pare a escrita.
@@ -143,24 +142,12 @@ multirrede, as conclusões são segmentadas por rede. `Fontes` vincula registros
 de `Referências`; a proveniência dos posts internos fica agregada em `Conteúdo`,
 sem criar referências artificiais.
 
-### Feedback do plugin
+### Feedback histórico
 
-- `Título` — resumo observável, sem nome de cliente ou dado confidencial
-- `Tipo` — `Bug` ou `Melhoria`
-- `Skill` — componente afetado
-- `Contexto`, `Esperado`, `Observado`, `Impacto` — relato sanitizado
-- `Status` — criar como `Novo`; manutenção posterior pode usar `Em triagem`,
-  `Encaminhado` ou `Resolvido`
-- `Link GitHub` — opcional, preenchido apenas se a equipe encaminhar o item
-- `Autor` — opcional, somente quando informado ou disponível com segurança
-
-O feedback é criado pela skill, não por formulário. A tabela pode ficar oculta
-na interface do Airtable sem restringir a edição das pessoas que usam o plugin.
-Antes de criar, pesquise itens abertos da mesma skill por ação e sintoma; diante
-de possível duplicidade, ofereça complementar o contexto, criar um item distinto
-ou cancelar. Mostre a prévia sanitizada e exija confirmação explícita. Se o
-Airtable estiver indisponível, entregue um rascunho copiável e não alegue
-registro concluído.
+A tabela `Feedback do plugin` da base InsideOut Social guarda relatos antigos.
+Não crie novos registros nela pelo fluxo do Social. Novas fricções pertencem à
+skill `registrar-friccao` do plugin InsideOut Governança, na base própria.
+Preserve os registros históricos sem migração ou limpeza automática.
 
 ### Posts
 

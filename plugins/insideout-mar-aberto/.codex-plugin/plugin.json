@@ -1,6 +1,6 @@
 {
   "name": "insideout-mar-aberto",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Skills da InsideOut para validar exportações da Stilingue, analisar o corpus observado e produzir relatórios de mar aberto.",
   "author": {
     "name": "InsideOut"
@@ -15,8 +15,7 @@
     "capabilities": ["Read", "Write", "Interactive"],
     "defaultPrompt": [
       "Execute uma análise de mar aberto do i20.",
-      "Retome esta análise de mar aberto.",
-      "Registre um problema do Mar Aberto."
+      "Retome esta análise de mar aberto."
     ]
   }
 }

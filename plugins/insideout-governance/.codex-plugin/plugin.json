@@ -1,0 +1,21 @@
+{
+  "name": "insideout-governance",
+  "version": "0.2.0",
+  "description": "Registro e priorização das fricções dos plugins InsideOut em uma caixa compartilhada.",
+  "author": {
+    "name": "InsideOut"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "InsideOut Governança",
+    "shortDescription": "Registre e priorize fricções dos plugins InsideOut.",
+    "longDescription": "Registra relatos sanitizados na base própria de governança após confirmação; lê os casos existentes, prioriza por impacto e recorrência e sugere fixes verificáveis.",
+    "developerName": "InsideOut",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Registre uma fricção de um plugin InsideOut para os mantenedores.",
+      "Priorize as fricções existentes por impacto e recorrência e sugira fixes verificáveis."
+    ]
+  }
+}

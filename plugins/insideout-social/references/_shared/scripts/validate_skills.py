@@ -18,7 +18,6 @@ SKILLS = {
     "generate-image": ROOT / "generate-image",
     "generate-video": ROOT / "generate-video",
     "review-grid-feedback": ROOT / "review-grid-feedback",
-    "skill-feedback": ROOT / "skill-feedback",
 }
 REQUIRED_SHARED = (
     SHARED_ROOT / "voz-usuario.md",
@@ -34,7 +33,6 @@ REQUIRED_FEATURE_FILES = (
     ROOT / "generate-grid" / "references" / "html-snapshot.md",
     ROOT / "generate-grid" / "references" / "client-presentation.md",
     ROOT / "generate-grid" / "references" / "site-access.md",
-    ROOT / "skill-feedback" / "references" / "feedback-contract.md",
 )
 FEEDBACK_ACCEPTANCE = {
     SHARED_ROOT / "client-feedback-package.md": (

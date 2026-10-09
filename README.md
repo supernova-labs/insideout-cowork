@@ -1,7 +1,7 @@
 # Plugins InsideOut
 
-Catálogo oficial da InsideOut para produção de social media e análise de mar
-aberto no Codex.
+Catálogo oficial da InsideOut para produção de social media, análise de mar
+aberto e governança dos plugins no Codex.
 
 ## Instalação para o time
 
@@ -12,14 +12,16 @@ o plugin:
 codex plugin marketplace add supernova-labs/insideout-cowork --ref main
 codex plugin add insideout-social@insideout
 codex plugin add insideout-mar-aberto@insideout
+codex plugin add insideout-governance@insideout
 ```
 
-Instale somente o produto necessário. Depois, abra uma nova tarefa no Codex e
-peça o trabalho normalmente.
+Instale somente o produto necessário. Para registrar ou priorizar fricções de
+qualquer produto, instale também `insideout-governance`. Depois, abra uma nova
+tarefa no Codex e peça o trabalho normalmente.
 
 ## InsideOut Social
 
-Versão atual: 0.5.0.
+Versão atual: 0.6.0.
 
 | Skill | Resultado |
 |---|---|
@@ -30,11 +32,10 @@ Versão atual: 0.5.0.
 | `generate-image` | Gera e registra mockups com trilha de auditoria. |
 | `generate-video` | Produz e registra vídeos curtos a partir de direção visual aprovada. |
 | `review-grid-feedback` | Valida o JSON de feedback exportado pelo cliente, consolida retornos por post e encaminha ajustes aprovados à skill responsável. |
-| `skill-feedback` | Prepara e, após confirmação, registra bugs ou melhorias na caixa de entrada do Airtable. |
 
 ## InsideOut Mar Aberto
 
-Versão candidata: 0.5.0.
+Versão candidata: 0.6.0.
 
 | Skill | Resultado |
 |---|---|
@@ -43,13 +44,30 @@ Versão candidata: 0.5.0.
 | `collect-comments` | Coleta comentários e respostas observáveis e entrega diagnóstico de cobertura legível. |
 | `analyze-sentiment` | Analisa menções, comentários e respostas observados, mesmo quando há lacunas registradas. |
 | `generate-report` | Revisa conclusões afetadas no Gate 1 e gera HTML e planilha a partir de templates limpos. |
-| `skill-feedback` | Registra fricções em Markdown local e oferece encaminhamento por e-mail. |
 
 O piloto usa o filtro do Hyundai i20 e arquivos locais por execução. A pessoa
 fornece por padrão a exportação oficial baixada da Stilingue e faz login
 diretamente no Instagram e YouTube quando solicitado; o plugin não recebe nem
 armazena credenciais. Menções de Instagram, YouTube, X/Twitter, Facebook e
 portais são analisadas separadamente dos comentários.
+O template do relatório mantém sua versão de conteúdo `0.5.0`; seu hash é
+validado separadamente da versão do plugin.
+
+## InsideOut Governança
+
+Versão atual: 0.2.0.
+
+| Skill | Resultado |
+|---|---|
+| `registrar-friccao` | Prepara um relato sanitizado, pesquisa recorrências e, após confirmação, registra bugs ou melhorias na base **InsideOut Governança**. |
+| `governanca` | Lê os casos da base, prioriza por impacto e recorrência e propõe um fix verificável para cada fricção em formato padronizado, sem alterar registros. |
+
+A tabela `Fricções` é a caixa compartilhada para novos relatos dos plugins,
+inclusive da própria governança. A pessoa precisa ter acesso de edição à base. Se a conexão estiver
+indisponível, a skill entrega um rascunho copiável marcado como não registrado.
+Relatos antigos no Social e arquivos locais do Mar Aberto permanecem onde estão;
+nenhuma migração de dados é automática. O feedback de cliente sobre posts
+continua no fluxo `review-grid-feedback` do Social.
 
 ## Pré-requisitos
 
@@ -59,13 +77,12 @@ portais são analisadas separadamente dos comentários.
 - Acesso ao recurso criativo indicado pela skill quando houver geração de
   imagem ou vídeo. Esses fluxos podem envolver custo e seguem as aprovações
   previstas no processo.
-- Para registrar feedback do Social, acesso de edição à base pelo Airtable. A
-  tabela pode permanecer oculta na interface; a skill não usa formulário nem
-  exige conta no GitHub.
+- Para fricções dos plugins, acesso à base **InsideOut Governança** pelo
+  Airtable. A triagem requer leitura; o registro requer edição. As skills não
+  usam formulário nem exigem GitHub.
 - Para o Mar Aberto, acesso à exportação oficial da Stilingue e acesso
-  individual a Instagram e YouTube pelo navegador do Codex. Feedback não exige
-  GitHub; Gmail é apenas um encaminhamento opcional. Os testes reais são feitos
-  pela equipe da InsideOut após a publicação.
+  individual a Instagram e YouTube pelo navegador do Codex. Os testes reais
+  são feitos pela equipe da InsideOut após a publicação.
 
 As skills trabalham em linguagem de marca, produto, post e mês. Elas não
 substituem aprovação humana nem completam informações ausentes por hipótese.

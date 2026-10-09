@@ -6,7 +6,7 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-09-30T00:00:00Z",
+  "lastUpdated": "2026-10-09T00:00:00Z",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -57,14 +57,6 @@
       "description": "Gera e registra vídeos curtos de posts."
     },
     {
-      "id": "skill:insideout-social:skill-feedback",
-      "type": "skill",
-      "name": "skill-feedback",
-      "plugin": "insideout-social",
-      "canonicalPath": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
-      "description": "Registra bugs e melhorias na caixa de entrada do Airtable."
-    },
-    {
       "id": "skill:insideout-social:review-grid-feedback",
       "type": "skill",
       "name": "review-grid-feedback",
@@ -113,12 +105,20 @@
       "description": "Produz HTML e planilha, com lacunas explicadas onde afetam conclusões."
     },
     {
-      "id": "skill:insideout-mar-aberto:skill-feedback",
+      "id": "skill:insideout-governance:registrar-friccao",
       "type": "skill",
-      "name": "skill-feedback",
-      "plugin": "insideout-mar-aberto",
-      "canonicalPath": "plugins/insideout-mar-aberto/skills/skill-feedback/SKILL.md",
-      "description": "Registra feedback sanitizado em Markdown local e oferece e-mail."
+      "name": "registrar-friccao",
+      "plugin": "insideout-governance",
+      "canonicalPath": "plugins/insideout-governance/skills/registrar-friccao/SKILL.md",
+      "description": "Registra fricções sanitizadas dos plugins InsideOut na caixa compartilhada de governança."
+    },
+    {
+      "id": "skill:insideout-governance:governanca",
+      "type": "skill",
+      "name": "governanca",
+      "plugin": "insideout-governance",
+      "canonicalPath": "plugins/insideout-governance/skills/governanca/SKILL.md",
+      "description": "Prioriza fricções por impacto e recorrência e sugere fixes verificáveis em formato padronizado."
     }
   ],
   "adapters": [
@@ -165,13 +165,6 @@
       "sourcePath": "plugins/insideout-social/skills/generate-video"
     },
     {
-      "componentId": "skill:insideout-social:skill-feedback",
-      "harness": "codex",
-      "status": "shared",
-      "path": "plugins/insideout-social/skills/skill-feedback/SKILL.md",
-      "sourcePath": "plugins/insideout-social/skills/skill-feedback"
-    },
-    {
       "componentId": "skill:insideout-social:review-grid-feedback",
       "harness": "codex",
       "status": "shared",
@@ -214,11 +207,18 @@
       "sourcePath": "plugins/insideout-mar-aberto/skills/generate-report"
     },
     {
-      "componentId": "skill:insideout-mar-aberto:skill-feedback",
+      "componentId": "skill:insideout-governance:registrar-friccao",
       "harness": "codex",
       "status": "shared",
-      "path": "plugins/insideout-mar-aberto/skills/skill-feedback/SKILL.md",
-      "sourcePath": "plugins/insideout-mar-aberto/skills/skill-feedback"
+      "path": "plugins/insideout-governance/skills/registrar-friccao/SKILL.md",
+      "sourcePath": "plugins/insideout-governance/skills/registrar-friccao"
+    },
+    {
+      "componentId": "skill:insideout-governance:governanca",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-governance/skills/governanca/SKILL.md",
+      "sourcePath": "plugins/insideout-governance/skills/governanca"
     }
   ],
   "gaps": [],
@@ -237,6 +237,12 @@
           "name": "insideout-mar-aberto",
           "sourceType": "local",
           "path": "plugins/insideout-mar-aberto",
+          "managed": true
+        },
+        {
+          "name": "insideout-governance",
+          "sourceType": "local",
+          "path": "plugins/insideout-governance",
           "managed": true
         }
       ]

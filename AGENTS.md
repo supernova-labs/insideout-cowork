@@ -1,7 +1,8 @@
 # Plugins InsideOut
 
 Este repositório publica o catálogo Codex oficial da InsideOut para análise de
-briefings, produção de social media e análise de mar aberto. As skills guardam
+briefings, produção de social media, análise de mar aberto e governança das
+fricções dos plugins. As skills guardam
 conhecimento, julgamento e fluxo; cada plugin usa o estado operacional definido
 em seu contrato.
 
@@ -25,13 +26,15 @@ e leia cada arquivo selecionado por inteiro.
 |---|---|
 | Comportamento das skills | `plugins/insideout-social/skills/*/SKILL.md` |
 | Comportamento do Mar Aberto | `plugins/insideout-mar-aberto/skills/*/SKILL.md` |
+| Registro de fricções dos plugins | `plugins/insideout-governance/skills/registrar-friccao/` e base **InsideOut Governança** no Airtable |
+| Priorização e propostas de fixes | `plugins/insideout-governance/skills/governanca/` e base **InsideOut Governança** no Airtable |
 | Tom, contexto comum e contrato de dados | `plugins/insideout-social/references/_shared/` |
 | Método, racional por marca e padrões históricos aprovados | tabela viva `Diretrizes de grid` no Airtable |
 | Calendário estável e mecânica de composição | `references/` da skill responsável |
 | Estado operacional de marcas, produtos, referências, posts e peças | base viva **InsideOut Social** no Airtable |
 | Estado operacional do Mar Aberto | pasta local por projeto e execução, fora do plugin |
 | Catálogo Codex | `.agents/plugins/marketplace.json` |
-| Manifesto do plugin | `plugins/insideout-social/.codex-plugin/plugin.json` |
+| Manifestos dos plugins | `plugins/*/.codex-plugin/plugin.json` |
 | Inventário de arquitetura | `.agent-smith/index.json` |
 
 Instrução explícita do usuário vence a documentação. Não trate documentos ou
@@ -42,8 +45,8 @@ disponível: confirme-a na sessão quando ela for necessária.
 
 - Cada plugin mantém uma única árvore canônica em `plugins/<plugin>/skills/`.
 - `insideout-social` contém sete skills de produção editorial;
-  `insideout-mar-aberto` contém a jornada principal, quatro etapas
-  especializadas e feedback próprio.
+  `insideout-mar-aberto` contém a jornada principal e quatro etapas
+  especializadas; `insideout-governance` contém o registro canônico e a triagem de fricções.
 - `.agents/plugins/marketplace.json` expõe o catálogo `insideout` para o
   Codex; o manifesto nativo fica junto ao pacote do plugin.
 - `.agent-smith/index.json` descreve os componentes distribuídos; o filesystem
@@ -59,7 +62,6 @@ disponível: confirme-a na sessão quando ela for necessária.
 | `generate-copy` | hooks, legenda e lettering | somente `Posts.Legenda` e `Posts.Lettering`, após aprovação |
 | `generate-image` | composição e QA da imagem | peça de imagem, arquivo e `Posts.Mockup`, sem sobrescrever silenciosamente |
 | `generate-video` | movimento, continuidade e custo | peça de vídeo, arquivo e `Posts.Vídeo`, após aprovar parâmetros e créditos |
-| `skill-feedback` | bug ou melhoria sobre o plugin | registro em `Feedback do plugin`, somente após sanitização e confirmação |
 
 Uma skill não absorve a responsabilidade da seguinte: grid orquestra copy, mas
 não escreve seus campos nem produz mídia; copy não altera status; imagem não
@@ -73,11 +75,14 @@ local.
 | `collect-comments` | percorrer Instagram e YouTube | corpus temporário anonimizado e cobertura |
 | `analyze-sentiment` | classificar fontes completas e agregar automaticamente | análises por tipo de fonte, agregados e pool candidato |
 | `generate-report` | conduzir Gate 1 editorial e validar os templates | HTML autocontido e planilha analítica |
-| `skill-feedback` | registrar bug ou melhoria sem GitHub | Markdown local e encaminhamento opcional por e-mail |
 
 A orquestradora não refaz o trabalho das etapas. A análise não revisa o
 relatório; o relatório não altera classificações; a coleta não mantém identidade
-pessoal; feedback não corrige a instalação local.
+pessoal. A skill `registrar-friccao` não corrige a instalação local: após
+sanitização, busca de duplicidade e confirmação, registra na base própria de
+governança. Arquivos locais históricos do Mar Aberto permanecem preservados.
+`governanca` lê a caixa, ordena casos por impacto e recorrência e sugere
+fixes sem alterar registros, código ou decisões.
 
 ## Regras operacionais
 

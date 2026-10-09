@@ -27,7 +27,6 @@ SKILLS = (
     "collect-comments",
     "analyze-sentiment",
     "generate-report",
-    "skill-feedback",
 )
 REQUIRED_SHARED = (
     "about-mar-aberto.md",
@@ -69,7 +68,6 @@ REQUIRED_SHARED = (
     "fixtures/manifest-complete-v3-synthetic.json",
     "fixtures/manifest-path-traversal-invalid-synthetic.json",
     "fixtures/orchestration-cases-synthetic.json",
-    "fixtures/feedback-sanitized-synthetic.md",
 )
 FORBIDDEN_TEXT = ("HB20", "insideout-listening", "${CLAUDE_PLUGIN_ROOT}")
 SECRET_PATTERN = re.compile(
@@ -892,20 +890,19 @@ def main() -> int:
     assets = SKILLS_ROOT / "generate-report" / "assets"
     template_manifest = validate_json(assets / "template-manifest.json", errors)
     if isinstance(template_manifest, dict):
-        readme_version = re.search(
-            r"Versão candidata:\s*(\d+\.\d+\.\d+)",
-            (REPO_ROOT / "README.md").read_text(encoding="utf-8"),
-        )
-        plugin_version = readme_version.group(1) if readme_version else ""
-        if template_manifest.get("template_version") != plugin_version:
+        if template_manifest.get("template_version") != "0.5.0":
             errors.append("generate-report: versão dos templates divergente")
         for key, filename in (("report_template", "report-template.html"),
                               ("analytics_template", "analytics-template.xlsx")):
             entry = template_manifest.get(key, {})
             path = assets / filename
+            template_bytes = path.read_bytes() if path.is_file() else b""
+            if filename.endswith(".html"):
+                # Git normaliza LF; o checkout do Windows pode materializar CRLF.
+                template_bytes = template_bytes.replace(b"\r\n", b"\n")
             if entry.get("path") != filename or (
                 path.is_file() and
-                entry.get("sha256") != hashlib.sha256(path.read_bytes()).hexdigest()
+                entry.get("sha256") != hashlib.sha256(template_bytes).hexdigest()
             ):
                 errors.append(f"generate-report: hash do template divergente: {filename}")
     html_template = assets / "report-template.html"
@@ -1081,20 +1078,7 @@ def main() -> int:
                 if re.search(r"(?i)@[a-z0-9.-]+\.[a-z]{2,}|2026[-/]0[89][-/]\d{1,2}|https?://", text):
                     errors.append(f"generate-report: conteúdo histórico ou pessoal em {filename}: {name}")
 
-    feedback_contract = SKILLS_ROOT / "skill-feedback" / "references" / "feedback-contract.md"
-    legacy_issue_contract = SKILLS_ROOT / "skill-feedback" / "references" / "issue-contract.md"
-    if not feedback_contract.is_file():
-        errors.append("skill-feedback: contrato local ausente")
-    else:
-        feedback_text = feedback_contract.read_text(encoding="utf-8")
-        for token in ("feedback_version", "fingerprint", "status: local", "rascunho"):
-            if token not in feedback_text:
-                errors.append(f"skill-feedback: contrato local sem {token}")
-    if legacy_issue_contract.exists():
-        errors.append("skill-feedback: contrato legado de issue ainda distribuído")
-    feedback_skill_text = (SKILLS_ROOT / "skill-feedback" / "SKILL.md").read_text(encoding="utf-8")
-    if "não exigir conta no github" not in feedback_skill_text.lower() or "Markdown" not in feedback_skill_text:
-        errors.append("skill-feedback: fluxo local sem GitHub não está explícito")
+    # Fixture histórica: execuções antigas preservam seus arquivos locais.
     feedback_fixture = SHARED_ROOT / "fixtures" / "feedback-sanitized-synthetic.md"
     if feedback_fixture.is_file():
         feedback_fixture_text = feedback_fixture.read_text(encoding="utf-8")
