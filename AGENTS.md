@@ -26,8 +26,8 @@ e leia cada arquivo selecionado por inteiro.
 |---|---|
 | Comportamento das skills | `plugins/insideout-social/skills/*/SKILL.md` |
 | Comportamento do Mar Aberto | `plugins/insideout-mar-aberto/skills/*/SKILL.md` |
-| Registro de fricções dos plugins | `plugins/insideout-governance/skills/registrar-friccao/` e base **InsideOut Governança** no Airtable |
-| Priorização e propostas de fixes | `plugins/insideout-governance/skills/governanca/` e base **InsideOut Governança** no Airtable |
+| Registro de fricções dos plugins | `plugins/insideout-governance/skills/registrar-friccao/` e aba `Fricções e fixes` do **Acervo de Governança** |
+| Priorização e propostas de fixes | `plugins/insideout-governance/skills/governanca/` e aba `Fricções e fixes` do **Acervo de Governança** |
 | Tom, contexto comum e contrato de dados | `plugins/insideout-social/references/_shared/` |
 | Método, racional por marca e padrões históricos aprovados | tabela viva `Diretrizes de grid` no Airtable |
 | Calendário estável e mecânica de composição | `references/` da skill responsável |
@@ -79,8 +79,9 @@ local.
 A orquestradora não refaz o trabalho das etapas. A análise não revisa o
 relatório; o relatório não altera classificações; a coleta não mantém identidade
 pessoal. A skill `registrar-friccao` não corrige a instalação local: após
-sanitização, busca de duplicidade e confirmação, registra na base própria de
-governança. Arquivos locais históricos do Mar Aberto permanecem preservados.
+sanitização, busca de duplicidade e confirmação, registra na aba
+`Fricções e fixes` do Acervo de Governança. A antiga base Airtable e os arquivos locais
+históricos do Mar Aberto permanecem preservados.
 `governanca` lê a caixa, ordena casos por impacto e recorrência e sugere
 fixes sem alterar registros, código ou decisões.
 
@@ -90,8 +91,10 @@ fixes sem alterar registros, código ou decisões.
 - Use apenas fontes colocadas em escopo; não complete briefing, claim, contrato
   ou atributo de marca por plausibilidade.
 - Fale com o time em linguagem de marca, produto, post, mês e data. Não exponha
-  IDs, schema, chamadas de ferramenta ou logs crus.
+  IDs operacionais, schema, chamadas de ferramenta ou logs crus.
 - Antes de escrever no Airtable, descubra a base, as tabelas e os campos atuais.
+- Antes de escrever fricções na planilha, confirme aba, cabeçalhos, listas,
+  tabela e linha vazia; não sobrescreva colunas de decisão ou fix.
 - Pesquise pela chave natural antes de criar. Diante de duplicidade, pare a
   escrita e apresente o conflito.
 - Releia toda mutação antes de declarar sucesso. Em harness, escreva em lotes
@@ -131,8 +134,9 @@ python plugins/insideout-mar-aberto/references/_shared/scripts/validate_skills.p
 ```
 
 Os evals de comportamento vivem em cada pasta `evals/` e devem ser executados
-em tarefas limpas. Evals que escrevem no Airtable exigem releitura e uma
-segunda execução para comprovar idempotência; limpeza é separada e destrutiva.
+em tarefas limpas. Evals que escrevem no Airtable ou na planilha exigem
+releitura e uma segunda execução para comprovar idempotência; limpeza é
+separada e destrutiva.
 
 Antes de entregar, confira o diff, rode a validação proporcional à mudança e
 declare o que foi comprovado, o que permanece pendente e qualquer gate que

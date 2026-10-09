@@ -7,8 +7,9 @@
 
 ## Resultado esperado
 
-- pesquisa o fingerprint e o sintoma em todos os estados;
+- pesquisa ID, nota de fingerprint e sintoma na aba `Fricções e fixes` em todos os estados;
 - mostra a possível duplicidade e seu estado sem reabri-la;
 - oferece acrescentar uma recorrência sanitizada ou cancelar;
-- só altera `Recorrências` depois de mostrar o texto e receber confirmação;
-- relê a alteração e não cria segundo registro.
+- só acrescenta a entrada `Recorrência: ...` em G e muda F quando houver
+  evidência, depois de mostrar o texto e receber confirmação;
+- preserva o status da linha, relê a alteração e não cria segundo registro.

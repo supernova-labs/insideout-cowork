@@ -31,7 +31,7 @@
     },
     {
       "name": "insideout-governance",
-      "description": "Registro compartilhado, priorização e propostas de fixes para fricções dos plugins InsideOut.",
+      "description": "Registro na planilha de governança, priorização e propostas de fixes para fricções dos plugins InsideOut.",
       "source": {
         "source": "local",
         "path": "./plugins/insideout-governance"

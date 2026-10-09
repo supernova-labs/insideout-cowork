@@ -2,17 +2,21 @@
 
 ## Fonte e cobertura
 
-A fonte padrão é a base **InsideOut Governança**, tabela `Fricções`. Confirme
-base, campos e opções de `Status` na sessão. Leia os registros em todas as
-páginas antes de declarar total ou ordem global. Casos `Resolvido` não entram
-na fila aberta, mas podem fundamentar uma recorrência ou aparecer em uma seção
-de histórico quando a pessoa pedir. Não altere nenhum registro.
+A fonte padrão é a aba
+[`Fricções e fixes`](https://docs.google.com/spreadsheets/d/1w5IWXgefqsb15149T9SlNj6UEKNsJVJxHH4XAixA0uM/edit?gid=1952697901#gid=1952697901)
+da planilha **Acervo de Governança - Inside Out**. Confirme os cabeçalhos A:N,
+as opções de `Status` e o intervalo da tabela na sessão. Leia todas as linhas
+ocupadas antes de declarar total ou ordem global. Exclua `[TESTE CODEX]` da
+fila real e informe quantas linhas de teste encontrou. `Resolvida` e
+`Não priorizada` ficam fora da fila aberta, mas podem fundamentar uma
+recorrência ou decisão existente. Não altere nenhuma linha.
 
-`Impacto` é texto livre: a classificação abaixo é julgamento sobre a evidência,
-não um valor já armazenado. `Recorrências` também é texto livre: se não for
-possível distinguir entradas, registre a contagem como indeterminada. Um
-segundo registro com o mesmo sintoma é possível duplicata, não uma ocorrência
-confirmada até revisão da equivalência.
+`Impacto` em E é uma categoria registrada; confira também o efeito descrito em
+`Evidência` antes de aceitar a classificação. `Recorrência` em F é uma
+categoria, não a contagem: conte o relato inicial e somente entradas
+`Recorrência: ...` distintas em G. Se não for possível distingui-las, registre
+a contagem como indeterminada. Um segundo ID com sintoma parecido é possível
+duplicata, não uma ocorrência confirmada até revisão da equivalência.
 
 ## Classificação
 
@@ -24,11 +28,13 @@ confirmada até revisão da equivalência.
 | Baixo | inconveniência ou apresentação sem efeito material na entrega |
 | Indeterminado | descrição insuficiente para distinguir os níveis anteriores |
 
-Recorrência `Única` significa um relato inicial e nenhuma repetição confirmada.
-`Recorrente` significa pelo menos duas ocorrências distintas confirmadas,
-incluindo o relato inicial. Use `Indeterminada` se o registro não permite contar
-com segurança. Não traduza ausência de anotações em prova de que o problema
-nunca voltou: `Única` descreve apenas o que foi registrado.
+Para a matriz, `Única` significa um relato inicial e nenhuma repetição
+confirmada na linha; pode corresponder ao valor `Isolada` em F. `Recorrente`
+significa pelo menos duas ocorrências distintas confirmadas, incluindo o
+relato inicial. O valor `Sistêmica` em F exige evidência de alcance entre
+componentes ou produtos e não substitui a contagem. Use `Indeterminada` se
+o registro não permite contar com segurança. Ausência de anotações não prova
+que o problema nunca voltou.
 
 | Impacto | Única | Recorrente | Recorrência indeterminada |
 |---|---|---|---|
@@ -54,7 +60,7 @@ que estejam nos registros. Mantenha exatamente estas seções e campos; use
 ```markdown
 ## Escopo e cobertura
 - Fonte e data da leitura: ...
-- Registros lidos: ...; casos abertos: ...; resolvidos fora da fila: ...
+- Linhas lidas: ...; casos abertos: ...; resolvidos/não priorizados fora da fila: ...; testes excluídos: ...
 - Limitações: ...
 
 ## Fila priorizada

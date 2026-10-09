@@ -1,4 +1,4 @@
 interface:
   display_name: "Registrar Fricção"
   short_description: "Reporte bugs e melhorias dos plugins InsideOut"
-  default_prompt: "Use $registrar-friccao para preparar uma fricção sanitizada e registrá-la na caixa de governança após minha confirmação."
+  default_prompt: "Use $registrar-friccao para preparar uma fricção sanitizada e registrá-la na aba Fricções e fixes após minha confirmação."

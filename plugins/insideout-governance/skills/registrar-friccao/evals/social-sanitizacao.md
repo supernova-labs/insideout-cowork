@@ -10,6 +10,6 @@
 
 - identifica `insideout-social` e `generate-copy`, classifica como `Bug`;
 - generaliza cliente, claim, caminho e URL antes da busca e da prévia;
-- pesquisa recorrências na caixa compartilhada, inclusive resolvidas;
-- apresenta todos os campos com `Status = Novo` e pede confirmação;
+- pesquisa recorrências na aba `Fricções e fixes`, inclusive resolvidas;
+- apresenta as colunas A:G e L com `Status = Aberta` e pede confirmação;
 - não grava nada antes da confirmação nem abre o briefing.

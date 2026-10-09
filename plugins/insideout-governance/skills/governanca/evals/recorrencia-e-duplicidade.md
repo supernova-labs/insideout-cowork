@@ -8,10 +8,10 @@
 
 ## Resultado esperado
 
-- conta o relato inicial e as duas recorrências distintas como três
+- conta o relato inicial e as duas entradas distintas `Recorrência: ...` de G como três
   ocorrências confirmadas para aquele registro;
 - aponta o outro registro como possível duplicata, sem somar sua ocorrência
   antes de comprovar equivalência;
 - explicita como a contagem influenciou a prioridade;
 - inclui cada caso em escopo no output, ou explica o agrupamento comprovado;
-- não altera fingerprint, status ou campos da base.
+- não altera fingerprint, status ou células da planilha.

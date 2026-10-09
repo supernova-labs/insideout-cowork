@@ -110,7 +110,7 @@
       "name": "registrar-friccao",
       "plugin": "insideout-governance",
       "canonicalPath": "plugins/insideout-governance/skills/registrar-friccao/SKILL.md",
-      "description": "Registra fricções sanitizadas dos plugins InsideOut na caixa compartilhada de governança."
+      "description": "Registra fricções sanitizadas dos plugins InsideOut na aba Fricções e fixes do Acervo de Governança."
     },
     {
       "id": "skill:insideout-governance:governanca",
@@ -118,7 +118,7 @@
       "name": "governanca",
       "plugin": "insideout-governance",
       "canonicalPath": "plugins/insideout-governance/skills/governanca/SKILL.md",
-      "description": "Prioriza fricções por impacto e recorrência e sugere fixes verificáveis em formato padronizado."
+      "description": "Lê a aba Fricções e fixes, prioriza por impacto e recorrência e sugere fixes verificáveis."
     }
   ],
   "adapters": [

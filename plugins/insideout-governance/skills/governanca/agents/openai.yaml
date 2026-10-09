@@ -1,4 +1,4 @@
 interface:
   display_name: "Governança de Fricções"
   short_description: "Ordene fricções e proponha fixes verificáveis"
-  default_prompt: "Use $governanca para ler a caixa de governança, priorizar por impacto e recorrência e propor fixes em formato padronizado."
+  default_prompt: "Use $governanca para ler a aba Fricções e fixes, priorizar por impacto e recorrência e propor fixes em formato padronizado."

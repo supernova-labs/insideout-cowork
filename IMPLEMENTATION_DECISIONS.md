@@ -374,3 +374,20 @@ com critérios reproduzíveis sem confundir proposta com decisão ou execução.
 **Impacto:** casos antigos dos produtos continuam fora da leitura padrão até
 serem colocados em escopo. A base nova ainda precisa de casos reais para
 avaliar a qualidade das recomendações; evals usam cenários sintéticos.
+
+## D029 — A aba Fricções e fixes é a caixa de entrada dos plugins
+
+**Decisão:** `registrar-friccao` cria novos relatos somente na aba
+`Fricções e fixes` da planilha **Acervo de Governança - Inside Out**, após prévia e
+confirmação. Usa as colunas de fricção, impacto, recorrência, evidência e status
+da tabela e preserva as colunas de fix e decisão. `governanca` lê a mesma aba
+para priorizar e sugerir correções, sem escrita.
+
+**Racional:** a equipe acompanha as decisões e fixes nessa planilha. Registrar
+diretamente na aba elimina a separação entre a caixa de entrada e a fila de
+governança.
+
+**Impacto:** D027 e D028 descrevem o destino anterior no Airtable. A base
+InsideOut Governança e os relatos legados permanecem históricos, sem migração
+ou sincronização automática. Evals de registro precisam testar a escrita na
+aba, a releitura e a idempotência.

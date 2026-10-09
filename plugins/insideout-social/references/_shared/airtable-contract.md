@@ -146,7 +146,8 @@ sem criar referências artificiais.
 
 A tabela `Feedback do plugin` da base InsideOut Social guarda relatos antigos.
 Não crie novos registros nela pelo fluxo do Social. Novas fricções pertencem à
-skill `registrar-friccao` do plugin InsideOut Governança, na base própria.
+skill `registrar-friccao` do plugin InsideOut Governança, na aba
+`Fricções e fixes` do Acervo de Governança.
 Preserve os registros históricos sem migração ou limpeza automática.
 
 ### Posts

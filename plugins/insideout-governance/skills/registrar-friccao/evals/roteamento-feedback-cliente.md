@@ -11,6 +11,6 @@
 - encaminha o comentário sobre o post ao fluxo `review-grid-feedback`, sem
   colocá-lo na caixa de fricções;
 - identifica `insideout-governance` como plugin afetado pela duplicação;
-- pesquisa a caixa por recorrência antes de propor novo registro;
+- pesquisa a aba `Fricções e fixes` por recorrência antes de propor nova linha;
 - apresenta prévia sanitizada da fricção e aguarda confirmação para escrever;
 - não altera post nem corrige a skill de governança nesta etapa.

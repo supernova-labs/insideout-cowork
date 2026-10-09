@@ -55,19 +55,20 @@ validado separadamente da versão do plugin.
 
 ## InsideOut Governança
 
-Versão atual: 0.2.0.
+Versão atual: 0.3.0.
 
 | Skill | Resultado |
 |---|---|
-| `registrar-friccao` | Prepara um relato sanitizado, pesquisa recorrências e, após confirmação, registra bugs ou melhorias na base **InsideOut Governança**. |
-| `governanca` | Lê os casos da base, prioriza por impacto e recorrência e propõe um fix verificável para cada fricção em formato padronizado, sem alterar registros. |
+| `registrar-friccao` | Prepara um relato sanitizado, pesquisa recorrências e, após confirmação, registra bugs ou melhorias na aba `Fricções e fixes` do **Acervo de Governança**. |
+| `governanca` | Lê os casos da mesma aba, prioriza por impacto e recorrência e propõe um fix verificável para cada fricção em formato padronizado, sem alterar registros. |
 
-A tabela `Fricções` é a caixa compartilhada para novos relatos dos plugins,
-inclusive da própria governança. A pessoa precisa ter acesso de edição à base. Se a conexão estiver
-indisponível, a skill entrega um rascunho copiável marcado como não registrado.
-Relatos antigos no Social e arquivos locais do Mar Aberto permanecem onde estão;
-nenhuma migração de dados é automática. O feedback de cliente sobre posts
-continua no fluxo `review-grid-feedback` do Social.
+A aba [`Fricções e fixes`](https://docs.google.com/spreadsheets/d/1w5IWXgefqsb15149T9SlNj6UEKNsJVJxHH4XAixA0uM/edit?gid=1952697901#gid=1952697901)
+é a caixa compartilhada para novos relatos dos plugins, inclusive da própria
+governança. Se a conexão estiver indisponível, a skill entrega um rascunho
+copiável marcado como não registrado. A antiga base Airtable, relatos antigos
+no Social e arquivos locais do Mar Aberto permanecem como histórico, sem
+migração automática. Feedback de cliente sobre posts continua no fluxo
+`review-grid-feedback` do Social.
 
 ## Pré-requisitos
 
@@ -77,9 +78,10 @@ continua no fluxo `review-grid-feedback` do Social.
 - Acesso ao recurso criativo indicado pela skill quando houver geração de
   imagem ou vídeo. Esses fluxos podem envolver custo e seguem as aprovações
   previstas no processo.
-- Para fricções dos plugins, acesso à base **InsideOut Governança** pelo
-  Airtable. A triagem requer leitura; o registro requer edição. As skills não
-  usam formulário nem exigem GitHub.
+- Para fricções dos plugins, acesso à planilha
+  **Acervo de Governança - Inside Out**. A triagem requer leitura; o registro
+  requer edição da aba `Fricções e fixes`. As skills não usam formulário nem
+  exigem GitHub.
 - Para o Mar Aberto, acesso à exportação oficial da Stilingue e acesso
   individual a Instagram e YouTube pelo navegador do Codex. Os testes reais
   são feitos pela equipe da InsideOut após a publicação.
@@ -104,8 +106,9 @@ python plugins/insideout-social/references/_shared/scripts/validate_skills.py
 python plugins/insideout-mar-aberto/references/_shared/scripts/validate_skills.py
 ```
 
-E revise os evals da skill alterada. Evals que escrevem no Airtable exigem
-confirmação, releitura e uma segunda execução para provar idempotência.
+E revise os evals da skill alterada. Evals que escrevem no Airtable ou na
+planilha exigem confirmação, releitura e segunda execução para provar
+idempotência.
 
 O plano do Mar Aberto está em `DEVELOPMENT_PLAN_MAR_ABERTO.md`. Decisões tomadas
 durante a implementação ficam em `IMPLEMENTATION_DECISIONS.md`; resultados

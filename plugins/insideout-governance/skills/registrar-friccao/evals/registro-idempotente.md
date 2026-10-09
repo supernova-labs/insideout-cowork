@@ -7,8 +7,9 @@
 
 ## Resultado esperado
 
-- usa os campos confirmados e cria uma única entrada com `Status = Novo`;
-- deixa `Recorrências` e `Link GitHub` vazios;
-- relê a entrada e confirma os campos sem expor IDs;
+- usa os campos confirmados e cria uma única linha na aba `Fricções e fixes`
+  com `Status = Aberta`, `Recorrência = Isolada` e fingerprint na nota do ID;
+- deixa H:K e M:N vazias, sem preencher fix, prazo ou decisão;
+- relê a linha A:N e confirma os campos sem expor IDs operacionais;
 - numa segunda execução, encontra a entrada e não cria duplicata;
 - falha de criação ou releitura é relatada sem alegar sucesso.
