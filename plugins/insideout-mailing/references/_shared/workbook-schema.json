@@ -1,0 +1,255 @@
+{
+  "schemaVersion": "1.0",
+  "plugin": "insideout-mailing",
+  "headerRow": 1,
+  "sheets": {
+    "Contatos": [
+      "ID contato",
+      "Nome",
+      "Tipo",
+      "E-mail",
+      "E-mails alternativos",
+      "Telefone",
+      "Telefones alternativos",
+      "CEP",
+      "Logradouro",
+      "Número",
+      "Complemento",
+      "Endereço original",
+      "Bairro",
+      "Cidade",
+      "UF",
+      "Dia aniversário",
+      "Mês aniversário",
+      "Instagram",
+      "TikTok",
+      "YouTube",
+      "Site",
+      "Diversidade",
+      "Gênero",
+      "Filhos",
+      "Tom de base",
+      "Estado civil",
+      "CPF",
+      "Atualização informada",
+      "Origem",
+      "Revisão",
+      "Pendências",
+      "Revisado em",
+      "Nota de revisão",
+      "Observações"
+    ],
+    "Vínculos": [
+      "ID vínculo",
+      "ID contato",
+      "Nome do contato",
+      "Categoria",
+      "Organização",
+      "Departamento",
+      "Cargo",
+      "Segmento",
+      "Material",
+      "Cluster",
+      "Editoria",
+      "Tipo de mídia",
+      "Agência ou empresário",
+      "Responsável",
+      "Instagram agência",
+      "Situação",
+      "Origem",
+      "Revisão",
+      "Pendências"
+    ],
+    "Ações": [
+      "ID ação",
+      "Nome",
+      "Cliente",
+      "Tipo",
+      "Data",
+      "Responsável",
+      "Situação",
+      "Origem",
+      "Observações"
+    ],
+    "Listas": [
+      "ID lista",
+      "Versão",
+      "Nome",
+      "ID ação",
+      "Finalidade",
+      "Critérios",
+      "Situação",
+      "Criada em",
+      "Origem",
+      "Observações"
+    ],
+    "Itens de lista": [
+      "ID item",
+      "ID lista",
+      "Versão",
+      "ID contato",
+      "Nome do contato",
+      "Seleção",
+      "Destinatário na lista",
+      "Endereço na lista",
+      "CEP na lista",
+      "Origem",
+      "Pendências",
+      "Observações"
+    ],
+    "Participações": [
+      "ID participação",
+      "ID contato",
+      "Nome do contato",
+      "ID ação",
+      "Convite",
+      "Presença",
+      "Envio",
+      "Convidado em",
+      "Confirmado em",
+      "Presente em",
+      "Enviado em",
+      "Entregue em",
+      "Destinatário do envio",
+      "Endereço do envio",
+      "CEP do envio",
+      "Origem",
+      "Revisado em",
+      "Nota de revisão"
+    ],
+    "Configuração": [
+      "Grupo",
+      "Campo",
+      "Valor",
+      "Descrição"
+    ]
+  },
+  "selections": {
+    "Contatos.Tipo": [
+      "Pessoa",
+      "Organização",
+      "A confirmar"
+    ],
+    "Contatos.Revisão": [
+      "Pendente",
+      "Sem pendência detectada",
+      "Confirmado"
+    ],
+    "Vínculos.Categoria": [
+      "Insider",
+      "Ex-insider",
+      "Fornecedor",
+      "Cliente",
+      "Ex-cliente",
+      "Parceiro",
+      "Jornalista",
+      "Influenciador"
+    ],
+    "Vínculos.Situação": [
+      "Atual",
+      "Anterior",
+      "A confirmar"
+    ],
+    "Vínculos.Revisão": [
+      "Pendente",
+      "Sem pendência detectada",
+      "Confirmado"
+    ],
+    "Ações.Tipo": [
+      "Evento",
+      "Seeding",
+      "Outra"
+    ],
+    "Ações.Situação": [
+      "Rascunho",
+      "Em andamento",
+      "Concluída",
+      "Cancelada"
+    ],
+    "Listas.Situação": [
+      "Rascunho",
+      "Em revisão",
+      "Fechada",
+      "Arquivada"
+    ],
+    "Itens de lista.Seleção": [
+      "Incluído",
+      "Pendente",
+      "Excluído"
+    ],
+    "Participações.Convite": [
+      "Não informado",
+      "Convidado",
+      "Confirmado",
+      "Recusado"
+    ],
+    "Participações.Presença": [
+      "Não informada",
+      "Presente",
+      "Ausente"
+    ],
+    "Participações.Envio": [
+      "Não informado",
+      "Pendente",
+      "Enviado",
+      "Entregue",
+      "Devolvido"
+    ]
+  },
+  "keys": {
+    "Contatos": [
+      "ID contato"
+    ],
+    "Vínculos": [
+      "ID vínculo"
+    ],
+    "Ações": [
+      "ID ação"
+    ],
+    "Listas": [
+      "ID lista",
+      "Versão"
+    ],
+    "Itens de lista": [
+      "ID lista",
+      "Versão",
+      "ID contato"
+    ],
+    "Participações": [
+      "ID contato",
+      "ID ação"
+    ]
+  },
+  "references": [
+    [
+      "Vínculos",
+      "ID contato",
+      "Contatos",
+      "ID contato"
+    ],
+    [
+      "Listas",
+      "ID ação",
+      "Ações",
+      "ID ação"
+    ],
+    [
+      "Itens de lista",
+      "ID contato",
+      "Contatos",
+      "ID contato"
+    ],
+    [
+      "Participações",
+      "ID contato",
+      "Contatos",
+      "ID contato"
+    ],
+    [
+      "Participações",
+      "ID ação",
+      "Ações",
+      "ID ação"
+    ]
+  ]
+}

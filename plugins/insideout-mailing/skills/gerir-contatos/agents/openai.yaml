@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerir contatos"
+  short_description: "Consulte e revise os contatos da InsideOut"
+  default_prompt: "Use $gerir-contatos para revisar os cadastros e apresentar as correções antes de salvar."

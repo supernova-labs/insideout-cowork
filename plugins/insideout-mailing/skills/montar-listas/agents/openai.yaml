@@ -1,0 +1,4 @@
+interface:
+  display_name: "Montar listas"
+  short_description: "Prepare listas de mailing e seeding versionadas"
+  default_prompt: "Use $montar-listas para preparar uma lista e mostrar critérios, seleção e pendências."

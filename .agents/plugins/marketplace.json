@@ -41,6 +41,19 @@
         "authentication": "ON_USE"
       },
       "category": "Productivity"
+    },
+    {
+      "name": "insideout-mailing",
+      "description": "Contatos, listas e histórico de ações no Google Sheets.",
+      "source": {
+        "source": "local",
+        "path": "./plugins/insideout-mailing"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
     }
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "name": "insideout-mailing",
+  "version": "0.1.0",
+  "description": "Contatos, listas versionadas e histórico de ações no Google Sheets.",
+  "author": {
+    "name": "InsideOut"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "InsideOut Mailing",
+    "shortDescription": "Gerencie contatos, listas e histórico de ações.",
+    "longDescription": "Três skills para cadastros e qualidade, listas de mailing e seeding e histórico de ações. Estado operacional no Google Sheets; implantação inicial separada.",
+    "developerName": "InsideOut",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Revise os contatos e apresente duplicatas e pendências.",
+      "Monte uma lista de seeding com os critérios informados.",
+      "Cruze esta lista com o histórico da ação e mostre as correspondências."
+    ]
+  }
+}

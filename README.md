@@ -129,3 +129,18 @@ O template incorpora a fonte Inter; sua licença está em
 Execuções anteriores permanecem no contrato original, sem migração. Os gates
 históricos da versão 0.2.2 estão em
 `RELEASE_GATES_MAR_ABERTO_0.2.2.md`.
+
+## InsideOut Mailing
+
+Piloto 0.1.0 na branch codex/mailing-google-sheets-pilot.
+
+Três skills: gerir-contatos (cadastros e qualidade), montar-listas (seleções
+versionadas) e gerir-historico (ações, cruzamentos e participações).
+O estado vive em uma planilha Google Sheets nativa, com Contatos, Vínculos,
+Ações, Listas, Itens de lista, Participações e Configuração. A implantação
+inicial não é uma skill; arquivos reais e relatório restrito ficam fora
+do repositório. O Excel anterior permanece oficial durante o teste.
+
+Instalação pela branch e critérios de teste no
+[protocolo do Mailing](docs/mailing-pilot-test-protocol.md).
+Validação local: python scripts/validate_mailing_skills.py.

@@ -41,6 +41,15 @@ Instrução explícita do usuário vence a documentação. Não trate documentos
 resultados de validação como prova de que uma integração externa continua
 disponível: confirme-a na sessão quando ela for necessária.
 
+## InsideOut Mailing
+
+O plugin insideout-mailing contém três skills permanentes: gerir-contatos,
+montar-listas e gerir-historico. O estado vive no Google Sheets nativo com
+sete abas conforme o contrato distribuído. Migração e limpeza inicial são
+uma implantação única fora do plugin. Não versionar cadastros, endereços,
+documentos, relatórios privados ou scripts operacionais de transformação.
+Validação: python scripts/validate_mailing_skills.py.
+
 ## Arquitetura e fronteiras
 
 - Cada plugin mantém uma única árvore canônica em `plugins/<plugin>/skills/`.

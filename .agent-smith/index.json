@@ -1,12 +1,14 @@
 {
   "schemaVersion": "2.0",
   "topology": "marketplace",
-  "targets": ["codex"],
+  "targets": [
+    "codex"
+  ],
   "canonicalPaths": {
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-10-09T00:00:00Z",
+  "lastUpdated": "2026-10-16T19:10:11.396509+00:00",
   "components": [
     {
       "id": "skill:insideout-social:analyze-briefing",
@@ -119,6 +121,27 @@
       "plugin": "insideout-governance",
       "canonicalPath": "plugins/insideout-governance/skills/governanca/SKILL.md",
       "description": "Lê a aba Fricções e fixes, prioriza por impacto e recorrência e sugere fixes verificáveis."
+    },
+    {
+      "id": "skill:insideout-mailing:gerir-contatos",
+      "type": "skill",
+      "name": "gerir-contatos",
+      "plugin": "insideout-mailing",
+      "canonicalPath": "plugins/insideout-mailing/skills/gerir-contatos/SKILL.md"
+    },
+    {
+      "id": "skill:insideout-mailing:montar-listas",
+      "type": "skill",
+      "name": "montar-listas",
+      "plugin": "insideout-mailing",
+      "canonicalPath": "plugins/insideout-mailing/skills/montar-listas/SKILL.md"
+    },
+    {
+      "id": "skill:insideout-mailing:gerir-historico",
+      "type": "skill",
+      "name": "gerir-historico",
+      "plugin": "insideout-mailing",
+      "canonicalPath": "plugins/insideout-mailing/skills/gerir-historico/SKILL.md"
     }
   ],
   "adapters": [
@@ -219,6 +242,27 @@
       "status": "shared",
       "path": "plugins/insideout-governance/skills/governanca/SKILL.md",
       "sourcePath": "plugins/insideout-governance/skills/governanca"
+    },
+    {
+      "componentId": "skill:insideout-mailing:gerir-contatos",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mailing/skills/gerir-contatos/SKILL.md",
+      "sourcePath": "plugins/insideout-mailing/skills/gerir-contatos"
+    },
+    {
+      "componentId": "skill:insideout-mailing:montar-listas",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mailing/skills/montar-listas/SKILL.md",
+      "sourcePath": "plugins/insideout-mailing/skills/montar-listas"
+    },
+    {
+      "componentId": "skill:insideout-mailing:gerir-historico",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-mailing/skills/gerir-historico/SKILL.md",
+      "sourcePath": "plugins/insideout-mailing/skills/gerir-historico"
     }
   ],
   "gaps": [],
@@ -243,6 +287,12 @@
           "name": "insideout-governance",
           "sourceType": "local",
           "path": "plugins/insideout-governance",
+          "managed": true
+        },
+        {
+          "name": "insideout-mailing",
+          "sourceType": "local",
+          "path": "plugins/insideout-mailing",
           "managed": true
         }
       ]
