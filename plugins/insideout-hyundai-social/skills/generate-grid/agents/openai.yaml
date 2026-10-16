@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planejar grid Hyundai"
+  short_description: "Monte ideias e revisão HTML da Hyundai"
+  default_prompt: "Use $generate-grid para montar o mês Hyundai e o HTML de referências com feedback."

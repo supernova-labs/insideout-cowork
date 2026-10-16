@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pesquisar mês Hyundai"
+  short_description: "Pesquise agenda e repertório do mês Hyundai"
+  default_prompt: "Use $research-month para pesquisar o mês da Hyundai sem briefing obrigatório."

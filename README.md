@@ -21,7 +21,7 @@ tarefa no Codex e peça o trabalho normalmente.
 
 ## InsideOut Social
 
-Versão atual: 0.6.0.
+Versão atual: 0.6.1.
 
 | Skill | Resultado |
 |---|---|
@@ -32,6 +32,41 @@ Versão atual: 0.6.0.
 | `generate-image` | Gera e registra mockups com trilha de auditoria. |
 | `generate-video` | Produz e registra vídeos curtos a partir de direção visual aprovada. |
 | `review-grid-feedback` | Valida o JSON de feedback exportado pelo cliente, consolida retornos por post e encaminha ajustes aprovados à skill responsável. |
+
+## InsideOut Hyundai Social
+
+Versão inicial: 0.1.0 (piloto). Pacote independente para a equipe Hyundai, sem alterar
+a instalação do Social das marcas Estée Lauder. O mês começa por pesquisa;
+briefing é uma exceção de lançamento ou campanha. O cliente revisa ideias e
+referências em HTML com feedback, antes da produção das artes.
+
+O piloto está na branch `codex/hyundai-social-pilot`, ainda fora da `main`.
+Siga o [guia de instalação e teste da Carol](docs/hyundai-carol-test-guide.md)
+para selecionar essa versão e conectar a base correta.
+
+| Skill | Resultado |
+|---|---|
+| `research-month` | Pesquisa agenda, esportes, eventos, repertório e trends com fontes e data de corte. |
+| `generate-grid` | Compõe ideias e publicações por rede, reservas de influenciadores e revisão HTML de referências. |
+| `review-grid-feedback` | Valida a versão do feedback Hyundai, consolida ajustes e os encaminha à revisão do time. |
+| `send-to-asana` | Prepara e envia somente ideias confirmadas pelo time, com retomada parcial e deduplicação. |
+
+O estado vive na base exclusiva **InsideOut Hyundai Social**. A base começa
+sem migração dos testes antigos. Regras permanentes são versionadas; contagem
+entre redes e participação dos influenciadores nos totais aguardam o time.
+Comentários não equivalem a aprovação. Mudança material invalida a confirmação
+anterior para novo envio e exige uma nova revisão.
+
+O envio começa em `Planejamento/on Hold`. Regras fictícias de alocação só
+operam em projeto separado de testes, sem pessoas reais. Produção de copy,
+imagem/vídeo, Notion, publicação, métricas e automações ficam fora da v1.
+Base separada não comprova restrição de acesso: a liberação operacional exige
+teste das permissões com contas representativas de cada equipe.
+
+Veja o [protocolo de piloto Hyundai](docs/hyundai-pilot-test-protocol.md) e o
+[registro de implantação e validação](docs/hyundai-implementation-status.md).
+Nenhuma referência publicada ou integração externa é considerada validada
+apenas por existir na documentação.
 
 ## InsideOut Mar Aberto
 
@@ -73,8 +108,9 @@ migração automática. Feedback de cliente sobre posts continua no fluxo
 ## Pré-requisitos
 
 - Codex instalado.
-- Acesso individual à base **InsideOut Social** no Airtable para os fluxos que
-  leem ou atualizam dados operacionais.
+- Acesso individual à base **InsideOut Social** no Airtable para os fluxos do
+  Social. O Hyundai Social usa somente **InsideOut Hyundai Social**, com a conta
+  pessoal da equipe autorizada no conector.
 - Acesso ao recurso criativo indicado pela skill quando houver geração de
   imagem ou vídeo. Esses fluxos podem envolver custo e seguem as aprovações
   previstas no processo.
@@ -104,6 +140,8 @@ Antes de compartilhar uma nova versão, valide a estrutura:
 ```powershell
 python plugins/insideout-social/references/_shared/scripts/validate_skills.py
 python plugins/insideout-mar-aberto/references/_shared/scripts/validate_skills.py
+python scripts/validate_hyundai_skills.py
+python -m unittest discover -s tests/hyundai -v
 ```
 
 E revise os evals da skill alterada. Evals que escrevem no Airtable ou na

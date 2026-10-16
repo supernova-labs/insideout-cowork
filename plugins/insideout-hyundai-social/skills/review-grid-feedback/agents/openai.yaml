@@ -1,0 +1,4 @@
+interface:
+  display_name: "Revisar feedback Hyundai"
+  short_description: "Concilie ajustes da revisão de ideias Hyundai"
+  default_prompt: "Use $review-grid-feedback para validar o arquivo de feedback de ideias Hyundai."

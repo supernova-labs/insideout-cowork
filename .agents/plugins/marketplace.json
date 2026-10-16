@@ -5,6 +5,19 @@
   },
   "plugins": [
     {
+      "name": "insideout-hyundai-social",
+      "description": "Pesquisa mensal Hyundai, revisão de ideias com feedback e encaminhamento ao Asana.",
+      "source": {
+        "source": "local",
+        "path": "./plugins/insideout-hyundai-social"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "insideout-social",
       "source": {
         "source": "local",

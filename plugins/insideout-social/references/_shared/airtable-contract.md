@@ -5,6 +5,11 @@ Airtable.
 
 ## Descoberta obrigatória
 
+O planejamento Hyundai usa a base exclusiva **InsideOut Hyundai Social** e o
+plugin `insideout-hyundai-social`. Os registros Hyundai desta base são testes
+históricos preservados: não migrar, limpar nem reutilizar como destino por
+fallback. Não operar dados Hyundai neste contrato.
+
 1. Localize a base pelo nome exato.
 2. Liste tabelas e campos antes de ler ou escrever.
 3. Resolva os IDs atuais de base, tabela, campo e registros em cada execução.

@@ -6,8 +6,40 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-10-09T00:00:00Z",
+  "lastUpdated": "2026-10-16T00:00:00Z",
   "components": [
+    {
+      "id": "skill:insideout-hyundai-social:research-month",
+      "type": "skill",
+      "name": "research-month",
+      "plugin": "insideout-hyundai-social",
+      "canonicalPath": "plugins/insideout-hyundai-social/skills/research-month/SKILL.md",
+      "description": "Pesquisa o mês Hyundai sem briefing obrigatório, com fontes e corte histórico."
+    },
+    {
+      "id": "skill:insideout-hyundai-social:generate-grid",
+      "type": "skill",
+      "name": "generate-grid",
+      "plugin": "insideout-hyundai-social",
+      "canonicalPath": "plugins/insideout-hyundai-social/skills/generate-grid/SKILL.md",
+      "description": "Compõe ideias e publicações Hyundai e revisão HTML de referências antes da produção."
+    },
+    {
+      "id": "skill:insideout-hyundai-social:review-grid-feedback",
+      "type": "skill",
+      "name": "review-grid-feedback",
+      "plugin": "insideout-hyundai-social",
+      "canonicalPath": "plugins/insideout-hyundai-social/skills/review-grid-feedback/SKILL.md",
+      "description": "Concilia feedback Hyundai sem aprovar ou aplicar mudanças automaticamente."
+    },
+    {
+      "id": "skill:insideout-hyundai-social:send-to-asana",
+      "type": "skill",
+      "name": "send-to-asana",
+      "plugin": "insideout-hyundai-social",
+      "canonicalPath": "plugins/insideout-hyundai-social/skills/send-to-asana/SKILL.md",
+      "description": "Encaminha ideias Hyundai confirmadas ao Asana com retomada e deduplicação."
+    },
     {
       "id": "skill:insideout-social:analyze-briefing",
       "type": "skill",
@@ -123,6 +155,34 @@
   ],
   "adapters": [
     {
+      "componentId": "skill:insideout-hyundai-social:research-month",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-hyundai-social/skills/research-month/SKILL.md",
+      "sourcePath": "plugins/insideout-hyundai-social/skills/research-month"
+    },
+    {
+      "componentId": "skill:insideout-hyundai-social:generate-grid",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-hyundai-social/skills/generate-grid/SKILL.md",
+      "sourcePath": "plugins/insideout-hyundai-social/skills/generate-grid"
+    },
+    {
+      "componentId": "skill:insideout-hyundai-social:review-grid-feedback",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-hyundai-social/skills/review-grid-feedback/SKILL.md",
+      "sourcePath": "plugins/insideout-hyundai-social/skills/review-grid-feedback"
+    },
+    {
+      "componentId": "skill:insideout-hyundai-social:send-to-asana",
+      "harness": "codex",
+      "status": "shared",
+      "path": "plugins/insideout-hyundai-social/skills/send-to-asana/SKILL.md",
+      "sourcePath": "plugins/insideout-hyundai-social/skills/send-to-asana"
+    },
+    {
       "componentId": "skill:insideout-social:analyze-briefing",
       "harness": "codex",
       "status": "shared",
@@ -227,6 +287,12 @@
       "harness": "codex",
       "manifestPath": ".agents/plugins/marketplace.json",
       "plugins": [
+        {
+          "name": "insideout-hyundai-social",
+          "sourceType": "local",
+          "path": "plugins/insideout-hyundai-social",
+          "managed": true
+        },
         {
           "name": "insideout-social",
           "sourceType": "local",

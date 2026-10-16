@@ -1,6 +1,6 @@
 ---
 name: generate-grid
-description: Gera, revisa e atualiza o primeiro take mensal da InsideOut, compondo estrutura, rationale, briefing de design, copy, trends sociais atuais e saídas estáticas para revisão ou cliente. Use quando o usuário pedir para montar ou revisar um grid, distribuir posts entre redes ou preparar uma validação visual de mês, inclusive uma revisão de cliente com feedback local exportável.
+description: Gera, revisa e atualiza o primeiro take mensal da InsideOut a partir de briefing, com direção de design, copy, trends e revisão de cliente. Use para os grids das marcas Estée Lauder e outros clientes desse fluxo; planejamento mensal Hyundai pertence ao plugin InsideOut Hyundai Social.
 ---
 
 # Gerar grid editorial InsideOut
@@ -10,6 +10,11 @@ Orquestre capacidades especializadas sem absorver suas responsabilidades e
 persista somente os posts aprovados.
 
 ## Preparar
+
+Para planejamento ou revisão de ideias Hyundai, encaminhe a
+`insideout-hyundai-social:generate-grid` antes de consultar ou escrever nesta
+base. Se o pacote não estiver disponível, informe a dependência; não improvise
+a jornada Hyundai dentro deste fluxo de briefing e produção.
 
 1. Leia `../../references/_shared/voz-usuario.md`,
    `../../references/_shared/about-insideout.md` e `../../references/_shared/airtable-contract.md`.

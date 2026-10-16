@@ -1,0 +1,4 @@
+interface:
+  display_name: "Encaminhar Hyundai ao Asana"
+  short_description: "Prepare tarefas Hyundai sem duplicação"
+  default_prompt: "Use $send-to-asana para preparar o envio das ideias Hyundai confirmadas ao projeto de testes."

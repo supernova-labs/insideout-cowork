@@ -1,6 +1,6 @@
 ---
 name: review-grid-feedback
-description: Valida arquivos de feedback exportados do grid de cliente, concilia comentários por post e encaminha ajustes aprovados para a skill responsável. Use quando o time receber um JSON de feedback de cliente ou quiser consolidar retornos post a post sem alterar o grid automaticamente.
+description: Valida feedback exportado do grid de cliente do Social e encaminha ajustes por post sem aplicá-los automaticamente. Use para o pacote insideout-grid-feedback; feedback de ideias Hyundai pertence ao plugin InsideOut Hyundai Social.
 ---
 
 # Revisar feedback de grid
@@ -9,6 +9,10 @@ Converta feedback exportado de um HTML de cliente em uma proposta editorial
 auditável. Esta skill recebe e valida; ela não aplica mudanças diretamente.
 
 ## Preparar
+
+Um pacote `insideout-hyundai-feedback` pertence a
+`insideout-hyundai-social:review-grid-feedback`. Encaminhe-o sem converter o
+formato, consultar a base Social ou presumir que um comentário aprova a ideia.
 
 1. Leia `../../references/_shared/voz-usuario.md`,
    `../../references/_shared/about-insideout.md`,

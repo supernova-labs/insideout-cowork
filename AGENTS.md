@@ -25,6 +25,8 @@ e leia cada arquivo selecionado por inteiro.
 | Assunto | Fonte principal |
 |---|---|
 | Comportamento das skills | `plugins/insideout-social/skills/*/SKILL.md` |
+| Comportamento Hyundai Social | `plugins/insideout-hyundai-social/skills/*/SKILL.md` |
+| Estado Hyundai Social | base exclusiva **InsideOut Hyundai Social**, sem migração dos testes antigos |
 | Comportamento do Mar Aberto | `plugins/insideout-mar-aberto/skills/*/SKILL.md` |
 | Registro de fricções dos plugins | `plugins/insideout-governance/skills/registrar-friccao/` e aba `Fricções e fixes` do **Acervo de Governança** |
 | Priorização e propostas de fixes | `plugins/insideout-governance/skills/governanca/` e aba `Fricções e fixes` do **Acervo de Governança** |
@@ -44,6 +46,9 @@ disponível: confirme-a na sessão quando ela for necessária.
 ## Arquitetura e fronteiras
 
 - Cada plugin mantém uma única árvore canônica em `plugins/<plugin>/skills/`.
+- `insideout-hyundai-social` contém quatro skills próprias de pesquisa,
+  planejamento, feedback de ideias e encaminhamento ao Asana, antes da produção;
+  seus dados não usam a base Social e sua instalação não depende dela.
 - `insideout-social` contém sete skills de produção editorial;
   `insideout-mar-aberto` contém a jornada principal e quatro etapas
   especializadas; `insideout-governance` contém o registro canônico e a triagem de fricções.
@@ -131,6 +136,8 @@ fixes sem alterar registros, código ou decisões.
 ```powershell
 python plugins/insideout-social/references/_shared/scripts/validate_skills.py
 python plugins/insideout-mar-aberto/references/_shared/scripts/validate_skills.py
+python scripts/validate_hyundai_skills.py
+python -m unittest discover -s tests/hyundai -v
 ```
 
 Os evals de comportamento vivem em cada pasta `evals/` e devem ser executados
