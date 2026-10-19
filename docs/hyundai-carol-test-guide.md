@@ -30,9 +30,32 @@ codex --version
 ```
 
 Se aparecer uma versão, continue abaixo. Se o Windows disser que `codex` não é
-reconhecido, pare e envie essa mensagem à pessoa que acompanha o piloto: ainda
-é preciso disponibilizar o CLI nesse computador. Não tente mudar permissões
-do Airtable para corrigir esse erro.
+reconhecido, o comando não está disponível nessa janela: o CLI pode estar ausente
+ou fora do PATH. Se ele acabou de ser instalado, feche o PowerShell e abra uma
+janela nova antes de repetir o teste.
+
+Se continuar indisponível, instale o **Codex CLI** com o comando da
+[documentação oficial, opção Windows](https://learn.chatgpt.com/docs/codex/cli).
+Abra o PowerShell normalmente na conta da pessoa que usa o aplicativo e cole
+a linha inteira, sem acrescentar aspas ao redor do comando:
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+Esse instalador oficial disponibiliza o CLI no perfil do usuário e não exige
+Node/npm. A documentação de [instalação no Windows](https://learn.chatgpt.com/docs/enterprise/windows-deployment)
+descreve a instalação por usuário e a atualização do PATH. Aguarde a conclusão,
+feche o PowerShell e abra outro. Confira novamente:
+
+```powershell
+codex --version
+codex plugin marketplace list --json
+```
+
+Se a instalação falhar, envie a saída completa desse instalador antes de tentar
+os comandos do catálogo. Disponibilizar o CLI permite gerenciar o catálogo;
+isso não comprova nem corrige a conexão Airtable do aplicativo.
 
 Se o chat responder `failed to resolve CODEX_HOME` / `Could not find home directory`,
 a execução falhou antes de consultar o catálogo. Repita o teste no PowerShell

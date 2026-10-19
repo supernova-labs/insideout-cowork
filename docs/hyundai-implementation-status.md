@@ -140,3 +140,12 @@ conexão Airtable. O guia passou a começar pela abertura manual do PowerShell
 local e pelo teste `codex --version`, com ramificações para comando ausente e
 erro de diretório também no terminal. O resultado no computador da Carol
 permanece pendente.
+
+O retorno seguinte incluiu `CommandNotFoundException` para `codex --version`
+no PowerShell local. Isso comprova ausência do comando nessa janela, sem
+distinguir instalação ausente de PATH incompleto. A versão do guia passou a
+incluir o instalador oficial standalone do Codex CLI para Windows, conferido
+na opção Windows da documentação atual, e reabertura do terminal antes da
+verificação. Não instalamos ou atualizamos software no computador da Carol.
+O outro print manteve a indisponibilidade de ferramenta Airtable na sessão;
+esse bloqueio continua independente da instalação do CLI.
