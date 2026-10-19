@@ -1,6 +1,6 @@
 # Hyundai Social — instalação e primeiro teste
 
-Esta versão 0.1.0 permite testar pesquisa, planejamento e revisão de referências.
+Esta versão 0.1.1 permite testar pesquisa, planejamento e revisão de referências.
 É um piloto: o envio ao quadro operacional do Asana aguarda homologação e os
 testes da integração. A versão está na branch `codex/hyundai-social-pilot`.
 
@@ -10,29 +10,91 @@ Use a conta InsideOut que já acessa **InsideOut Hyundai Social** no Airtable.
 Em 16/10/2026, Caroline já consta como proprietária do workspace e herda acesso
 à base. Não é preciso criar outra base nem pedir acesso ao Social antigo.
 
-No Codex, conecte o plugin Airtable com essa mesma conta. Se a base Hyundai
-não aparecer, revise a autorização de bases na conexão pessoal do Airtable.
+O pacote declara o conector oficial Airtable como dependência obrigatória. Na
+instalação pelo aplicativo de desktop, conclua a conexão do Airtable com essa
+mesma conta. Se a conexão já existir, confira se ela está ativa. Se a base Hyundai
+não aparecer depois de uma busca real, revise a autorização de bases nessa conexão.
 O acesso no navegador e a autorização do conector são verificações distintas.
 Não compartilhe credenciais nem use a conta de outra pessoa.
 
 ## Instalar a versão de piloto
 
-No terminal:
+Antes, no terminal local, confira se o catálogo já existe:
+
+```powershell
+codex plugin marketplace list --json
+```
+
+Se `insideout` já estiver cadastrado, anote sua origem atual. Para trocar da
+versão normal para o piloto, remova somente o cadastro dessa origem:
+
+```powershell
+codex plugin marketplace remove insideout
+```
+
+Este comando gerencia a origem do catálogo. Não use comandos para desinstalar
+plugins ou apagar configurações. A seleção do piloto vale para o catálogo
+InsideOut nesta conta; durante o teste, não atualize os outros produtos a partir
+dessa branch. A versão normal pode ser recadastrada pela `main` após o teste.
+
+Em seguida, cadastre a origem de piloto e instale o Hyundai:
 
 ```powershell
 codex plugin marketplace add supernova-labs/insideout-cowork --ref codex/hyundai-social-pilot
 codex plugin add insideout-hyundai-social@insideout
 ```
 
-Os comandos usam o catálogo `insideout`. Se ele já estiver cadastrado, confira
-que a origem ficou na branch de piloto antes de instalar. Se o aplicativo
-continuar mostrando somente a versão anterior, atualize o catálogo e reinicie
-o aplicativo. Instale apenas **InsideOut Hyundai Social** para este teste;
-os conectores Airtable e de pesquisa também precisam estar disponíveis.
+Os comandos devem ser executados no terminal local, não somente colados como
+mensagem de planejamento no chat. O primeiro seleciona o catálogo da branch
+de piloto; o segundo instala o produto Hyundai. Cadastrar o catálogo não
+comprova a instalação. A `main` ainda não oferece esse plugin.
+
+Se o catálogo já aponta para o piloto e precisa buscar uma revisão nova,
+atualize-o e confira os produtos disponíveis:
+
+```powershell
+codex plugin marketplace upgrade insideout
+codex plugin list --available --marketplace insideout --json
+```
+
+**InsideOut Hyundai Social 0.1.1** deve aparecer. Se não aparecer, não continue
+o grid: guarde a resposta completa dos comandos. Atualizar um catálogo que ainda
+aponta para `main` não muda sua branch; é preciso trocar sua origem conforme
+o procedimento acima. Não remova plugins nem apague configurações como tentativa.
+
+No diretório de plugins do aplicativo, confira **InsideOut Hyundai Social**
+instalado/ativado e a conexão **Airtable** concluída. Instale somente o produto
+Hyundai para este teste. Pesquisa web também precisa estar disponível.
 
 A sintaxe de catálogo e seleção de branch segue a
 [documentação oficial do Codex](https://developers.openai.com/plugins/build/plugins).
 O plugin não inclui credenciais nem concede acesso a serviços externos.
+Depois de concluir instalação e conexão, reinicie o aplicativo e abra uma
+conversa nova. Uma conversa anterior pode não dispor das ferramentas recém-conectadas.
+
+## Diagnosticar antes de iniciar o grid
+
+São três verificações independentes:
+
+| Verificação | Evidência necessária |
+|---|---|
+| Instalação do Hyundai | Produto 0.1.1 instalado e ativado no aplicativo; não apenas catálogo cadastrado |
+| Conexão do Airtable | Conector oficial instalado e conta InsideOut conectada no aplicativo |
+| Acesso à base | Busca real encontra a base exata e lista as oito tabelas na conversa nova |
+
+Se a resposta disser **ferramenta indisponível nesta sessão**, o acesso à base
+não chegou a ser testado. Confira plugin, conexão e conversa nova antes de pedir
+novo convite ou alterar permissões. Se a busca funcionar e retornar acesso negado
+ou não encontrar a base, então confira conta e bases autorizadas no Airtable.
+
+Se continuar bloqueado, envie à pessoa que acompanha o piloto a resposta completa
+dos comandos de instalação, o print do detalhe do plugin Hyundai e o estado da
+conexão Airtable. Não envie senha, token ou códigos de autenticação.
+
+O erro `marketplace 'insideout' is already added from a different source` foi
+reproduzido em 19/10/2026 ao tentar adicionar a branch de piloto sobre o cadastro
+existente. Nesse caso, repetir o comando de adicionar ou atualizar o catálogo
+não resolve: é necessária a troca da origem cadastrada descrita acima.
 
 ## Começar em uma conversa nova
 

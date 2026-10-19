@@ -1,9 +1,10 @@
 {
   "name": "insideout-hyundai-social",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Planejamento mensal Hyundai por pesquisa, aprovação de referências e encaminhamento ao Asana.",
   "author": { "name": "InsideOut" },
   "skills": "./skills/",
+  "apps": "./.app.json",
   "interface": {
     "displayName": "InsideOut Hyundai Social",
     "shortDescription": "Pesquise e planeje o mês da Hyundai.",

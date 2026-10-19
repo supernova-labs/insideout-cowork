@@ -1,6 +1,6 @@
-# Hyundai Social — implantação 0.1.0
+# Hyundai Social — implantação 0.1.1
 
-Data: 16/10/2026. Estado: implementado para piloto, não liberado para operação.
+Atualização: 19/10/2026. Estado: implementado para piloto, não liberado para operação.
 
 ## Pacote e distribuição
 
@@ -100,3 +100,34 @@ conexão. Não substituir por escrita no quadro operacional via navegador.
 Regras provisórias de alocação estão marcadas Simulação. Operação real continua
 bloqueada até a confirmação da Carol, a validação das contagens, os testes de
 acesso e a homologação. Comentários não alteram esse estado.
+
+## Instalação e diagnóstico — 19/10/2026
+
+O relato de teste no desktop mostrou indisponibilidade da ferramenta de busca
+do Airtable na conversa, sem consulta efetiva à base. Isso não comprova erro
+de permissão. O estado de instalação e a conexão na conta da pessoa testadora
+ainda precisam ser conferidos; o print não identifica a causa exata.
+
+A mesma busca pela nossa conexão retornou a base Hyundai, e a leitura atual
+listou suas oito tabelas. Nenhum registro ou acesso foi alterado no diagnóstico.
+A branch de piloto está publicada; a `main` continua sem esse produto.
+
+O comando do guia foi executado sobre um catálogo `insideout` existente e falhou
+com `already added from a different source`. A tentativa não trocou a origem.
+Essa é uma falha reproduzida do onboarding anterior; não foi confirmado que a
+Carol recebeu exatamente esse erro. O guia passou a orientar a troca explícita
+do cadastro de origem antes de selecionar o piloto, sem desinstalar produtos.
+Não executamos remoção do catálogo nem alteramos as instalações desta conta
+durante o diagnóstico. A troca completa ainda precisa ser testada na conta da Carol.
+
+A versão 0.1.0 dependia da instalação manual do conector, sem declará-lo no
+pacote. A 0.1.1 adiciona `.app.json` com o conector oficial Airtable obrigatório,
+referência no manifesto e autenticação na instalação no catálogo. O mapeamento
+usa a identidade do conector distribuído, sem credencial ou conta compartilhada.
+O guia agora distingue catálogo, plugin instalado, conexão e acesso à base.
+Essa correção torna a dependência explícita; não comprova que o problema da
+sessão remota foi resolvido. O teste final exige nova conversa na conta da Carol.
+Onze testes locais cobrem contrato e distribuição, inclusive ausência do
+mapeamento, conector opcional/incorreto e autenticação adiada. O validador do
+catálogo e do inventário passou. Instalação e autorização na conta remota não
+foram executadas por este diagnóstico.

@@ -35,7 +35,7 @@ Versão atual: 0.6.1.
 
 ## InsideOut Hyundai Social
 
-Versão inicial: 0.1.0 (piloto). Pacote independente para a equipe Hyundai, sem alterar
+Versão inicial: 0.1.1 (piloto). Pacote independente para a equipe Hyundai, sem alterar
 a instalação do Social das marcas Estée Lauder. O mês começa por pesquisa;
 briefing é uma exceção de lançamento ou campanha. O cliente revisa ideias e
 referências em HTML com feedback, antes da produção das artes.
@@ -43,6 +43,9 @@ referências em HTML com feedback, antes da produção das artes.
 O piloto está na branch `codex/hyundai-social-pilot`, ainda fora da `main`.
 Siga o [guia de instalação e teste da Carol](docs/hyundai-carol-test-guide.md)
 para selecionar essa versão e conectar a base correta.
+O pacote declara o conector oficial Airtable como dependência obrigatória e
+solicita sua autenticação na instalação. Cada pessoa precisa autorizar sua
+própria conta; a declaração não concede acesso a bases nem comprova conexão.
 
 | Skill | Resultado |
 |---|---|

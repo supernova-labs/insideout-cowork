@@ -6,14 +6,14 @@
   "plugins": [
     {
       "name": "insideout-hyundai-social",
-      "description": "Pesquisa mensal Hyundai, revisão de ideias com feedback e encaminhamento ao Asana.",
+      "description": "Pesquisa e planejamento Hyundai com conector Airtable, revisão de ideias e encaminhamento ao Asana.",
       "source": {
         "source": "local",
         "path": "./plugins/insideout-hyundai-social"
       },
       "policy": {
         "installation": "AVAILABLE",
-        "authentication": "ON_USE"
+        "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
     },

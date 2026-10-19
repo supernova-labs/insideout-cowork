@@ -6,8 +6,16 @@
     "index": ".agent-smith/index.json",
     "skills": "plugins"
   },
-  "lastUpdated": "2026-10-16T00:00:00Z",
+  "lastUpdated": "2026-10-19T00:00:00Z",
   "components": [
+    {
+      "id": "mcp:insideout-hyundai-social:airtable",
+      "type": "mcp",
+      "name": "airtable",
+      "plugin": "insideout-hyundai-social",
+      "canonicalPath": "plugins/insideout-hyundai-social/.app.json",
+      "description": "Mapeamento obrigatório para o conector oficial Airtable, autorizado individualmente na instalação."
+    },
     {
       "id": "skill:insideout-hyundai-social:research-month",
       "type": "skill",
@@ -154,6 +162,12 @@
     }
   ],
   "adapters": [
+    {
+      "componentId": "mcp:insideout-hyundai-social:airtable",
+      "harness": "codex",
+      "status": "native",
+      "path": "plugins/insideout-hyundai-social/.app.json"
+    },
     {
       "componentId": "skill:insideout-hyundai-social:research-month",
       "harness": "codex",
