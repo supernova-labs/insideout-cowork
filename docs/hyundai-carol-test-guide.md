@@ -19,6 +19,28 @@ Não compartilhe credenciais nem use a conta de outra pessoa.
 
 ## Instalar a versão de piloto
 
+### No Windows: abrir o PowerShell do próprio computador
+
+Abra o menu Iniciar, procure **PowerShell** e abra-o normalmente, sem executar
+como administrador. Os comandos desta seção são digitados nessa janela, fora
+do campo de mensagem do ChatGPT. Primeiro, confira se o comando está disponível:
+
+```powershell
+codex --version
+```
+
+Se aparecer uma versão, continue abaixo. Se o Windows disser que `codex` não é
+reconhecido, pare e envie essa mensagem à pessoa que acompanha o piloto: ainda
+é preciso disponibilizar o CLI nesse computador. Não tente mudar permissões
+do Airtable para corrigir esse erro.
+
+Se o chat responder `failed to resolve CODEX_HOME` / `Could not find home directory`,
+a execução falhou antes de consultar o catálogo. Repita o teste no PowerShell
+local. O print do chat, sozinho, não prova defeito no perfil do Windows. Não
+crie diretórios, defina variáveis ou copie credenciais para o ambiente do chat
+como tentativa de conserto. Se o mesmo erro ocorrer no PowerShell, envie o erro
+completo e a versão do Codex para diagnóstico do ambiente local.
+
 Antes, no terminal local, confira se o catálogo já existe:
 
 ```powershell

@@ -131,3 +131,12 @@ Onze testes locais cobrem contrato e distribuição, inclusive ausência do
 mapeamento, conector opcional/incorreto e autenticação adiada. O validador do
 catálogo e do inventário passou. Instalação e autorização na conta remota não
 foram executadas por este diagnóstico.
+
+Um segundo relato em 19/10 mostrou `failed to resolve CODEX_HOME`, causado por
+`Could not find home directory`, após o comando ser enviado pelo chat. Foi
+confirmado que a tentativa ocorreu somente pelo chat, em Windows. Esse erro
+precede a consulta ao catálogo; não diagnostica o perfil do computador ou a
+conexão Airtable. O guia passou a começar pela abertura manual do PowerShell
+local e pelo teste `codex --version`, com ramificações para comando ausente e
+erro de diretório também no terminal. O resultado no computador da Carol
+permanece pendente.
