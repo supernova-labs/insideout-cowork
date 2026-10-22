@@ -25,9 +25,9 @@ Para registrar ou priorizar fricções de
 qualquer produto, instale também `insideout-governance`. Depois, abra uma nova
 tarefa no Codex e peça o trabalho normalmente.
 
-## InsideOut Social
+## InsideOut Estée Lauder Social
 
-Versão atual: 0.6.1.
+Versão atual: 0.6.2. Identificador de instalação mantido: `insideout-social@insideout`.
 
 | Skill | Resultado |
 |---|---|
