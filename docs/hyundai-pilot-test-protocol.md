@@ -58,6 +58,6 @@ igualdade literal de ideias com a referência histórica.
 
 Não publicar o plugin como operação homologada nem enviar ao quadro real sem
 os gates da referência `release-gates.md`. Publicação do catálogo no GitHub
-exige o fluxo autorizado de revisão; não fazer push direto na main.
+exige revisão e autorização explícita antes de um push direto na main.
 Os registros e entregáveis reais ficam no workspace da execução e na base,
 fora do pacote e dos evals. Limpeza dos testes é separada e exige confirmação.

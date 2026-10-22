@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerir histórico"
+  short_description: "Registre ações e consulte participações"
+  default_prompt: "Use $gerir-historico para cruzar esta lista com a base e apresentar os fatos a registrar."

@@ -2,7 +2,7 @@
 
 Esta versão 0.1.1 permite testar pesquisa, planejamento e revisão de referências.
 É um piloto: o envio ao quadro operacional do Asana aguarda homologação e os
-testes da integração. A versão está na branch `codex/hyundai-social-pilot`.
+testes da integração. A versão está disponível no catálogo da `main`, junto ao Mailing.
 
 ## Acesso à base
 
@@ -19,103 +19,14 @@ Não compartilhe credenciais nem use a conta de outra pessoa.
 
 ## Instalar a versão de piloto
 
-### No Windows: abrir o PowerShell do próprio computador
+Siga o [guia comum de instalação e atualização](instalacao-plugins.md).
+Execute os comandos no PowerShell do próprio computador, fora do chat. O guia
+explica como trocar o catálogo de uma antiga branch de piloto para a `main`,
+que oferece Hyundai Social e Mailing juntos, e como conferir a instalação.
 
-Abra o menu Iniciar, procure **PowerShell** e abra-o normalmente, sem executar
-como administrador. Os comandos desta seção são digitados nessa janela, fora
-do campo de mensagem do ChatGPT. Primeiro, confira se o comando está disponível:
-
-```powershell
-codex --version
-```
-
-Se aparecer uma versão, continue abaixo. Se o Windows disser que `codex` não é
-reconhecido, o comando não está disponível nessa janela: o CLI pode estar ausente
-ou fora do PATH. Se ele acabou de ser instalado, feche o PowerShell e abra uma
-janela nova antes de repetir o teste.
-
-Se continuar indisponível, instale o **Codex CLI** com o comando da
-[documentação oficial, opção Windows](https://learn.chatgpt.com/docs/codex/cli).
-Abra o PowerShell normalmente na conta da pessoa que usa o aplicativo e cole
-a linha inteira, sem acrescentar aspas ao redor do comando:
-
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
-```
-
-Esse instalador oficial disponibiliza o CLI no perfil do usuário e não exige
-Node/npm. A documentação de [instalação no Windows](https://learn.chatgpt.com/docs/enterprise/windows-deployment)
-descreve a instalação por usuário e a atualização do PATH. Aguarde a conclusão,
-feche o PowerShell e abra outro. Confira novamente:
-
-```powershell
-codex --version
-codex plugin marketplace list --json
-```
-
-Se a instalação falhar, envie a saída completa desse instalador antes de tentar
-os comandos do catálogo. Disponibilizar o CLI permite gerenciar o catálogo;
-isso não comprova nem corrige a conexão Airtable do aplicativo.
-
-Se o chat responder `failed to resolve CODEX_HOME` / `Could not find home directory`,
-a execução falhou antes de consultar o catálogo. Repita o teste no PowerShell
-local. O print do chat, sozinho, não prova defeito no perfil do Windows. Não
-crie diretórios, defina variáveis ou copie credenciais para o ambiente do chat
-como tentativa de conserto. Se o mesmo erro ocorrer no PowerShell, envie o erro
-completo e a versão do Codex para diagnóstico do ambiente local.
-
-Antes, no terminal local, confira se o catálogo já existe:
-
-```powershell
-codex plugin marketplace list --json
-```
-
-Se `insideout` já estiver cadastrado, anote sua origem atual. Para trocar da
-versão normal para o piloto, remova somente o cadastro dessa origem:
-
-```powershell
-codex plugin marketplace remove insideout
-```
-
-Este comando gerencia a origem do catálogo. Não use comandos para desinstalar
-plugins ou apagar configurações. A seleção do piloto vale para o catálogo
-InsideOut nesta conta; durante o teste, não atualize os outros produtos a partir
-dessa branch. A versão normal pode ser recadastrada pela `main` após o teste.
-
-Em seguida, cadastre a origem de piloto e instale o Hyundai:
-
-```powershell
-codex plugin marketplace add supernova-labs/insideout-cowork --ref codex/hyundai-social-pilot
-codex plugin add insideout-hyundai-social@insideout
-```
-
-Os comandos devem ser executados no terminal local, não somente colados como
-mensagem de planejamento no chat. O primeiro seleciona o catálogo da branch
-de piloto; o segundo instala o produto Hyundai. Cadastrar o catálogo não
-comprova a instalação. A `main` ainda não oferece esse plugin.
-
-Se o catálogo já aponta para o piloto e precisa buscar uma revisão nova,
-atualize-o e confira os produtos disponíveis:
-
-```powershell
-codex plugin marketplace upgrade insideout
-codex plugin list --available --marketplace insideout --json
-```
-
-**InsideOut Hyundai Social 0.1.1** deve aparecer. Se não aparecer, não continue
-o grid: guarde a resposta completa dos comandos. Atualizar um catálogo que ainda
-aponta para `main` não muda sua branch; é preciso trocar sua origem conforme
-o procedimento acima. Não remova plugins nem apague configurações como tentativa.
-
-No diretório de plugins do aplicativo, confira **InsideOut Hyundai Social**
-instalado/ativado e a conexão **Airtable** concluída. Instale somente o produto
-Hyundai para este teste. Pesquisa web também precisa estar disponível.
-
-A sintaxe de catálogo e seleção de branch segue a
-[documentação oficial do Codex](https://developers.openai.com/plugins/build/plugins).
-O plugin não inclui credenciais nem concede acesso a serviços externos.
-Depois de concluir instalação e conexão, reinicie o aplicativo e abra uma
-conversa nova. Uma conversa anterior pode não dispor das ferramentas recém-conectadas.
+Confirme **InsideOut Hyundai Social 0.1.1** instalado/ativado e a conexão
+**Airtable** concluída com sua conta InsideOut. Pesquisa web também precisa
+estar disponível. Reinicie o aplicativo e abra uma conversa nova antes do teste.
 
 ## Diagnosticar antes de iniciar o grid
 

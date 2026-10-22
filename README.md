@@ -1,21 +1,27 @@
 # Plugins InsideOut
 
-Catálogo oficial da InsideOut para produção de social media, análise de mar
-aberto e governança dos plugins no Codex.
+Catálogo oficial da InsideOut para social media, planejamento Hyundai, mailing,
+análise de mar aberto e governança dos plugins no Codex.
 
 ## Instalação para o time
 
-No terminal, execute uma vez para adicionar o catálogo da InsideOut e instalar
-o plugin:
+No PowerShell do próprio computador, fora do chat, cadastre o catálogo da `main`
+e instale somente os produtos necessários:
 
 ```powershell
 codex plugin marketplace add supernova-labs/insideout-cowork --ref main
 codex plugin add insideout-social@insideout
 codex plugin add insideout-mar-aberto@insideout
 codex plugin add insideout-governance@insideout
+codex plugin add insideout-hyundai-social@insideout
+codex plugin add insideout-mailing@insideout
 ```
 
-Instale somente o produto necessário. Para registrar ou priorizar fricções de
+Se o catálogo já estiver cadastrado, siga o [guia de instalação e atualização](docs/instalacao-plugins.md)
+antes de repetir esses comandos. Ele cobre a troca das antigas branches de piloto
+para a `main`, que agora reúne os dois produtos novos.
+
+Para registrar ou priorizar fricções de
 qualquer produto, instale também `insideout-governance`. Depois, abra uma nova
 tarefa no Codex e peça o trabalho normalmente.
 
@@ -40,9 +46,9 @@ a instalação do Social das marcas Estée Lauder. O mês começa por pesquisa;
 briefing é uma exceção de lançamento ou campanha. O cliente revisa ideias e
 referências em HTML com feedback, antes da produção das artes.
 
-O piloto está na branch `codex/hyundai-social-pilot`, ainda fora da `main`.
+O piloto está disponível no catálogo da `main`, junto ao Mailing.
 Siga o [guia de instalação e teste da Carol](docs/hyundai-carol-test-guide.md)
-para selecionar essa versão e conectar a base correta.
+para instalar o produto e conectar a base correta.
 O pacote declara o conector oficial Airtable como dependência obrigatória e
 solicita sua autenticação na instalação. Cada pessoa precisa autorizar sua
 própria conta; a declaração não concede acesso a bases nem comprova conexão.
@@ -144,6 +150,7 @@ Antes de compartilhar uma nova versão, valide a estrutura:
 python plugins/insideout-social/references/_shared/scripts/validate_skills.py
 python plugins/insideout-mar-aberto/references/_shared/scripts/validate_skills.py
 python scripts/validate_hyundai_skills.py
+python scripts/validate_mailing_skills.py
 python -m unittest discover -s tests/hyundai -v
 ```
 
@@ -170,3 +177,18 @@ O template incorpora a fonte Inter; sua licença está em
 Execuções anteriores permanecem no contrato original, sem migração. Os gates
 históricos da versão 0.2.2 estão em
 `RELEASE_GATES_MAR_ABERTO_0.2.2.md`.
+
+## InsideOut Mailing
+
+Piloto 0.1.0 disponível no catálogo da `main`, junto ao Hyundai Social.
+
+Três skills: gerir-contatos (cadastros e qualidade), montar-listas (seleções
+versionadas) e gerir-historico (ações, cruzamentos e participações).
+O estado vive em uma planilha Google Sheets nativa, com Contatos, Vínculos,
+Ações, Listas, Itens de lista, Participações e Configuração. A implantação
+inicial não é uma skill; arquivos reais e relatório restrito ficam fora
+do repositório. O Excel anterior permanece oficial durante o teste.
+
+Instalação pela `main` e critérios de teste no
+[protocolo do Mailing](docs/mailing-pilot-test-protocol.md).
+Validação local: python scripts/validate_mailing_skills.py.

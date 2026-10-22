@@ -1,6 +1,6 @@
 # Hyundai Social — implantação 0.1.1
 
-Atualização: 19/10/2026. Estado: implementado para piloto, não liberado para operação.
+Atualização: 22/10/2026. Estado: implementado para piloto, não liberado para operação.
 
 ## Pacote e distribuição
 
@@ -10,11 +10,24 @@ Atualização: 19/10/2026. Estado: implementado para piloto, não liberado para 
   symlinks, runtime de geração, painel ou dependência do Social.
 - Social mantém identidade/instalação; versão 0.6.1 encaminha planejamento e
   feedback Hyundai ao pacote próprio e preserva os testes antigos.
-- A entrega para testes usa a branch `codex/hyundai-social-pilot`, sem publicação
-  direta na `main`. O [guia da Carol](hyundai-carol-test-guide.md) documenta
+- A entrega inicial para testes usou a branch `codex/hyundai-social-pilot`.
+  A distribuição conjunta de 22/10/2026 passa a usar a `main`, com autorização
+  explícita do usuário. O [guia da Carol](hyundai-carol-test-guide.md) documenta
   instalação e limites. A instalação na conta dela ainda precisa ser conferida.
 - A revisão para publicação retirou links de documentos internos e do quadro
   operacional do pacote. Entregáveis, dados e evidências locais não são versionados.
+
+## Distribuição conjunta — 22/10/2026
+
+O catálogo da `main` reúne Hyundai Social 0.1.1 e Mailing 0.1.0. Os validadores
+Social, Mar Aberto, Hyundai e Mailing passaram, assim como os onze testes de
+contrato/distribuição Hyundai. Agent Smith conferiu cinco plugins e 21 skills,
+sem erros ou avisos. O CLI listou os dois produtos na mesma origem em uma
+verificação local com configuração temporária, sem trocar o catálogo pessoal.
+
+Os guias usam a `main` e um procedimento comum de instalação no PowerShell.
+Isso comprova a distribuição conjunta, não uma invocação em conversa limpa,
+a instalação na conta da Carol ou a homologação dos serviços externos.
 
 ## Airtable comprovado
 
@@ -110,7 +123,8 @@ ainda precisam ser conferidos; o print não identifica a causa exata.
 
 A mesma busca pela nossa conexão retornou a base Hyundai, e a leitura atual
 listou suas oito tabelas. Nenhum registro ou acesso foi alterado no diagnóstico.
-A branch de piloto está publicada; a `main` continua sem esse produto.
+Naquele diagnóstico, a branch de piloto estava publicada e a `main` ainda não
+oferecia esse produto.
 
 O comando do guia foi executado sobre um catálogo `insideout` existente e falhou
 com `already added from a different source`. A tentativa não trocou a origem.
